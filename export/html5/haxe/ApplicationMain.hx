@@ -34,8 +34,16 @@ class ApplicationMain {
 		types.push (lime.Assets.AssetType.TEXT);
 		
 		
+		urls.push ("assets/images/background.png");
+		types.push (lime.Assets.AssetType.IMAGE);
+		
+		
 		urls.push ("assets/images/images-go-here.txt");
 		types.push (lime.Assets.AssetType.TEXT);
+		
+		
+		urls.push ("assets/images/test_image_cat.png");
+		types.push (lime.Assets.AssetType.IMAGE);
 		
 		
 		urls.push ("assets/music/music-goes-here.txt");
@@ -131,7 +139,7 @@ class ApplicationMain {
 		
 		config = {
 			
-			build: "1",
+			build: "39",
 			company: "Daisy",
 			file: "ProjectGanymede",
 			fps: 60,
