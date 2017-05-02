@@ -5,13 +5,13 @@
     <movie outputType="CustomBuild" />
     <movie input="" />
     <movie path="Project.xml" />
-    <movie fps="30" />
+    <movie fps="60" />
     <movie width="640" />
     <movie height="480" />
     <movie version="1" />
     <movie minorVersion="0" />
     <movie platform="Lime" />
-    <movie background="ffffff" />
+    <movie background="000000" />
   </output>
   <!-- Other classes to be compiled into your SWF -->
   <classpaths>

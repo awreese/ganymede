@@ -72,7 +72,7 @@ ApplicationMain.init = function() {
 	}
 };
 ApplicationMain.main = function() {
-	ApplicationMain.config = { build : "1", company : "Daisy", file : "ProjectGanymede", fps : 60, name : "Project Ganymede", orientation : "", packageName : "com.example.myapp", version : "0.0.1", windows : [{ antialiasing : 0, background : 0, borderless : false, depthBuffer : false, display : 0, fullscreen : false, hardware : false, height : 480, parameters : "{}", resizable : false, stencilBuffer : true, title : "Project Ganymede", vsync : true, width : 640, x : null, y : null}]};
+	ApplicationMain.config = { build : "5", company : "Daisy", file : "ProjectGanymede", fps : 60, name : "Project Ganymede", orientation : "", packageName : "com.example.myapp", version : "0.0.1", windows : [{ antialiasing : 0, background : 0, borderless : false, depthBuffer : false, display : 0, fullscreen : false, hardware : false, height : 480, parameters : "{}", resizable : false, stencilBuffer : true, title : "Project Ganymede", vsync : true, width : 640, x : null, y : null}]};
 };
 ApplicationMain.start = function() {
 	var hasMain = false;
@@ -3633,7 +3633,7 @@ PlayState.__name__ = ["PlayState"];
 PlayState.__super__ = flixel_FlxState;
 PlayState.prototype = $extend(flixel_FlxState.prototype,{
 	create: function() {
-		this.add(new flixel_text_FlxText(10,10,100,"Hello, world"));
+		this.add(new flixel_text_FlxText(10,10,100,"Hello, World"));
 		flixel_FlxState.prototype.create.call(this);
 	}
 	,update: function(elapsed) {
