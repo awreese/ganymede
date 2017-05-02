@@ -34,16 +34,8 @@ class ApplicationMain {
 		types.push (lime.Assets.AssetType.TEXT);
 		
 		
-		urls.push ("assets/images/background.png");
-		types.push (lime.Assets.AssetType.IMAGE);
-		
-		
 		urls.push ("assets/images/images-go-here.txt");
 		types.push (lime.Assets.AssetType.TEXT);
-		
-		
-		urls.push ("assets/images/test_image_cat.png");
-		types.push (lime.Assets.AssetType.IMAGE);
 		
 		
 		urls.push ("assets/music/music-goes-here.txt");
@@ -54,12 +46,12 @@ class ApplicationMain {
 		types.push (lime.Assets.AssetType.TEXT);
 		
 		
-		urls.push ("flixel/sounds/beep.ogg");
-		types.push (lime.Assets.AssetType.SOUND);
+		urls.push ("flixel/sounds/beep.mp3");
+		types.push (lime.Assets.AssetType.MUSIC);
 		
 		
-		urls.push ("flixel/sounds/flixel.ogg");
-		types.push (lime.Assets.AssetType.SOUND);
+		urls.push ("flixel/sounds/flixel.mp3");
+		types.push (lime.Assets.AssetType.MUSIC);
 		
 		
 		urls.push ("Nokia Cellphone FC Small");
@@ -139,11 +131,7 @@ class ApplicationMain {
 		
 		config = {
 			
-<<<<<<< HEAD
-			build: "39",
-=======
-			build: "5",
->>>>>>> b81fa65b4380e1211c4e81aba3f548f9e4342a17
+			build: "4",
 			company: "Daisy",
 			file: "ProjectGanymede",
 			fps: 60,
@@ -160,10 +148,10 @@ class ApplicationMain {
 					depthBuffer: false,
 					display: 0,
 					fullscreen: false,
-					hardware: false,
+					hardware: true,
 					height: 480,
 					parameters: "{}",
-					resizable: false,
+					resizable: true,
 					stencilBuffer: true,
 					title: "Project Ganymede",
 					vsync: true,
