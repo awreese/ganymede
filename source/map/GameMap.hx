@@ -1,7 +1,25 @@
 package map;
 
-import math.Vec;
+/**
+ *  Astrorush: TBD (The Best Defense)
+ *  Copyright (C) 2017  Andrew Reese, Daisy Xu, Rory Soiffer
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 import flixel.FlxSprite;
+import flixel.math.FlxVector;
 using flixel.util.FlxSpriteUtil;
 
 /**
@@ -18,10 +36,11 @@ class GameMap extends FlxSprite
 		super();
 
 		// Load the nodes
-		var n1 =  new MapNode(this, new Vec(50, 50));
-		var n2 = new MapNode(this, new Vec(100, 200));
-		var n3 = new MapNode(this, new Vec(300, 70));
-		var n4 = new MapNode(this, new Vec(270, 250));
+		var n1 =  new MapNode(this, new FlxVector(50, 50));
+		var n2 = new MapNode(this, new FlxVector(100, 200));
+		var n3 = new MapNode(this, new FlxVector(300, 70));
+		var n4 = new MapNode(this, new FlxVector(270, 250));
+
 
 		n1.neighbors.push(n2);
 		n2.neighbors.push(n1);
@@ -48,7 +67,8 @@ class GameMap extends FlxSprite
 
 	}
 
-	public function findNode(v: Vec): MapNode
+	//public function findNode(v: Vec): MapNode
+	public function findNode(v: FlxVector): MapNode
 	{
 		return nodes.filter(function(n) return n.contains(v))[0];
 	}

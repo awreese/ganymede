@@ -1,10 +1,28 @@
 package;
 
+/**
+ *  Astrorush: TBD (The Best Defense)
+ *  Copyright (C) 2017  Andrew Reese, Daisy Xu, Rory Soiffer
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 import flixel.FlxG;
 import flixel.FlxState;
 import flixel.group.FlxGroup;
+import flixel.math.FlxVector;
 import map.GameMap;
-import math.Vec;
 import source.Ship;
 
 class PlayState extends FlxState
@@ -37,7 +55,7 @@ class PlayState extends FlxState
 		// Selecting ships
 		if (FlxG.mouse.justPressed)
 		{
-			var n = gameMap.findNode(new Vec(FlxG.mouse.x, FlxG.mouse.y));
+			var n = gameMap.findNode(new FlxVector(FlxG.mouse.x, FlxG.mouse.y));
 			if (n == null)
 			{
 				for (s in grpShips)
@@ -58,7 +76,7 @@ class PlayState extends FlxState
 		// Ordering ships to move
 		if (FlxG.mouse.justPressedRight)
 		{
-			var n = gameMap.findNode(new Vec(FlxG.mouse.x, FlxG.mouse.y));
+			var n = gameMap.findNode(new FlxVector(FlxG.mouse.x, FlxG.mouse.y));
 			if (n != null)
 			{
 				trace("Ordered movement to " + n.pos.toString());

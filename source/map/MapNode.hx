@@ -1,8 +1,26 @@
 package map;
 
+/**
+ *  Astrorush: TBD (The Best Defense)
+ *  Copyright (C) 2017  Andrew Reese, Daisy Xu, Rory Soiffer
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 import flixel.FlxSprite;
+import flixel.math.FlxVector;
 import flixel.util.FlxColor;
-import math.Vec;
 using flixel.util.FlxSpriteUtil;
 /**
  * ...
@@ -13,32 +31,35 @@ class MapNode
 	public static var NODE_SIZE:Int = 30;
 
 	public var gameMap: GameMap;
-	public var pos: Vec;
+	public var pos: FlxVector;
 	public var neighbors: Array<MapNode> = new Array();
 
-	public function new(gameMap:GameMap, pos: Vec)
+	public function new(gameMap:GameMap, pos: FlxVector)
 	{
 		this.gameMap = gameMap;
 		this.pos = pos;
 	}
 
-	public function contains(v: Vec): Bool
+	public function contains(v: FlxVector): Bool
 	{
-		return pos.subtract(v).length() < NODE_SIZE;
+		return pos.dist(v) < NODE_SIZE;
 	}
 
 	public function distanceTo(n: MapNode): Float
 	{
-		return pos.subtract(n.pos).length();
+		return pos.dist(n.pos);
 	}
 
 	public function drawTo(sprite: FlxSprite): Void
 	{
-		sprite.drawCircle(pos.x, pos.y, NODE_SIZE, FlxColor.TRANSPARENT, {color: FlxColor.WHITE});
+		//sprite.drawCircle(pos.dx, pos.dy, NODE_SIZE, FlxColor.TRANSPARENT, {color: FlxColor.WHITE});
+		FlxSpriteUtil.drawCircle(sprite, pos.x, pos.y, NODE_SIZE, FlxColor.TRANSPARENT, {color: FlxColor.WHITE});
 		for (n in neighbors)
 		{
 			var e = new MapEdge(this, n);
-			sprite.drawLine(e.interpDist(NODE_SIZE).x, e.interpDist(NODE_SIZE).y, e.interpDist(e.length() - NODE_SIZE).x,
+			//sprite.drawLine(e.interpDist(NODE_SIZE).x, e.interpDist(NODE_SIZE).y, e.interpDist(e.length() - NODE_SIZE).x,
+			//e.interpDist(e.length() - NODE_SIZE).y, {color: FlxColor.WHITE});
+			FlxSpriteUtil.drawLine(sprite, e.interpDist(NODE_SIZE).x, e.interpDist(NODE_SIZE).y, e.interpDist(e.length() - NODE_SIZE).x,
 			e.interpDist(e.length() - NODE_SIZE).y, {color: FlxColor.WHITE});
 		}
 	}

@@ -1,9 +1,27 @@
 package source;
 
+/**
+ *  Astrorush: TBD (The Best Defense)
+ *  Copyright (C) 2017  Andrew Reese, Daisy Xu, Rory Soiffer
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 import flixel.FlxSprite;
+import flixel.math.FlxVector;
 import map.MapNode;
 import map.MapEdge;
-import math.Vec;
 
 import Faction;
 
@@ -19,7 +37,8 @@ class Ship extends FlxSprite
 	public var speed: Float = 30;
 
 	// Completely ship-specific
-	public var pos: Vec;
+	//public var pos: Vec;
+	public var pos: FlxVector;
 	public var rotation: Float;
 	public var destination: MapNode;
 	public var nodePath: Array<MapEdge> = [];
@@ -39,7 +58,7 @@ class Ship extends FlxSprite
 		this.faction = faction;
 	}
 
-	public function idealPos(): Vec
+	public function idealPos(): FlxVector
 	{
 		return nodePath[0].interpDist(progress);
 	}
@@ -92,9 +111,8 @@ class Ship extends FlxSprite
 		if (isMoving())
 		{
 			pos = idealPos();
-			rotation = nodePath[0].delta().angle();
-			angle = rotation * 180 / Math.PI;
-
+			angle = nodePath[0].delta().degrees;
+			
 			// Update the ship's movement along an edge
 			progress += speed * elapsed;
 			if (progress > nodePath[0].length())
