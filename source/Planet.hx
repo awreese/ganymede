@@ -36,18 +36,23 @@ class Planet extends FlxSprite
 		// set faction
 		this.faction = faction;
 		
-		if (this.faction == Faction.PLAYER) {
-			// draw player planet
-			loadGraphic(AssetPaths.player_planet_1__png, false, 16, 16);
-		} else if (this.faction == Faction.ENEMY_1) {
-			// draw enemy planet
-			loadGraphic(AssetPaths.enemy_planet_1__png, false, 16, 16);
-		} else if (this.faction == Faction.NEUTRAL) {
-			// draw neutral planet
-			loadGraphic(AssetPaths.neutral_planet_1__png, false, 16, 16);
-		} else {
-			// draw uncontrolled planet
-			loadGraphic(AssetPaths.uncontrolled_planet_1__png, false, 16, 16);
+		switch(this.faction) {
+			case Faction.PLAYER:
+				loadGraphic(AssetPaths.player_planet_1__png, false, 16, 16);
+			case Faction.ENEMY_1:
+				loadGraphic(AssetPaths.enemy_planet_1__png, false, 16, 16);
+			case Faction.ENEMY_2:
+				loadGraphic(AssetPaths.enemy_planet_1__png, false, 16, 16);
+			case Faction.ENEMY_3:
+				loadGraphic(AssetPaths.enemy_planet_1__png, false, 16, 16);
+			case Faction.ENEMY_4:
+				loadGraphic(AssetPaths.enemy_planet_1__png, false, 16, 16);
+			case Faction.ENEMY_5:
+				loadGraphic(AssetPaths.enemy_planet_1__png, false, 16, 16);
+			case Faction.ENEMY_6:
+				loadGraphic(AssetPaths.enemy_planet_1__png, false, 16, 16);
+			default:
+				loadGraphic(AssetPaths.uncontrolled_planet_1__png, false, 16, 16);
 		}
 		
 		// set levels
