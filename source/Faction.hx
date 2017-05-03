@@ -19,10 +19,20 @@ package;
  */
 
 /**
+ * This enumeration represents the controllable factions in the game.
+ * Game assets that can be controlled will have some controlling faction
+ * assigned to it.
+ * 
  * @author Drew Reese
  */
 enum Faction {
+	NOP;
 	PLAYER;
 	NEUTRAL;
-	ENEMY(f:Int);
+	ENEMY_1;
+	ENEMY_2;
+	ENEMY_3;
+	ENEMY_4;
+	ENEMY_5;
+	ENEMY_6;
 }
