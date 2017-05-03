@@ -42,7 +42,11 @@ class ApplicationMain {
 		types.push (lime.Assets.AssetType.TEXT);
 		
 		
-		urls.push ("assets/images/test_image_cat.png");
+		urls.push ("assets/images/ship_1.png");
+		types.push (lime.Assets.AssetType.IMAGE);
+		
+		
+		urls.push ("assets/images/ship_1_selected.png");
 		types.push (lime.Assets.AssetType.IMAGE);
 		
 		
@@ -139,11 +143,7 @@ class ApplicationMain {
 		
 		config = {
 			
-<<<<<<< HEAD
-			build: "39",
-=======
-			build: "5",
->>>>>>> b81fa65b4380e1211c4e81aba3f548f9e4342a17
+			build: "57",
 			company: "Daisy",
 			file: "ProjectGanymede",
 			fps: 60,
