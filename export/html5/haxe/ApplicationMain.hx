@@ -30,19 +30,19 @@ class ApplicationMain {
 		var types = [];
 		
 		
-		urls.push ("assets/data/data-goes-here.txt");
+		urls.push ("assets/music/music-goes-here.txt");
 		types.push (lime.Assets.AssetType.TEXT);
 		
 		
-		urls.push ("assets/images/background.png");
-		types.push (lime.Assets.AssetType.IMAGE);
-		
-		
-		urls.push ("assets/images/images-go-here.txt");
+		urls.push ("assets/sounds/sounds-go-here.txt");
 		types.push (lime.Assets.AssetType.TEXT);
 		
 		
 		urls.push ("assets/images/ship_1.png");
+		types.push (lime.Assets.AssetType.IMAGE);
+		
+		
+		urls.push ("assets/images/background.png");
 		types.push (lime.Assets.AssetType.IMAGE);
 		
 		
@@ -54,11 +54,11 @@ class ApplicationMain {
 		types.push (lime.Assets.AssetType.IMAGE);
 		
 		
-		urls.push ("assets/music/music-goes-here.txt");
+		urls.push ("assets/images/images-go-here.txt");
 		types.push (lime.Assets.AssetType.TEXT);
 		
 		
-		urls.push ("assets/sounds/sounds-go-here.txt");
+		urls.push ("assets/data/data-goes-here.txt");
 		types.push (lime.Assets.AssetType.TEXT);
 		
 		
@@ -147,7 +147,7 @@ class ApplicationMain {
 		
 		config = {
 			
-			build: "78",
+			build: "88",
 			company: "Daisy",
 			file: "ProjectGanymede",
 			fps: 60,

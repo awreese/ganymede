@@ -5,6 +5,8 @@ import map.MapNode;
 import map.MapEdge;
 import math.Vec;
 
+import Faction;
+
 /**
  * ...
  * @author Daisy
@@ -13,7 +15,7 @@ class Ship extends FlxSprite
 {
 
 	// General stats
-	public var team: Int;
+	private var faction: Faction;
 	public var speed: Float = 30;
 
 	// Completely ship-specific
@@ -23,14 +25,18 @@ class Ship extends FlxSprite
 	public var nodePath: Array<MapEdge> = [];
 	public var progress: Float;
 	public var isSelected: Bool;
+	
+	
 
-	public function new(destination: MapNode, team: Int)
+	//public function new(destination: MapNode, team: Int, faction: Faction)
+	public function new(destination: MapNode, faction: Faction)
 	{
 		super();
 		pos = destination.pos;
 		this.destination = destination;
 		loadGraphic("assets/images/ship_1.png", false, 32, 32);
-		this.team = team;
+		// this.team = team;
+		this.faction = faction;
 	}
 
 	public function idealPos(): Vec
@@ -62,6 +68,17 @@ class Ship extends FlxSprite
 
 	override public function update(elapsed:Float):Void
 	{
+		// check faction, draw appropriate sprite/color, etc..
+		switch(this.faction) {
+			case PLAYER:
+				trace("Player Ship");
+			case NEUTRAL:
+				trace("Neutral Ship");
+			case ENEMY(f):
+				trace("Enemy Ship #" + f);
+		}
+		
+		
 		// Change the sprite to show when the ship is selected
 		if (isSelected)
 		{

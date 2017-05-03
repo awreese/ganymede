@@ -25,7 +25,7 @@ class PlayState extends FlxState
 		
 		for (i in 0...10)
 		{
-			var s = new Ship(gameMap.nodes[0], 0);
+			var s = new Ship(gameMap.nodes[0], Faction.PLAYER);
 			grpShips.add(s);
 		}
 

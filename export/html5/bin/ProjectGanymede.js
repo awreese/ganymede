@@ -24,21 +24,21 @@ ApplicationMain.create = function() {
 	ApplicationMain.preloader.create(ApplicationMain.config);
 	var urls = [];
 	var types = [];
-	urls.push("assets/data/data-goes-here.txt");
+	urls.push("assets/music/music-goes-here.txt");
 	types.push("TEXT");
-	urls.push("assets/images/background.png");
-	types.push("IMAGE");
-	urls.push("assets/images/images-go-here.txt");
+	urls.push("assets/sounds/sounds-go-here.txt");
 	types.push("TEXT");
 	urls.push("assets/images/ship_1.png");
+	types.push("IMAGE");
+	urls.push("assets/images/background.png");
 	types.push("IMAGE");
 	urls.push("assets/images/ship_1_selected.png");
 	types.push("IMAGE");
 	urls.push("assets/images/tempmenubg.png");
 	types.push("IMAGE");
-	urls.push("assets/music/music-goes-here.txt");
+	urls.push("assets/images/images-go-here.txt");
 	types.push("TEXT");
-	urls.push("assets/sounds/sounds-go-here.txt");
+	urls.push("assets/data/data-goes-here.txt");
 	types.push("TEXT");
 	urls.push("flixel/sounds/beep.ogg");
 	types.push("SOUND");
@@ -80,7 +80,7 @@ ApplicationMain.init = function() {
 	}
 };
 ApplicationMain.main = function() {
-	ApplicationMain.config = { build : "78", company : "Daisy", file : "ProjectGanymede", fps : 60, name : "Project Ganymede", orientation : "", packageName : "com.example.myapp", version : "0.0.1", windows : [{ antialiasing : 0, background : 0, borderless : false, depthBuffer : false, display : 0, fullscreen : false, hardware : false, height : 480, parameters : "{}", resizable : false, stencilBuffer : true, title : "Project Ganymede", vsync : true, width : 640, x : null, y : null}]};
+	ApplicationMain.config = { build : "88", company : "Daisy", file : "ProjectGanymede", fps : 60, name : "Project Ganymede", orientation : "", packageName : "com.example.myapp", version : "0.0.1", windows : [{ antialiasing : 0, background : 0, borderless : false, depthBuffer : false, display : 0, fullscreen : false, hardware : false, height : 480, parameters : "{}", resizable : false, stencilBuffer : true, title : "Project Ganymede", vsync : true, width : 640, x : null, y : null}]};
 };
 ApplicationMain.start = function() {
 	var hasMain = false;
@@ -2239,7 +2239,7 @@ var DefaultAssetLibrary = function() {
 	lime_AssetLibrary.call(this);
 	openfl_text_Font.registerFont(_$_$ASSET_$_$OPENFL_$_$flixel_$fonts_$nokiafc22_$ttf);
 	openfl_text_Font.registerFont(_$_$ASSET_$_$OPENFL_$_$flixel_$fonts_$monsterrat_$ttf);
-	var id = "assets/data/data-goes-here.txt";
+	var id = "assets/music/music-goes-here.txt";
 	var _this = this.path;
 	if(__map_reserved[id] != null) {
 		_this.setReserved(id,id);
@@ -2253,7 +2253,7 @@ var DefaultAssetLibrary = function() {
 	} else {
 		_this1.h[id] = value;
 	}
-	id = "assets/images/background.png";
+	id = "assets/sounds/sounds-go-here.txt";
 	var _this2 = this.path;
 	if(__map_reserved[id] != null) {
 		_this2.setReserved(id,id);
@@ -2261,13 +2261,13 @@ var DefaultAssetLibrary = function() {
 		_this2.h[id] = id;
 	}
 	var _this3 = this.type;
-	var value1 = "IMAGE";
+	var value1 = "TEXT";
 	if(__map_reserved[id] != null) {
 		_this3.setReserved(id,value1);
 	} else {
 		_this3.h[id] = value1;
 	}
-	id = "assets/images/images-go-here.txt";
+	id = "assets/images/ship_1.png";
 	var _this4 = this.path;
 	if(__map_reserved[id] != null) {
 		_this4.setReserved(id,id);
@@ -2275,13 +2275,13 @@ var DefaultAssetLibrary = function() {
 		_this4.h[id] = id;
 	}
 	var _this5 = this.type;
-	var value2 = "TEXT";
+	var value2 = "IMAGE";
 	if(__map_reserved[id] != null) {
 		_this5.setReserved(id,value2);
 	} else {
 		_this5.h[id] = value2;
 	}
-	id = "assets/images/ship_1.png";
+	id = "assets/images/background.png";
 	var _this6 = this.path;
 	if(__map_reserved[id] != null) {
 		_this6.setReserved(id,id);
@@ -2323,7 +2323,7 @@ var DefaultAssetLibrary = function() {
 	} else {
 		_this11.h[id] = value5;
 	}
-	id = "assets/music/music-goes-here.txt";
+	id = "assets/images/images-go-here.txt";
 	var _this12 = this.path;
 	if(__map_reserved[id] != null) {
 		_this12.setReserved(id,id);
@@ -2337,7 +2337,7 @@ var DefaultAssetLibrary = function() {
 	} else {
 		_this13.h[id] = value6;
 	}
-	id = "assets/sounds/sounds-go-here.txt";
+	id = "assets/data/data-goes-here.txt";
 	var _this14 = this.path;
 	if(__map_reserved[id] != null) {
 		_this14.setReserved(id,id);
@@ -2816,6 +2816,15 @@ EReg.prototype = {
 	}
 	,__class__: EReg
 };
+var Faction = $hxClasses["Faction"] = { __ename__ : ["Faction"], __constructs__ : ["PLAYER","NEUTRAL","ENEMY"] };
+Faction.PLAYER = ["PLAYER",0];
+Faction.PLAYER.toString = $estr;
+Faction.PLAYER.__enum__ = Faction;
+Faction.NEUTRAL = ["NEUTRAL",1];
+Faction.NEUTRAL.toString = $estr;
+Faction.NEUTRAL.__enum__ = Faction;
+Faction.ENEMY = function(f) { var $x = ["ENEMY",2,f]; $x.__enum__ = Faction; $x.toString = $estr; return $x; };
+Faction.__empty_constructs__ = [Faction.PLAYER,Faction.NEUTRAL];
 var HxOverrides = function() { };
 $hxClasses["HxOverrides"] = HxOverrides;
 HxOverrides.__name__ = ["HxOverrides"];
@@ -3640,7 +3649,7 @@ MenuState.prototype = $extend(flixel_FlxState.prototype,{
 		this.background = new flixel_FlxSprite(0,0);
 		this.background.loadGraphic("assets/images/tempmenubg.png");
 		this.add(this.background);
-		this.title = new flixel_text_FlxText(0,20,0,"Project Ganymede");
+		this.title = new flixel_text_FlxText(0,20,0,"AstroRush: TBD");
 		this.title.setFormat("Consola",22);
 		this.title.set_alignment("center");
 		this.title.screenCenter(flixel_util_FlxAxes.X);
@@ -3750,7 +3759,7 @@ PlayState.prototype = $extend(flixel_FlxState.prototype,{
 		var _g = 0;
 		while(_g < 10) {
 			var i = _g++;
-			var s = new source_Ship(this.gameMap.nodes[0],0);
+			var s = new source_Ship(this.gameMap.nodes[0],Faction.ENEMY(2));
 			this.grpShips.add(s);
 		}
 		flixel_FlxState.prototype.create.call(this);
@@ -83367,20 +83376,20 @@ haxe_lang_Iterable.prototype = {
 	iterator: null
 	,__class__: haxe_lang_Iterable
 };
-var source_Ship = function(destination,team) {
+var source_Ship = function(destination,faction) {
 	this.nodePath = [];
 	this.speed = 30;
 	flixel_FlxSprite.call(this);
 	this.pos = destination.pos;
 	this.destination = destination;
 	this.loadGraphic("assets/images/ship_1.png",false,32,32);
-	this.team = team;
+	this.faction = faction;
 };
 $hxClasses["source.Ship"] = source_Ship;
 source_Ship.__name__ = ["source","Ship"];
 source_Ship.__super__ = flixel_FlxSprite;
 source_Ship.prototype = $extend(flixel_FlxSprite.prototype,{
-	team: null
+	faction: null
 	,speed: null
 	,pos: null
 	,rotation: null
@@ -83407,6 +83416,19 @@ source_Ship.prototype = $extend(flixel_FlxSprite.prototype,{
 		this.destination = n;
 	}
 	,update: function(elapsed) {
+		var _g = this.faction;
+		switch(_g[1]) {
+		case 0:
+			haxe_Log.trace("Player Ship",{ fileName : "Ship.hx", lineNumber : 74, className : "source.Ship", methodName : "update"});
+			break;
+		case 1:
+			haxe_Log.trace("Neutral Ship",{ fileName : "Ship.hx", lineNumber : 76, className : "source.Ship", methodName : "update"});
+			break;
+		case 2:
+			var f = _g[2];
+			haxe_Log.trace("Enemy Ship #" + f,{ fileName : "Ship.hx", lineNumber : 78, className : "source.Ship", methodName : "update"});
+			break;
+		}
 		if(this.isSelected) {
 			this.loadGraphic("assets/images/ship_1_selected.png",false,32,32);
 		} else {
@@ -83489,14 +83511,14 @@ openfl_display_DisplayObject.__instanceCount = 0;
 openfl_display_DisplayObject.__worldRenderDirty = 0;
 openfl_display_DisplayObject.__worldTransformDirty = 0;
 openfl_display_DisplayObject.__cacheAsBitmapMode = false;
-AssetPaths.data_goes_here__txt = "assets/data/data-goes-here.txt";
-AssetPaths.background__png = "assets/images/background.png";
-AssetPaths.images_go_here__txt = "assets/images/images-go-here.txt";
-AssetPaths.ship_1__png = "assets/images/ship_1.png";
-AssetPaths.ship_1_selected__png = "assets/images/ship_1_selected.png";
-AssetPaths.tempmenubg__png = "assets/images/tempmenubg.png";
 AssetPaths.music_goes_here__txt = "assets/music/music-goes-here.txt";
 AssetPaths.sounds_go_here__txt = "assets/sounds/sounds-go-here.txt";
+AssetPaths.ship_1__png = "assets/images/ship_1.png";
+AssetPaths.background__png = "assets/images/background.png";
+AssetPaths.ship_1_selected__png = "assets/images/ship_1_selected.png";
+AssetPaths.tempmenubg__png = "assets/images/tempmenubg.png";
+AssetPaths.images_go_here__txt = "assets/images/images-go-here.txt";
+AssetPaths.data_goes_here__txt = "assets/data/data-goes-here.txt";
 openfl_text_Font.__registeredFonts = [];
 flixel_FlxBasic.activeCount = 0;
 flixel_FlxBasic.visibleCount = 0;
