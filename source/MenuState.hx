@@ -27,7 +27,7 @@ class MenuState extends FlxState
 		add(background);
 		
 		// create and add the title
-		title = new FlxText(0, 20, 0, "Project Ganymede");
+		title = new FlxText(0, 20, 0, "AstroRush: TBD");
 		title.setFormat("Consola", 22);
 		title.alignment = CENTER;
 		title.screenCenter(FlxAxes.X);
