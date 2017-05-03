@@ -3,6 +3,7 @@ package;
 import flash.display.FrameLabel;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
+import js.html.svg.AnimatedBoolean;
 import map.MapNode;
 
 /**
@@ -74,23 +75,23 @@ class Planet extends FlxSprite
 			// draw uncontrolled planet
 			loadGraphic(AssetPaths.uncontrolled_planet_1__png, false, 16, 16);
 		}
-		
-		ProduceShips();
 		super.update(elapsed);
 	}
 	
 	// function that'll control the spousing of ships
-	private function ProduceShips():Void {
+	public function canProduceShips():Bool {
 		if (idleTimer < 5) {
 			// if it's time to produce ship, produce if can
+			idleTimer = 0;
 			if (numShips < capacity) {
-				// produce ship according to however deicded to spawn
+				return true;
 			}	
 			// reset timer
-			idleTimer = 0;
+			return false;
 		} else {
 			// else, don't produce ship
 			idleTimer++;
+			return false;
 		}
 	}
 	
@@ -122,5 +123,10 @@ class Planet extends FlxSprite
 	// set the planet faction to new faction if captured
 	public function captured(faction:Faction) {
 		this.faction = faction;
+	}
+	
+	// sets the number of ships at this planet
+	public function setNumShips(ships:Int):Void {
+		numShips = ships;
 	}
 }
