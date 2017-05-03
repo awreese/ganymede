@@ -50,6 +50,10 @@ class ApplicationMain {
 		types.push (lime.Assets.AssetType.IMAGE);
 		
 		
+		urls.push ("assets/images/tempmenubg.png");
+		types.push (lime.Assets.AssetType.IMAGE);
+		
+		
 		urls.push ("assets/music/music-goes-here.txt");
 		types.push (lime.Assets.AssetType.TEXT);
 		
@@ -143,7 +147,7 @@ class ApplicationMain {
 		
 		config = {
 			
-			build: "57",
+			build: "78",
 			company: "Daisy",
 			file: "ProjectGanymede",
 			fps: 60,
