@@ -74,8 +74,8 @@ class Ship extends FlxSprite
 				trace("Player Ship");
 			case NEUTRAL:
 				trace("Neutral Ship");
-			case ENEMY(f):
-				trace("Enemy Ship #" + f);
+			default:
+				trace("Enemy Ship #" + this.faction);
 		}
 		
 		
