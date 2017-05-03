@@ -22,9 +22,9 @@ class Planet extends FlxSprite
 	private var idleTimer:Float;
 	
 	// levels for the planet
-	public var capacityLevel:Int;
+	private var capacityLevel:Int;
 	private var MAX_CAPACITY_LEVEL:Int = 5; // default as 5 for now
-	public var techLevel:Int;
+	private var techLevel:Int;
 	private var MAX_TECH_LEVEL:Int = 5; // default as 5 for now
 	
 	public function new(location: MapNode, faction:Faction, capLevel:Int, techLevel:Int) 
@@ -61,6 +61,20 @@ class Planet extends FlxSprite
 	}
 	
 	override public function update(elapsed:Float):Void {
+		if (this.faction == Faction.PLAYER) {
+			// draw player planet
+			loadGraphic(AssetPaths.player_planet_1__png, false, 16, 16);
+		} else if (this.faction == Faction.ENEMY_1) {
+			// draw enemy planet
+			loadGraphic(AssetPaths.enemy_planet_1__png, false, 16, 16);
+		} else if (this.faction == Faction.NEUTRAL) {
+			// draw neutral planet
+			loadGraphic(AssetPaths.neutral_planet_1__png, false, 16, 16);
+		} else {
+			// draw uncontrolled planet
+			loadGraphic(AssetPaths.uncontrolled_planet_1__png, false, 16, 16);
+		}
+		
 		ProduceShips();
 		super.update(elapsed);
 	}
@@ -95,4 +109,18 @@ class Planet extends FlxSprite
 		}
 	}
 	
+	// get capacity level
+	public function getCapacityLevel():Int {
+		return capacityLevel;
+	}
+	
+	// get tech level
+	public function getTechLevel() {
+		return techLevel;
+	}
+	
+	// set the planet faction to new faction if captured
+	public function captured(faction:Faction) {
+		this.faction = faction;
+	}
 }
