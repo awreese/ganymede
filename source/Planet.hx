@@ -56,7 +56,7 @@ class Planet extends FlxSprite
 		
 		// set other
 		capacity = capacityLevel * 5;
-		productionRate = 5;
+		productionRate = 1;
 		numShips = 0;
 		idleTimer = 0;
 	}
@@ -116,12 +116,19 @@ class Planet extends FlxSprite
 	}
 	
 	// get tech level
-	public function getTechLevel() {
+	public function getTechLevel():Int {
 		return techLevel;
 	}
 	
+	// get the production rate
+	public function getProductionRate():Int {
+		// need to adjust production rate //
+		// currently return default production rate //
+		return productionRate;
+	}
+	
 	// set the planet faction to new faction if captured
-	public function captured(faction:Faction) {
+	public function captured(faction:Faction):Void {
 		this.faction = faction;
 	}
 	
