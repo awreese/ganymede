@@ -25,6 +25,31 @@ import js.html.svg.AnimatedBoolean;
 import map.MapNode;
 
 /**
+ * Planet statistic type
+ * 
+ * Planet statistics must be instanitated and passed into constructors
+ * for planets.
+ * 
+ * @author Drew Reese
+ */
+typedef PlanetStat = {
+	// General
+	var cap: Int;			// ship capacity
+	var prod: Float;		// ship production rate
+	var prod_thresh: Float;	// production rate threshold for falloff
+	
+	// Levels
+	var cap_level: Int;		// current capacity level
+	var tech_level: Int;	// current tech level
+	
+	// Upgrades/costs
+	var base_cost: Int;		// base upgrade cost in ships
+	var cap_per_lvl: Int;	// capacity increase per level
+	var tech_per_lvl: Float;	// tech increase per level
+	
+}
+
+/**
  * ...
  * @author Daisy
  * 
@@ -129,7 +154,7 @@ class Planet extends FlxSprite
 		if (idleTimer < 5) {
 			// if it's time to produce ship, produce if can
 			idleTimer = 0;
-			if (numShips < capacity) {
+			if (numShips < this.pStats.cap) {
 				return true;
 			}	
 			// reset timer
@@ -143,34 +168,42 @@ class Planet extends FlxSprite
 	
 	// updates the capacity level and changes teh capacity accordingly
 	public function updateCapacity():Void {
-		if (capacityLevel < MAX_CAPACITY_LEVEL) {
-			capacityLevel++;
-			capacity = capacityLevel * 5;
+		if (this.pStats.cap_level < MAX_CAPACITY_LEVEL) {
+			//capacityLevel++;
+			//capacity = capacityLevel * 5;
+			this.pStats.cap_level++;
+			this.pStats.cap *= 5;
 		}
 	}
 	
 	// updates the tech level
 	public function updateTech():Void {
-		if (techLevel < MAX_TECH_LEVEL) {
-			techLevel++;
+		//if (techLevel < MAX_TECH_LEVEL) {
+			//techLevel++;
+		//}
+		if (this.pStats.tech_level < MAX_TECH_LEVEL) {
+			this.pStats.tech_level++;
 		}
 	}
 	
 	// get capacity level
 	public function getCapacityLevel():Int {
-		return capacityLevel;
+		//return capacityLevel;
+		return this.pStats.cap_level;
 	}
 	
 	// get tech level
 	public function getTechLevel():Int {
-		return techLevel;
+		//return techLevel;
+		return this.pStats.tech_level;
 	}
 	
 	// get the production rate
 	public function getProductionRate():Float {
 		// need to adjust production rate //
 		// currently return default production rate //
-		return productionRate;
+		//return productionRate;
+		return this.pStats.prod;
 	}
 	
 	// set the planet faction to new faction if captured
