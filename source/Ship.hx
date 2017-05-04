@@ -48,7 +48,13 @@ class Ship extends FlxSprite
 	public var isSelected: Bool;
 	
 	
-
+	/*
+	 * TODO: Update constructor to take planet instead of node when created.
+	 * 
+	 * Planets have a map node field to use for destinations, i.e. Ships interact with planets, not
+	 * the underlying graph.
+	 */
+	
 	public function new(destination: MapNode, faction: Faction, shipStats: ShipStat)
 	{
 		super();

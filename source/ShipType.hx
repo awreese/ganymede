@@ -1,5 +1,4 @@
 package;
-import flixel.math.FlxVector;
 
 /**
  *  Astrorush: TBD (The Best Defense)
@@ -20,24 +19,18 @@ import flixel.math.FlxVector;
  */
 
 /**
- * Ship statistic type.
- * 
- * Ship statistics must be instanited and passed into constructors for ships
+ * Various ship types that exist in-game.
  * 
  * @author Drew Reese
  */
-typedef ShipStat = {
-	// General
-	var hull: ShipType;	// ship type
-	var pos: FlxVector;	// position
-	var vel: Float;		// velocity
-	
-	// Defense
-	var sh: Float;		// shields
-	var hp: Int;		// hitpoints
-	
-	// Offense
-	var as: Float;		// attack speed
-	var ap: Float;		// attack power
-	var cp: Float;		// capture power/rate
+enum ShipType {
+	FRIGATE;
+	DESTROYER;
+	CRUISER;
+	BATTLECUISER;
+	BATTLESHIP;
+	FIGHTER;
+	CORVETTE;
+	CAPITAL;
+	PATROL_CRAFT;
 }

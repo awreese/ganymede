@@ -44,7 +44,8 @@ class PlayState extends FlxState
 		
 		for (i in 0...10)
 		{
-			var stat: ShipStat = { pos: gameMap.nodes[0].pos, 
+			var stat: ShipStat = { hull: ShipType.FRIGATE,
+								   pos: gameMap.nodes[0].pos, 
 								   vel: 100, 
 								   sh: 100, 
 								   hp: 100, 
