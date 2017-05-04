@@ -33,16 +33,19 @@ import map.MapNode;
  */
 class Planet extends FlxSprite
 {
-	// fields
+	// parent node and faction control fields
+	private var node: MapNode;
 	private var faction:Faction;
+	
+	// internal fields
 	private var capacity:Int;
-	private var productionRate:Int;
+	private var productionRate:Float;
 	private var numShips:Int;
 	private var idleTimer:Float;
 	
 	// levels for the planet
 	private var capacityLevel:Int;
-	private var MAX_CAPACITY_LEVEL:Int = 5; // default as 5 for now
+	static private var MAX_CAPACITY_LEVEL:Int = 5; // default as 5 for now
 	private var techLevel:Int;
 	private var MAX_TECH_LEVEL:Int = 5; // default as 5 for now
 	
@@ -144,7 +147,7 @@ class Planet extends FlxSprite
 	}
 	
 	// get the production rate
-	public function getProductionRate():Int {
+	public function getProductionRate():Float {
 		// need to adjust production rate //
 		// currently return default production rate //
 		return productionRate;

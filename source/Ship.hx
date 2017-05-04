@@ -1,4 +1,4 @@
-package source;
+package;
 
 /**
  *  Astrorush: TBD (The Best Defense)
@@ -23,23 +23,25 @@ import flixel.math.FlxVector;
 import map.MapNode;
 import map.MapEdge;
 
-import Faction;
-
 /**
- * ...
+ * 
  * @author Daisy
+ * @author Rory Soiffer
+ * @author Drew Reese
  */
 class Ship extends FlxSprite
 {
-
-	// General stats
+	// Parent/Faction Info
+	private var homePlanet: Planet;
 	private var faction: Faction;
-	public var speed: Float = 30;
+	
+	// General stats
+	//private var pos: FlxVector;
+	//private var velocity: Float = 30;
+	public var stats: ShipStat;
 
 	// Completely ship-specific
-	//public var pos: Vec;
-	public var pos: FlxVector;
-	public var rotation: Float;
+	//public var rotation: Float; no longer used
 	public var destination: MapNode;
 	public var nodePath: Array<MapEdge> = [];
 	public var progress: Float;
@@ -47,15 +49,16 @@ class Ship extends FlxSprite
 	
 	
 
-	//public function new(destination: MapNode, team: Int, faction: Faction)
-	public function new(destination: MapNode, faction: Faction)
+	public function new(destination: MapNode, faction: Faction, shipStats: ShipStat)
 	{
 		super();
-		pos = destination.pos;
+		//pos = destination.pos;
 		this.destination = destination;
-		loadGraphic("assets/images/ship_1.png", false, 32, 32);
-		// this.team = team;
 		this.faction = faction;
+		this.stats = shipStats;
+		
+		loadGraphic("assets/images/ship_1.png", false, 32, 32);
+		
 	}
 
 	public function idealPos(): FlxVector
@@ -110,11 +113,13 @@ class Ship extends FlxSprite
 		// Whether the ship is currently stationed at one node or is moving between nodes
 		if (isMoving())
 		{
-			pos = idealPos();
+			//pos = idealPos();
+			stats.pos = idealPos();
 			angle = nodePath[0].delta().degrees;
 			
 			// Update the ship's movement along an edge
-			progress += speed * elapsed;
+			//progress += velocity * elapsed;
+			progress += stats.vel * elapsed;
 			if (progress > nodePath[0].length())
 			{
 				progress -= nodePath[0].length();
@@ -122,14 +127,18 @@ class Ship extends FlxSprite
 			}
 		}
 		else {
-			pos = destination.pos;
+			//pos = destination.pos;
+			stats.pos = destination.pos;
 
 			progress = 0;
 		}
 
 		// Set the sprite's position (x,y) to match the actual position (pos)
-		x = pos.x - origin.x;
-		y = pos.y - origin.y;
+		//x = pos.x - origin.x;
+		//y = pos.y - origin.y;
+		
+		x = stats.pos.x - origin.x;
+		y = stats.pos.y - origin.y;
 
 		super.update(elapsed);
 	}

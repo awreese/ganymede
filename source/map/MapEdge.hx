@@ -21,8 +21,10 @@ package map;
 import flixel.math.FlxVector;
 
 /**
- * ...
+ * Edge connects two nodes in a graph.
+ * 
  * @author Rory Soiffer
+ * @author Drew Reese
  */
 class MapEdge
 {
@@ -32,6 +34,10 @@ class MapEdge
 
 	public function new(n1: MapNode, n2: MapNode)
 	{
+		if (n1.pos.equals(n2.pos)) {
+			return;
+		}
+		
 		this.n1 = n1;
 		this.n2 = n2;
 	}
@@ -43,7 +49,7 @@ class MapEdge
 
 	public function interpDist(d: Float): FlxVector
 	{
-		return interpPerc(d / length());
+		return (length() != 0) ? interpPerc(d / length()) : new FlxVector(0,0); // check division by 0!!
 	}
 
 	public function interpPerc(i: Float): FlxVector
