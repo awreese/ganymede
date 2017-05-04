@@ -38,18 +38,21 @@ class Planet extends FlxSprite
 	private var faction:Faction;
 	
 	// internal fields
-	private var capacity:Int;
-	private var productionRate:Float;
+	//private var capacity:Int;
+	//private var productionRate:Float;
+	private var pStats: PlanetStat;
 	private var numShips:Int;
 	private var idleTimer:Float;
 	
 	// levels for the planet
-	private var capacityLevel:Int;
-	static private var MAX_CAPACITY_LEVEL:Int = 5; // default as 5 for now
-	private var techLevel:Int;
-	private var MAX_TECH_LEVEL:Int = 5; // default as 5 for now
+	//private var capacityLevel:Int;
+	//private var techLevel:Int;
 	
-	public function new(location: MapNode, faction:Faction, capLevel:Int, techLevel:Int) 
+	public static inline var MAX_CAPACITY_LEVEL:Int = 5; // default as 5 for now
+	public static inline var MAX_TECH_LEVEL:Int = 5; // default as 5 for now
+	
+	//public function new(location: MapNode, faction:Faction, capLevel:Int, techLevel:Int) 
+	public function new(location: MapNode, faction: Faction, pstats: PlanetStat)
 	{
 		// set position of the planet
 		super(location.pos.x - (MapNode.NODE_SIZE / 2), location.pos.y - (MapNode.NODE_SIZE / 2));
@@ -57,6 +60,7 @@ class Planet extends FlxSprite
 		// set faction
 		this.faction = faction;
 		
+		// Load graphics and any faction specific items
 		switch(this.faction) {
 			case Faction.PLAYER:
 				loadGraphic(AssetPaths.player_planet_1__png, false, 16, 16);
@@ -77,30 +81,46 @@ class Planet extends FlxSprite
 		}
 		
 		// set levels
-		capacityLevel = capLevel;
-		this.techLevel = techLevel;
+		//capacityLevel = capLevel;
+		//this.techLevel = techLevel;
+		this.pStats = pstats;
 		
 		// set other
-		capacity = capacityLevel * 5;
-		productionRate = 1;
+		//capacity = capacityLevel * 5;
+		//productionRate = 1;
 		numShips = 0;
 		idleTimer = 0;
 	}
 	
 	override public function update(elapsed:Float):Void {
-		if (this.faction == Faction.PLAYER) {
-			// draw player planet
-			loadGraphic(AssetPaths.player_planet_1__png, false, 16, 16);
-		} else if (this.faction == Faction.ENEMY_1) {
-			// draw enemy planet
-			loadGraphic(AssetPaths.enemy_planet_1__png, false, 16, 16);
-		} else if (this.faction == Faction.NEUTRAL) {
-			// draw neutral planet
-			loadGraphic(AssetPaths.neutral_planet_1__png, false, 16, 16);
-		} else {
-			// draw uncontrolled planet
-			loadGraphic(AssetPaths.uncontrolled_planet_1__png, false, 16, 16);
+		//if (this.faction == Faction.PLAYER) {
+			//// draw player planet
+			//loadGraphic(AssetPaths.player_planet_1__png, false, 16, 16);
+		//} else if (this.faction == Faction.ENEMY_1) {
+			//// draw enemy planet
+			//loadGraphic(AssetPaths.enemy_planet_1__png, false, 16, 16);
+		//} else if (this.faction == Faction.NEUTRAL) {
+			//// draw neutral planet
+			//loadGraphic(AssetPaths.neutral_planet_1__png, false, 16, 16);
+		//} else {
+			//// draw uncontrolled planet
+			//loadGraphic(AssetPaths.uncontrolled_planet_1__png, false, 16, 16);
+		//}  these were already set, only need to change on change of possession
+		
+		// Take faction action
+		switch(this.faction) {
+			case Faction.NOP:
+				trace("Open Planet");
+			case Faction.NEUTRAL:
+				trace("Neutral Planet");
+			case Faction.PLAYER:
+				trace("Player Planet");
+			default:
+				// Not player, neutral, or NOP planet => do enemy stuff
+				trace("Enemy Planet: " + this.faction);
 		}
+		
+		
 		super.update(elapsed);
 	}
 	

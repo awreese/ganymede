@@ -67,7 +67,6 @@ class GameMap extends FlxSprite
 
 	}
 
-	//public function findNode(v: Vec): MapNode
 	public function findNode(v: FlxVector): MapNode
 	{
 		return nodes.filter(function(n) return n.contains(v))[0];

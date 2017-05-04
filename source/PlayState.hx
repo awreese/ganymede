@@ -59,8 +59,20 @@ class PlayState extends FlxState
 		super.create();
 	}
 
-	override public function update(elapsed: Float): Void
-	{
+	/*
+	 * This is the main game engine.
+	 */
+	override public function update(elapsed: Float): Void {
+		
+		/*
+		 * Check and update any game state
+		 */
+		
+		
+		/*
+		 * Handle any mouse/keyboard events
+		 */
+		
 		// Selecting ships
 		if (FlxG.mouse.justPressed)
 		{
