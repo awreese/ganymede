@@ -32,21 +32,39 @@ import map.MapNode;
  * 
  * @author Drew Reese
  */
-typedef PlanetStat = {
+class PlanetStat {
+	// Class Constants
+	public static inline var MAX_CAPACITY_LEVEL:Int = 5; // default as 5 for now
+	public static inline var MAX_TECH_LEVEL:Int = 5; // default as 5 for now
+	
 	// General
-	var cap: Int;			// ship capacity
-	var prod: Float;		// ship production rate
-	var prod_thresh: Float;	// production rate threshold for falloff
+	public var cap: Int;			// ship capacity
+	public var prod: Float;			// ship production rate
+	public var prod_thresh: Float;	// production rate threshold for falloff
 	
 	// Levels
-	var cap_level: Int;		// current capacity level
-	var tech_level: Int;	// current tech level
+	public var cap_lvl: Int;		// current capacity level
+	public var tech_lvl: Int;		// current tech level
 	
 	// Upgrades/costs
-	var base_cost: Int;		// base upgrade cost in ships
-	var cap_per_lvl: Int;	// capacity increase per level
-	var tech_per_lvl: Float;	// tech increase per level
+	public var base_cost: Int;		// base upgrade cost in ships
+	public var cap_per_lvl: Int;	// capacity increase per level
+	public var tech_per_lvl: Float;	// tech increase per level
 	
+	public function new(?cap = 10, ?prod = 5.0, ?prod_thresh = 0.5,
+						?cap_lvl = 0, ?tech_lvl = 0,
+						?base_cost = 10,
+						?cap_per_lvl=5, ?tech_per_lvl=2) {
+							
+							this.cap = cap;
+							this.prod = prod;
+							this.prod_thresh = prod_thresh;
+							this.cap_lvl = cap_lvl;
+							this.tech_lvl = tech_lvl;
+							this.base_cost = base_cost;
+							this.cap_per_lvl = cap_per_lvl;
+							this.tech_per_lvl = tech_per_lvl;
+						}
 }
 
 /**
@@ -73,8 +91,8 @@ class Planet extends FlxSprite
 	//private var capacityLevel:Int;
 	//private var techLevel:Int;
 	
-	public static inline var MAX_CAPACITY_LEVEL:Int = 5; // default as 5 for now
-	public static inline var MAX_TECH_LEVEL:Int = 5; // default as 5 for now
+	//public static inline var MAX_CAPACITY_LEVEL:Int = 5; // default as 5 for now
+	//public static inline var MAX_TECH_LEVEL:Int = 5; // default as 5 for now
 	
 	//public function new(location: MapNode, faction:Faction, capLevel:Int, techLevel:Int) 
 	public function new(location: MapNode, faction: Faction, pstats: PlanetStat)
@@ -168,10 +186,10 @@ class Planet extends FlxSprite
 	
 	// updates the capacity level and changes teh capacity accordingly
 	public function updateCapacity():Void {
-		if (this.pStats.cap_level < MAX_CAPACITY_LEVEL) {
+		if (this.pStats.cap_lvl < PlanetStat.MAX_CAPACITY_LEVEL) {
 			//capacityLevel++;
 			//capacity = capacityLevel * 5;
-			this.pStats.cap_level++;
+			this.pStats.cap_lvl++;
 			this.pStats.cap *= 5;
 		}
 	}
@@ -181,21 +199,21 @@ class Planet extends FlxSprite
 		//if (techLevel < MAX_TECH_LEVEL) {
 			//techLevel++;
 		//}
-		if (this.pStats.tech_level < MAX_TECH_LEVEL) {
-			this.pStats.tech_level++;
+		if (this.pStats.tech_lvl < PlanetStat.MAX_TECH_LEVEL) {
+			this.pStats.tech_lvl++;
 		}
 	}
 	
 	// get capacity level
 	public function getCapacityLevel():Int {
 		//return capacityLevel;
-		return this.pStats.cap_level;
+		return this.pStats.cap_lvl;
 	}
 	
 	// get tech level
 	public function getTechLevel():Int {
 		//return techLevel;
-		return this.pStats.tech_level;
+		return this.pStats.tech_lvl;
 	}
 	
 	// get the production rate
