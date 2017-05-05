@@ -24,6 +24,78 @@ import map.MapNode;
 import map.MapEdge;
 
 /**
+ * Various ship types that exist in-game.
+ * 
+ * @author Drew Reese
+ */
+enum ShipType {
+	FRIGATE;
+	DESTROYER;
+	CRUISER;
+	BATTLECUISER;
+	BATTLESHIP;
+	FIGHTER;
+	CORVETTE;
+	CAPITAL;
+	PATROL_CRAFT;
+}
+
+/**
+ * Ship statistic type.
+ * 
+ * Ship statistics must be instanited and passed into constructors for ships
+ * 
+ * @author Drew Reese
+ */
+class ShipStat {
+	// General
+	public var hull: ShipType;	// ship type
+	public var pos: FlxVector;	// position
+	public var vel: Float;		// velocity
+	
+	/* 
+	 * Defense
+	 * 
+	 * Damage recieved is (incoming attack power ) x hp
+	 *  dmg = enemy.ap * sh
+	 * 	hp -= dmg
+	 */
+	public var sh: Float;		// shields [0.1, 0.9]
+	public var hp: Int;			// hitpoints
+	
+	/*
+	 * Offense
+	 * 
+	 * Damage sent is (attack power) every (attack speed) seconds.
+	 * 	dps = as * ap
+	 * 
+	 * Capturing is structure capture points per second
+	 */
+	public var as: Float;		// attack speed (attacks per second)
+	public var ap: Float;		// attack power (damage per attack)
+	public var cp: Float;		// capture power (capture points per second)
+	
+	public function new(?hull = null,
+						?pos = null,
+						?vel = 10.0,
+						?sh = 0.5,
+						?hp = 100,
+						?as = 2.0,
+						?ap = 10,
+						?cp = 5) {
+		this.hull = hull;
+		this.pos = pos;
+		this.vel = vel;
+		this.sh = sh;
+		this.hp = hp;
+		this.as = as;
+		this.ap = ap;
+		this.cp = cp;
+		
+	}
+}
+
+/**
  * 
  * @author Daisy
  * @author Rory Soiffer

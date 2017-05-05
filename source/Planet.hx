@@ -100,10 +100,6 @@ class Planet extends FlxSprite
 	//private var capacityLevel:Int;
 	//private var techLevel:Int;
 	
-	//public static inline var MAX_CAPACITY_LEVEL:Int = 5; // default as 5 for now
-	//public static inline var MAX_TECH_LEVEL:Int = 5; // default as 5 for now
-	
-	//public function new(location: MapNode, faction:Faction, capLevel:Int, techLevel:Int) 
 	public function new(location: MapNode, faction: Faction, pstats: PlanetStat)
 	{
 		// set position of the planet

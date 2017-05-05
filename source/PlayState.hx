@@ -24,7 +24,7 @@ import flixel.group.FlxGroup;
 import flixel.math.FlxVector;
 import map.GameMap;
 import map.MapNode;
-
+import Ship;
 
 class PlayState extends FlxState
 {
@@ -68,14 +68,14 @@ class PlayState extends FlxState
 		
 		for (i in 0...10)
 		{
-			var stat: ShipStat = { hull: ShipType.FRIGATE,
-								   pos: gameMap.nodes[0].pos, 
-								   vel: 100, 
-								   sh: 100, 
-								   hp: 100, 
-								   as: 0, 
-								   ap: 0, 
-								   cp: 0 };
+			var stat: ShipStat = new ShipStat(ShipType.FRIGATE,
+								  gameMap.nodes[0].pos, 
+								  30, 
+								  100, 
+								  100, 
+								  0, 
+								  0, 
+								  0);
 			var s = new Ship(gameMap.nodes[0], Faction.PLAYER, stat);
 			grpShips.add(s);
 		}
