@@ -153,6 +153,8 @@ class Planet extends FlxSprite
 		//productionRate = 1;
 		numShips = new Map<Faction, Int>();
 		numShips.set(Faction.PLAYER, 0);
+		numShips.set(Faction.ENEMY_1, 0);
+		numShips.set(Faction.NEUTRAL, 0);
 		idleTimer = 0;
 		
 		currFactionBar.value = Math.abs(factionProgress);
@@ -210,6 +212,12 @@ class Planet extends FlxSprite
 					invadingFactionBar.color = FlxColor.RED;
 				}
 		}
+		if (currFactionBar.visible) {
+			currFactionBar.value = Math.abs(factionProgress);
+		} else if (invadingFactionBar.visible) {
+			invadingFactionBar.value = Math.abs(factionProgress);
+		}
+		
 		if (factionProgress == 100) {
 			faction = Faction.PLAYER;
 		} else if (factionProgress == -100) {
@@ -284,7 +292,7 @@ class Planet extends FlxSprite
 	
 	// sets the number of ships of the faction to ships
 	public function setNumShips(shipFaction:Faction, ships:Int):Void {
-		numShips.set(faction, ships);
+		numShips.set(shipFaction, ships);
 	}
 	
 	// progress the capture bar
@@ -309,6 +317,11 @@ class Planet extends FlxSprite
 				}
 			default:
 				factionProgress += playerShips - enemyShips;
+		}
+		if (factionProgress > 0 && factionProgress > 100) {
+			factionProgress = 100;
+		} else if (factionProgress < 0 && factionProgress < -100) {
+			factionProgress = -100;
 		}
 	}
 	
