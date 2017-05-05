@@ -87,14 +87,14 @@ class Planet extends FlxSprite
 	//private var capacity:Int;
 	//private var productionRate:Float;
 	private var pStats: PlanetStat;
-	private var numShips:Int;
+	private var numShips:Map<Faction, Int>;
 	private var idleTimer:Float;
 	
 	// progress bar
 	private var factionProgress:Int;
-	private var invadingProgress:Int;
 	private var currFactionBar:FlxBar;
 	private var invadingFactionBar:FlxBar;
+	private var invadeFaction:Faction;
 	
 	// levels for the planet
 	//private var capacityLevel:Int;
@@ -139,9 +139,9 @@ class Planet extends FlxSprite
 			default:
 				factionProgress = 0;
 		}
-		invadingProgress = 0;
 		
 		setSprite();
+		invadingFactionBar.createColoredFilledBar(FlxColor.WHITE, true);
 		
 		// set levels
 		//capacityLevel = capLevel;
@@ -151,11 +151,11 @@ class Planet extends FlxSprite
 		// set other
 		//capacity = capacityLevel * 5;
 		//productionRate = 1;
-		numShips = 0;
+		numShips.set(Faction.PLAYER, 0);
 		idleTimer = 0;
 		
 		currFactionBar.value = factionProgress;
-		invadingFactionBar.value = invadingProgress;
+		invadingFactionBar.value = 0;
 		FlxG.state.add(currFactionBar);
 		FlxG.state.add(invadingFactionBar);
 	}
@@ -188,6 +188,30 @@ class Planet extends FlxSprite
 				trace("Enemy Planet: " + this.faction);
 		}*/
 		
+		// setting which bar is visible
+		/*switch (faction) {
+			case Faction.PLAYER:
+				currFactionBar.visible = factionProgress >= 0;
+				invadingFactionBar.color = FlxColor.RED;
+				invadingFactionBar.visible = factionProgress < 0;
+			case Faction.ENEMY_1:
+				currFactionBar.visible = factionProgress <= 0;
+				invadingFactionBar.color = FlxColor.BLUE;
+				invadingFactionBar.visible = factionProgress > 0;
+			default:
+				currFactionBar.visible = false;
+				invadingFactionBar.visible = true;
+				if (factionProgress >= 0) {
+					invadingFactionBar.color = FlxColor.BLUE;
+				} else {
+					invadingFactionBar.color = FlxColor.RED;
+				}
+		}
+		if (factionProgress == 100) {
+			faction = Faction.PLAYER;
+		} else if (factionProgress == -100) {
+			faction = Faction.ENEMY_1;
+		}*/
 		setSprite();
 		
 		super.update(elapsed);
@@ -198,7 +222,7 @@ class Planet extends FlxSprite
 		if (idleTimer < 5) {
 			// if it's time to produce ship, produce if can
 			idleTimer = 0;
-			if (numShips < this.pStats.cap) {
+			if (numShips.get(faction) < this.pStats.cap) {
 				return true;
 			}	
 			// reset timer
@@ -255,76 +279,34 @@ class Planet extends FlxSprite
 		this.faction = faction;
 	}
 	
-	// sets the number of ships at this planet
-	public function setNumShips(ships:Int):Void {
-		numShips = ships;
+	// sets the number of ships of the faction to ships
+	public function setNumShips(shipFaction:Faction, ships:Int):Void {
+		numShips.set(faction, ships);
 	}
 	
 	// progress the capture bar
 	private function capturing():Void
 	{
-		// get number of each faction ships at the planet
-		/*var enemyShips:Int = numShips.get(Faction.ENEMY_1);
 		var playerShips:Int = numShips.get(Faction.PLAYER);
-		var neutralShips:Int = numShips.get(Faction.NEUTRAL);
-		var newProgress:Int = controllingFactionProgress;
-		switch (faction)
-		{
-			// if current faction is player, enemy, or uncontrol
-			case Faction.PLAYER :
-				if (enemyShips > 0)
-				{
-					newProgress = controllingFactionProgress + (playerShips - enemyShips) * 5;
-					// make sure don't go over 100
-					newProgress = newProgress % 101;
+		var enemyShips:Int = numShips.get(Faction.ENEMY_1);
+		var neutralShips:Int = numShips.get(Faction.NEUTRAL); 
+		
+		switch(faction) {
+			case Faction.PLAYER:
+				if (playerShips == 0) {
+					factionProgress += -enemyShips;
 				}
 			case Faction.ENEMY_1:
-				if (playerShips > 0)
-				{
-					newProgress = controllingFactionProgress + (playerShips - enemyShips) * 5;
-					// make sure don't go over -100
-					if (newProgress < -100) newProgress = -100;
+				if (enemyShips == 0) {
+					factionProgress += playerShips;
 				}
-			// if faction is neutral
+			case Faction.NEUTRAL:
+				if (neutralShips == 0) {
+					factionProgress += playerShips - enemyShips;
+				}
 			default:
-				// if there are no neutral ship, move bar
-				if (neutralShips == 0)
-				{
-					newProgress = controllingFactionProgress + (playerShips - enemyShips) * 5;
-					// cap controllingfactionprogress
-					newProgress = newProgress % 101;
-					if (newProgress < -100) newProgress = -100;
-				}
-				// else do nothing
-		}*/
-		/*if (controllingFactionProgress != newProgress)
-		{
-			// if progress bar is different, adjust
-			controllingFactionProgress = newProgress;
-			// move progress bar
-			if (controllingFactionProgress > 0)
-			{
-				if (!playerFactionBar.visible)
-				{
-					// if player progress bar not visible, set to visible and set enemy bar invisible
-					playerFactionBar.visible = true;
-					enemyFactionBar.visible = false;
-				}
-				// if on player bar, move player bar
-				playerFactionBar.value = Math.abs(controllingFactionProgress);
-			}
-			else
-			{
-				if (!enemyFactionBar.visible)
-				{
-					// if enemy progress bar is not visible, set to visible and set player bar invisible
-					playerFactionBar.visible = false;
-					enemyFactionBar.visible = true;
-				}
-				// if on enemy bar, move enemy bar
-				enemyFactionBar.value = Math.abs(controllingFactionProgress);
-			}
-		}*/
+				factionProgress += playerShips - enemyShips;
+		}
 	}
 	
 	private function setSprite():Void {
