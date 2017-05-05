@@ -24,6 +24,8 @@ import flixel.group.FlxGroup;
 import flixel.math.FlxVector;
 import map.GameMap;
 import map.MapNode;
+import faction.Faction;
+//import faction.FactionType;
 import Ship;
 
 class PlayState extends FlxState
@@ -50,15 +52,18 @@ class PlayState extends FlxState
 		//grpPlanets.add(new Planet(gameMap.nodes[1], Faction.NOP, new Planet.PlanetStat()));
 		
 		//playerPlanet = new Planet(gameMap.nodes[0], Faction.PLAYER, new Planet.PlanetStat());
-		enemyPlanet = new Planet(gameMap.nodes[1], Faction.ENEMY_1, new Planet.PlanetStat());
+		//enemyPlanet = new Planet(gameMap.nodes[1], faction.Faction.ENEMY_1, new Planet.PlanetStat());
 		//openPlanet = new Planet(gameMap.nodes[2], Faction.NOP, new Planet.PlanetStat());
 		
 		//add(playerPlanet);
-		add(enemyPlanet);
+		//add(enemyPlanet);
 		//add(openPlanet);
 		
+		/*enemyPlanet = new Planet(gameMap.nodes[1], faction.Faction.ENEMY_1, new Planet.PlanetStat());
+		add(enemyPlanet);*/
+		
 		//playerPlanet.setNumShips(Faction.ENEMY_1, 1);
-		enemyPlanet.setNumShips(Faction.PLAYER, 2);
+		//enemyPlanet.setNumShips(PLAYER, 2);
 		//openPlanet.setNumShips(Faction.PLAYER, 2);
 		//openPlanet.setNumShips(Faction.ENEMY_1, 1);
 
@@ -76,7 +81,8 @@ class PlayState extends FlxState
 								  0, 
 								  0, 
 								  0);
-			var s = new Ship(gameMap.nodes[0], Faction.PLAYER, stat);
+			var faction:Faction = new Faction(FactionType.PLAYER);
+			var s = new Ship(gameMap.nodes[0], faction, stat);
 			grpShips.add(s);
 		}
 

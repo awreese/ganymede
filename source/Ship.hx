@@ -22,6 +22,7 @@ import flixel.FlxSprite;
 import flixel.math.FlxVector;
 import map.MapNode;
 import map.MapEdge;
+import faction.Faction;
 
 /**
  * Various ship types that exist in-game.
@@ -105,6 +106,7 @@ class Ship extends FlxSprite
 {
 	// Parent/Faction Info
 	private var homePlanet: Planet;
+	//private var faction: Faction;
 	private var faction: Faction;
 	
 	// General stats
@@ -169,13 +171,15 @@ class Ship extends FlxSprite
 	override public function update(elapsed:Float):Void
 	{
 		// check faction, draw appropriate sprite/color, etc..
-		switch(this.faction) {
+		switch(this.faction.getFaction()) {
+			case NOP:
+				trace("NOP Ship " + this.faction.getColor().toWebString);
 			case PLAYER:
-				trace("Player Ship");
+				trace("Player Ship " + this.faction.getColor().toWebString);
 			case NEUTRAL:
-				trace("Neutral Ship");
+				trace("Neutral Ship " + this.faction.getColor().toWebString);
 			default:
-				trace("Enemy Ship #" + this.faction);
+				trace("Enemy Ship #" + this.faction.getColor().toWebString);
 		}
 		
 		

@@ -26,6 +26,8 @@ import flixel.ui.FlxBar;
 import flixel.util.FlxColor;
 import js.html.svg.AnimatedBoolean;
 import map.MapNode;
+import faction.Faction;
+
 
 /**
  * Planet statistic type
@@ -115,22 +117,22 @@ class Planet extends FlxSprite
 		invadingFactionBar.visible = false;
 		
 		// Load graphics and any faction specific items
-		switch(this.faction) {
-			case Faction.PLAYER:
+		switch(this.faction.getFaction()) {
+			case PLAYER:
 				factionProgress = 100;
-			case Faction.ENEMY_1:
+			case ENEMY_1:
 				factionProgress = -100;
-			case Faction.ENEMY_2:
+			case ENEMY_2:
 				factionProgress = -100;
-			case Faction.ENEMY_3:
+			case ENEMY_3:
 				factionProgress = -100;
-			case Faction.ENEMY_4:
+			case ENEMY_4:
 				factionProgress = -100;
-			case Faction.ENEMY_5:
+			case ENEMY_5:
 				factionProgress = -100;
-			case Faction.ENEMY_6:
+			case ENEMY_6:
 				factionProgress = -100;
-			case Faction.NEUTRAL:
+			case NEUTRAL:
 				factionProgress = 100;
 			default:
 				factionProgress = 0;
@@ -147,7 +149,7 @@ class Planet extends FlxSprite
 		// set other
 		//capacity = capacityLevel * 5;
 		//productionRate = 1;
-		numShips = new Map<Faction, Int>();
+		/*numShips = new Map<Faction, Int>();
 		numShips.set(Faction.PLAYER, 0);
 		numShips.set(Faction.ENEMY_1, 0);
 		numShips.set(Faction.NEUTRAL, 0);
@@ -156,7 +158,7 @@ class Planet extends FlxSprite
 		currFactionBar.value = Math.abs(factionProgress);
 		invadingFactionBar.value = 0;
 		FlxG.state.add(currFactionBar);
-		FlxG.state.add(invadingFactionBar);
+		FlxG.state.add(invadingFactionBar);*/
 	}
 	
 	override public function update(elapsed:Float):Void {
@@ -190,12 +192,12 @@ class Planet extends FlxSprite
 		capturing();
 		
 		// setting which bar is visible
-		switch (this.faction) {
-			case Faction.PLAYER:
+		switch (this.faction.getFaction()) {
+			case PLAYER:
 				currFactionBar.visible = factionProgress >= 0;
 				invadingFactionBar.color = FlxColor.RED;
 				invadingFactionBar.visible = factionProgress < 0;
-			case Faction.ENEMY_1:
+			case ENEMY_1:
 				currFactionBar.visible = factionProgress <= 0;
 				invadingFactionBar.color = FlxColor.BLUE;
 				invadingFactionBar.visible = factionProgress > 0;
@@ -215,9 +217,9 @@ class Planet extends FlxSprite
 		}
 		
 		if (factionProgress == 100) {
-			faction = Faction.PLAYER;
+			this.faction.setFaction(PLAYER);
 		} else if (factionProgress == -100) {
-			faction = Faction.ENEMY_1;
+			this.faction.setFaction(ENEMY_1);
 		}
 		setSprite();
 		
@@ -282,38 +284,38 @@ class Planet extends FlxSprite
 	}
 	
 	// set the planet faction to new faction if captured
-	public function captured(faction:Faction):Void {
+	public function captured(faction:faction.Faction):Void {
 		this.faction = faction;
 	}
 	
 	// sets the number of ships of the faction to ships
-	public function setNumShips(shipFaction:Faction, ships:Int):Void {
+	public function setNumShips(shipFaction:faction.Faction, ships:Int):Void {
 		numShips.set(shipFaction, ships);
 	}
 	
 	// progress the capture bar
 	private function capturing():Void
 	{
-		var playerShips:Int = numShips.get(Faction.PLAYER);
-		var enemyShips:Int = numShips.get(Faction.ENEMY_1);
-		var neutralShips:Int = numShips.get(Faction.NEUTRAL); 
+		/*var playerShips:Int = numShips.get(faction.Faction.PLAYER);
+		var enemyShips:Int = numShips.get(faction.Faction.ENEMY_1);
+		var neutralShips:Int = numShips.get(faction.Faction.NEUTRAL);*/ 
 		
-		switch(faction) {
-			case Faction.PLAYER:
+		/*switch(this.faction.getFaction()) {
+			case PLAYER:
 				if (playerShips == 0) {
 					factionProgress += -enemyShips;
 				}
-			case Faction.ENEMY_1:
+			case ENEMY_1:
 				if (enemyShips == 0) {
 					factionProgress += playerShips;
 				}
-			case Faction.NEUTRAL:
+			case NEUTRAL:
 				if (neutralShips == 0) {
 					factionProgress += playerShips - enemyShips;
 				}
 			default:
 				factionProgress += playerShips - enemyShips;
-		}
+		}*/
 		if (factionProgress > 0 && factionProgress > 100) {
 			factionProgress = 100;
 		} else if (factionProgress < 0 && factionProgress < -100) {
@@ -322,29 +324,29 @@ class Planet extends FlxSprite
 	}
 	
 	private function setSprite():Void {
-		switch(this.faction) {
-			case Faction.PLAYER:
+		switch(this.faction.getFaction()) {
+			case PLAYER:
 				loadGraphic(AssetPaths.player_planet_1__png, false, 16, 16);
 				currFactionBar.createColoredFilledBar(FlxColor.BLUE, true);
-			case Faction.ENEMY_1:
+			case ENEMY_1:
 				loadGraphic(AssetPaths.enemy_planet_1__png, false, 16, 16);
 				currFactionBar.createColoredFilledBar(FlxColor.RED, true);
-			case Faction.ENEMY_2:
+			case ENEMY_2:
 				loadGraphic(AssetPaths.enemy_planet_1__png, false, 16, 16);
 				currFactionBar.createColoredFilledBar(FlxColor.RED, true);
-			case Faction.ENEMY_3:
+			case ENEMY_3:
 				loadGraphic(AssetPaths.enemy_planet_1__png, false, 16, 16);
 				currFactionBar.createColoredFilledBar(FlxColor.RED, true);
-			case Faction.ENEMY_4:
+			case ENEMY_4:
 				loadGraphic(AssetPaths.enemy_planet_1__png, false, 16, 16);
 				currFactionBar.createColoredFilledBar(FlxColor.RED, true);
-			case Faction.ENEMY_5:
+			case ENEMY_5:
 				loadGraphic(AssetPaths.enemy_planet_1__png, false, 16, 16);
 				currFactionBar.createColoredFilledBar(FlxColor.RED, true);
-			case Faction.ENEMY_6:
+			case ENEMY_6:
 				loadGraphic(AssetPaths.enemy_planet_1__png, false, 16, 16);
 				currFactionBar.createColoredFilledBar(FlxColor.RED, true);
-			case Faction.NEUTRAL:
+			case NEUTRAL:
 				loadGraphic(AssetPaths.neutral_planet_1__png, false, 16, 16);
 				currFactionBar.createColoredFilledBar(FlxColor.GREEN, true);
 			default:
