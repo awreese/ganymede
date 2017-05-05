@@ -22,8 +22,6 @@ import flixel.util.FlxColor;
 
 /**
  * This enumeration represents the controllable factions in the game.
- * Game assets that can be controlled/possessed will have some controlling 
- * faction assigned to it.
  * 
  * @author Drew Reese
  */
@@ -41,6 +39,9 @@ enum FactionType {
 
 /**
  * Faction class represents the existing factions in the game.
+ * Game assets that can be controlled/possessed will have some controlling 
+ * faction assigned to it.
+ * 
  * @author Drew Reese
  */
 class Faction {
