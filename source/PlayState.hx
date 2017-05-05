@@ -31,12 +31,20 @@ class PlayState extends FlxState
 
 	private var gameMap: GameMap;
 	private var grpShips: FlxTypedGroup<Ship>;
+	private var grpPlanets: FlxTypedGroup<Planet>;
 
 	override public function create(): Void
 	{
 		// Initialize the map
 		gameMap = new GameMap();
 		add(gameMap);
+		
+		// create planets
+		grpPlanets = new FlxTypedGroup<Planet>();
+		add(grpPlanets);
+		
+		grpPlanets.add(new Planet(gameMap.nodes[0], Faction.PLAYER, new Planet.PlanetStat()));
+		grpPlanets.add(new Planet(gameMap.nodes[1], Faction.NOP, new Planet.PlanetStat()));
 
 		// Create the ships
 		grpShips = new FlxTypedGroup<Ship>();
