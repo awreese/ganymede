@@ -151,10 +151,11 @@ class Planet extends FlxSprite
 		// set other
 		//capacity = capacityLevel * 5;
 		//productionRate = 1;
+		numShips = new Map<Faction, Int>();
 		numShips.set(Faction.PLAYER, 0);
 		idleTimer = 0;
 		
-		currFactionBar.value = factionProgress;
+		currFactionBar.value = Math.abs(factionProgress);
 		invadingFactionBar.value = 0;
 		FlxG.state.add(currFactionBar);
 		FlxG.state.add(invadingFactionBar);
@@ -188,8 +189,10 @@ class Planet extends FlxSprite
 				trace("Enemy Planet: " + this.faction);
 		}*/
 		
+		capturing();
+		
 		// setting which bar is visible
-		/*switch (faction) {
+		switch (this.faction) {
 			case Faction.PLAYER:
 				currFactionBar.visible = factionProgress >= 0;
 				invadingFactionBar.color = FlxColor.RED;
@@ -211,7 +214,7 @@ class Planet extends FlxSprite
 			faction = Faction.PLAYER;
 		} else if (factionProgress == -100) {
 			faction = Faction.ENEMY_1;
-		}*/
+		}
 		setSprite();
 		
 		super.update(elapsed);

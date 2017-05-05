@@ -43,13 +43,13 @@ class PlayState extends FlxState
 		add(gameMap);
 		
 		// create planets
-		grpPlanets = new FlxTypedGroup<Planet>();
-		add(grpPlanets);
+		/*grpPlanets = new FlxTypedGroup<Planet>();
+		add(grpPlanets);*/
 		
-		grpPlanets.add(new Planet(gameMap.nodes[0], Faction.PLAYER, new Planet.PlanetStat()));
-		grpPlanets.add(new Planet(gameMap.nodes[1], Faction.NOP, new Planet.PlanetStat()));
+		//grpPlanets.add(new Planet(gameMap.nodes[0], Faction.PLAYER, new Planet.PlanetStat()));
+		//grpPlanets.add(new Planet(gameMap.nodes[1], Faction.NOP, new Planet.PlanetStat()));
 		
-		/*playerPlanet = new Planet(gameMap.nodes[0], Faction.PLAYER, new Planet.PlanetStat());
+		playerPlanet = new Planet(gameMap.nodes[0], Faction.PLAYER, new Planet.PlanetStat());
 		enemyPlanet = new Planet(gameMap.nodes[1], Faction.ENEMY_1, new Planet.PlanetStat());
 		openPlanet = new Planet(gameMap.nodes[2], Faction.NOP, new Planet.PlanetStat());
 		
@@ -60,7 +60,7 @@ class PlayState extends FlxState
 		playerPlanet.setNumShips(Faction.ENEMY_1, 1);
 		enemyPlanet.setNumShips(Faction.PLAYER, 1);
 		openPlanet.setNumShips(Faction.PLAYER, 2);
-		openPlanet.setNumShips(Faction.ENEMY_1, 1);*/
+		openPlanet.setNumShips(Faction.ENEMY_1, 1);
 
 		// Create the ships
 		grpShips = new FlxTypedGroup<Ship>();
