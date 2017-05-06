@@ -37,7 +37,7 @@ class PlayState extends FlxState
 	private var playerPlanet: Planet;
 	private var enemyPlanet: Planet;
 	private var openPlanet: Planet;
-
+	
 	override public function create(): Void
 	{
 		// Initialize the map
@@ -45,33 +45,16 @@ class PlayState extends FlxState
 		add(gameMap);
 		
 		// create planets
-		/*grpPlanets = new FlxTypedGroup<Planet>();
-		add(grpPlanets);*/
+		grpPlanets = new FlxTypedGroup<Planet>();
+		add(grpPlanets);
+		grpPlanets.add(new Planet(gameMap.nodes[0], new Faction(FactionType.PLAYER), new Planet.PlanetStat()));
 		
-		//grpPlanets.add(new Planet(gameMap.nodes[0], Faction.PLAYER, new Planet.PlanetStat()));
-		//grpPlanets.add(new Planet(gameMap.nodes[1], Faction.NOP, new Planet.PlanetStat()));
-		
-		//playerPlanet = new Planet(gameMap.nodes[0], Faction.PLAYER, new Planet.PlanetStat());
-		//enemyPlanet = new Planet(gameMap.nodes[1], faction.Faction.ENEMY_1, new Planet.PlanetStat());
-		//openPlanet = new Planet(gameMap.nodes[2], Faction.NOP, new Planet.PlanetStat());
-		
-		//add(playerPlanet);
-		//add(enemyPlanet);
-		//add(openPlanet);
-		
-		/*enemyPlanet = new Planet(gameMap.nodes[1], faction.Faction.ENEMY_1, new Planet.PlanetStat());
-		add(enemyPlanet);*/
-		
-		//playerPlanet.setNumShips(Faction.ENEMY_1, 1);
-		//enemyPlanet.setNumShips(PLAYER, 2);
-		//openPlanet.setNumShips(Faction.PLAYER, 2);
-		//openPlanet.setNumShips(Faction.ENEMY_1, 1);
 
 		// Create the ships
 		grpShips = new FlxTypedGroup<Ship>();
 		add(grpShips);
 		
-		for (i in 0...10)
+		for (i in 0...1)
 		{
 			var stat: ShipStat = new ShipStat(ShipType.FRIGATE,
 								  gameMap.nodes[0].pos, 
@@ -141,7 +124,29 @@ class PlayState extends FlxState
 			}
 		}
 		
-		
+		// check where each ships are and updating each planet
+		for (p in grpPlanets) {
+			var numShips:Map<FactionType, Int> = new Map<FactionType, Int>();
+			numShips.set(FactionType.PLAYER, 0);
+			numShips.set(FactionType.ENEMY_1, 0);
+			numShips.set(FactionType.ENEMY_2, 0);
+			numShips.set(FactionType.ENEMY_3, 0);
+			numShips.set(FactionType.ENEMY_4, 0);
+			numShips.set(FactionType.ENEMY_5, 0);
+			numShips.set(FactionType.ENEMY_6, 0);
+			numShips.set(FactionType.NEUTRAL, 0);
+			for (s in grpShips) {
+				var pPos:FlxVector = p.getPos();
+				var sPos:FlxVector = s.getPos();
+				var distance:Float = Math.sqrt((sPos.x - pPos.x) * (sPos.x - pPos.x) + (sPos.y - pPos.y) * (sPos.y - pPos.y));
+				if (distance < 30) {
+					numShips.set(s.getFaction(), numShips.get(s.getFaction()) + 1);
+				}
+			}
+			for (f in numShips.keys()) {
+				p.setNumShips(f, numShips.get(f));
+			}
+		}
 
 		super.update(elapsed);
 	}

@@ -225,4 +225,12 @@ class Ship extends FlxSprite
 		super.update(elapsed);
 	}
 
+	// return the position of the ship
+	public function getPos():FlxVector {
+		return new FlxVector(this.x, this.y);
+	}
+	
+	public function getFaction():FactionType {
+		return faction.getFaction();
+	}
 }
