@@ -47,6 +47,7 @@ enum FactionType {
 class Faction {
 	// maps faction type to faction color
 	private static var faction_color:Map<FactionType, FlxColor>;
+    private static var faction_count:Int;
 
 	// initializes faction color mapping
 	static function __init__() {
@@ -60,8 +61,26 @@ class Faction {
 		faction_color.set(FactionType.ENEMY_4, FlxColor.PINK);
 		faction_color.set(FactionType.ENEMY_5, FlxColor.MAGENTA);
 		faction_color.set(FactionType.ENEMY_6, FlxColor.CYAN);
+        faction_count = Lambda.count(faction_color);
 		trace("faction & color: " + faction_color);
+        trace("faction count: " + faction_count);
 	}
+    
+    /**
+     * Returns an array of FactionType Enums.
+     * @return array of FactionType
+     */
+    public static function getEnums():Array<FactionType> {
+        return Type.allEnums(FactionType);
+    }
+    
+    /**
+     * Returns the count of FactionType Enums.
+     * @return count of FactionType
+     */
+    public static function count():Int {
+        return faction_count;
+    }
 	
 	var _faction: FactionType;
 	
