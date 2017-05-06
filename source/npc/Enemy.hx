@@ -1,12 +1,11 @@
-package source;
+package npc;
 
-import flixel.FlxSprite;
-
+import flixel.FlxSprite
 /**
  * ...
  * @author Daisy
  */
-class Neutral extends FlxSprite 
+class Enemy extends FlxSprite
 {
 
 	public function new(x:Float, y:Float) 

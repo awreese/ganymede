@@ -1,4 +1,4 @@
-package;
+package gameUnits;
 
 /**
  *  Astrorush: TBD (The Best Defense)

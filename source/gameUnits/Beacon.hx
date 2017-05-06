@@ -1,11 +1,11 @@
-package source;
+package gameUnits;
 
-import flixel.FlxSprite
+import flixel.FlxSprite;
 /**
  * ...
  * @author Daisy
  */
-class Enemy extends FlxSprite
+class Beacon extends FlxSprite
 {
 
 	public function new(x:Float, y:Float) 
@@ -16,4 +16,5 @@ class Enemy extends FlxSprite
 	override public function update(elapsed:Float):Void {
 		
 	}
+	
 }

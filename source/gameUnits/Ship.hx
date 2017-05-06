@@ -1,4 +1,4 @@
-package;
+package gameUnits;
 
 /**
  *  Astrorush: TBD (The Best Defense)
@@ -20,6 +20,7 @@ package;
 
 import flixel.FlxSprite;
 import flixel.math.FlxVector;
+import gameUnits.Planet;
 import map.MapNode;
 import map.MapEdge;
 import faction.Faction;
@@ -105,7 +106,7 @@ class ShipStat {
 class Ship extends FlxSprite
 {
 	// Parent/Faction Info
-	private var homePlanet: Planet;
+	private var homePlanet: gameUnits.Planet;
 	//private var faction: Faction;
 	private var faction: Faction;
 	

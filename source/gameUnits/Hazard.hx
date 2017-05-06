@@ -1,11 +1,12 @@
-package source;
+package gameUnits;
 
 import flixel.FlxSprite;
+
 /**
  * ...
  * @author Daisy
  */
-class Beacon extends FlxSprite
+class Hazard extends FlxSprite
 {
 
 	public function new(x:Float, y:Float) 

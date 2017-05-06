@@ -22,21 +22,22 @@ import flixel.FlxG;
 import flixel.FlxState;
 import flixel.group.FlxGroup;
 import flixel.math.FlxVector;
+import gameUnits.Planet;
 import map.GameMap;
 import map.MapNode;
 import faction.Faction;
 //import faction.FactionType;
-import Ship;
+import gameUnits.Ship;
 
 class PlayState extends FlxState
 {
 
 	private var gameMap: GameMap;
-	private var grpShips: FlxTypedGroup<Ship>;
-	private var grpPlanets: FlxTypedGroup<Planet>;
-	private var playerPlanet: Planet;
-	private var enemyPlanet: Planet;
-	private var openPlanet: Planet;
+	private var grpShips: FlxTypedGroup<gameUnits.Ship>;
+	private var grpPlanets: FlxTypedGroup<gameUnits.Planet>;
+	private var playerPlanet: gameUnits.Planet;
+	private var enemyPlanet: gameUnits.Planet;
+	private var openPlanet: gameUnits.Planet;
 	
 	override public function create(): Void
 	{
@@ -45,13 +46,13 @@ class PlayState extends FlxState
 		add(gameMap);
 		
 		// create planets
-		grpPlanets = new FlxTypedGroup<Planet>();
+		grpPlanets = new FlxTypedGroup<gameUnits.Planet>();
 		add(grpPlanets);
-		grpPlanets.add(new Planet(gameMap.nodes[0], new Faction(FactionType.PLAYER), new Planet.PlanetStat()));
+		grpPlanets.add(new gameUnits.Planet(gameMap.nodes[0], new Faction(FactionType.PLAYER), new gameUnits.Planet.PlanetStat()));
 		
 
 		// Create the ships
-		grpShips = new FlxTypedGroup<Ship>();
+		grpShips = new FlxTypedGroup<gameUnits.Ship>();
 		add(grpShips);
 		
 		for (i in 0...1)
@@ -65,7 +66,7 @@ class PlayState extends FlxState
 								  0, 
 								  0);
 			var faction:Faction = new Faction(FactionType.PLAYER);
-			var s = new Ship(gameMap.nodes[0], faction, stat);
+			var s = new gameUnits.Ship(gameMap.nodes[0], faction, stat);
 			grpShips.add(s);
 		}
 

@@ -1,4 +1,4 @@
-package source;
+package npc;
 
 import flixel.FlxSprite;
 
@@ -6,7 +6,7 @@ import flixel.FlxSprite;
  * ...
  * @author Daisy
  */
-class Hazard extends FlxSprite
+class Neutral extends FlxSprite 
 {
 
 	public function new(x:Float, y:Float) 
@@ -17,5 +17,4 @@ class Hazard extends FlxSprite
 	override public function update(elapsed:Float):Void {
 		
 	}
-	
 }
