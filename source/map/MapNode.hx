@@ -42,7 +42,7 @@ class MapNode
 
 	public function contains(v: FlxVector): Bool
 	{
-		return pos.dist(v) < NODE_SIZE;
+		return pos.dist(v) < NODE_SIZE + 15;
 	}
 
 	public function distanceTo(n: MapNode): Float
@@ -106,5 +106,9 @@ class MapNode
 			e = parents.get(e);
 		}
 		return path;
+	}
+	
+	public function getPos():FlxVector {
+		return new FlxVector(pos.x, pos.y);
 	}
 }

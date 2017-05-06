@@ -55,7 +55,7 @@ class PlayState extends FlxState
 		grpShips = new FlxTypedGroup<gameUnits.Ship>();
 		add(grpShips);
 		
-		for (i in 0...1)
+		/*for (i in 0...1)
 		{
 			var stat: ShipStat = new ShipStat(ShipType.FRIGATE,
 								  gameMap.nodes[0].pos, 
@@ -68,8 +68,17 @@ class PlayState extends FlxState
 			var faction:Faction = new Faction(FactionType.PLAYER);
 			var s = new gameUnits.Ship(gameMap.nodes[0], faction, stat);
 			grpShips.add(s);
-		}
-
+		}*/
+		var stat: ShipStat = new ShipStat(ShipType.FRIGATE,
+								  gameMap.nodes[0].pos, 
+								  30, 
+								  100, 
+								  100, 
+								  0, 
+								  0, 
+								  0);
+		grpShips.add(new Ship(gameMap.nodes[0], new Faction(FactionType.PLAYER), stat));
+		grpShips.add(new Ship(gameMap.nodes[1], new Faction(FactionType.ENEMY_1), stat));
 		super.create();
 	}
 
@@ -103,8 +112,15 @@ class PlayState extends FlxState
 				trace("Selected node " + n.pos.toString());
 				for (s in grpShips)
 				{
-					//s.isSelected = n.contains(s.pos);
-					s.isSelected = n.contains(s.stats.pos);
+					// only move the ships that are the player's
+					if (s.getFaction() == FactionType.PLAYER) {
+						//s.isSelected = n.contains(s.pos);
+						//s.isSelected = n.contains(s.getPos());
+						// allows player to select multiple ships on the map
+						if (n.contains(s.getPos())) {
+							s.isSelected = true;
+						}
+					}
 				}
 			}
 		}
@@ -139,7 +155,7 @@ class PlayState extends FlxState
 			for (s in grpShips) {
 				var pPos:FlxVector = p.getPos();
 				var sPos:FlxVector = s.getPos();
-				var distance:Float = Math.sqrt((sPos.x - pPos.x) * (sPos.x - pPos.x) + (sPos.y - pPos.y) * (sPos.y - pPos.y));
+				var distance:Float = pPos.dist(sPos);
 				if (distance < 30) {
 					numShips.set(s.getFaction(), numShips.get(s.getFaction()) + 1);
 				}

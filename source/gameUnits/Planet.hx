@@ -103,6 +103,7 @@ class Planet extends FlxSprite
 	// levels for the planet
 	//private var capacityLevel:Int;
 	//private var techLevel:Int;
+	private var shipText:FlxText;
 	
 	public function new(location: MapNode, faction: Faction, pstats: PlanetStat)
 	{
@@ -162,9 +163,16 @@ class Planet extends FlxSprite
 		invadingFactionBar.value = 0;
 		FlxG.state.add(currFactionBar);
 		FlxG.state.add(invadingFactionBar);
+		shipText = new FlxText(this.x, this.y + 40, 0, "0", 16);
+		FlxG.state.add(shipText);
 	}
 	
 	override public function update(elapsed:Float):Void {
+		var totalShip:Int = 0;
+		for (f in numShips.keys()) {
+			totalShip += numShips.get(f);
+		}
+		shipText.text = "" + totalShip;
 		//if (this.faction == Faction.PLAYER) {
 			//// draw player planet
 			//loadGraphic(AssetPaths.player_planet_1__png, false, 16, 16);
@@ -226,10 +234,6 @@ class Planet extends FlxSprite
 		}
 		setSprite();
 		
-		var totalShips:Int = 0;
-		for (f in numShips.keys()) {
-			totalShips += numShips.get(f);
-		}
 		super.update(elapsed);
 	}
 	
