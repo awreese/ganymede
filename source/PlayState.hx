@@ -49,8 +49,8 @@ class PlayState extends FlxState
 		// create planets
 		grpPlanets = new FlxTypedGroup<gameUnits.Planet>();
 		add(grpPlanets);
-		grpPlanets.add(new gameUnits.Planet(gameMap.nodes[0], new Faction(FactionType.PLAYER), new gameUnits.Planet.PlanetStat()));
-		grpPlanets.add(new gameUnits.Planet(gameMap.nodes[1], new Faction(FactionType.ENEMY_1), new gameUnits.Planet.PlanetStat()));
+		grpPlanets.add(new gameUnits.Planet(gameMap.nodes[0], new Faction(FactionType.PLAYER), new gameUnits.Planet.PlanetStat(new ShipStat(ShipType.FRIGATE))));
+		grpPlanets.add(new gameUnits.Planet(gameMap.nodes[1], new Faction(FactionType.ENEMY_1), new gameUnits.Planet.PlanetStat(new ShipStat(ShipType.FRIGATE))));
 
 		// Create the ships
 		grpShips = new FlxTypedGroup<gameUnits.Ship>();
@@ -70,18 +70,9 @@ class PlayState extends FlxState
 			var s = new gameUnits.Ship(gameMap.nodes[0], faction, stat);
 			grpShips.add(s);
 		}*/
-		var stat1: ShipStat = new ShipStat();
-		stat1.hull = ShipType.FRIGATE;
-		stat1.ap = 50;
-		var stat2: ShipStat = new ShipStat();
-		stat2.hull = ShipType.FRIGATE;
-		stat2.ap = 50;
-		var stat3: ShipStat = new ShipStat();
-		stat3.hull = ShipType.FRIGATE;
-		stat3.ap = 50;
-		grpShips.add(new Ship(gameMap.nodes[1], new Faction(FactionType.PLAYER), stat1));
-		grpShips.add(new Ship(gameMap.nodes[2], new Faction(FactionType.ENEMY_1), stat2));
-		grpShips.add(new Ship(gameMap.nodes[3], new Faction(FactionType.PLAYER), stat3));
+		//grpShips.add(new Ship(gameMap.nodes[1], new Faction(FactionType.PLAYER), new ShipStat(ShipType.FRIGATE, null, 10, 0.5, 100, 2.0, 50)));
+		//grpShips.add(new Ship(gameMap.nodes[2], new Faction(FactionType.ENEMY_1), new ShipStat(ShipType.FRIGATE, null, 10, 0.5, 100, 2.0, 50)));
+		//grpShips.add(new Ship(gameMap.nodes[3], new Faction(FactionType.PLAYER), new ShipStat(ShipType.FRIGATE, null, 10, 0.5, 100, 2.0, 50)));
 		super.create();
 	}
 
@@ -147,7 +138,15 @@ class PlayState extends FlxState
 			}
 		}
 
-		// check where each ships are and updating each planet
+		// check where each ships are and updating each planet, and battle if there's opposing factions
+		nodeUpdate(elapsed);
+		
+		produceShips(elapsed);
+
+		super.update(elapsed);
+	}
+	
+	private function nodeUpdate(elapsed : Float):Void {
 		for (n in gameMap.nodes)
 		{
 			var p : Planet = getPlanet(n.pos);
@@ -247,10 +246,24 @@ class PlayState extends FlxState
 							}
 						}
 		}
-
-		super.update(elapsed);
 	}
 	
+	private function produceShips(elapsed: Float):Void {
+		for (p in grpPlanets) {
+			var pPos = p.getPos();
+			var node = gameMap.findNode(new FlxVector(pPos.x + (MapNode.NODE_SIZE / 2), pPos.y + (MapNode.NODE_SIZE / 2)));
+			if (p.getTimer() / p.getProductionRate() > 1.0) {
+				// if time to produce another ship, do it
+				var ship:Ship = p.produceShip(node);
+				if (ship != null) {
+					grpShips.add(ship);
+				}
+				p.resetTimer();
+			}
+		}
+	}
+	
+	// return the planet at the node at pos, null if there is no planet
 	private function getPlanet(pos:FlxVector) : Planet {
 		for (p in grpPlanets) {
 			var planetPos = p.getPos();

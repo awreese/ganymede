@@ -26,6 +26,8 @@ import flixel.math.FlxVector;
 import flixel.text.FlxText;
 import flixel.ui.FlxBar;
 import flixel.util.FlxColor;
+import gameUnits.Ship.ShipStat;
+import gameUnits.Ship.ShipType;
 import js.html.svg.AnimatedBoolean;
 import map.MapNode;
 import faction.Faction;
@@ -48,6 +50,7 @@ class PlanetStat {
 	public var cap: Int;			// ship capacity
 	public var prod: Float;			// ship production rate
 	public var prod_thresh: Float;	// production rate threshold for falloff
+	public var ship: ShipStat; // ship type for production
 	
 	// Levels
 	public var cap_lvl: Int;		// current capacity level
@@ -58,7 +61,7 @@ class PlanetStat {
 	public var cap_per_lvl: Int;	// capacity increase per level
 	public var tech_per_lvl: Float;	// tech increase per level
 	
-	public function new(?cap = 10, ?prod = 5.0, ?prod_thresh = 0.5,
+	public function new(?ship = null, ?cap = 10, ?prod = 5.0, ?prod_thresh = 0.5,
 						?cap_lvl = 0, ?tech_lvl = 0,
 						?base_cost = 10,
 						?cap_per_lvl=5, ?tech_per_lvl=2) {
@@ -66,6 +69,7 @@ class PlanetStat {
 							this.cap = cap;
 							this.prod = prod;
 							this.prod_thresh = prod_thresh;
+							this.ship = ship;
 							this.cap_lvl = cap_lvl;
 							this.tech_lvl = tech_lvl;
 							this.base_cost = base_cost;
@@ -92,7 +96,7 @@ class Planet extends FlxSprite
 	//private var productionRate:Float;
 	private var pStats: PlanetStat;
 	private var numShips:Map<FactionType, Int>;
-	private var idleTimer:Float;
+	private var shipTimer:Float;
 	
 	// progress bar
 	private var factionProgress:Int;
@@ -157,7 +161,7 @@ class Planet extends FlxSprite
 		numShips.set(FactionType.PLAYER, 0);
 		numShips.set(FactionType.ENEMY_1, 0);
 		numShips.set(FactionType.NEUTRAL, 0);
-		//idleTimer = 0;
+		shipTimer = 0;
 		
 		currFactionBar.value = Math.abs(factionProgress);
 		invadingFactionBar.value = 0;
@@ -234,12 +238,14 @@ class Planet extends FlxSprite
 		}
 		setSprite();
 		
+		// increment timer
+		shipTimer += elapsed;
 		super.update(elapsed);
 	}
 	
 	// function that'll control the spousing of ships
-	public function canProduceShips():Bool {
-		if (idleTimer < 5) {
+	private function canProduceShips():Bool {
+		/*if (idleTimer < 5) {
 			// if it's time to produce ship, produce if can
 			idleTimer = 0;
 			if (numShips.get(faction.getFaction()) < this.pStats.cap) {
@@ -251,7 +257,8 @@ class Planet extends FlxSprite
 			// else, don't produce ship
 			idleTimer++;
 			return false;
-		}
+		}*/
+		return numShips.get(faction.getFaction()) < this.pStats.cap;
 	}
 	
 	// updates the capacity level and changes teh capacity accordingly
@@ -288,10 +295,20 @@ class Planet extends FlxSprite
 	
 	// get the production rate
 	public function getProductionRate():Float {
-		// need to adjust production rate //
-		// currently return default production rate //
-		//return productionRate;
 		return this.pStats.prod;
+	}
+	
+	// produce a ship
+	public function produceShip(node: MapNode):Ship {
+		// if can produce a ship, produce a ship
+		if (canProduceShips()) 
+		{
+			numShips.set(faction.getFaction(), numShips.get(faction.getFaction()) + 1);
+			var stat = new ShipStat(pStats.ship.hull, null, pStats.ship.vel, pStats.ship.sh, pStats.ship.hp, pStats.ship.as, pStats.ship.ap, pStats.ship.cp);
+			return new Ship(node, faction, stat); 
+		}
+		// if can't produce ship, return null
+		return null;
 	}
 	
 	// sets the number of ships of the faction to ships
@@ -302,6 +319,16 @@ class Planet extends FlxSprite
 	// return the position of the planet
 	public function getPos():FlxVector {
 		return new FlxVector(this.x, this.y);
+	}
+	
+	// get the production timer
+	public function getTimer():Float {
+		return shipTimer;
+	}
+	
+	// reset timer to 0.0
+	public function resetTimer():Void {
+		shipTimer = 0.0;
 	}
 	
 	// progress the capture bar

@@ -23,6 +23,7 @@ import flixel.FlxSprite;
 import flixel.math.FlxVector;
 import flixel.text.FlxText;
 import gameUnits.Planet;
+import gameUnits.Ship.ShipStat;
 import map.MapNode;
 import map.MapEdge;
 import faction.Faction;
@@ -83,10 +84,10 @@ class ShipStat {
 						?pos = null,
 						?vel = 10.0,
 						?sh = 0.5,
-						?hp = 100,
+						?hp = 100.0,
 						?as = 2.0,
-						?ap = 10,
-						?cp = 5) {
+						?ap = 10.0,
+						?cp = 5.0) {
 		this.hull = hull;
 		this.pos = pos;
 		this.vel = vel;
@@ -94,8 +95,7 @@ class ShipStat {
 		this.hp = hp;
 		this.as = as;
 		this.ap = ap;
-		this.cp = cp;
-		
+		this.cp = cp;	
 	}
 }
 
