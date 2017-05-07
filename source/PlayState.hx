@@ -141,6 +141,7 @@ class PlayState extends FlxState
 		// check where each ships are and updating each planet, and battle if there's opposing factions
 		nodeUpdate(elapsed);
 		
+		// produce ships
 		produceShips(elapsed);
 
 		super.update(elapsed);
@@ -248,9 +249,11 @@ class PlayState extends FlxState
 		}
 	}
 	
+	// produce ships for each planet (if they can)
 	private function produceShips(elapsed: Float):Void {
 		for (p in grpPlanets) {
 			var pPos = p.getPos();
+			// find the MapNode for the planet
 			var node = gameMap.findNode(new FlxVector(pPos.x + (MapNode.NODE_SIZE / 2), pPos.y + (MapNode.NODE_SIZE / 2)));
 			if (p.getTimer() / p.getProductionRate() > 1.0) {
 				// if time to produce another ship, do it
@@ -258,6 +261,7 @@ class PlayState extends FlxState
 				if (ship != null) {
 					grpShips.add(ship);
 				}
+				// resets the shipProductionTimer
 				p.resetTimer();
 			}
 		}
