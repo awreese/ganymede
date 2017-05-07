@@ -79,8 +79,8 @@ class PlayState extends FlxState
 		var stat3: ShipStat = new ShipStat();
 		stat3.hull = ShipType.FRIGATE;
 		stat3.ap = 50;
-		grpShips.add(new Ship(gameMap.nodes[0], new Faction(FactionType.PLAYER), stat1));
-		grpShips.add(new Ship(gameMap.nodes[1], new Faction(FactionType.ENEMY_1), stat2));
+		grpShips.add(new Ship(gameMap.nodes[1], new Faction(FactionType.PLAYER), stat1));
+		grpShips.add(new Ship(gameMap.nodes[2], new Faction(FactionType.ENEMY_1), stat2));
 		grpShips.add(new Ship(gameMap.nodes[3], new Faction(FactionType.PLAYER), stat3));
 		super.create();
 	}
@@ -148,8 +148,9 @@ class PlayState extends FlxState
 		}
 
 		// check where each ships are and updating each planet
-		for (p in grpPlanets)
+		for (n in gameMap.nodes)
 		{
+			var p : Planet = getPlanet(n.pos);
 			var numShips:Map<FactionType, Int> = new Map<FactionType, Int>();
 			numShips.set(FactionType.PLAYER, 0);
 			numShips.set(FactionType.ENEMY_1, 0);
@@ -161,13 +162,16 @@ class PlayState extends FlxState
 			numShips.set(FactionType.NEUTRAL, 0);
 
 			var shipsAtNode = new Array<Ship>();
+			
+			var nPos:FlxVector = new FlxVector(n.pos.x, n.pos.y);
+				nPos.x -= MapNode.NODE_SIZE / 2;
+				nPos.y -= MapNode.NODE_SIZE / 2;
 
 			// determine which ships are within the range of the node
 			for (s in grpShips)
 			{
-				var pPos:FlxVector = p.getPos();
 				var sPos:FlxVector = s.getPos();
-				var distance:Float = pPos.dist(sPos);
+				var distance:Float = nPos.dist(sPos);
 				if (distance < 30 && s.exists)
 				{
 					numShips.set(s.getFaction(), numShips.get(s.getFaction()) + 1);
@@ -203,7 +207,7 @@ class PlayState extends FlxState
 						}
 
 						// random chance of hitting
-						var hit : Bool = rand.int() % 5 == 0;
+						var hit : Bool = rand.int() % 2 == 0;
 						if (hit)
 						{
 							// if hit, decrease hp
@@ -233,14 +237,31 @@ class PlayState extends FlxState
 					}
 				}
 			}
-
-			// update number of ships of each faction in
-			for (f in numShips.keys())
-			{
-				p.setNumShips(f, numShips.get(f));
-			}
+						// if there's a planet here
+						if (p != null) 
+						{
+							// update number of ships of each faction in
+							for (f in numShips.keys())
+							{
+								p.setNumShips(f, numShips.get(f));
+							}
+						}
 		}
 
 		super.update(elapsed);
+	}
+	
+	private function getPlanet(pos:FlxVector) : Planet {
+		for (p in grpPlanets) {
+			var planetPos = p.getPos();
+			// set the planet position back to the nodes
+			planetPos.x += MapNode.NODE_SIZE / 2;
+			planetPos.y += MapNode.NODE_SIZE / 2;
+			var distance = pos.dist(planetPos);
+			if (distance < 1.0) {
+				return p;
+			}
+		}
+		return null;
 	}
 }
