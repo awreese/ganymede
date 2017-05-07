@@ -18,8 +18,10 @@ package gameUnits;
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.math.FlxVector;
+import flixel.text.FlxText;
 import gameUnits.Planet;
 import map.MapNode;
 import map.MapEdge;
@@ -63,7 +65,7 @@ class ShipStat {
 	 * 	hp -= dmg
 	 */
 	public var sh: Float;		// shields [0.1, 0.9]
-	public var hp: Int;			// hitpoints
+	public var hp: Float;			// hitpoints
 	
 	/*
 	 * Offense
@@ -122,6 +124,7 @@ class Ship extends FlxSprite
 	public var progress: Float;
 	public var isSelected: Bool;
 	
+	private var hpBar :FlxText;
 	
 	/*
 	 * TODO: Update constructor to take planet instead of node when created.
@@ -140,6 +143,8 @@ class Ship extends FlxSprite
 		
 		loadGraphic("assets/images/ship_1.png", false, 32, 32);
 		
+		hpBar = new FlxText(this.x, this.y - this.height, 0, "" + stats.hp, 16);
+		FlxG.state.add(hpBar);
 	}
 
 	public function idealPos(): FlxVector
@@ -222,6 +227,10 @@ class Ship extends FlxSprite
 		
 		x = stats.pos.x - origin.x;
 		y = stats.pos.y - origin.y;
+		
+		hpBar.x = this.x;
+		hpBar.y = this.y - this.height / 2 + 5;
+		hpBar.text = "" + stats.hp;
 
 		super.update(elapsed);
 	}
