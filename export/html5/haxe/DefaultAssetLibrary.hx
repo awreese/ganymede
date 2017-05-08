@@ -61,6 +61,11 @@ class DefaultAssetLibrary extends AssetLibrary {
 		
 		
 		
+		
+		
+		
+		
+		
 		openfl.text.Font.registerFont (__ASSET__OPENFL__flixel_fonts_nokiafc22_ttf);
 		openfl.text.Font.registerFont (__ASSET__OPENFL__flixel_fonts_monsterrat_ttf);
 		
@@ -70,22 +75,32 @@ class DefaultAssetLibrary extends AssetLibrary {
 		
 		#if flash
 		
-		className.set ("assets/music/music-goes-here.txt", __ASSET__assets_music_music_goes_here_txt);
-		type.set ("assets/music/music-goes-here.txt", AssetType.TEXT);
-		className.set ("assets/sounds/sounds-go-here.txt", __ASSET__assets_sounds_sounds_go_here_txt);
-		type.set ("assets/sounds/sounds-go-here.txt", AssetType.TEXT);
-		className.set ("assets/images/ship_1.png", __ASSET__assets_images_ship_1_png);
-		type.set ("assets/images/ship_1.png", AssetType.IMAGE);
+		className.set ("assets/data/data-goes-here.txt", __ASSET__assets_data_data_goes_here_txt);
+		type.set ("assets/data/data-goes-here.txt", AssetType.TEXT);
 		className.set ("assets/images/background.png", __ASSET__assets_images_background_png);
 		type.set ("assets/images/background.png", AssetType.IMAGE);
+		className.set ("assets/images/enemy_planet_1.png", __ASSET__assets_images_enemy_planet_1_png);
+		type.set ("assets/images/enemy_planet_1.png", AssetType.IMAGE);
+		className.set ("assets/images/images-go-here.txt", __ASSET__assets_images_images_go_here_txt);
+		type.set ("assets/images/images-go-here.txt", AssetType.TEXT);
+		className.set ("assets/images/neutral_planet_1.png", __ASSET__assets_images_neutral_planet_1_png);
+		type.set ("assets/images/neutral_planet_1.png", AssetType.IMAGE);
+		className.set ("assets/images/planet.psd", __ASSET__assets_images_planet_psd);
+		type.set ("assets/images/planet.psd", AssetType.BINARY);
+		className.set ("assets/images/player_planet_1.png", __ASSET__assets_images_player_planet_1_png);
+		type.set ("assets/images/player_planet_1.png", AssetType.IMAGE);
+		className.set ("assets/images/ship_1.png", __ASSET__assets_images_ship_1_png);
+		type.set ("assets/images/ship_1.png", AssetType.IMAGE);
 		className.set ("assets/images/ship_1_selected.png", __ASSET__assets_images_ship_1_selected_png);
 		type.set ("assets/images/ship_1_selected.png", AssetType.IMAGE);
 		className.set ("assets/images/tempmenubg.png", __ASSET__assets_images_tempmenubg_png);
 		type.set ("assets/images/tempmenubg.png", AssetType.IMAGE);
-		className.set ("assets/images/images-go-here.txt", __ASSET__assets_images_images_go_here_txt);
-		type.set ("assets/images/images-go-here.txt", AssetType.TEXT);
-		className.set ("assets/data/data-goes-here.txt", __ASSET__assets_data_data_goes_here_txt);
-		type.set ("assets/data/data-goes-here.txt", AssetType.TEXT);
+		className.set ("assets/images/uncontrolled_planet_1.png", __ASSET__assets_images_uncontrolled_planet_1_png);
+		type.set ("assets/images/uncontrolled_planet_1.png", AssetType.IMAGE);
+		className.set ("assets/music/music-goes-here.txt", __ASSET__assets_music_music_goes_here_txt);
+		type.set ("assets/music/music-goes-here.txt", AssetType.TEXT);
+		className.set ("assets/sounds/sounds-go-here.txt", __ASSET__assets_sounds_sounds_go_here_txt);
+		type.set ("assets/sounds/sounds-go-here.txt", AssetType.TEXT);
 		className.set ("flixel/sounds/beep.ogg", __ASSET__flixel_sounds_beep_ogg);
 		type.set ("flixel/sounds/beep.ogg", AssetType.SOUND);
 		className.set ("flixel/sounds/flixel.ogg", __ASSET__flixel_sounds_flixel_ogg);
@@ -103,19 +118,35 @@ class DefaultAssetLibrary extends AssetLibrary {
 		#elseif html5
 		
 		var id;
-		id = "assets/music/music-goes-here.txt";
+		id = "assets/data/data-goes-here.txt";
 		path.set (id, id);
 		
 		type.set (id, AssetType.TEXT);
-		id = "assets/sounds/sounds-go-here.txt";
-		path.set (id, id);
-		
-		type.set (id, AssetType.TEXT);
-		id = "assets/images/ship_1.png";
+		id = "assets/images/background.png";
 		path.set (id, id);
 		
 		type.set (id, AssetType.IMAGE);
-		id = "assets/images/background.png";
+		id = "assets/images/enemy_planet_1.png";
+		path.set (id, id);
+		
+		type.set (id, AssetType.IMAGE);
+		id = "assets/images/images-go-here.txt";
+		path.set (id, id);
+		
+		type.set (id, AssetType.TEXT);
+		id = "assets/images/neutral_planet_1.png";
+		path.set (id, id);
+		
+		type.set (id, AssetType.IMAGE);
+		id = "assets/images/planet.psd";
+		path.set (id, id);
+		
+		type.set (id, AssetType.BINARY);
+		id = "assets/images/player_planet_1.png";
+		path.set (id, id);
+		
+		type.set (id, AssetType.IMAGE);
+		id = "assets/images/ship_1.png";
 		path.set (id, id);
 		
 		type.set (id, AssetType.IMAGE);
@@ -127,11 +158,15 @@ class DefaultAssetLibrary extends AssetLibrary {
 		path.set (id, id);
 		
 		type.set (id, AssetType.IMAGE);
-		id = "assets/images/images-go-here.txt";
+		id = "assets/images/uncontrolled_planet_1.png";
+		path.set (id, id);
+		
+		type.set (id, AssetType.IMAGE);
+		id = "assets/music/music-goes-here.txt";
 		path.set (id, id);
 		
 		type.set (id, AssetType.TEXT);
-		id = "assets/data/data-goes-here.txt";
+		id = "assets/sounds/sounds-go-here.txt";
 		path.set (id, id);
 		
 		type.set (id, AssetType.TEXT);
@@ -177,17 +212,29 @@ class DefaultAssetLibrary extends AssetLibrary {
 		
 		var useManifest = false;
 		
-		className.set ("assets/music/music-goes-here.txt", __ASSET__assets_music_music_goes_here_txt);
-		type.set ("assets/music/music-goes-here.txt", AssetType.TEXT);
-		
-		className.set ("assets/sounds/sounds-go-here.txt", __ASSET__assets_sounds_sounds_go_here_txt);
-		type.set ("assets/sounds/sounds-go-here.txt", AssetType.TEXT);
-		
-		className.set ("assets/images/ship_1.png", __ASSET__assets_images_ship_1_png);
-		type.set ("assets/images/ship_1.png", AssetType.IMAGE);
+		className.set ("assets/data/data-goes-here.txt", __ASSET__assets_data_data_goes_here_txt);
+		type.set ("assets/data/data-goes-here.txt", AssetType.TEXT);
 		
 		className.set ("assets/images/background.png", __ASSET__assets_images_background_png);
 		type.set ("assets/images/background.png", AssetType.IMAGE);
+		
+		className.set ("assets/images/enemy_planet_1.png", __ASSET__assets_images_enemy_planet_1_png);
+		type.set ("assets/images/enemy_planet_1.png", AssetType.IMAGE);
+		
+		className.set ("assets/images/images-go-here.txt", __ASSET__assets_images_images_go_here_txt);
+		type.set ("assets/images/images-go-here.txt", AssetType.TEXT);
+		
+		className.set ("assets/images/neutral_planet_1.png", __ASSET__assets_images_neutral_planet_1_png);
+		type.set ("assets/images/neutral_planet_1.png", AssetType.IMAGE);
+		
+		className.set ("assets/images/planet.psd", __ASSET__assets_images_planet_psd);
+		type.set ("assets/images/planet.psd", AssetType.BINARY);
+		
+		className.set ("assets/images/player_planet_1.png", __ASSET__assets_images_player_planet_1_png);
+		type.set ("assets/images/player_planet_1.png", AssetType.IMAGE);
+		
+		className.set ("assets/images/ship_1.png", __ASSET__assets_images_ship_1_png);
+		type.set ("assets/images/ship_1.png", AssetType.IMAGE);
 		
 		className.set ("assets/images/ship_1_selected.png", __ASSET__assets_images_ship_1_selected_png);
 		type.set ("assets/images/ship_1_selected.png", AssetType.IMAGE);
@@ -195,11 +242,14 @@ class DefaultAssetLibrary extends AssetLibrary {
 		className.set ("assets/images/tempmenubg.png", __ASSET__assets_images_tempmenubg_png);
 		type.set ("assets/images/tempmenubg.png", AssetType.IMAGE);
 		
-		className.set ("assets/images/images-go-here.txt", __ASSET__assets_images_images_go_here_txt);
-		type.set ("assets/images/images-go-here.txt", AssetType.TEXT);
+		className.set ("assets/images/uncontrolled_planet_1.png", __ASSET__assets_images_uncontrolled_planet_1_png);
+		type.set ("assets/images/uncontrolled_planet_1.png", AssetType.IMAGE);
 		
-		className.set ("assets/data/data-goes-here.txt", __ASSET__assets_data_data_goes_here_txt);
-		type.set ("assets/data/data-goes-here.txt", AssetType.TEXT);
+		className.set ("assets/music/music-goes-here.txt", __ASSET__assets_music_music_goes_here_txt);
+		type.set ("assets/music/music-goes-here.txt", AssetType.TEXT);
+		
+		className.set ("assets/sounds/sounds-go-here.txt", __ASSET__assets_sounds_sounds_go_here_txt);
+		type.set ("assets/sounds/sounds-go-here.txt", AssetType.TEXT);
 		
 		className.set ("flixel/sounds/beep.ogg", __ASSET__flixel_sounds_beep_ogg);
 		type.set ("flixel/sounds/beep.ogg", AssetType.SOUND);
@@ -863,14 +913,19 @@ class DefaultAssetLibrary extends AssetLibrary {
 #if !display
 #if flash
 
-@:keep @:bind #if display private #end class __ASSET__assets_music_music_goes_here_txt extends null { }
-@:keep @:bind #if display private #end class __ASSET__assets_sounds_sounds_go_here_txt extends null { }
-@:keep @:bind #if display private #end class __ASSET__assets_images_ship_1_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
+@:keep @:bind #if display private #end class __ASSET__assets_data_data_goes_here_txt extends null { }
 @:keep @:bind #if display private #end class __ASSET__assets_images_background_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
+@:keep @:bind #if display private #end class __ASSET__assets_images_enemy_planet_1_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
+@:keep @:bind #if display private #end class __ASSET__assets_images_images_go_here_txt extends null { }
+@:keep @:bind #if display private #end class __ASSET__assets_images_neutral_planet_1_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
+@:keep @:bind #if display private #end class __ASSET__assets_images_planet_psd extends null { }
+@:keep @:bind #if display private #end class __ASSET__assets_images_player_planet_1_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
+@:keep @:bind #if display private #end class __ASSET__assets_images_ship_1_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
 @:keep @:bind #if display private #end class __ASSET__assets_images_ship_1_selected_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
 @:keep @:bind #if display private #end class __ASSET__assets_images_tempmenubg_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
-@:keep @:bind #if display private #end class __ASSET__assets_images_images_go_here_txt extends null { }
-@:keep @:bind #if display private #end class __ASSET__assets_data_data_goes_here_txt extends null { }
+@:keep @:bind #if display private #end class __ASSET__assets_images_uncontrolled_planet_1_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
+@:keep @:bind #if display private #end class __ASSET__assets_music_music_goes_here_txt extends null { }
+@:keep @:bind #if display private #end class __ASSET__assets_sounds_sounds_go_here_txt extends null { }
 @:keep @:bind #if display private #end class __ASSET__flixel_sounds_beep_ogg extends null { }
 @:keep @:bind #if display private #end class __ASSET__flixel_sounds_flixel_ogg extends null { }
 @:keep @:bind #if display private #end class __ASSET__flixel_fonts_nokiafc22_ttf extends null { }
@@ -880,6 +935,11 @@ class DefaultAssetLibrary extends AssetLibrary {
 
 
 #elseif html5
+
+
+
+
+
 
 
 
@@ -904,14 +964,19 @@ class DefaultAssetLibrary extends AssetLibrary {
 #if (windows || mac || linux || cpp)
 
 
-@:file("assets/music/music-goes-here.txt") #if display private #end class __ASSET__assets_music_music_goes_here_txt extends lime.utils.Bytes {}
-@:file("assets/sounds/sounds-go-here.txt") #if display private #end class __ASSET__assets_sounds_sounds_go_here_txt extends lime.utils.Bytes {}
-@:image("assets/images/ship_1.png") #if display private #end class __ASSET__assets_images_ship_1_png extends lime.graphics.Image {}
+@:file("assets/data/data-goes-here.txt") #if display private #end class __ASSET__assets_data_data_goes_here_txt extends lime.utils.Bytes {}
 @:image("assets/images/background.png") #if display private #end class __ASSET__assets_images_background_png extends lime.graphics.Image {}
+@:image("assets/images/enemy_planet_1.png") #if display private #end class __ASSET__assets_images_enemy_planet_1_png extends lime.graphics.Image {}
+@:file("assets/images/images-go-here.txt") #if display private #end class __ASSET__assets_images_images_go_here_txt extends lime.utils.Bytes {}
+@:image("assets/images/neutral_planet_1.png") #if display private #end class __ASSET__assets_images_neutral_planet_1_png extends lime.graphics.Image {}
+@:file("assets/images/planet.psd") #if display private #end class __ASSET__assets_images_planet_psd extends lime.utils.Bytes {}
+@:image("assets/images/player_planet_1.png") #if display private #end class __ASSET__assets_images_player_planet_1_png extends lime.graphics.Image {}
+@:image("assets/images/ship_1.png") #if display private #end class __ASSET__assets_images_ship_1_png extends lime.graphics.Image {}
 @:image("assets/images/ship_1_selected.png") #if display private #end class __ASSET__assets_images_ship_1_selected_png extends lime.graphics.Image {}
 @:image("assets/images/tempmenubg.png") #if display private #end class __ASSET__assets_images_tempmenubg_png extends lime.graphics.Image {}
-@:file("assets/images/images-go-here.txt") #if display private #end class __ASSET__assets_images_images_go_here_txt extends lime.utils.Bytes {}
-@:file("assets/data/data-goes-here.txt") #if display private #end class __ASSET__assets_data_data_goes_here_txt extends lime.utils.Bytes {}
+@:image("assets/images/uncontrolled_planet_1.png") #if display private #end class __ASSET__assets_images_uncontrolled_planet_1_png extends lime.graphics.Image {}
+@:file("assets/music/music-goes-here.txt") #if display private #end class __ASSET__assets_music_music_goes_here_txt extends lime.utils.Bytes {}
+@:file("assets/sounds/sounds-go-here.txt") #if display private #end class __ASSET__assets_sounds_sounds_go_here_txt extends lime.utils.Bytes {}
 @:file("C:/HaxeToolkit/haxe/lib/flixel/4,2,1/assets/sounds/beep.ogg") #if display private #end class __ASSET__flixel_sounds_beep_ogg extends lime.utils.Bytes {}
 @:file("C:/HaxeToolkit/haxe/lib/flixel/4,2,1/assets/sounds/flixel.ogg") #if display private #end class __ASSET__flixel_sounds_flixel_ogg extends lime.utils.Bytes {}
 @:font("C:/HaxeToolkit/haxe/lib/flixel/4,2,1/assets/fonts/nokiafc22.ttf") #if display private #end class __ASSET__flixel_fonts_nokiafc22_ttf extends lime.text.Font {}

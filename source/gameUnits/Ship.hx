@@ -1,7 +1,7 @@
 /**
  *  Astrorush: TBD (The Best Defense)
  *  Copyright (C) 2017  Andrew Reese, Daisy Xu, Rory Soiffer
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
@@ -18,22 +18,23 @@
 
 package gameUnits;
 
+import faction.Faction;
 import flixel.FlxG;
 import flixel.FlxSprite;
+import flixel.addons.effects.chainable.FlxWaveEffect.FlxWaveDirection;
 import flixel.math.FlxVector;
 import flixel.text.FlxText;
 import gameUnits.capturable.Planet;
-//import gameUnits.Ship.ShipStat;
-import map.MapNode;
 import map.MapEdge;
-import faction.Faction;
+import map.MapNode;
 
 /**
  * Various ship types that exist in-game.
- * 
+ *
  * @author Drew Reese
  */
-enum ShipType {
+enum ShipType
+{
 	FRIGATE;
 	DESTROYER;
 	CRUISER;
@@ -47,105 +48,156 @@ enum ShipType {
 
 /**
  * Ship statistic type.
- * 
+ *
  * Ship statistics must be instanited and passed into constructors for ships
- * 
+ *
  * @author Drew Reese
  */
-class ShipStat {
+class ShipStat
+{
 	// General
 	public var hull: ShipType;	// ship type
 	public var pos: FlxVector;	// position
-	public var vel: Float;		// velocity
-	
-	/* 
+	public var vel: FlxVector = new FlxVector(0,0);  // current velocity
+	public var speed: Float;		// speed
+
+	/*
 	 * Defense
-	 * 
+	 *
 	 * Damage recieved is (incoming attack power ) x hp
 	 *  dmg = enemy.ap * sh
 	 * 	hp -= dmg
 	 */
 	public var sh: Float;		// shields [0.1, 0.9]
 	public var hp: Float;		// hitpoints
-	
+
 	/*
 	 * Offense
-	 * 
+	 *
 	 * Damage sent is (attack power) every (attack speed) seconds.
 	 * 	dps = as * ap
-	 * 
+	 *
 	 * Capturing is structure capture points per second
 	 */
 	public var as: Float;		// attack speed (attacks per second)
 	public var ap: Float;		// attack power (damage per attack)
 	public var cp: Float;		// capture power (capture points per second)
-	
+
 	public function new(?hull = null,
 						?pos = null,
-						?vel = 10.0,
+						?speed = 20.0,
 						?sh = 0.5,
 						?hp = 100.0,
 						?as = 2.0,
 						?ap = 10.0,
-						?cp = 5.0) {
+						?cp = 5.0)
+	{
 		this.hull = hull;
 		this.pos = pos;
-		this.vel = vel;
+		this.speed = speed;
 		this.sh = sh;
 		this.hp = hp;
 		this.as = as;
 		this.ap = ap;
-		this.cp = cp;	
+		this.cp = cp;
 	}
 }
 
 /**
- * 
+ *
  * @author Daisy
  * @author Rory Soiffer
  * @author Drew Reese
  */
 class Ship extends FlxSprite
 {
+
+	private var playState: PlayState;
+
 	// Parent/Faction Info
 	private var homePlanet: gameUnits.capturable.Planet;
 	private var faction: Faction;
-	
-	// General stats
-	public var stats: ShipStat;
 
-	// Completely ship-specific
-	public var destination: MapNode;
-	public var nodePath: Array<MapEdge> = [];
-	public var progress: Float;
-	public var isSelected: Bool;
-	
+	public var stats: ShipStat; // General stats (should be split into type-specific vs. ship-specific)
+
+	public var destination: MapNode; // The node this ship is moving towards
+	public var nodePath: Array<MapEdge> = []; // The path this ship is moving along (if any)
+	public var progress: Float; // How far along the path this ship has traveled
+
+	public var isSelected: Bool; // Whether the player has currently selected this ship (should ideally be moved to a Player class in the future)
+
 	private var hpBar :FlxText;
-	
-		
-	public function new(destination: MapNode, faction: Faction, shipStats: ShipStat)
+
+	public function new(playState: PlayState, destination: MapNode, faction: Faction, shipStats: ShipStat)
 	{
 		super();
+		this.playState = playState;
 		this.destination = destination;
 		this.faction = faction;
 		this.stats = shipStats;
-		
+		stats.pos = destination.pos;
+
 		loadGraphic("assets/images/ship_1.png", false, 32, 32);
-		
+
 		hpBar = new FlxText(this.x, this.y - this.height, 0, "" + stats.hp, 16);
-		FlxG.state.add(hpBar);
+		//FlxG.state.add(hpBar);
 	}
 
+	// Moves the ship, following flocking behavior
+	public function flock(elapsed: Float): Void
+	{
+		var toDest = idealPos().subtractNew(stats.pos);
+		var desiredSpeed = stats.vel.normalize().scaleNew(stats.speed).subtractNew(stats.vel);
+		var noise = new FlxVector(Math.random() - .5, Math.random() - .5);
+		var seperation = new FlxVector(0, 0);
+		var alignment = new FlxVector(0, 0);
+		var cohesion = new FlxVector(0, 0);
+
+		for (s in playState.grpShips)
+		{
+			if (s != this && getFaction() == s.getFaction())
+			{
+				var d: FlxVector = stats.pos.subtractNew(s.stats.pos);
+				if (d.length < 30)
+				{
+					seperation = seperation.addNew(d.scaleNew(1/d.lengthSquared));
+					alignment = alignment.addNew(s.stats.vel.subtractNew(stats.vel));
+					cohesion = cohesion.addNew(d.normalize());
+				}
+			}
+		}
+
+		var mod = new FlxVector(0, 0)
+		.addNew(toDest.scaleNew(.05 * toDest.length))
+		.addNew(desiredSpeed.scaleNew(50))
+		.addNew(noise.scaleNew(10))
+		.addNew(seperation.scaleNew(100))
+		.addNew(alignment.scaleNew(.5))
+		.addNew(cohesion.scaleNew(0.5));
+
+		stats.vel = stats.vel.addNew(mod.scaleNew(elapsed));
+		stats.pos = stats.pos.addNew(stats.vel.scaleNew(elapsed));
+	}
+
+	// Returns where along its path the ship should be right now if it weren't for flocking behavior
 	public function idealPos(): FlxVector
 	{
-		return nodePath[0].interpDist(progress);
+		if (isMoving())
+		{
+			return nodePath[0].interpDist(progress);
+		}
+		else {
+			return destination.pos;
+		}
 	}
 
+	// Returns whether the ship is currently moving between nodes or is at a node
 	public function isMoving(): Bool
 	{
-		return nodePath.length >= 1;
+		return nodePath.length > 0;
 	}
 
+	// Orders the ship to follow the shortest possible path to a given node
 	public function pathTo(n: MapNode): Void
 	{
 		if (isMoving())
@@ -166,7 +218,8 @@ class Ship extends FlxSprite
 	override public function update(elapsed:Float):Void
 	{
 		// check faction, take appropriate actions, etc..
-		switch(this.faction.getFaction()) {
+		switch (this.faction.getFaction())
+		{
 			case NOP:
 				trace("NOP Ship " + this.faction.getColor().toWebString);
 			case PLAYER:
@@ -176,8 +229,7 @@ class Ship extends FlxSprite
 			default:
 				trace("Enemy Ship #" + this.faction.getColor().toWebString);
 		}
-		
-		
+
 		// Change the sprite to show when the ship is selected
 		if (isSelected)
 		{
@@ -187,15 +239,20 @@ class Ship extends FlxSprite
 			loadGraphic("assets/images/ship_1.png", false, 32, 32);
 		}
 
-        // TODO: Handle Combat here
+		//
+		// TODO: Handle Combat here
+		//
+
+		flock(elapsed);
+
 		// Whether the ship is currently stationed at one node or is moving between nodes
 		if (isMoving())
 		{
-			stats.pos = idealPos();
-			angle = nodePath[0].delta().degrees;
-			
+			//stats.pos = idealPos();
+			//angle = nodePath[0].delta().degrees;
+
 			// Update the ship's movement along an edge
-			progress += stats.vel * elapsed;
+			progress += stats.speed * elapsed;
 			if (progress > nodePath[0].length())
 			{
 				progress -= nodePath[0].length();
@@ -203,56 +260,62 @@ class Ship extends FlxSprite
 			}
 		}
 		else {
-			stats.pos = destination.pos;
+			//stats.pos = destination.pos;
 
 			progress = 0;
 		}
 
 		// Set the sprite's position (x,y) to match the actual position (pos)
-		//x = pos.x - origin.x;
-		//y = pos.y - origin.y;
-		
 		x = stats.pos.x - origin.x;
 		y = stats.pos.y - origin.y;
-		
+
+		// Rotate the ship to match its velocity
+		angle = stats.vel.degrees;
+
 		hpBar.x = this.x;
 		hpBar.y = this.y - this.height / 2 + 5;
-		hpBar.text = "" + stats.hp;
+		hpBar.text = "" + Math.round(stats.hp);
 
 		super.update(elapsed);
 	}
 
-	// return the position of the ship
-	public function getPos():FlxVector {
-		return new FlxVector(this.x, this.y);
+	// Returns the position of the ship
+	public function getPos(): FlxVector
+	{
+		return stats.pos;
 	}
-	
-	public function getFaction():FactionType {
+
+	// Returns this ship's faction
+	public function getFaction(): FactionType
+	{
 		return faction.getFaction();
 	}
 }
 
 /**
  * ShipFactory
- * 
+ *
  * Fairly self-explanitory, this produces specific ships.
- * 
+ *
  * @author Drew Reese
  */
-class ShipFactory {
-    
-    private var _planet:Planet;
-    private var _producedShip:ShipStat;
-    
-    // TODO: Finish this class
-    
-    public function new(planet:Planet) {
-        this._planet = planet;
-        
-    }
-    
-    public function setProduction(producedShip:ShipStat):Void {
-        this._producedShip = producedShip;
-    }
-    
+class ShipFactory
+{
+
+	private var _planet:Planet;
+	private var _producedShip:ShipStat;
+
+	// TODO: Finish this class
+
+	public function new(planet:Planet)
+	{
+		this._planet = planet;
+
+	}
+
+	public function setProduction(producedShip:ShipStat):Void
+	{
+		this._producedShip = producedShip;
+	}
+
 }
