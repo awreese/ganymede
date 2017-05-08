@@ -140,7 +140,7 @@ class Ship extends FlxSprite
 		loadGraphic("assets/images/ship_1.png", false, 32, 32);
 
 		hpBar = new FlxText(this.x, this.y - this.height, 0, "" + stats.hp, 16);
-		//FlxG.state.add(hpBar);
+		FlxG.state.add(hpBar);
 	}
 
 	// Moves the ship, following flocking behavior

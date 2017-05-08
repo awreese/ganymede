@@ -18,9 +18,15 @@ package map;
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.math.FlxVector;
 import flixel.util.FlxColor;
+import gameUnits.capturable.Planet;
+import gameUnits.capturable.Planet.PlanetStat;
+import gameUnits.Ship.ShipStat;
+import faction.Faction;
+import faction.Faction.FactionType;
 using flixel.util.FlxSpriteUtil;
 /**
  * ...
@@ -33,12 +39,26 @@ class MapNode
 	public var gameMap: GameMap;
 	public var pos: FlxVector;
 	public var neighbors: Array<MapNode> = new Array();
-
-	public function new(gameMap:GameMap, pos: FlxVector)
-	{
+	
+	// variables held if node contain a planet or a beacon
+	private var planet:Planet;
+	
+	public function new(gameMap:GameMap, pos: FlxVector) {
 		this.gameMap = gameMap;
 		this.pos = pos;
 	}
+	
+	/*public function new(gameMap:GameMap, pos: FlxVector, containPlanet: Bool, containBeacon: Bool, faction: FactionType, pStats:PlanetStat)
+	{
+		this.gameMap = gameMap;
+		this.pos = pos;
+		if (containPlanet) {
+		
+		} else planet = null;
+		if (containBeacon) {
+			
+		} else beacon = null;
+	}*/
 
 	public function contains(v: FlxVector): Bool
 	{
@@ -111,4 +131,17 @@ class MapNode
 	public function getPos():FlxVector {
 		return new FlxVector(pos.x, pos.y);
 	}
+	
+	// TODO: set up planet setting faction mechanic
+	// changes the faction for the beacon/planet at this node
+	public function changeFaction(faction: FactionType) {
+		
+	}
+	
+	private function createPlanet(faction: FactionType, pStats: PlanetStat):Void {
+		//planet = new Planet (this, new Faction(faction), pStats);
+		//FlxG.state.add(planet);
+	}
+	
+	private function createBeacon():Void {}
 }

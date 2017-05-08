@@ -43,7 +43,7 @@ class PlayState extends FlxState
 	{
 		rand = new FlxRandom();
 		// Initialize the map
-		gameMap = new GameMap();
+		gameMap = new GameMap(3);
 		add(gameMap);
 
 		// create planets
@@ -165,8 +165,8 @@ class PlayState extends FlxState
 			var shipsAtNode = new Array<Ship>();
 			
 			var nPos:FlxVector = new FlxVector(n.pos.x, n.pos.y);
-				nPos.x -= MapNode.NODE_SIZE / 2;
-				nPos.y -= MapNode.NODE_SIZE / 2;
+			//nPos.x -= MapNode.NODE_SIZE / 2;
+			//nPos.y -= MapNode.NODE_SIZE / 2;
 
 			// determine which ships are within the range of the node
 			for (s in grpShips)
@@ -231,14 +231,14 @@ class PlayState extends FlxState
 				}
 			}
 						// if there's a planet here
-						if (p != null) 
-						{
-							// update number of ships of each faction in
-							for (f in numShips.keys())
-							{
-								p.setNumShips(f, numShips.get(f));
-							}
-						}
+			if (p != null) 
+			{
+				// update number of ships of each faction in
+				for (f in numShips.keys())
+				{
+					p.setNumShips(f, numShips.get(f));
+				}
+			}
 		}
 	}
 	
@@ -261,10 +261,10 @@ class PlayState extends FlxState
 		for (p in grpPlanets) {
 			var planetPos = p.getPos();
 			// set the planet position back to the nodes
-			planetPos.x += MapNode.NODE_SIZE / 2;
-			planetPos.y += MapNode.NODE_SIZE / 2;
+			//planetPos.x += MapNode.NODE_SIZE / 2;
+			//planetPos.y += MapNode.NODE_SIZE / 2;
 			var distance = pos.dist(planetPos);
-			if (distance < 1.0) {
+			if (distance < 10.0) {
 				return p;
 			}
 		}

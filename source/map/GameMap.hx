@@ -18,8 +18,13 @@ package map;
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import faction.Faction.FactionType;
+import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.math.FlxVector;
+import gameUnits.Ship.ShipStat;
+import gameUnits.Ship.ShipType;
+import gameUnits.capturable.Planet;
 using flixel.util.FlxSpriteUtil;
 
 /**
@@ -30,31 +35,24 @@ class GameMap extends FlxSprite
 {
 
 	public var nodes:Array<MapNode> = [];
+	private var level:Int;
 
-	public function new()
+	public function new(level: Int)
 	{
 		super();
+		
+		// store the level
+		this.level = level;
 
 		// Load the nodes
-		var n1 =  new MapNode(this, new FlxVector(50, 50));
-		var n2 = new MapNode(this, new FlxVector(100, 200));
-		var n3 = new MapNode(this, new FlxVector(300, 70));
-		var n4 = new MapNode(this, new FlxVector(270, 250));
-
-
-		n1.neighbors.push(n2);
-		n2.neighbors.push(n1);
-
-		n2.neighbors.push(n3);
-		n3.neighbors.push(n2);
-
-		n2.neighbors.push(n4);
-		n4.neighbors.push(n2);
-
-		n3.neighbors.push(n4);
-		n4.neighbors.push(n3);
-
-		nodes = [n1, n2, n3, n4];
+		switch (level) {
+			case 1:
+				levelOne();
+			case 2:
+				levelTwo();
+			default:
+				levelThree();
+		}
 
 		// Loads an empty sprite for the map background
 		loadGraphic("assets/images/background.png", false, 400, 320);
@@ -77,6 +75,63 @@ class GameMap extends FlxSprite
 	override public function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
+	}
+	
+	// level 1
+	private function levelOne():Void {
+		/*var n1 = new MapNode(this, new FlxVector(50, 150), true, false, FactionType.PLAYER, new PlanetStat(ShipType.FRIGATE));
+ 		var n2 = new MapNode(this, new FlxVector(150, 150), true, false, FactionType.NOP, new PlanetStat(ShipType.FRIGATE));*/
+		
+		var n1 = new MapNode(this, new FlxVector(50, 150));
+		var n2 = new MapNode(this, new FlxVector(150, 150));
+		
+		n1.neighbors.push(n2);
+		n2.neighbors.push(n1);
+		nodes = [n1, n2];
+	}
+	
+	// level 2
+	private function levelTwo():Void {
+		/*var n1 = new MapNode(this, new FlxVector(50, 150), true, false, FactionType.PLAYER, new PlanetStat(ShipType.FRIGATE));
+ 		var n2 = new MapNode(this, new FlxVector(200, 150), true, false, FactionType.NOP, new PlanetStat(ShipType.FRIGATE));
+		var n3 = new MapNode(this, new FlxVector(350, 150), true, false, FactionType.ENEMY_1, new PlanetStat(ShipType.FRIGATE));*/
+		
+		var n1 = new MapNode(this, new FlxVector(50, 150));
+		var n2 = new MapNode(this, new FlxVector(200, 150));
+		var n3 = new MapNode(this, new FlxVector(350, 150));
+		
+		n1.neighbors.push(n2);
+		n2.neighbors.push(n1);
+		n2.neighbors.push(n3);
+		n3.neighbors.push(n2);
+		nodes = [n1, n2, n3];
+	}
+	
+	// level 3
+	public function levelThree():Void {
+		/*var n1 =  new MapNode(this, new FlxVector(50, 50), true, false, FactionType.PLAYER, new PlanetStat(ShipType.FRIGATE));
+		var n2 = new MapNode(this, new FlxVector(100, 200), true, false, FactionType.NOP, new PlanetStat(ShipType.FRIGATE));
+		var n3 = new MapNode(this, new FlxVector(300, 70), true, false, FactionType.NOP, new PlanetStat(ShipType.FRIGATE));
+		var n4 = new MapNode(this, new FlxVector(270, 250), true, false, FactionType.ENEMY_1, new PlanetStat(ShipType.FRIGATE));*/
+
+		var n1 =  new MapNode(this, new FlxVector(50, 50));
+		var n2 = new MapNode(this, new FlxVector(100, 200));
+		var n3 = new MapNode(this, new FlxVector(300, 70));
+		var n4 = new MapNode(this, new FlxVector(270, 250));
+
+		n1.neighbors.push(n2);
+		n2.neighbors.push(n1);
+
+		n2.neighbors.push(n3);
+		n3.neighbors.push(n2);
+
+		n2.neighbors.push(n4);
+		n4.neighbors.push(n2);
+
+		n3.neighbors.push(n4);
+		n4.neighbors.push(n3);
+
+		nodes = [n1, n2, n3, n4];
 	}
 }
 
