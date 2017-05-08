@@ -1,5 +1,3 @@
-package gameUnits;
-
 /**
  *  Astrorush: TBD (The Best Defense)
  *  Copyright (C) 2017  Andrew Reese, Daisy Xu, Rory Soiffer
@@ -17,6 +15,8 @@ package gameUnits;
  * You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+package gameUnits;
 
 import flash.display.FrameLabel;
 import flixel.FlxG;

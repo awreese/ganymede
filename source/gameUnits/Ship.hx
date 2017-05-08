@@ -1,5 +1,3 @@
-package gameUnits;
-
 /**
  *  Astrorush: TBD (The Best Defense)
  *  Copyright (C) 2017  Andrew Reese, Daisy Xu, Rory Soiffer
@@ -17,6 +15,8 @@ package gameUnits;
  * You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+package gameUnits;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -66,7 +66,7 @@ class ShipStat {
 	 * 	hp -= dmg
 	 */
 	public var sh: Float;		// shields [0.1, 0.9]
-	public var hp: Float;			// hitpoints
+	public var hp: Float;		// hitpoints
 	
 	/*
 	 * Offense
@@ -126,13 +126,7 @@ class Ship extends FlxSprite
 	
 	private var hpBar :FlxText;
 	
-	/*
-	 * TODO: Update constructor to take planet instead of node when created.
-	 * 
-	 * Planets have a map node field to use for destinations, i.e. Ships interact with planets, not
-	 * the underlying graph.
-	 */
-	
+		
 	public function new(destination: MapNode, faction: Faction, shipStats: ShipStat)
 	{
 		super();

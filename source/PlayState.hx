@@ -1,5 +1,3 @@
-package;
-
 /**
  *  Astrorush: TBD (The Best Defense)
  *  Copyright (C) 2017  Andrew Reese, Daisy Xu, Rory Soiffer
@@ -18,6 +16,8 @@ package;
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+package;
+
 import flixel.FlxG;
 import flixel.FlxState;
 import flixel.group.FlxGroup;
@@ -27,7 +27,6 @@ import gameUnits.Planet;
 import map.GameMap;
 import map.MapNode;
 import faction.Faction;
-//import faction.FactionType;
 import gameUnits.Ship;
 import flixel.math.FlxRandom;
 

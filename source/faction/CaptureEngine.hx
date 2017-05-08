@@ -1,5 +1,3 @@
-package faction;
-
 /**
  *  Astrorush: TBD (The Best Defense)
  *  Copyright (C) 2017  Andrew Reese, Daisy Xu, Rory Soiffer
@@ -17,6 +15,8 @@ package faction;
  * You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+package faction;
 
 import faction.Faction;
 
