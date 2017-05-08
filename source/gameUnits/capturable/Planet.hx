@@ -120,6 +120,8 @@ class Planet extends Capturable {
 	{
 		// set position of the planet
 		//super(location.pos.x - (MapNode.NODE_SIZE / 2), location.pos.y - (MapNode.NODE_SIZE / 2));
+		location.pos.x -= MapNode.NODE_SIZE / 2;
+		location.pos.y -= MapNode.NODE_SIZE / 2;
         super(location, faction);
 		
 		// set faction
@@ -278,20 +280,9 @@ class Planet extends Capturable {
 	
 	// function that'll control the spousing of ships
 	private function canProduceShips():Bool {
-		/*if (idleTimer < 5) {
-			// if it's time to produce ship, produce if can
-			idleTimer = 0;
-			if (numShips.get(faction.getFaction()) < this.pStats.cap) {
-				return true;
-			}	
-			// reset timer
-			return false;
-		} else {
-			// else, don't produce ship
-			idleTimer++;
-			return false;
-		}*/
-		return faction.getFaction != FactionType.NOP && faction.getFaction() != FactionType.NEUTRAL && numShips.get(faction.getFaction()) < this.pStats.cap;
+		// return true if is not an open planet, not a neutral planet, not have reach capacity and if enough time has pass
+		return faction.getFaction() != FactionType.NOP && faction.getFaction() != FactionType.NEUTRAL 
+				&& numShips.get(faction.getFaction()) < this.pStats.cap && shipTimer >= pStats.prod;
 	}
 	
 	// updates the capacity level and changes teh capacity accordingly
@@ -336,6 +327,7 @@ class Planet extends Capturable {
 		// if can produce a ship, produce a ship
 		if (canProduceShips()) 
 		{
+			shipTimer = 0.0;
 			numShips.set(faction.getFaction(), numShips.get(faction.getFaction()) + 1);
 			var stat = new ShipStat(pStats.ship.hull, null, pStats.ship.vel, pStats.ship.sh, pStats.ship.hp, pStats.ship.as, pStats.ship.ap, pStats.ship.cp);
 			return new Ship(node, faction, stat); 
@@ -352,16 +344,6 @@ class Planet extends Capturable {
 	// return the position of the planet
 	public function getPos():FlxVector {
 		return new FlxVector(this.x, this.y);
-	}
-	
-	// get the production timer
-	public function getTimer():Float {
-		return shipTimer;
-	}
-	
-	// reset timer to 0.0
-	public function resetTimer():Void {
-		shipTimer = 0.0;
 	}
 	
 	// progress the capture bar

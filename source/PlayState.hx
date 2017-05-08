@@ -249,14 +249,9 @@ class PlayState extends FlxState
 			var pPos = p.getPos();
 			// find the MapNode for the planet
 			var node = gameMap.findNode(new FlxVector(pPos.x + (MapNode.NODE_SIZE / 2), pPos.y + (MapNode.NODE_SIZE / 2)));
-			if (p.getTimer() / p.getProductionRate() > 1.0) {
-				// if time to produce another ship, do it
-				var ship:Ship = p.produceShip(node);
-				if (ship != null) {
-					grpShips.add(ship);
-				}
-				// resets the shipProductionTimer
-				p.resetTimer();
+			var ship:Ship = p.produceShip(node);
+			if (ship != null) {
+				grpShips.add(ship);
 			}
 		}
 	}
