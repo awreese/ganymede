@@ -87,6 +87,11 @@ private class AggressionEngine {
 /**
  * AggressionTimer
  * 
+ * When attacks on a faction are detected, an aggression timer is started.  If at
+ * any point before the timer has expired another attack is detected, the timer is 
+ * reset and timer starts over.  If no attacks are registered for the duration of 
+ * the aggression timer, it cancels automatically and any actions previous 
+ * aggressed faction cease.
  * 
  * @author Drew Reese
  */
@@ -174,6 +179,16 @@ class AggressionTimer {
      */
     public function getTimeLeft(opposing:FactionType):Float {
         return getTimer(opposing).timer.timeLeft;
+    }
+    
+    /**
+     * Returns [true|false] if the timer between this and aggressing
+     * faction has expired.
+     * @param opposing  - aggressing faction
+     * @return  true iff this timer has expired
+     */
+    public function isExpired(opposing:FactionType):Bool {
+        return getTimer(opposing).timer.finished;
     }
     
 }
