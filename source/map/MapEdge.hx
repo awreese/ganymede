@@ -31,6 +31,7 @@ class MapEdge
 
 	public var n1: MapNode;
 	public var n2: MapNode;
+    private var distance:Float;
 
 	public function new(n1: MapNode, n2: MapNode)
 	{
@@ -40,6 +41,7 @@ class MapEdge
 		
 		this.n1 = n1;
 		this.n2 = n2;
+        this.distance = n1.pos.dist(n2.pos);
 	}
 
 	public function delta(): FlxVector

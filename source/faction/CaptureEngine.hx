@@ -23,6 +23,7 @@ import faction.Faction;
 /**
  * Control Accumulator wraps and maintains an N-way accumulator that tracks
  * the accruing control points from each faction.
+ * 
  * @author Drew Reese
  */
 private class ControlAccumulator {

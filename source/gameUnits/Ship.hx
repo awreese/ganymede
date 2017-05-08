@@ -22,8 +22,8 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.math.FlxVector;
 import flixel.text.FlxText;
-import gameUnits.Planet;
-import gameUnits.Ship.ShipStat;
+import gameUnits.capturable.Planet;
+//import gameUnits.Ship.ShipStat;
 import map.MapNode;
 import map.MapEdge;
 import faction.Faction;
@@ -108,17 +108,13 @@ class ShipStat {
 class Ship extends FlxSprite
 {
 	// Parent/Faction Info
-	private var homePlanet: gameUnits.Planet;
-	//private var faction: Faction;
+	private var homePlanet: gameUnits.capturable.Planet;
 	private var faction: Faction;
 	
 	// General stats
-	//private var pos: FlxVector;
-	//private var velocity: Float = 30;
 	public var stats: ShipStat;
 
 	// Completely ship-specific
-	//public var rotation: Float; no longer used
 	public var destination: MapNode;
 	public var nodePath: Array<MapEdge> = [];
 	public var progress: Float;
@@ -130,7 +126,6 @@ class Ship extends FlxSprite
 	public function new(destination: MapNode, faction: Faction, shipStats: ShipStat)
 	{
 		super();
-		//pos = destination.pos;
 		this.destination = destination;
 		this.faction = faction;
 		this.stats = shipStats;
@@ -170,7 +165,7 @@ class Ship extends FlxSprite
 
 	override public function update(elapsed:Float):Void
 	{
-		// check faction, draw appropriate sprite/color, etc..
+		// check faction, take appropriate actions, etc..
 		switch(this.faction.getFaction()) {
 			case NOP:
 				trace("NOP Ship " + this.faction.getColor().toWebString);
@@ -192,15 +187,14 @@ class Ship extends FlxSprite
 			loadGraphic("assets/images/ship_1.png", false, 32, 32);
 		}
 
+        // TODO: Handle Combat here
 		// Whether the ship is currently stationed at one node or is moving between nodes
 		if (isMoving())
 		{
-			//pos = idealPos();
 			stats.pos = idealPos();
 			angle = nodePath[0].delta().degrees;
 			
 			// Update the ship's movement along an edge
-			//progress += velocity * elapsed;
 			progress += stats.vel * elapsed;
 			if (progress > nodePath[0].length())
 			{
@@ -209,7 +203,6 @@ class Ship extends FlxSprite
 			}
 		}
 		else {
-			//pos = destination.pos;
 			stats.pos = destination.pos;
 
 			progress = 0;
@@ -237,4 +230,29 @@ class Ship extends FlxSprite
 	public function getFaction():FactionType {
 		return faction.getFaction();
 	}
+}
+
+/**
+ * ShipFactory
+ * 
+ * Fairly self-explanitory, this produces specific ships.
+ * 
+ * @author Drew Reese
+ */
+class ShipFactory {
+    
+    private var _planet:Planet;
+    private var _producedShip:ShipStat;
+    
+    // TODO: Finish this class
+    
+    public function new(planet:Planet) {
+        this._planet = planet;
+        
+    }
+    
+    public function setProduction(producedShip:ShipStat):Void {
+        this._producedShip = producedShip;
+    }
+    
 }

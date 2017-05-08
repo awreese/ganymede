@@ -16,7 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package gameUnits;
+package gameUnits.capturable;
 
 import flash.display.FrameLabel;
 import flixel.FlxG;
@@ -26,6 +26,7 @@ import flixel.math.FlxVector;
 import flixel.text.FlxText;
 import flixel.ui.FlxBar;
 import flixel.util.FlxColor;
+import gameUnits.capturable.Capturable;
 import gameUnits.Ship.ShipStat;
 import gameUnits.Ship.ShipType;
 import js.html.svg.AnimatedBoolean;
@@ -79,25 +80,33 @@ class PlanetStat {
 }
 
 /**
- * ...
+ * Planets
+ * Planets are capturable, and produce ship units once controlled.  They 
+ * can be upgraded.
+ * 
  * @author Daisy
+ * @author Drew Reese
  * 
  * Contains the property of the Planets
  * Stores the faction, capacity, production rate, etc
  */
-class Planet extends FlxSprite
-{
-	// parent node and faction control fields
-	private var node: MapNode;
-	private var faction:Faction;
+class Planet extends Capturable {
+	/*
+     * From Capturable Class
+     * 
+     * parent node: this.node
+     * faction:     this.faction
+     * 
+     */
 	
 	// internal fields
-	//private var capacity:Int;
-	//private var productionRate:Float;
 	private var pStats: PlanetStat;
-	private var numShips:Map<FactionType, Int>;
+	
+    
+    private var numShips:Map<FactionType, Int>;
 	private var shipTimer:Float;
 	
+    // TODO: Move this to captureHUD in Capturable class
 	// progress bar
 	private var factionProgress:Int;
 	private var currFactionBar:FlxBar;
@@ -105,17 +114,16 @@ class Planet extends FlxSprite
 	private var invadeFaction:Faction;
 	
 	// levels for the planet
-	//private var capacityLevel:Int;
-	//private var techLevel:Int;
 	private var shipText:FlxText;
 	
 	public function new(location: MapNode, faction: Faction, pstats: PlanetStat)
 	{
 		// set position of the planet
-		super(location.pos.x - (MapNode.NODE_SIZE / 2), location.pos.y - (MapNode.NODE_SIZE / 2));
+		//super(location.pos.x - (MapNode.NODE_SIZE / 2), location.pos.y - (MapNode.NODE_SIZE / 2));
+        super(location, faction);
 		
 		// set faction
-		this.faction = faction;
+		//this.faction = faction;
 		
 		// Load graphics and any faction specific items
 		switch(this.faction.getFaction()) {
@@ -141,6 +149,7 @@ class Planet extends FlxSprite
 		
 		setSprite();
 		
+        // TODO: Move this to captureHUD in Capturable class
 		// create capture bar
 		currFactionBar = new FlxBar(this.x - this.graphic.width / 4, this.y + this.graphic.height + 2, LEFT_TO_RIGHT, 50, 10);
 		currFactionBar.createColoredFilledBar(faction.getColor(), true);
@@ -242,6 +251,30 @@ class Planet extends FlxSprite
 		shipTimer += elapsed;
 		super.update(elapsed);
 	}
+    
+    /**
+     * Returns the underlying graphnode of this Planet
+     * @return  MapNode under this planet
+     */
+    public function getNode():MapNode {
+        return this.node;
+    }
+    
+    /**
+     * Returns the faction of this planet.
+     * @return  Faction of this planet
+     */
+    public function getFaction():Faction {
+        return this.faction;
+    }
+    
+    /**
+     * Returns the stats of this planet.
+     * @return  PlanetStats for this planet
+     */
+    public function getStats():PlanetStat {
+        return this.pStats;
+    }
 	
 	// function that'll control the spousing of ships
 	private function canProduceShips():Bool {

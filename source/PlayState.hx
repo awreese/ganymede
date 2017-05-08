@@ -23,7 +23,8 @@ import flixel.FlxState;
 import flixel.group.FlxGroup;
 import flixel.math.FlxVector;
 import flixel.util.FlxTimer;
-import gameUnits.Planet;
+import gameUnits.capturable.Planet;
+import gameUnits.capturable.Planet.PlanetStat;
 import map.GameMap;
 import map.MapNode;
 import faction.Faction;
@@ -35,7 +36,7 @@ class PlayState extends FlxState
 
 	private var gameMap: GameMap;
 	private var grpShips: FlxTypedGroup<gameUnits.Ship>;
-	private var grpPlanets: FlxTypedGroup<gameUnits.Planet>;
+	private var grpPlanets: FlxTypedGroup<gameUnits.capturable.Planet>;
 	private var rand:FlxRandom;
 
 	override public function create(): Void
@@ -46,10 +47,10 @@ class PlayState extends FlxState
 		add(gameMap);
 
 		// create planets
-		grpPlanets = new FlxTypedGroup<gameUnits.Planet>();
+		grpPlanets = new FlxTypedGroup<Planet>();
 		add(grpPlanets);
-		grpPlanets.add(new gameUnits.Planet(gameMap.nodes[0], new Faction(FactionType.PLAYER), new gameUnits.Planet.PlanetStat(new ShipStat(ShipType.FRIGATE))));
-		grpPlanets.add(new gameUnits.Planet(gameMap.nodes[1], new Faction(FactionType.ENEMY_1), new gameUnits.Planet.PlanetStat(new ShipStat(ShipType.FRIGATE))));
+		grpPlanets.add(new Planet(gameMap.nodes[0], new Faction(FactionType.PLAYER), new PlanetStat(new ShipStat(ShipType.FRIGATE))));
+		grpPlanets.add(new Planet(gameMap.nodes[1], new Faction(FactionType.ENEMY_1), new PlanetStat(new ShipStat(ShipType.FRIGATE))));
 
 		// Create the ships
 		grpShips = new FlxTypedGroup<gameUnits.Ship>();
@@ -146,6 +147,7 @@ class PlayState extends FlxState
 		super.update(elapsed);
 	}
 	
+    // TODO: Most (if not all) of this should be moved to GameMap and Ship
 	private function nodeUpdate(elapsed : Float):Void {
 		for (n in gameMap.nodes)
 		{
@@ -240,6 +242,7 @@ class PlayState extends FlxState
 		}
 	}
 	
+    // TODO: Move this into PlanetFactory
 	// produce ships for each planet (if they can)
 	private function produceShips(elapsed: Float):Void {
 		for (p in grpPlanets) {

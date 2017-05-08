@@ -16,17 +16,22 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package gameUnits;
+package gameUnits.capturable;
 
+import flixel.FlxSprite;
 /**
  * ...
  * @author 
  */
-class PowerUp 
+class Beacon extends Capturable
 {
 
-	public function new() 
+	public function new(x:Float, y:Float) 
 	{
+		
+	}
+	
+	override public function update(elapsed:Float):Void {
 		
 	}
 	
