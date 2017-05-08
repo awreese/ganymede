@@ -219,15 +219,7 @@ class PlayState extends FlxState
 								target.visible = false;
 								// decrease num ships at the planet
 								numShips.set(target.getFaction(), numShips.get(target.getFaction()) - 1);
-								numFactions = 0;
-								// recheck number of factions after killing a ship
-								for (f in numShips.keys())
-								{
-									if (numShips.get(f) > 0)
-									{
-										numFactions++;
-									}
-								}
+								numFactions = numShips.get(target.getFaction()) > 0 ? numFactions : numFactions - 1;
 							}
 						}
 						// if there is less than 2 factions, break out of loop
