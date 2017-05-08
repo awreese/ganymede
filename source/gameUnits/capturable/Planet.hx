@@ -120,8 +120,6 @@ class Planet extends Capturable {
 	{
 		// set position of the planet
 		//super(location.pos.x - (MapNode.NODE_SIZE / 2), location.pos.y - (MapNode.NODE_SIZE / 2));
-		location.pos.x -= MapNode.NODE_SIZE / 2;
-		location.pos.y -= MapNode.NODE_SIZE / 2;
         super(location, faction);
 		
 		// set faction
