@@ -291,7 +291,7 @@ class Planet extends Capturable {
 			idleTimer++;
 			return false;
 		}*/
-		return numShips.get(faction.getFaction()) < this.pStats.cap;
+		return faction.getFaction != FactionType.NOP && faction.getFaction() != FactionType.NEUTRAL && numShips.get(faction.getFaction()) < this.pStats.cap;
 	}
 	
 	// updates the capacity level and changes teh capacity accordingly
