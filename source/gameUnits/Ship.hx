@@ -232,7 +232,7 @@ class Ship extends FlxSprite
 			return nodePath[0].interpDist(progress);
 		}
 		else {
-			return new FlxPoint(destination.pos.x, destination.pos.y);
+			return destination.pos;
 		}
 	}
 
@@ -329,7 +329,7 @@ class Ship extends FlxSprite
 	public function getPos(): FlxPoint
 	{
 		//return stats.pos;
-        return new FlxPoint(this.x, this.y);
+        return this.getPosition();
 	}
 
 	// Returns this ship's faction
