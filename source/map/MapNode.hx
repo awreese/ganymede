@@ -22,6 +22,7 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.math.FlxVector;
 import flixel.util.FlxColor;
+import gameUnits.capturable.Capturable;
 import gameUnits.capturable.Planet;
 import gameUnits.capturable.Planet.PlanetStat;
 import gameUnits.Ship.ShipStat;
