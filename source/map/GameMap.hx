@@ -18,6 +18,7 @@ package map;
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import faction.Faction;
 import faction.Faction.FactionType;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -54,15 +55,6 @@ class GameMap extends FlxSprite
 				levelThree();
 		}
 
-		// Loads an empty sprite for the map background
-		loadGraphic("assets/images/background.png", false, 400, 320);
-
-		// Draw the nodes to the background
-		for (n in nodes)
-		{
-			n.drawTo(this);
-		}
-
 	}
 
 	public function findNode(v: FlxVector): MapNode
@@ -77,24 +69,40 @@ class GameMap extends FlxSprite
 		super.update(elapsed);
 	}
 	
+	private function drawNodes():Void {
+		// Loads an empty sprite for the map background
+		loadGraphic("assets/images/background.png", false, 400, 320);
+
+		// Draw the nodes to the background
+		for (n in nodes)
+		{
+			n.drawTo(this);
+		}
+	}
+	
 	// level 1
 	private function levelOne():Void {
-		/*var n1 = new MapNode(this, new FlxVector(50, 150), true, false, FactionType.PLAYER, new PlanetStat(ShipType.FRIGATE));
- 		var n2 = new MapNode(this, new FlxVector(150, 150), true, false, FactionType.NOP, new PlanetStat(ShipType.FRIGATE));*/
-		
+		// create nodes
 		var n1 = new MapNode(this, new FlxVector(50, 150));
 		var n2 = new MapNode(this, new FlxVector(150, 150));
 		
+		// create edges
 		n1.neighbors.push(n2);
 		n2.neighbors.push(n1);
+		
+		// draw the nodes
 		nodes = [n1, n2];
+		drawNodes();
+		
+		// set captureable
+		var n1P = new Planet(null, n1, new Faction(FactionType.PLAYER), new PlanetStat(new ShipStat(ShipType.FRIGATE)));
+		var n2P = new Planet(null, n2, new Faction(FactionType.NOP), new PlanetStat(new ShipStat(ShipType.FRIGATE)));
+		n1.setCapturable(n1P);
+		n2.setCapturable(n2P);
 	}
 	
 	// level 2
 	private function levelTwo():Void {
-		/*var n1 = new MapNode(this, new FlxVector(50, 150), true, false, FactionType.PLAYER, new PlanetStat(ShipType.FRIGATE));
- 		var n2 = new MapNode(this, new FlxVector(200, 150), true, false, FactionType.NOP, new PlanetStat(ShipType.FRIGATE));
-		var n3 = new MapNode(this, new FlxVector(350, 150), true, false, FactionType.ENEMY_1, new PlanetStat(ShipType.FRIGATE));*/
 		
 		var n1 = new MapNode(this, new FlxVector(50, 150));
 		var n2 = new MapNode(this, new FlxVector(200, 150));
@@ -109,10 +117,6 @@ class GameMap extends FlxSprite
 	
 	// level 3
 	public function levelThree():Void {
-		/*var n1 =  new MapNode(this, new FlxVector(50, 50), true, false, FactionType.PLAYER, new PlanetStat(ShipType.FRIGATE));
-		var n2 = new MapNode(this, new FlxVector(100, 200), true, false, FactionType.NOP, new PlanetStat(ShipType.FRIGATE));
-		var n3 = new MapNode(this, new FlxVector(300, 70), true, false, FactionType.NOP, new PlanetStat(ShipType.FRIGATE));
-		var n4 = new MapNode(this, new FlxVector(270, 250), true, false, FactionType.ENEMY_1, new PlanetStat(ShipType.FRIGATE));*/
 
 		var n1 =  new MapNode(this, new FlxVector(50, 50));
 		var n2 = new MapNode(this, new FlxVector(100, 200));
