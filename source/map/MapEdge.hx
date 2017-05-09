@@ -48,7 +48,8 @@ class MapEdge
 	public function delta(): FlxPoint
 	{
 		//return n2.pos.subtractNew(n1.pos);
-        return n2.pos.subtractPoint(n1.pos);
+        //return n2.pos.subtractPoint(n1.pos);
+		return new FlxPoint(n2.pos.x - n1.pos.x, n2.pos.y - n1.pos.y);
 	}
 
 	public function interpDist(d: Float): FlxPoint
@@ -59,7 +60,9 @@ class MapEdge
 	public function interpPerc(i: Float): FlxPoint
 	{
 		//return n1.pos.addNew(delta().scale(i));
-        return n1.pos.addPoint(delta().scale(i));
+        //return n1.pos.addPoint(delta().scale(i));
+		var d = delta().scale(i);
+		return new FlxPoint(n1.pos.x + d.x, n1.pos.y + d.y);
 	}
 
 	public function length(): Float
