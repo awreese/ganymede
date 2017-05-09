@@ -26,9 +26,11 @@ import flixel.math.FlxVector;
 import flixel.text.FlxText;
 import flixel.ui.FlxBar;
 import flixel.util.FlxColor;
+import gameUnits.Ship.ShipFactory;
 import gameUnits.capturable.Capturable;
 import gameUnits.Ship.ShipStat;
 import gameUnits.Ship.ShipType;
+import gameUnits.capturable.Planet.PlanetStat;
 import js.html.svg.AnimatedBoolean;
 import map.MapNode;
 import faction.Faction;
@@ -36,8 +38,8 @@ import faction.Faction;
 /**
  * Planet statistic type
  *
- * Planet statistics must be instanitated and passed into constructors
- * for planets.
+ * This defines planet types by specifying thier statistics.  Planet statistics 
+ * must be instanitated or cloned before being passed into constructors for planets.
  *
  * @author Drew Reese
  */
@@ -62,10 +64,23 @@ class PlanetStat
 	public var cap_per_lvl: Int;	// capacity increase per level
 	public var tech_per_lvl: Float;	// tech increase per level
 
+    /**
+     * Defines a new Planet Stat.
+     * 
+     * @param ship = null
+     * @param cap = 10
+     * @param prod = 5.0
+     * @param prod_thresh = 0.5
+     * @param cap_lvl = 0
+     * @param tech_lvl = 0
+     * @param base_cost = 10
+     * @param cap_per_lvl=5
+     * @param tech_per_lvl=2
+     */
 	public function new(?ship = null, ?cap = 10, ?prod = 5.0, ?prod_thresh = 0.5,
 						?cap_lvl = 0, ?tech_lvl = 0,
 						?base_cost = 10,
-						?cap_per_lvl=5, ?tech_per_lvl=2)
+						?cap_per_lvl=5, ?tech_per_lvl=2.0)
 	{
 
 		this.cap = cap;
@@ -78,6 +93,17 @@ class PlanetStat
 		this.cap_per_lvl = cap_per_lvl;
 		this.tech_per_lvl = tech_per_lvl;
 	}
+    
+    /**
+     * Copies and returns a clone of this planet definition.
+     * @return clone of this PlanetStat
+     */
+    public function clone():PlanetStat {
+        return new PlanetStat(this.ship.clone(), this.cap, this.prod, this.prod_thresh, 
+                            this.cap_lvl, this.tech_lvl,
+                            this.base_cost, 
+                            this.cap_per_lvl, this.tech_per_lvl);
+    }
 }
 
 /**
@@ -115,6 +141,9 @@ class Planet extends Capturable
 	private var currFactionBar:FlxBar;
 	private var invadingFactionBar:FlxBar;
 	private var invadeFaction:Faction;
+    
+    // Ship Factory
+    private var shipFactory:ShipFactory;
 
 	// levels for the planet
 	private var shipText:FlxText;
@@ -165,6 +194,9 @@ class Planet extends Capturable
 		//capacityLevel = capLevel;
 		//this.techLevel = techLevel;
 		this.pStats = pstats;
+        
+        this.shipFactory = new ShipFactory(this);
+        this.shipFactory.setProduction(this.pStats.ship);
 
 		// set other
 		//capacity = capacityLevel * 5;
@@ -218,6 +250,11 @@ class Planet extends Capturable
 				trace("Enemy Planet: " + this.faction);
 		}*/
 
+        var newShip = shipFactory.produceShip(elapsed);
+        if (newShip != null) {
+            // add new ship to underlying node when api available
+        }
+        
 		capturing();
 
 		// setting which bar is visible
