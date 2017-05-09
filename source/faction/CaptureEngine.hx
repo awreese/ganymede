@@ -27,21 +27,24 @@ import faction.Faction;
  * @author Drew Reese
  */
 private class ControlAccumulator {
-    public var _controlAccumulator:Map<FactionType, Float>;
-    public var _controlPoints:Float;
-    public var _controlFaction:FactionType;
+    //public var _controlAccumulator:Map<FactionType, Float>;
+    public var _totalControlPoints:Float;
+	public var _currentControlPoints:Float;
+    public var _currentControlFaction:FactionType;
+	public var _capturingFaction: FactionType;
     
     /**
      * Creates new control accumulator.
      * @param control_faction = NOP
      * @param control_points = 100.0
      */
-    public function new(?control_faction:FactionType, ?control_points = 100.0) {
+    public function new(?control_faction:FactionType, ?total_control_points = 100.0) {
         control_faction = (control_faction == null) ? NOP : control_faction; // sets default
-        this._controlAccumulator = new Map<FactionType, Float>();
-        this._controlPoints = control_points;
+        //this._controlAccumulator = new Map<FactionType, Float>();
+        //this._controlPoints = control_points;
+		this._totalControlPoints = total_control_points;
         
-        this.setControl(control_faction, control_points);
+        //this.setControl(control_faction, total_control_points);
         
         trace("new control accumulator: " + this);
     }
@@ -51,7 +54,7 @@ private class ControlAccumulator {
      * @param control_faction
      * @param control_points
      */
-    public function setControl(control_faction:FactionType, control_points:Float):Void {
+    /*public function setControl(control_faction:FactionType, control_points:Float):Void {
         this._controlFaction = control_faction;
         for (ft in Faction.getEnums()) {
             if (ft == this._controlFaction) {
@@ -60,7 +63,7 @@ private class ControlAccumulator {
                 this._controlAccumulator.set(ft, 0.0);
             }
         }
-    }
+    }*/
     
     /**
      * Runs one interation of capture point accumulation.
@@ -68,7 +71,7 @@ private class ControlAccumulator {
      * @return true iff controlling faction changed
      */
     public function accumulate(factions:Map<FactionType, Float>):Bool {
-        // N-way accumulator
+        /*// N-way accumulator
         for (f1 in Faction.getEnums()) {
             var contribution = factions.get(f1);
             factions.set(f1, 0.0);
@@ -88,7 +91,32 @@ private class ControlAccumulator {
                 return true;
             }
         }
-        return false;
+        return false;*/
+		
+		var oldController = this._currentControlFaction;
+		
+		for (f in Faction.getEnums()) {
+			if (f == this._capturingFaction) {
+				this._currentControlPoints += factions.get(f);
+				
+				// check if capturing faction finally captured
+				if (this._currentControlPoints > this._totalControlPoints) {
+					this._currentControlPoints = this._totalControlPoints;
+					this._currentControlFaction = f;
+				}
+			} else {
+				this._currentControlPoints -= factions.get(f);
+				
+				// check if controling faction lost possession
+				if (this._currentControlPoints < 0) {
+					this._currentControlFaction = NOP;
+					this._capturingFaction = f;
+					this._currentControlPoints = Math.abs(this._currentControlPoints);
+				}
+			}
+		}
+		
+		return this._currentControlFaction != oldController;
     }
     
 }
@@ -148,7 +176,8 @@ class CaptureEngine {
      */
     public function setPoints(faction:FactionType, points:Float):Void {
         var min = 0.0;
-        var max = this._controlAccumulator._controlPoints;
+        //var max = this._controlAccumulator._controlPoints;
+		var max = this._controlAccumulator._totalControlPoints;
         
         this._factions[faction] = bound(points, min, max);
     }
@@ -159,10 +188,11 @@ class CaptureEngine {
      * @return true iff controlling faction has less then total control points, false otherwise
      */
     public function isContended():Bool {
-        var controllingFaction = this._controlAccumulator._controlFaction;
+        /*var controllingFaction = this._controlAccumulator._controlFaction;
         var controllingPoints = this._controlAccumulator._controlAccumulator.get(controllingFaction);
         var totalControlPoints = this._controlAccumulator._controlPoints;
-        return controllingPoints < totalControlPoints;
+        return controllingPoints < totalControlPoints;*/
+		return this._controlAccumulator._currentControlPoints < this._controlAccumulator._totalControlPoints;
     }
     
     /**
@@ -178,8 +208,10 @@ class CaptureEngine {
      * @return
      */
     public function status():Map<FactionType, Float> {
-        var faction = this._controlAccumulator._controlFaction;
-        var points = this._controlAccumulator._controlAccumulator.get(faction);
+        //var faction = this._controlAccumulator._controlFaction;
+        //var points = this._controlAccumulator._controlAccumulator.get(faction);
+		var faction = this._controlAccumulator._currentControlFaction;
+        var points = this._controlAccumulator._currentControlPoints;
         return [faction => points];
     }
 }

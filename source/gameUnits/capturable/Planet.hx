@@ -219,18 +219,18 @@ class Planet extends Capturable
 	override public function update(elapsed:Float):Void
 	{
 		var totalShips:Int = 0;
-		for (f in numShips.keys())
-		{
-			totalShips += numShips.get(f);
-		}
-		shipText.text = "" + totalShips;
+		//for (f in numShips.keys())
+		//{
+			//totalShips += numShips.get(f);
+		//}
+		//shipText.text = "" + totalShips;
 
         /*var newShip = shipFactory.produceShip(elapsed);
         if (newShip != null) {
             // add new ship to underlying node when api available
         }*/
         
-		capturing(elapsed);
+		//capturing(elapsed);
 
 		// setting which bar is visible
 		/*switch (this.faction.getFaction())

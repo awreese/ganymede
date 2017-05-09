@@ -83,6 +83,8 @@ class Capturable extends FlxSprite {
 		
 		captureBar.visible = true;
 		
+		trace(captureBar.value);
+		
         super.update(elapsed);
     }
 }
