@@ -50,8 +50,8 @@ class PlayState extends FlxState
 		// create planets
 		grpPlanets = new FlxTypedGroup<Planet>();
 		add(grpPlanets);
-		//grpPlanets.add(new Planet(this, gameMap.nodes[0], new Faction(FactionType.PLAYER), new PlanetStat(new ShipStat(ShipType.FRIGATE))));
-		//grpPlanets.add(new Planet(this, gameMap.nodes[1], new Faction(FactionType.ENEMY_1), new PlanetStat(new ShipStat(ShipType.FRIGATE))));
+		grpPlanets.add(new Planet(this, gameMap.nodes[0], new Faction(FactionType.PLAYER), new PlanetStat(new ShipStat(ShipType.FRIGATE))));
+		grpPlanets.add(new Planet(this, gameMap.nodes[1], new Faction(FactionType.ENEMY_1), new PlanetStat(new ShipStat(ShipType.FRIGATE))));
 
 		// Create the ships
 		grpShips = new FlxTypedGroup<gameUnits.Ship>();
@@ -262,7 +262,6 @@ class PlayState extends FlxState
 	// return the planet at the node at pos, null if there is no planet
 	private function getPlanet(pos:FlxPoint) : Planet {
 		for (p in grpPlanets) {
-			var planetPos = p.getPos();
 			// set the planet position back to the nodes
 			//planetPos.x += MapNode.NODE_SIZE / 2;
 			//planetPos.y += MapNode.NODE_SIZE / 2;

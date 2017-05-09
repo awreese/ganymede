@@ -22,6 +22,7 @@ import flash.display.FrameLabel;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
+import flixel.math.FlxPoint;
 import flixel.math.FlxVector;
 import flixel.text.FlxText;
 import flixel.ui.FlxBar;
@@ -368,9 +369,9 @@ class Planet extends Capturable
 	}
 
 	// return the position of the planet
-	public function getPos():FlxVector
+	public function getPos():FlxPoint
 	{
-		return new FlxVector(this.x, this.y);
+		return new FlxPoint(this.x, this.y);
 	}
 
 	// progress the capture bar
