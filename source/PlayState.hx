@@ -81,6 +81,11 @@ class PlayState extends FlxState
 		/*
 		 * Check and update any game state
 		 */
+		
+		// Update each ship's list of all ships
+		for (s in grpShips) {
+			s.listOfAllShips = grpShips.members;
+		}
 
 		/*
 		 * Handle any mouse/keyboard events
