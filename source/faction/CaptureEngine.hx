@@ -154,6 +154,18 @@ class CaptureEngine {
     }
     
     /**
+     * If the controlling faction is not in 100% control of capturable object, this 
+     * method returns true, false otherwise.
+     * @return true iff controlling faction has less then total control points, false otherwise
+     */
+    public function isContended():Bool {
+        var controllingFaction = this._controlAccumulator._controlFaction;
+        var controllingPoints = this._controlAccumulator._controlAccumulator.get(controllingFaction);
+        var totalControlPoints = this._controlAccumulator._controlPoints;
+        return controllingPoints < totalControlPoints;
+    }
+    
+    /**
      * Checks if object has been captured.
      * @return true iff object has been captured, false otherwise
      */
