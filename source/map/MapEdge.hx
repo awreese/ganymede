@@ -18,6 +18,7 @@ package map;
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import flixel.math.FlxPoint;
 import flixel.math.FlxVector;
 
 /**
@@ -41,22 +42,24 @@ class MapEdge
 		
 		this.n1 = n1;
 		this.n2 = n2;
-        this.distance = n1.pos.dist(n2.pos);
+        this.distance = n1.distanceTo(n2);
 	}
 
-	public function delta(): FlxVector
+	public function delta(): FlxPoint
 	{
-		return n2.pos.subtractNew(n1.pos);
+		//return n2.pos.subtractNew(n1.pos);
+        return n2.pos.subtractPoint(n1.pos);
 	}
 
-	public function interpDist(d: Float): FlxVector
+	public function interpDist(d: Float): FlxPoint
 	{
-		return (length() != 0) ? interpPerc(d / length()) : new FlxVector(0,0); // check division by 0!!
+		return (length() != 0) ? interpPerc(d / length()) : new FlxPoint(0,0); // check division by 0!!
 	}
 
-	public function interpPerc(i: Float): FlxVector
+	public function interpPerc(i: Float): FlxPoint
 	{
-		return n1.pos.addNew(delta().scale(i));
+		//return n1.pos.addNew(delta().scale(i));
+        return n1.pos.addPoint(delta().scale(i));
 	}
 
 	public function length(): Float
