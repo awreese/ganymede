@@ -48,6 +48,18 @@ class MapNode
 		this.pos = pos;
         trace("new Node: " + this.pos);
 	}
+	
+	/*public function new(gameMap:GameMap, pos: FlxVector, containPlanet: Bool, containBeacon: Bool, faction: FactionType, pStats:PlanetStat)
+	{
+		this.gameMap = gameMap;
+		this.pos = pos;
+		if (containPlanet) {
+		
+		} else planet = null;
+		if (containBeacon) {
+			
+		} else beacon = null;
+	}*/
 
 	public function contains(v: FlxPoint): Bool
 	{
@@ -67,12 +79,11 @@ class MapNode
 		FlxSpriteUtil.drawCircle(sprite, pos.x, pos.y, NODE_SIZE, FlxColor.TRANSPARENT, {color: FlxColor.WHITE});
 		for (n in neighbors)
 		{
-			var e = new MapEdge(new MapNode(gameMap, new FlxPoint(pos.x, pos.y)), new MapNode(n.gameMap, new FlxPoint(n.pos.x, n.pos.y)));
+			var e = new MapEdge(this, n);
 			//sprite.drawLine(e.interpDist(NODE_SIZE).x, e.interpDist(NODE_SIZE).y, e.interpDist(e.length() - NODE_SIZE).x,
 			//e.interpDist(e.length() - NODE_SIZE).y, {color: FlxColor.WHITE});
 			FlxSpriteUtil.drawLine(sprite, e.interpDist(NODE_SIZE).x, e.interpDist(NODE_SIZE).y, e.interpDist(e.length() - NODE_SIZE).x,
 			e.interpDist(e.length() - NODE_SIZE).y, {color: FlxColor.WHITE});
-			var i = 0;
 		}
 	}
 
