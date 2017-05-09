@@ -21,9 +21,10 @@ package gameUnits;
 import faction.Faction;
 import flixel.FlxG;
 import flixel.FlxSprite;
-import flixel.addons.effects.chainable.FlxWaveEffect.FlxWaveDirection;
+//import flixel.addons.effects.chainable.FlxWaveEffect.FlxWaveDirection;
 import flixel.math.FlxVector;
 import flixel.text.FlxText;
+import gameUnits.Ship.ShipStat;
 import gameUnits.capturable.Planet;
 import map.MapEdge;
 import map.MapNode;
@@ -33,8 +34,7 @@ import map.MapNode;
  *
  * @author Drew Reese
  */
-enum ShipType
-{
+enum ShipType {
 	FRIGATE;
 	DESTROYER;
 	CRUISER;
@@ -53,12 +53,9 @@ enum ShipType
  *
  * @author Drew Reese
  */
-class ShipStat
-{
+class ShipStat {
 	// General
 	public var hull: ShipType;	// ship type
-	public var pos: FlxVector;	// position
-	public var vel: FlxVector = new FlxVector(0,0);  // current velocity
 	public var speed: Float;		// speed
 
 	/*
@@ -81,26 +78,38 @@ class ShipStat
 	 */
 	public var as: Float;		// attack speed (attacks per second)
 	public var ap: Float;		// attack power (damage per attack)
-	public var cp: Float;		// capture power (capture points per second)
+	public var cps: Float;		// capture power (capture points per second)
 
+    /**
+     * 
+     * @param hull = null
+     * @param speed = 20.0
+     * @param sh = 0.5 shields
+     * @param hp = 100.0 hitpoints
+     * @param as = 2.0 attacks/second
+     * @param ap = 10.0 damage/attack
+     * @param cps = 5.0 capture points/second
+     */
 	public function new(?hull = null,
-						?pos = null,
 						?speed = 20.0,
 						?sh = 0.5,
 						?hp = 100.0,
 						?as = 2.0,
 						?ap = 10.0,
-						?cp = 5.0)
+						?cps = 5.0)
 	{
-		this.hull = hull;
-		this.pos = pos;
+		this.hull = (hull == null) ? FRIGATE : hull;
 		this.speed = speed;
 		this.sh = sh;
 		this.hp = hp;
 		this.as = as;
 		this.ap = ap;
-		this.cp = cp;
+		this.cps = cps;
 	}
+    
+    public function clone():ShipStat {
+        return new ShipStat(this.hull, this.speed, this.sh, this.hp, this.as, this.ap, this.cps);
+    }
 }
 
 /**
@@ -109,15 +118,16 @@ class ShipStat
  * @author Rory Soiffer
  * @author Drew Reese
  */
-class Ship extends FlxSprite
-{
+class Ship extends FlxSprite {
 
-	private var playState: PlayState;
+	//private var playState: PlayState; // NO, this is bad style.  If anything access what you want via getter.  I'm trying to push all these calls like this down to the node that everything sits on.  Way too much coupling going on!!
 
 	// Parent/Faction Info
 	private var homePlanet: gameUnits.capturable.Planet;
 	private var faction: Faction;
 
+    public var pos:FlxVector;
+    public var vel: FlxVector = new FlxVector(0,0);  // current velocity
 	public var stats: ShipStat; // General stats (should be split into type-specific vs. ship-specific)
 
 	public var destination: MapNode; // The node this ship is moving towards
@@ -128,14 +138,14 @@ class Ship extends FlxSprite
 
 	private var hpBar :FlxText;
 
-	public function new(playState: PlayState, destination: MapNode, faction: Faction, shipStats: ShipStat)
-	{
+	//public function new(playState: PlayState, destination: MapNode, faction: Faction, shipStats: ShipStat) 	{
+	public function new(destination: MapNode, faction: Faction, shipStats: ShipStat) 	{
 		super();
-		this.playState = playState;
+		//this.playState = playState;
 		this.destination = destination;
 		this.faction = faction;
 		this.stats = shipStats;
-		stats.pos = destination.pos;
+		this.pos = destination.pos;
 
 		loadGraphic("assets/images/ship_1.png", false, 32, 32);
 
@@ -143,25 +153,24 @@ class Ship extends FlxSprite
 		FlxG.state.add(hpBar);
 	}
 
+    /*
+     * Should make this an idle tweening route that loops or something similar
+     */
 	// Moves the ship, following flocking behavior
-	public function flock(elapsed: Float): Void
-	{
-		var toDest = idealPos().subtractNew(stats.pos);
-		var desiredSpeed = stats.vel.normalize().scaleNew(stats.speed).subtractNew(stats.vel);
+	/*public function flock(elapsed: Float): Void {
+		var toDest = idealPos().subtractNew(this.pos);
+		var desiredSpeed = this.vel.normalize().scaleNew(stats.speed).subtractNew(this.vel);
 		var noise = new FlxVector(Math.random() - .5, Math.random() - .5);
 		var seperation = new FlxVector(0, 0);
 		var alignment = new FlxVector(0, 0);
 		var cohesion = new FlxVector(0, 0);
 
-		for (s in playState.grpShips)
-		{
-			if (s != this && getFaction() == s.getFaction())
-			{
-				var d: FlxVector = stats.pos.subtractNew(s.stats.pos);
-				if (d.length < 30)
-				{
+		for (s in playState.grpShips) {
+			if (s != this && getFaction() == s.getFaction())  {
+				var d: FlxVector = this.pos.subtractNew(s.pos);
+				if (d.length < 30)  {
 					seperation = seperation.addNew(d.scaleNew(1/d.lengthSquared));
-					alignment = alignment.addNew(s.stats.vel.subtractNew(stats.vel));
+					alignment = alignment.addNew(s.vel.subtractNew(this.vel));
 					cohesion = cohesion.addNew(d.normalize());
 				}
 			}
@@ -175,20 +184,18 @@ class Ship extends FlxSprite
 		.addNew(alignment.scaleNew(.5))
 		.addNew(cohesion.scaleNew(0.5));
 
-		stats.vel = stats.vel.addNew(mod.scaleNew(elapsed));
-		stats.pos = stats.pos.addNew(stats.vel.scaleNew(elapsed));
-	}
+		this.vel = this.vel.addNew(mod.scaleNew(elapsed));
+		this.pos = this.pos.addNew(this.vel.scaleNew(elapsed));
+	}*/
 
 	// Returns where along its path the ship should be right now if it weren't for flocking behavior
-	public function idealPos(): FlxVector
-	{
-		if (isMoving())
-		{
+	public function idealPos(): FlxVector  {
+		/*if (isMoving())  {
 			return nodePath[0].interpDist(progress);
-		}
-		else {
+		}  else {
 			return destination.pos;
-		}
+		}*/
+        return nodePath[0].interpDist(progress);
 	}
 
 	// Returns whether the ship is currently moving between nodes or is at a node
@@ -215,11 +222,9 @@ class Ship extends FlxSprite
 		destination = n;
 	}
 
-	override public function update(elapsed:Float):Void
-	{
+	override public function update(elapsed:Float):Void  {
 		// check faction, take appropriate actions, etc..
-		switch (this.faction.getFaction())
-		{
+		/*switch (this.faction.getFaction())  {
 			case NOP:
 				trace("NOP Ship " + this.faction.getColor().toWebString);
 			case PLAYER:
@@ -228,14 +233,12 @@ class Ship extends FlxSprite
 				trace("Neutral Ship " + this.faction.getColor().toWebString);
 			default:
 				trace("Enemy Ship #" + this.faction.getColor().toWebString);
-		}
+		}*/
 
 		// Change the sprite to show when the ship is selected
-		if (isSelected)
-		{
+		if (isSelected)  {
 			loadGraphic("assets/images/ship_1_selected.png", false, 32, 32);
-		}
-		else {
+		}  else {
 			loadGraphic("assets/images/ship_1.png", false, 32, 32);
 		}
 
@@ -243,34 +246,32 @@ class Ship extends FlxSprite
 		// TODO: Handle Combat here
 		//
 
-		flock(elapsed);
+		//flock(elapsed);
 
 		// Whether the ship is currently stationed at one node or is moving between nodes
-		if (isMoving())
-		{
-			//stats.pos = idealPos();
-			//angle = nodePath[0].delta().degrees;
+		if (isMoving())  {
+			this.pos = idealPos();
+			angle = nodePath[0].delta().degrees;
+            trace(angle);
 
 			// Update the ship's movement along an edge
 			progress += stats.speed * elapsed;
-			if (progress > nodePath[0].length())
-			{
+			if (progress > nodePath[0].length())  {
 				progress -= nodePath[0].length();
 				nodePath.shift();
 			}
-		}
-		else {
-			//stats.pos = destination.pos;
+		} else {
+			this.pos = destination.pos;
 
 			progress = 0;
 		}
 
 		// Set the sprite's position (x,y) to match the actual position (pos)
-		x = stats.pos.x - origin.x;
-		y = stats.pos.y - origin.y;
+		x = this.pos.x - origin.x;
+		y = this.pos.y - origin.y;
 
 		// Rotate the ship to match its velocity
-		angle = stats.vel.degrees;
+		//angle = this.vel.degrees;
 
 		hpBar.x = this.x;
 		hpBar.y = this.y - this.height / 2 + 5;
@@ -280,14 +281,12 @@ class Ship extends FlxSprite
 	}
 
 	// Returns the position of the ship
-	public function getPos(): FlxVector
-	{
-		return stats.pos;
+	public function getPos(): FlxVector {
+		return this.pos;
 	}
 
 	// Returns this ship's faction
-	public function getFaction(): FactionType
-	{
+	public function getFaction(): FactionType  {
 		return faction.getFaction();
 	}
 }
@@ -295,27 +294,75 @@ class Ship extends FlxSprite
 /**
  * ShipFactory
  *
- * Fairly self-explanitory, this produces specific ships.
+ * Fairly self-explanitory, this produces specified ships.
  *
  * @author Drew Reese
  */
-class ShipFactory
-{
+class ShipFactory {
 
 	private var _planet:Planet;
+    private var _timeSinceLastMS:Float;
 	private var _producedShip:ShipStat;
 
-	// TODO: Finish this class
-
-	public function new(planet:Planet)
-	{
+    /**
+     * Instantiates new ShipFactory registered to specified Planet.
+     * @param planet    Planet this factory produces ships from
+     */
+	public function new(planet:Planet) {
 		this._planet = planet;
-
+        this._timeSinceLastMS = Math.NaN;
 	}
 
-	public function setProduction(producedShip:ShipStat):Void
-	{
+    /**
+     * Sets the ship type procduced by this factory.
+     * @param producedShip  ShipStat of ship to produce
+     */
+	public function setProduction(producedShip:ShipStat):Void  {
 		this._producedShip = producedShip;
 	}
+    
+    /**
+     * Produces ship after enough production time has elapsed.  Call this on every
+     * loop of update() of the parant planet.
+     * @param elapsed   time(ms) from the last call
+     * @return
+     */
+    public function produceShip(elapsed:Float):Ship {
+        this._timeSinceLastMS += elapsed;
+        if (initial() || canProduce()) {
+            this._timeSinceLastMS = 0.0;
+            return new Ship(_planet.getNode(), _planet.getFaction(), _producedShip.clone());
+        }
+        return null;
+    }
+    
+    /**
+     * There are three rules to Ship Factory:
+     *  Rule #1: You do not talk about Ship Factory
+     *  Rule #2: You do NOT talk about Ship Factory
+     *  Rule #3: If this is your first time at Ship Factory, you have to produce a ship.
+     * 
+     * @return true if first time at Ship Factory
+     */
+    private function initial():Bool {
+        return this._timeSinceLastMS == Math.NaN;
+    }
+    
+    /**
+     * Returns true if a ship can be produced.  A ship can be produced time elapsed
+     * from last production is greater than or equal to production time.
+     * @return true iff a ship is producable
+     */
+    private function canProduce(): Bool {
+        return this._timeSinceLastMS >= productionTimeMS();
+    }
+    
+    /**
+     * Converts production time from seconds to milliseconds
+     * @return  production time converted to ms
+     */
+    private function productionTimeMS():Float {
+        return this._planet.getStats().prod * 1000.0;
+    }
 
 }
