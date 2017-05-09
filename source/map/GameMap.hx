@@ -21,6 +21,7 @@ package map;
 import faction.Faction.FactionType;
 import flixel.FlxG;
 import flixel.FlxSprite;
+import flixel.math.FlxPoint;
 import flixel.math.FlxVector;
 import gameUnits.Ship.ShipStat;
 import gameUnits.Ship.ShipType;
@@ -82,8 +83,8 @@ class GameMap extends FlxSprite
 		/*var n1 = new MapNode(this, new FlxVector(50, 150), true, false, FactionType.PLAYER, new PlanetStat(ShipType.FRIGATE));
  		var n2 = new MapNode(this, new FlxVector(150, 150), true, false, FactionType.NOP, new PlanetStat(ShipType.FRIGATE));*/
 		
-		var n1 = new MapNode(this, new FlxVector(50, 150));
-		var n2 = new MapNode(this, new FlxVector(150, 150));
+		var n1 = new MapNode(this, new FlxPoint(50, 150));
+		var n2 = new MapNode(this, new FlxPoint(150, 150));
 		
 		n1.neighbors.push(n2);
 		n2.neighbors.push(n1);
@@ -96,9 +97,9 @@ class GameMap extends FlxSprite
  		var n2 = new MapNode(this, new FlxVector(200, 150), true, false, FactionType.NOP, new PlanetStat(ShipType.FRIGATE));
 		var n3 = new MapNode(this, new FlxVector(350, 150), true, false, FactionType.ENEMY_1, new PlanetStat(ShipType.FRIGATE));*/
 		
-		var n1 = new MapNode(this, new FlxVector(50, 150));
-		var n2 = new MapNode(this, new FlxVector(200, 150));
-		var n3 = new MapNode(this, new FlxVector(350, 150));
+		var n1 = new MapNode(this, new FlxPoint(50, 150));
+		var n2 = new MapNode(this, new FlxPoint(200, 150));
+		var n3 = new MapNode(this, new FlxPoint(350, 150));
 		
 		n1.neighbors.push(n2);
 		n2.neighbors.push(n1);
@@ -114,10 +115,10 @@ class GameMap extends FlxSprite
 		var n3 = new MapNode(this, new FlxVector(300, 70), true, false, FactionType.NOP, new PlanetStat(ShipType.FRIGATE));
 		var n4 = new MapNode(this, new FlxVector(270, 250), true, false, FactionType.ENEMY_1, new PlanetStat(ShipType.FRIGATE));*/
 
-		var n1 =  new MapNode(this, new FlxVector(50, 50));
-		var n2 = new MapNode(this, new FlxVector(100, 200));
-		var n3 = new MapNode(this, new FlxVector(300, 70));
-		var n4 = new MapNode(this, new FlxVector(270, 250));
+		var n1 =  new MapNode(this, new FlxPoint(50, 50));
+		var n2 = new MapNode(this, new FlxPoint(100, 200));
+		var n3 = new MapNode(this, new FlxPoint(300, 70));
+		var n4 = new MapNode(this, new FlxPoint(270, 250));
 
 		n1.neighbors.push(n2);
 		n2.neighbors.push(n1);
