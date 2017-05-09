@@ -54,9 +54,11 @@ class Capturable extends FlxSprite {
         this.captureEngine = new CaptureEngine(this.faction.getFaction(), 100.0);
 		
 		// create capturebar and add it to the graphics
-		captureBar = new FlxBar(node.pos.x - 15, node.pos.y - 15, LEFT_TO_RIGHT, 50, 10, null, "", 0, 100, true);
+		captureBar = new FlxBar(0, 0, LEFT_TO_RIGHT, 50, 10, null, "", 0, 100, true);
+		captureBar.x = node.pos.x - 25;
+		captureBar.y = node.pos.y + 20;
 		captureBar.createColoredFilledBar(faction.getColor(), true);
-		captureBar.visible = true;
+		captureBar.visible = false;
 		FlxG.state.add(captureBar);
     }
     
@@ -65,18 +67,22 @@ class Capturable extends FlxSprite {
 		
 		// get the current controlling faction and their cp
 		var currStatus = captureEngine.status();
-		var currFaction = currStatus.keys().next();
+		var currFaction = FactionType.NOP;
+		for (f in currStatus.keys()) {
+			currFaction = f;
+		}
 		var currCP = currStatus.get(currFaction);
 		
-		// set the faction to current faction
-		faction = new Faction(currFaction);
-		// set the color and points of the capture bar to current faction and points
-		captureBar.color = faction.getColor();
+		if (captureEngine.checkCaptured()) {
+			// if captured, change faction and set bar color
+			faction = new Faction(currFaction);
+			captureBar.color = faction.getColor();
+		}
+		
 		captureBar.value = currCP;
 		
-		captureBar.visible = currCP < TOTAL_CP;
+		captureBar.visible = true;
 		
         super.update(elapsed);
     }
-    
 }

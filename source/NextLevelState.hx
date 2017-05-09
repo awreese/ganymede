@@ -20,6 +20,7 @@ class NextLevelState extends FlxState
 	
 	override public function create():Void
 	{
+		
 		// create background
 		background = new FlxSprite(0, 0);
 		background.loadGraphic(AssetPaths.nextlevelbg__png);

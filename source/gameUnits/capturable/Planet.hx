@@ -26,6 +26,7 @@ import flixel.math.FlxVector;
 import flixel.text.FlxText;
 import flixel.ui.FlxBar;
 import flixel.util.FlxColor;
+import gameUnits.Ship;
 import gameUnits.Ship.ShipFactory;
 import gameUnits.capturable.Capturable;
 import gameUnits.Ship.ShipStat;
@@ -133,14 +134,15 @@ class Planet extends Capturable
 	private var pStats: PlanetStat;
 
 	private var numShips:Map<FactionType, Int>;
+	private var shipsAtPlanet: Array<Ship>;
 	private var shipTimer:Float;
 
 	// TODO: Move this to captureHUD in Capturable class
 	// progress bar
-	private var factionProgress:Int;
+	/*private var factionProgress:Int;
 	private var currFactionBar:FlxBar;
 	private var invadingFactionBar:FlxBar;
-	private var invadeFaction:Faction;
+	private var invadeFaction:Faction;*/
     
     // Ship Factory
     private var shipFactory:ShipFactory;
@@ -157,7 +159,7 @@ class Planet extends Capturable
 		this.playState = playState;
 
 		// Load graphics and any faction specific items
-		switch (this.faction.getFaction())
+		/*switch (this.faction.getFaction())
 		{
 			case PLAYER:
 				factionProgress = 100;
@@ -177,18 +179,18 @@ class Planet extends Capturable
 				factionProgress = 100;
 			default:
 				factionProgress = 0;
-		}
+		}*/
 
 		setSprite();
 
 		// TODO: Move this to captureHUD in Capturable class
 		// create capture bar
-		currFactionBar = new FlxBar(this.x - this.graphic.width / 4, this.y + this.graphic.height + 2, LEFT_TO_RIGHT, 50, 10);
+		/*currFactionBar = new FlxBar(this.x - this.graphic.width / 4, this.y + this.graphic.height + 2, LEFT_TO_RIGHT, 50, 10);
 		currFactionBar.createColoredFilledBar(faction.getColor(), true);
 		invadingFactionBar = new FlxBar(this.x - 8, this.y + 36, RIGHT_TO_LEFT, 50, 10);
 		currFactionBar.visible = true;
 		invadingFactionBar.visible = false;
-		invadingFactionBar.createColoredFilledBar(FlxColor.WHITE, true);
+		invadingFactionBar.createColoredFilledBar(FlxColor.WHITE, true);*/
 
 		// set levels
 		//capacityLevel = capLevel;
@@ -198,67 +200,40 @@ class Planet extends Capturable
         this.shipFactory = new ShipFactory(this);
         this.shipFactory.setProduction(this.pStats.ship);
 
-		// set other
-		//capacity = capacityLevel * 5;
-		//productionRate = 1;
+		// set number of ships
 		numShips = new Map<FactionType, Int>();
-		numShips.set(FactionType.PLAYER, 0);
-		numShips.set(FactionType.ENEMY_1, 0);
-		numShips.set(FactionType.NEUTRAL, 0);
+		for (f in Faction.getEnums()) {
+			numShips.set(f, 0);
+		}
 		shipTimer = 0;
+		shipsAtPlanet = new Array<Ship>();
 
-		currFactionBar.value = Math.abs(factionProgress);
+		/*currFactionBar.value = Math.abs(factionProgress);
 		invadingFactionBar.value = 0;
 		FlxG.state.add(currFactionBar);
-		FlxG.state.add(invadingFactionBar);
+		FlxG.state.add(invadingFactionBar);*/
 		shipText = new FlxText(this.x, this.y + 40, 0, "0", 16);
-		FlxG.state.add(shipText);
+		//FlxG.state.add(shipText);
 	}
 
 	override public function update(elapsed:Float):Void
 	{
-		var totalShip:Int = 0;
+		var totalShips:Int = 0;
 		for (f in numShips.keys())
 		{
-			totalShip += numShips.get(f);
+			totalShips += numShips.get(f);
 		}
-		shipText.text = "" + totalShip;
-		//if (this.faction == Faction.PLAYER) {
-		//// draw player planet
-		//loadGraphic(AssetPaths.player_planet_1__png, false, 16, 16);
-		//} else if (this.faction == Faction.ENEMY_1) {
-		//// draw enemy planet
-		//loadGraphic(AssetPaths.enemy_planet_1__png, false, 16, 16);
-		//} else if (this.faction == Faction.NEUTRAL) {
-		//// draw neutral planet
-		//loadGraphic(AssetPaths.neutral_planet_1__png, false, 16, 16);
-		//} else {
-		//// draw uncontrolled planet
-		//loadGraphic(AssetPaths.uncontrolled_planet_1__png, false, 16, 16);
-		//}  these were already set, only need to change on change of possession
+		shipText.text = "" + totalShips;
 
-		// Take faction action
-		/*switch(this.faction) {
-			case Faction.NOP:
-				trace("Open Planet");
-			case Faction.NEUTRAL:
-				trace("Neutral Planet");
-			case Faction.PLAYER:
-				trace("Player Planet");
-			default:
-				// Not player, neutral, or NOP planet => do enemy stuff
-				trace("Enemy Planet: " + this.faction);
-		}*/
-
-        var newShip = shipFactory.produceShip(elapsed);
+        /*var newShip = shipFactory.produceShip(elapsed);
         if (newShip != null) {
             // add new ship to underlying node when api available
-        }
+        }*/
         
-		capturing();
+		capturing(elapsed);
 
 		// setting which bar is visible
-		switch (this.faction.getFaction())
+		/*switch (this.faction.getFaction())
 		{
 			case PLAYER:
 				currFactionBar.visible = factionProgress >= 0;
@@ -296,12 +271,12 @@ class Planet extends Capturable
 		else if (factionProgress == -100)
 		{
 			this.faction.setFaction(ENEMY_1);
-		}
-		setSprite();
+		}*/
 
 		// increment timer
 		shipTimer += elapsed;
 		super.update(elapsed);
+		setSprite();
 	}
 
 	/**
@@ -404,6 +379,11 @@ class Planet extends Capturable
 	{
 		numShips.set(shipFaction, ships);
 	}
+	
+	// sets array of ships at planet
+	public function setShips(ships: Array<Ship>): Void {
+		shipsAtPlanet = ships;
+	}
 
 	// return the position of the planet
 	public function getPos():FlxVector
@@ -412,7 +392,7 @@ class Planet extends Capturable
 	}
 
 	// progress the capture bar
-	private function capturing():Void
+	private function capturing(elapsed: Float):Void
 	{
 		/*var playerShips:Int = numShips.get(faction.Faction.PLAYER);
 		var enemyShips:Int = numShips.get(faction.Faction.ENEMY_1);
@@ -433,7 +413,7 @@ class Planet extends Capturable
 				}
 			default:
 				factionProgress += playerShips - enemyShips;
-		}*/
+		}
 		if (factionProgress > 0 && factionProgress > 100)
 		{
 			factionProgress = 100;
@@ -441,6 +421,17 @@ class Planet extends Capturable
 		else if (factionProgress < 0 && factionProgress < -100)
 		{
 			factionProgress = -100;
+		}*/
+		var totalCP = new Map<FactionType, Float>();
+		for (f in Faction.getEnums()) {
+			totalCP[f] = 0.0;
+		}
+		for (s in shipsAtPlanet) {
+			var cp = totalCP[s.getFaction()];
+			totalCP.set(s.getFaction(), cp + (s.stats.cps));
+		}
+		for (f in Faction.getEnums()) {
+			captureEngine.setPoints(f, totalCP[f] * elapsed);
 		}
 	}
 

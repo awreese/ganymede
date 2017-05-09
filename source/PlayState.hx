@@ -22,6 +22,7 @@ import flixel.FlxG;
 import flixel.FlxState;
 import flixel.group.FlxGroup;
 import flixel.math.FlxVector;
+import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import gameUnits.capturable.Planet;
 import gameUnits.capturable.Planet.PlanetStat;
@@ -29,30 +30,35 @@ import map.GameMap;
 import map.MapNode;
 import faction.Faction;
 import gameUnits.Ship;
+import Main;
 import flixel.math.FlxRandom;
 
 class PlayState extends FlxState
 {
-
+	private var grpMap: FlxTypedGroup<GameMap>;
 	private var gameMap: GameMap;
 	public var grpShips: FlxTypedGroup<gameUnits.Ship>;
 	private var grpPlanets: FlxTypedGroup<gameUnits.capturable.Planet>;
 	private var rand:FlxRandom;
+	private var numPlayerFaction:Int;
 
 	override public function create(): Void
 	{
 		rand = new FlxRandom();
 		// Initialize the map
-		gameMap = new GameMap(1);
-		add(gameMap);
+		grpMap = new FlxTypedGroup<GameMap>();
+		add(grpMap);
+		gameMap = new GameMap(this, Main.LEVEL);
+		grpMap.add(gameMap);
+		//add(gameMap);
 
 		// draw planets
-		for (n in gameMap.nodes) {
+		/*for (n in gameMap.nodes) {
 			var c = n.getCaptureable();
 			if (c != null) {
 				add(c);
 			}
-		}
+		}*/
 		// create planets
 		/*grpPlanets = new FlxTypedGroup<Planet>();
 		add(grpPlanets);
@@ -133,6 +139,21 @@ class PlayState extends FlxState
 		
 		// produce ships
 		produceShips(elapsed);
+		
+		// if captured all the planets, progress
+		if (gameMap.getNumPlayerPlanets() == gameMap.getNumPlanets()) {
+			FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
+			FlxG.switchState(new NextLevelState());
+			Main.LEVEL++;
+			});
+		}
+		
+		// if player lose all planets, gameover
+		if (gameMap.getNumPlayerPlanets() == 0) {
+			FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
+			FlxG.switchState(new GameOverState());
+			});
+		}
 
 		super.update(elapsed);
 	}
@@ -143,14 +164,9 @@ class PlayState extends FlxState
 		{
 			var p : Planet = n.containPlanet() ? cast(n.getCaptureable(), Planet) : null;
 			var numShips:Map<FactionType, Int> = new Map<FactionType, Int>();
-			numShips.set(FactionType.PLAYER, 0);
-			numShips.set(FactionType.ENEMY_1, 0);
-			numShips.set(FactionType.ENEMY_2, 0);
-			numShips.set(FactionType.ENEMY_3, 0);
-			numShips.set(FactionType.ENEMY_4, 0);
-			numShips.set(FactionType.ENEMY_5, 0);
-			numShips.set(FactionType.ENEMY_6, 0);
-			numShips.set(FactionType.NEUTRAL, 0);
+			for (f in Faction.getEnums()) {
+				numShips.set(f, 0);
+			}
 
 			var shipsAtNode = new Array<Ship>();
 			
@@ -228,6 +244,7 @@ class PlayState extends FlxState
 				{
 					p.setNumShips(f, numShips.get(f));
 				}
+				p.setShips(shipsAtNode);
 			}
 		}
 	}
