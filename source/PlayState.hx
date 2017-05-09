@@ -43,36 +43,26 @@ class PlayState extends FlxState
 	{
 		rand = new FlxRandom();
 		// Initialize the map
-		gameMap = new GameMap(3);
+		gameMap = new GameMap(1);
 		add(gameMap);
 
+		// draw planets
+		for (n in gameMap.nodes) {
+			var c = n.getCaptureable();
+			if (c != null) {
+				add(c);
+			}
+		}
 		// create planets
-		grpPlanets = new FlxTypedGroup<Planet>();
+		/*grpPlanets = new FlxTypedGroup<Planet>();
 		add(grpPlanets);
 		grpPlanets.add(new Planet(this, gameMap.nodes[0], new Faction(FactionType.PLAYER), new PlanetStat(new ShipStat(ShipType.FRIGATE))));
-		grpPlanets.add(new Planet(this, gameMap.nodes[1], new Faction(FactionType.ENEMY_1), new PlanetStat(new ShipStat(ShipType.FRIGATE))));
+		grpPlanets.add(new Planet(this, gameMap.nodes[1], new Faction(FactionType.ENEMY_1), new PlanetStat(new ShipStat(ShipType.FRIGATE))));*/
 
 		// Create the ships
 		grpShips = new FlxTypedGroup<gameUnits.Ship>();
 		add(grpShips);
 
-		/*for (i in 0...1)
-		{
-			var stat: ShipStat = new ShipStat(ShipType.FRIGATE,
-								  gameMap.nodes[0].pos,
-								  30,
-								  100,
-								  100,
-								  0,
-								  0,
-								  0);
-			var faction:Faction = new Faction(FactionType.PLAYER);
-			var s = new gameUnits.Ship(gameMap.nodes[0], faction, stat);
-			grpShips.add(s);
-		}*/
-		//grpShips.add(new Ship(gameMap.nodes[1], new Faction(FactionType.PLAYER), new ShipStat(ShipType.FRIGATE, null, 10, 0.5, 100, 2.0, 50)));
-		//grpShips.add(new Ship(gameMap.nodes[2], new Faction(FactionType.ENEMY_1), new ShipStat(ShipType.FRIGATE, null, 10, 0.5, 100, 2.0, 50)));
-		//grpShips.add(new Ship(gameMap.nodes[3], new Faction(FactionType.PLAYER), new ShipStat(ShipType.FRIGATE, null, 10, 0.5, 100, 2.0, 50)));
 		super.create();
 	}
 
@@ -151,7 +141,7 @@ class PlayState extends FlxState
 	private function nodeUpdate(elapsed : Float):Void {
 		for (n in gameMap.nodes)
 		{
-			var p : Planet = getPlanet(n.pos);
+			var p : Planet = n.containPlanet() ? cast(n.getCaptureable(), Planet) : null;
 			var numShips:Map<FactionType, Int> = new Map<FactionType, Int>();
 			numShips.set(FactionType.PLAYER, 0);
 			numShips.set(FactionType.ENEMY_1, 0);
@@ -245,7 +235,13 @@ class PlayState extends FlxState
     // TODO: Move this into PlanetFactory
 	// produce ships for each planet (if they can)
 	private function produceShips(elapsed: Float):Void {
-		for (p in grpPlanets) {
+		for (n in gameMap.nodes) {
+			// checks if there's a planet at n
+			if (!n.containPlanet()) {
+				continue;
+			}
+			// get the planet
+			var p = cast(n.getCaptureable(), Planet);
 			var pPos = p.getPos();
 			// find the MapNode for the planet
 			var node = gameMap.findNode(new FlxVector(pPos.x + (MapNode.NODE_SIZE / 2), pPos.y + (MapNode.NODE_SIZE / 2)));
@@ -254,20 +250,5 @@ class PlayState extends FlxState
 				grpShips.add(ship);
 			}
 		}
-	}
-	
-	// return the planet at the node at pos, null if there is no planet
-	private function getPlanet(pos:FlxVector) : Planet {
-		for (p in grpPlanets) {
-			var planetPos = p.getPos();
-			// set the planet position back to the nodes
-			//planetPos.x += MapNode.NODE_SIZE / 2;
-			//planetPos.y += MapNode.NODE_SIZE / 2;
-			var distance = pos.dist(planetPos);
-			if (distance < 10.0) {
-				return p;
-			}
-		}
-		return null;
 	}
 }

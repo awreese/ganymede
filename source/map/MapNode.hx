@@ -29,6 +29,7 @@ import gameUnits.Ship.ShipStat;
 import faction.Faction;
 import faction.Faction.FactionType;
 using flixel.util.FlxSpriteUtil;
+import Std;
 /**
  * ...
  * @author Rory Soiffer
@@ -47,19 +48,8 @@ class MapNode
 	public function new(gameMap:GameMap, pos: FlxVector) {
 		this.gameMap = gameMap;
 		this.pos = pos;
+		capturable = null;
 	}
-	
-	/*public function new(gameMap:GameMap, pos: FlxVector, containPlanet: Bool, containBeacon: Bool, faction: FactionType, pStats:PlanetStat)
-	{
-		this.gameMap = gameMap;
-		this.pos = pos;
-		if (containPlanet) {
-		
-		} else planet = null;
-		if (containBeacon) {
-			
-		} else beacon = null;
-	}*/
 
 	public function contains(v: FlxVector): Bool
 	{
@@ -132,8 +122,22 @@ class MapNode
 	public function getPos():FlxVector {
 		return new FlxVector(pos.x, pos.y);
 	}
+		
+	public function setCapturable(capturable:Capturable):Void {
+		if (capturable != null) {
+			this.capturable = capturable;
+		}
+	}
 	
-	private function setCapturable(capturable:Capturable):Void {
-        this.capturable = capturable;
+	/*
+	 * return true if captureable is a planet, false otherwise
+	 */
+	public function containPlanet():Bool {
+		//var v = Std.instance(capturable, Planet);
+		return !(Std.instance(capturable, Planet) == null);
+	}
+	
+	public function getCaptureable(): Capturable {
+		return capturable;
 	}
 }
