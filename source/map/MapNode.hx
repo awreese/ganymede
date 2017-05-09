@@ -20,30 +20,30 @@ package map;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
-import flixel.math.FlxPoint;
 import flixel.math.FlxVector;
 import flixel.util.FlxColor;
-import gameUnits.capturable.Capturable;
+import gameUnits.capturable.Planet;
+import gameUnits.capturable.Planet.PlanetStat;
+import gameUnits.Ship.ShipStat;
 import faction.Faction;
 import faction.Faction.FactionType;
 using flixel.util.FlxSpriteUtil;
 /**
  * ...
  * @author Rory Soiffer
- * @author Drew Reese
  */
 class MapNode
 {
 	public static var NODE_SIZE:Int = 30;
 
 	public var gameMap: GameMap;
-	public var pos: FlxPoint;
+	public var pos: FlxVector;
 	public var neighbors: Array<MapNode> = new Array();
 	
 	// variables held if node contain a planet or a beacon
-	private var capturable:Capturable;
+	private var planet:Planet;
 	
-	public function new(gameMap:GameMap, pos: FlxPoint) {
+	public function new(gameMap:GameMap, pos: FlxVector) {
 		this.gameMap = gameMap;
 		this.pos = pos;
 	}
@@ -60,16 +60,14 @@ class MapNode
 		} else beacon = null;
 	}*/
 
-	public function contains(v: FlxPoint): Bool
+	public function contains(v: FlxVector): Bool
 	{
-		//return pos.dist(v) < NODE_SIZE + 15;
-		return pos.distanceTo(v) > NODE_SIZE + 15;
+		return pos.dist(v) < NODE_SIZE + 15;
 	}
 
 	public function distanceTo(n: MapNode): Float
 	{
-		//return pos.dist(n.pos);
-		return this.pos.distanceTo(n.pos);
+		return pos.dist(n.pos);
 	}
 
 	public function drawTo(sprite: FlxSprite): Void
@@ -130,12 +128,20 @@ class MapNode
 		return path;
 	}
 	
-	public function getPos():FlxPoint {
-		return new FlxPoint(pos.x, pos.y);
+	public function getPos():FlxVector {
+		return new FlxVector(pos.x, pos.y);
 	}
 	
-	private function setCapturable(capturable:Capturable):Void {
-        this.capturable = capturable;
+	// TODO: set up planet setting faction mechanic
+	// changes the faction for the beacon/planet at this node
+	public function changeFaction(faction: FactionType) {
+		
 	}
 	
+	private function createPlanet(faction: FactionType, pStats: PlanetStat):Void {
+		//planet = new Planet (this, new Faction(faction), pStats);
+		//FlxG.state.add(planet);
+	}
+	
+	private function createBeacon():Void {}
 }
