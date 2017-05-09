@@ -41,7 +41,7 @@ class MapNode
 	public var neighbors: Array<MapNode> = new Array();
 	
 	// variables held if node contain a planet or a beacon
-	private var planet:Planet;
+	private var capturable:Capturable;
 	
 	public function new(gameMap:GameMap, pos: FlxVector) {
 		this.gameMap = gameMap;
@@ -132,16 +132,7 @@ class MapNode
 		return new FlxVector(pos.x, pos.y);
 	}
 	
-	// TODO: set up planet setting faction mechanic
-	// changes the faction for the beacon/planet at this node
-	public function changeFaction(faction: FactionType) {
-		
+	private function setCapturable(capturable:Capturable):Void {
+        this.capturable = capturable;
 	}
-	
-	private function createPlanet(faction: FactionType, pStats: PlanetStat):Void {
-		//planet = new Planet (this, new Faction(faction), pStats);
-		//FlxG.state.add(planet);
-	}
-	
-	private function createBeacon():Void {}
 }
