@@ -19,7 +19,9 @@
 package gameUnits.capturable;
 
 import faction.CaptureEngine;
+import flixel.FlxG;
 import flixel.FlxSprite;
+import flixel.ui.FlxBar;
 import map.MapNode;
 import faction.Faction;
 
@@ -39,6 +41,9 @@ class Capturable extends FlxSprite {
     // parent node and faction control fields
 	private var node: MapNode;
 	private var faction:Faction;
+	
+	private var captureBar:FlxBar;
+	private var TOTAL_CP:Float = 100.0;
     
     private var captureEngine:CaptureEngine; // TODO: make this an actual HUD :/
     
@@ -47,10 +52,30 @@ class Capturable extends FlxSprite {
         this.node = node;
         this.faction = faction;
         this.captureEngine = new CaptureEngine(this.faction.getFaction(), 100.0);
+		
+		// create capturebar and add it to the graphics
+		captureBar = new FlxBar(node.pos.x - 15, node.pos.y - 15, LEFT_TO_RIGHT, 50, 10, null, "", 0, 100, true);
+		captureBar.createColoredFilledBar(faction.getColor(), true);
+		captureBar.visible = true;
+		FlxG.state.add(captureBar);
     }
     
     override public function update(elapsed:Float):Void {
         // TODO: Monitor capture status, display "contended" bar when active skirmish happening
+		
+		// get the current controlling faction and their cp
+		var currStatus = captureEngine.status();
+		var currFaction = currStatus.keys().next();
+		var currCP = currStatus.get(currFaction);
+		
+		// set the faction to current faction
+		faction = new Faction(currFaction);
+		// set the color and points of the capture bar to current faction and points
+		captureBar.color = faction.getColor();
+		captureBar.value = currCP;
+		
+		captureBar.visible = currCP < TOTAL_CP;
+		
         super.update(elapsed);
     }
     
