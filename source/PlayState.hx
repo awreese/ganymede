@@ -21,7 +21,6 @@ package;
 import flixel.FlxG;
 import flixel.FlxState;
 import flixel.group.FlxGroup;
-import flixel.math.FlxPoint;
 import flixel.math.FlxVector;
 import flixel.util.FlxTimer;
 import gameUnits.capturable.Planet;
@@ -165,17 +164,15 @@ class PlayState extends FlxState
 
 			var shipsAtNode = new Array<Ship>();
 			
-			//var nPos:FlxVector = new FlxVector(n.pos.x, n.pos.y);
-			var nPos:FlxPoint = new FlxPoint(n.pos.x, n.pos.x);
+			var nPos:FlxVector = new FlxVector(n.pos.x, n.pos.y);
 			//nPos.x -= MapNode.NODE_SIZE / 2;
 			//nPos.y -= MapNode.NODE_SIZE / 2;
 
 			// determine which ships are within the range of the node
 			for (s in grpShips)
 			{
-				var sPos:FlxPoint = s.getPos();
-				//var distance:Float = nPos.dist(sPos);
-				var distance:Float = nPos.distanceTo(sPos);
+				var sPos:FlxVector = s.getPos();
+				var distance:Float = nPos.dist(sPos);
 				if (distance < 30 && s.exists)
 				{
 					numShips.set(s.getFaction(), numShips.get(s.getFaction()) + 1);
@@ -260,14 +257,13 @@ class PlayState extends FlxState
 	}
 	
 	// return the planet at the node at pos, null if there is no planet
-	private function getPlanet(pos:FlxPoint) : Planet {
+	private function getPlanet(pos:FlxVector) : Planet {
 		for (p in grpPlanets) {
 			var planetPos = p.getPos();
 			// set the planet position back to the nodes
 			//planetPos.x += MapNode.NODE_SIZE / 2;
 			//planetPos.y += MapNode.NODE_SIZE / 2;
-			//var distance = pos.dist(planetPos);
-			var distance = pos.distanceTo(p.getPos());
+			var distance = pos.dist(planetPos);
 			if (distance < 10.0) {
 				return p;
 			}

@@ -22,12 +22,9 @@ import faction.Faction;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.addons.effects.chainable.FlxWaveEffect.FlxWaveDirection;
-import flixel.math.FlxPoint;
 import flixel.math.FlxVector;
 import flixel.text.FlxText;
-import gameUnits.Ship.ShipStat;
 import gameUnits.capturable.Planet;
-import haxe.Serializer;
 import map.MapEdge;
 import map.MapNode;
 
@@ -56,12 +53,13 @@ enum ShipType
  *
  * @author Drew Reese
  */
-class ShipStat {
+class ShipStat
+{
 	// General
 	public var hull: ShipType;	// ship type
-	//public var pos: FlxVector;	// position
-	//public var vel: FlxVector;  // current velocity
-	public var vmax: Float;	// max velocity
+	public var pos: FlxVector;	// position
+	public var vel: FlxVector = new FlxVector(0,0);  // current velocity
+	public var speed: Float;		// speed
 
 	/*
 	 * Defense
@@ -86,7 +84,8 @@ class ShipStat {
 	public var cp: Float;		// capture power (capture points per second)
 
 	public function new(?hull = null,
-						?vmax = 20.0,
+						?pos = null,
+						?speed = 20.0,
 						?sh = 0.5,
 						?hp = 100.0,
 						?as = 2.0,
@@ -94,27 +93,14 @@ class ShipStat {
 						?cp = 5.0)
 	{
 		this.hull = hull;
-		this.vmax = vmax;
+		this.pos = pos;
+		this.speed = speed;
 		this.sh = sh;
 		this.hp = hp;
 		this.as = as;
 		this.ap = ap;
 		this.cp = cp;
-        
-        this.clone();
 	}
-    
-    public function clone():ShipStat {
-        var serializer = new Serializer();
-        serializer.serialize(this);
-        
-        var s = serializer.toString();
-        trace("shipStat: " + s);
-        
-        return null;
-    }
-    
-    
 }
 
 /**
@@ -132,21 +118,7 @@ class Ship extends FlxSprite
 	private var homePlanet: gameUnits.capturable.Planet;
 	private var faction: Faction;
 
-    //private var position:FlxPoint; FlxObject already has x, y coordinate
-    private var vel:FlxVector;  // We should really look into using FlxObject's velocity field instead, why re-invent the wheel?
-    
 	public var stats: ShipStat; // General stats (should be split into type-specific vs. ship-specific)
-    
-    /*
-     * Ok, I see what you mean here (above).
-     * 
-     * Agreed.
-     * 
-     * Ship should have position, velocity, and speed (which is really just velocity.length) fields
-     * ShipStat should just be statistics about classes of ships
-     * 
-     */
-    
 
 	public var destination: MapNode; // The node this ship is moving towards
 	public var nodePath: Array<MapEdge> = []; // The path this ship is moving along (if any)
@@ -159,18 +131,11 @@ class Ship extends FlxSprite
 	public function new(playState: PlayState, destination: MapNode, faction: Faction, shipStats: ShipStat)
 	{
 		super();
-		this.playState = playState; // why is playstate stuff here?  play state is level stuff, not ship stuff
+		this.playState = playState;
 		this.destination = destination;
 		this.faction = faction;
 		this.stats = shipStats;
-        
-		//stats.pos = destination.pos;
-        
-        //this.position = destination.pos;
-        this.x = destination.pos.x;
-        this.y = destination.pos.y;
-        
-        this.vel = new FlxVector(0, 0);
+		stats.pos = destination.pos;
 
 		loadGraphic("assets/images/ship_1.png", false, 32, 32);
 
@@ -181,11 +146,8 @@ class Ship extends FlxSprite
 	// Moves the ship, following flocking behavior
 	public function flock(elapsed: Float): Void
 	{
-		//var toDest = idealPos().subtractNew(this.getPosition());
-        var p = idealPos().subtractPoint(this.getPosition());
-		var toDest = new FlxVector(p.x, p.y);
-		//var desiredSpeed = stats.vel.normalize().scaleNew(stats.speed).subtractNew(stats.vel);
-		var desiredSpeed = this.vel.normalize().scaleNew(this.vel.length).subtractNew(this.vel);
+		var toDest = idealPos().subtractNew(stats.pos);
+		var desiredSpeed = stats.vel.normalize().scaleNew(stats.speed).subtractNew(stats.vel);
 		var noise = new FlxVector(Math.random() - .5, Math.random() - .5);
 		var seperation = new FlxVector(0, 0);
 		var alignment = new FlxVector(0, 0);
@@ -195,14 +157,11 @@ class Ship extends FlxSprite
 		{
 			if (s != this && getFaction() == s.getFaction())
 			{
-				//var d: FlxVector = stats.pos.subtractNew(s.stats.pos);
-                var p = this.getPosition().subtractPoint(s.getPosition());
-				var d: FlxVector = new FlxVector(p.x, p.y);
+				var d: FlxVector = stats.pos.subtractNew(s.stats.pos);
 				if (d.length < 30)
 				{
 					seperation = seperation.addNew(d.scaleNew(1/d.lengthSquared));
-					//alignment = alignment.addNew(s.stats.vel.subtractNew(stats.vel));
-					alignment = alignment.addNew(s.vel.subtractNew(this.vel));
+					alignment = alignment.addNew(s.stats.vel.subtractNew(stats.vel));
 					cohesion = cohesion.addNew(d.normalize());
 				}
 			}
@@ -216,16 +175,12 @@ class Ship extends FlxSprite
 		.addNew(alignment.scaleNew(.5))
 		.addNew(cohesion.scaleNew(0.5));
 
-		//stats.vel = stats.vel.addNew(mod.scaleNew(elapsed));
-		//stats.pos = stats.pos.addNew(stats.vel.scaleNew(elapsed));
-        this.vel = this.vel.addNew(mod.scaleNew(elapsed));
-		var newpos = this.getPosition().addPoint(this.vel.scaleNew(elapsed));
-        this.x = newpos.x;
-        this.y = newpos.y;
+		stats.vel = stats.vel.addNew(mod.scaleNew(elapsed));
+		stats.pos = stats.pos.addNew(stats.vel.scaleNew(elapsed));
 	}
 
 	// Returns where along its path the ship should be right now if it weren't for flocking behavior
-	public function idealPos(): FlxPoint
+	public function idealPos(): FlxVector
 	{
 		if (isMoving())
 		{
@@ -297,8 +252,7 @@ class Ship extends FlxSprite
 			//angle = nodePath[0].delta().degrees;
 
 			// Update the ship's movement along an edge
-			//progress += stats.speed * elapsed;
-			progress += this.vel.length * elapsed;
+			progress += stats.speed * elapsed;
 			if (progress > nodePath[0].length())
 			{
 				progress -= nodePath[0].length();
@@ -312,11 +266,11 @@ class Ship extends FlxSprite
 		}
 
 		// Set the sprite's position (x,y) to match the actual position (pos)
-		x = this.x - origin.x;
-		y = this.y - origin.y;
+		x = stats.pos.x - origin.x;
+		y = stats.pos.y - origin.y;
 
 		// Rotate the ship to match its velocity
-		angle = this.vel.degrees;
+		angle = stats.vel.degrees;
 
 		hpBar.x = this.x;
 		hpBar.y = this.y - this.height / 2 + 5;
@@ -326,10 +280,9 @@ class Ship extends FlxSprite
 	}
 
 	// Returns the position of the ship
-	public function getPos(): FlxPoint
+	public function getPos(): FlxVector
 	{
-		//return stats.pos;
-        return this.getPosition();
+		return stats.pos;
 	}
 
 	// Returns this ship's faction

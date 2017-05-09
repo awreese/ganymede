@@ -46,7 +46,6 @@ class MapNode
 	public function new(gameMap:GameMap, pos: FlxPoint) {
 		this.gameMap = gameMap;
 		this.pos = pos;
-        trace("new Node: " + this.pos);
 	}
 	
 	/*public function new(gameMap:GameMap, pos: FlxVector, containPlanet: Bool, containBeacon: Bool, faction: FactionType, pStats:PlanetStat)

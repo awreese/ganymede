@@ -51,7 +51,7 @@ class PlanetStat
 	public var cap: Int;			// ship capacity
 	public var prod: Float;			// ship production rate
 	public var prod_thresh: Float;	// production rate threshold for falloff
-	public var ship: ShipStat;      // ship type for production
+	public var ship: ShipStat; // ship type for production
 
 	// Levels
 	public var cap_lvl: Int;		// current capacity level
@@ -354,7 +354,7 @@ class Planet extends Capturable
 		{
 			shipTimer = 0.0;
 			numShips.set(faction.getFaction(), numShips.get(faction.getFaction()) + 1);
-			var stat = new ShipStat(pStats.ship.hull, pStats.ship.sh, pStats.ship.hp, pStats.ship.as, pStats.ship.ap, pStats.ship.cp);
+			var stat = new ShipStat(pStats.ship.hull, null, pStats.ship.speed, pStats.ship.sh, pStats.ship.hp, pStats.ship.as, pStats.ship.ap, pStats.ship.cp);
 			return new Ship(playState, node, faction, stat);
 		}
 		// if can't produce ship, return null
