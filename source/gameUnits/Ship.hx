@@ -48,15 +48,17 @@ enum ShipType {
 
 /**
  * Ship statistic type.
- *
- * Ship statistics must be instanited and passed into constructors for ships
+ * 
+ * This defines ship types by specifying the ShipType and statistics.  Ship 
+ * statistics must be instanited or cloned before being passed into 
+ * constructors for ships
  *
  * @author Drew Reese
  */
 class ShipStat {
 	// General
 	public var hull: ShipType;	// ship type
-	public var speed: Float;		// speed
+	public var speed: Float;	// speed
 
 	/*
 	 * Defense
@@ -81,6 +83,8 @@ class ShipStat {
 	public var cps: Float;		// capture power (capture points per second)
 
     /**
+     * Defines a new Ship type.
+     * - Combines ShipType with a list of specs
      * 
      * @param hull = null
      * @param speed = 20.0
@@ -107,6 +111,10 @@ class ShipStat {
 		this.cps = cps;
 	}
     
+    /**
+     * Copies and returns a clone of this ship definition.
+     * @return clone of this ShipStat
+     */
     public function clone():ShipStat {
         return new ShipStat(this.hull, this.speed, this.sh, this.hp, this.as, this.ap, this.cps);
     }
@@ -301,7 +309,7 @@ class Ship extends FlxSprite {
 class ShipFactory {
 
 	private var _planet:Planet;
-    private var _timeSinceLastMS:Float;
+    private var _timeSinceLast:Float;
 	private var _producedShip:ShipStat;
 
     /**
@@ -310,7 +318,7 @@ class ShipFactory {
      */
 	public function new(planet:Planet) {
 		this._planet = planet;
-        this._timeSinceLastMS = Math.NaN;
+        this._timeSinceLast = Math.NaN;
 	}
 
     /**
@@ -325,13 +333,14 @@ class ShipFactory {
      * Produces ship after enough production time has elapsed.  Call this on every
      * loop of update() of the parant planet.
      * @param elapsed   time(ms) from the last call
-     * @return
+     * @return new specified ship, or null
      */
     public function produceShip(elapsed:Float):Ship {
-        this._timeSinceLastMS += elapsed;
+        this._timeSinceLast += elapsed;
         if (initial() || canProduce()) {
-            this._timeSinceLastMS = 0.0;
-            return new Ship(_planet.getNode(), _planet.getFaction(), _producedShip.clone());
+            this._timeSinceLast = 0.0;
+            this._planet.playState.add(new Ship(_planet.getNode(), _planet.getFaction(), _producedShip.clone()));
+            //return new Ship(_planet.getNode(), _planet.getFaction(), _producedShip.clone());
         }
         return null;
     }
@@ -345,7 +354,7 @@ class ShipFactory {
      * @return true if first time at Ship Factory
      */
     private function initial():Bool {
-        return this._timeSinceLastMS == Math.NaN;
+        return Math.isNaN(this._timeSinceLast);
     }
     
     /**
@@ -354,15 +363,16 @@ class ShipFactory {
      * @return true iff a ship is producable
      */
     private function canProduce(): Bool {
-        return this._timeSinceLastMS >= productionTimeMS();
+        return this._timeSinceLast >= productionTime();
     }
     
     /**
-     * Converts production time from seconds to milliseconds
-     * @return  production time converted to ms
+     * Returns the prudction time.
+     * @return  production time
      */
-    private function productionTimeMS():Float {
-        return this._planet.getStats().prod * 1000.0;
+    private function productionTime():Float {
+        // TODO: Incorporate global capacity into this factory's production line
+        return this._planet.getStats().prod;
     }
 
 }
