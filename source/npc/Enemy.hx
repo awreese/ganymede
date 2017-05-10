@@ -47,6 +47,8 @@ class Enemy extends NPC
 				}
 			}
 			
+			n = nodes.getRandom(); // I got a compiler warning n was never initialized below, so I did it here to make it stop whining.
+			
 			// if the cp isn't that low, expand territory
 			if (ratio >= 0.7) {
 				var des: MapNode = null;
@@ -75,7 +77,8 @@ class Enemy extends NPC
 					}
 				}
 				
-				var ships = n.getShips(this.faction);
+				//var ships = n.getShips(this.faction);
+				var ships = n.getShipGroup(this.faction);
 				for (s in ships) {
 					s.pathTo(des);
 				}
@@ -93,7 +96,8 @@ class Enemy extends NPC
 					}
 				
 					// move ships to des
-					var ships = n.getShips(this.faction);
+					//var ships = n.getShips(this.faction);
+					var ships = n.getShipGroup(this.faction);
 					for (s in ships) {
 						s.pathTo(des);
 					}
