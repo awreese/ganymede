@@ -135,19 +135,9 @@ class Planet extends Capturable
 
 	private var numShips:Map<FactionType, Int>;
 	private var shipTimer:Float;
-
-	// TODO: Move this to captureHUD in Capturable class
-	// progress bar
-	/*private var factionProgress:Int;
-	private var currFactionBar:FlxBar;
-	private var invadingFactionBar:FlxBar;
-	private var invadeFaction:Faction;*/
     
     // Ship Factory
     private var shipFactory:ShipFactory;
-
-	// levels for the planet
-	private var shipText:FlxText;
 
 	public function new(playState: PlayState, location: MapNode, faction: Faction, pstats: PlanetStat)
 	{
@@ -157,43 +147,9 @@ class Planet extends Capturable
 
 		this.playState = playState;
 
-		// Load graphics and any faction specific items
-		/*switch (this.faction.getFaction())
-		{
-			case PLAYER:
-				factionProgress = 100;
-			case ENEMY_1:
-				factionProgress = -100;
-			case ENEMY_2:
-				factionProgress = -100;
-			case ENEMY_3:
-				factionProgress = -100;
-			case ENEMY_4:
-				factionProgress = -100;
-			case ENEMY_5:
-				factionProgress = -100;
-			case ENEMY_6:
-				factionProgress = -100;
-			case NEUTRAL:
-				factionProgress = 100;
-			default:
-				factionProgress = 0;
-		}*/
-
+		// set sprite
 		setSprite();
 
-		// TODO: Move this to captureHUD in Capturable class
-		// create capture bar
-		/*currFactionBar = new FlxBar(this.x - this.graphic.width / 4, this.y + this.graphic.height + 2, LEFT_TO_RIGHT, 50, 10);
-		currFactionBar.createColoredFilledBar(faction.getColor(), true);
-		invadingFactionBar = new FlxBar(this.x - 8, this.y + 36, RIGHT_TO_LEFT, 50, 10);
-		currFactionBar.visible = true;
-		invadingFactionBar.visible = false;
-		invadingFactionBar.createColoredFilledBar(FlxColor.WHITE, true);*/
-
-		// set levels
-		//capacityLevel = capLevel;
-		//this.techLevel = techLevel;
 		this.pStats = pstats;
         
         this.shipFactory = new ShipFactory(this);
@@ -206,72 +162,10 @@ class Planet extends Capturable
 		}
 		shipTimer = 0;
 		shipsAtPlanet = new Array<Ship>();
-
-		/*currFactionBar.value = Math.abs(factionProgress);
-		invadingFactionBar.value = 0;
-		FlxG.state.add(currFactionBar);
-		FlxG.state.add(invadingFactionBar);*/
-		shipText = new FlxText(this.x, this.y + 40, 0, "0", 16);
-		//FlxG.state.add(shipText);
 	}
 
 	override public function update(elapsed:Float):Void
 	{
-		var totalShips:Int = 0;
-		//for (f in numShips.keys())
-		//{
-			//totalShips += numShips.get(f);
-		//}
-		//shipText.text = "" + totalShips;
-
-        /*var newShip = shipFactory.produceShip(elapsed);
-        if (newShip != null) {
-            // add new ship to underlying node when api available
-        }*/
-        
-		//capturing(elapsed);
-
-		// setting which bar is visible
-		/*switch (this.faction.getFaction())
-		{
-			case PLAYER:
-				currFactionBar.visible = factionProgress >= 0;
-				invadingFactionBar.color = FlxColor.RED;
-				invadingFactionBar.visible = factionProgress < 0;
-			case ENEMY_1:
-				currFactionBar.visible = factionProgress <= 0;
-				invadingFactionBar.color = FlxColor.BLUE;
-				invadingFactionBar.visible = factionProgress > 0;
-			default:
-				currFactionBar.visible = false;
-				invadingFactionBar.visible = true;
-				if (factionProgress >= 0)
-				{
-					invadingFactionBar.color = FlxColor.BLUE;
-				}
-				else
-				{
-					invadingFactionBar.color = FlxColor.RED;
-				}
-		}
-		if (currFactionBar.visible)
-		{
-			currFactionBar.value = Math.abs(factionProgress);
-		}
-		else if (invadingFactionBar.visible)
-		{
-			invadingFactionBar.value = Math.abs(factionProgress);
-		}
-
-		if (factionProgress == 100)
-		{
-			this.faction.setFaction(PLAYER);
-		}
-		else if (factionProgress == -100)
-		{
-			this.faction.setFaction(ENEMY_1);
-		}*/
-
 		// increment timer
 		shipTimer += elapsed;
 		super.update(elapsed);
@@ -383,40 +277,6 @@ class Planet extends Capturable
 	public function getPos():FlxVector
 	{
 		return new FlxVector(this.x, this.y);
-	}
-
-	// progress the capture bar
-	private function capturing(elapsed: Float):Void
-	{
-		/*var playerShips:Int = numShips.get(faction.Faction.PLAYER);
-		var enemyShips:Int = numShips.get(faction.Faction.ENEMY_1);
-		var neutralShips:Int = numShips.get(faction.Faction.NEUTRAL);*/
-
-		/*switch(this.faction.getFaction()) {
-			case PLAYER:
-				if (playerShips == 0) {
-					factionProgress += -enemyShips;
-				}
-			case ENEMY_1:
-				if (enemyShips == 0) {
-					factionProgress += playerShips;
-				}
-			case NEUTRAL:
-				if (neutralShips == 0) {
-					factionProgress += playerShips - enemyShips;
-				}
-			default:
-				factionProgress += playerShips - enemyShips;
-		}
-		if (factionProgress > 0 && factionProgress > 100)
-		{
-			factionProgress = 100;
-		}
-		else if (factionProgress < 0 && factionProgress < -100)
-		{
-			factionProgress = -100;
-		}*/
-		
 	}
 
 	private function setSprite():Void

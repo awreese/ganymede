@@ -81,7 +81,7 @@ class Capturable extends FlxSprite {
 		
 		// change bar color to invading faction
 		if (this.faction.getFaction() == FactionType.NOP) {
-			captureBar.color = captureEngine.getCapturingFaction().getColor();
+			captureBar.createColoredFilledBar(captureEngine.getCapturingFaction().getColor(),true);
 		}
 		
 		// change faction if captured
@@ -106,8 +106,9 @@ class Capturable extends FlxSprite {
 		// keep track of current cp
 		var currCP = currStatus[currFaction];
 		
+		trace("currCP " + currCP);
+		
 		// set value for bar
-		// make sure value does not go out of range
 		captureBar.value = currCP;
 		captureBar.updateBar();
 		

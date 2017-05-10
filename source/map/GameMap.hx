@@ -175,7 +175,7 @@ class GameMap extends FlxSprite {
 	
 	private function drawNodes():Void {
 		// Loads an empty sprite for the map background
-		loadGraphic("assets/images/background.png", false, 400, 320);
+		loadGraphic("assets/images/mapbg.png", false, 400, 320);
 
 		// Draw the nodes to the background
 		for (n in nodes)
