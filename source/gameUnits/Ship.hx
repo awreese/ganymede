@@ -21,7 +21,6 @@ package gameUnits;
 import faction.Faction;
 import flixel.FlxG;
 import flixel.FlxSprite;
-//import flixel.addons.effects.chainable.FlxWaveEffect.FlxWaveDirection;
 import flixel.math.FlxVector;
 import flixel.text.FlxText;
 import gameUnits.Ship.ShipStat;
@@ -34,8 +33,7 @@ import map.MapNode;
  *
  * @author Drew Reese
  */
-enum ShipType
-{
+enum ShipType {
 	FRIGATE;
 	DESTROYER;
 	CRUISER;
@@ -56,8 +54,7 @@ enum ShipType
  *
  * @author Drew Reese
  */
-class ShipStat
-{
+class ShipStat {
 	// General
 	public var hull: ShipType;	// ship type
 	public var speed: Float;	// speed
@@ -117,8 +114,7 @@ class ShipStat
 	 * Copies and returns a clone of this ship definition.
 	 * @return clone of this ShipStat
 	 */
-	public function clone():ShipStat
-	{
+	public function clone():ShipStat {
 		return new ShipStat(this.hull, this.speed, this.sh, this.hp, this.as, this.ap, this.cps);
 	}
 }
@@ -129,8 +125,7 @@ class ShipStat
  * @author Rory Soiffer
  * @author Drew Reese
  */
-class Ship extends FlxSprite
-{
+class Ship extends FlxSprite {
 
 	//private var playState: PlayState; // NO, this is bad style.  If anything access what you want via getter.  I'm trying to push all these calls like this down to the node that everything sits on.  Way too much coupling going on!!
 
@@ -153,8 +148,7 @@ class Ship extends FlxSprite
 	private var hpBar :FlxText;
 
 	//public function new(playState: PlayState, destination: MapNode, faction: Faction, shipStats: ShipStat) 	{
-	public function new(destination: MapNode, faction: Faction, shipStats: ShipStat)
-	{
+	public function new(destination: MapNode, faction: Faction, shipStats: ShipStat) {
 		super();
 		//this.playState = playState;
 		this.destination = destination;
@@ -169,8 +163,7 @@ class Ship extends FlxSprite
 	}
 
 	// Moves the ship, following flocking behavior
-	public function flock(elapsed: Float): Void
-	{
+	public function flock(elapsed: Float): Void {
 		// All the forces acting on the ship
 		var toDest = idealPos().subtractNew(this.pos);
 		var desiredSpeed = this.vel.normalize().scaleNew(stats.speed).subtractNew(this.vel);
@@ -179,14 +172,11 @@ class Ship extends FlxSprite
 		var alignment = new FlxVector(0, 0);
 		var cohesion = new FlxVector(0, 0);
 
-		for (s in listOfAllShips)
-		{
+		for (s in listOfAllShips) {
 			// Only flock with other ships of your faction
-			if (s != this && getFaction() == s.getFaction())
-			{
+			if (s != this && getFaction() == s.getFaction()) {
 				var d: FlxVector = this.pos.subtractNew(s.pos);
-				if (d.length < 30)
-				{
+				if (d.length < 30) {
 					seperation = seperation.addNew(d.scaleNew(1/d.lengthSquared));
 					alignment = alignment.addNew(s.vel.subtractNew(this.vel));
 					cohesion = cohesion.addNew(d.normalize());
@@ -209,44 +199,35 @@ class Ship extends FlxSprite
 	}
 
 	// Returns where along its path the ship should be right now if it weren't for flocking behavior
-	public function idealPos(): FlxVector
-	{
-		if (isMoving())
-		{
+	public function idealPos(): FlxVector {
+		if (isMoving()) {
 			return nodePath[0].interpDist(progress);
-		}
-		else {
+		} else {
 			return destination.pos;
 		}
 		//return nodePath[0].interpDist(progress);
 	}
 
 	// Returns whether the ship is currently moving between nodes or is at a node
-	public function isMoving(): Bool
-	{
+	public function isMoving(): Bool {
 		return nodePath.length > 0;
 	}
 
 	// Orders the ship to follow the shortest possible path to a given node
-	public function pathTo(n: MapNode): Void
-	{
-		if (isMoving())
-		{
+	public function pathTo(n: MapNode): Void {
+		if (isMoving()) {
 			var e = nodePath[0];
 			nodePath = nodePath[0].pathTo(n, progress);
-			if (nodePath[0].n1 != e.n1)
-			{
+			if (nodePath[0].n1 != e.n1) {
 				progress = e.length() - progress;
 			}
-		}
-		else {
+		} else {
 			nodePath = destination.pathTo(n);
 		}
 		destination = n;
 	}
 
-	override public function update(elapsed:Float):Void
-	{
+	override public function update(elapsed:Float):Void {
 		// check faction, take appropriate actions, etc..
 		/*switch (this.faction.getFaction())  {
 			case NOP:
@@ -260,11 +241,9 @@ class Ship extends FlxSprite
 		}*/
 
 		// Change the sprite to show when the ship is selected
-		if (isSelected)
-		{
+		if (isSelected) {
 			loadGraphic("assets/images/ship_1_selected.png", false, 32, 32);
-		}
-		else {
+		} else {
 			loadGraphic("assets/images/ship_1.png", false, 32, 32);
 		}
 
@@ -273,35 +252,29 @@ class Ship extends FlxSprite
 		//
 
 		// Whether the ship is currently stationed at one node or is moving between nodes
-		if (isMoving())
-		{
+		if (isMoving()) {
 			// Update the ship's movement along an edge
 			progress += stats.speed * elapsed;
-			if (progress > nodePath[0].length())
-			{
+			if (progress > nodePath[0].length()) {
 				// If needed, move to the next edge
 				progress -= nodePath[0].length();
 				nodePath.shift();
 			}
-		}
-		else {
+		} else {
 			progress = 0;
 		}
 
 		// Moving the ship itself, either with or without flocking
 		var USE_FLOCKING = false;
-		if (USE_FLOCKING)
-		{
+		if (USE_FLOCKING) {
 			// Accelerate the ship correctly
 			flock(elapsed);
 			// Rotate the sprite to match the velocity
 			angle = this.vel.degrees;
-		}
-		else {
+		} else {
 			// Move the ship to the correct position
 			this.pos = idealPos();
-			if (isMoving())
-			{
+			if (isMoving()) {
 				// If the ship is moving, rotate it to face along the direction of movement
 				angle = nodePath[0].delta().degrees;
 			}
@@ -319,14 +292,12 @@ class Ship extends FlxSprite
 	}
 
 	// Returns the position of the ship
-	public function getPos(): FlxVector
-	{
+	public function getPos(): FlxVector {
 		return this.pos;
 	}
 
 	// Returns this ship's faction
-	public function getFaction(): FactionType
-	{
+	public function getFaction(): FactionType {
 		return faction.getFaction();
 	}
 }
@@ -338,8 +309,7 @@ class Ship extends FlxSprite
  *
  * @author Drew Reese
  */
-class ShipFactory
-{
+class ShipFactory {
 
 	private var _planet:Planet;
 	private var _timeSinceLast:Float;
@@ -349,8 +319,7 @@ class ShipFactory
 	 * Instantiates new ShipFactory registered to specified Planet.
 	 * @param planet    Planet this factory produces ships from
 	 */
-	public function new(planet:Planet)
-	{
+	public function new(planet:Planet) {
 		this._planet = planet;
 		this._timeSinceLast = Math.NaN;
 	}
@@ -359,8 +328,7 @@ class ShipFactory
 	 * Sets the ship type procduced by this factory.
 	 * @param producedShip  ShipStat of ship to produce
 	 */
-	public function setProduction(producedShip:ShipStat):Void
-	{
+	public function setProduction(producedShip:ShipStat):Void {
 		this._producedShip = producedShip;
 	}
 
@@ -370,14 +338,12 @@ class ShipFactory
 	 * @param elapsed   time(ms) from the last call
 	 * @return new specified ship, or null
 	 */
-	public function produceShip(elapsed:Float):Ship
-	{
+	public function produceShip(elapsed:Float):Ship {
 		this._timeSinceLast += elapsed;
-		if (initial() || canProduce())
-		{
+		if (initial() || canProduce()) {
 			this._timeSinceLast = 0.0;
-			this._planet.playState.add(new Ship(_planet.getNode(), _planet.getFaction(), _producedShip.clone()));
-			//return new Ship(_planet.getNode(), _planet.getFaction(), _producedShip.clone());
+			//this._planet.playState.add(new Ship(_planet.getNode(), _planet.getFaction(), _producedShip.clone()));
+			return new Ship(_planet.getNode(), _planet.getFaction(), _producedShip.clone());
 		}
 		return null;
 	}
@@ -390,8 +356,7 @@ class ShipFactory
 	 *
 	 * @return true if first time at Ship Factory
 	 */
-	private function initial():Bool
-	{
+	private function initial():Bool {
 		return Math.isNaN(this._timeSinceLast);
 	}
 
@@ -400,8 +365,7 @@ class ShipFactory
 	 * from last production is greater than or equal to production time.
 	 * @return true iff a ship is producable
 	 */
-	private function canProduce(): Bool
-	{
+	private function canProduce(): Bool {
 		return this._timeSinceLast >= productionTime();
 	}
 
@@ -409,8 +373,7 @@ class ShipFactory
 	 * Returns the prudction time.
 	 * @return  production time
 	 */
-	private function productionTime():Float
-	{
+	private function productionTime():Float {
 		// TODO: Incorporate global capacity into this factory's production line
 		return this._planet.getStats().prod;
 	}
