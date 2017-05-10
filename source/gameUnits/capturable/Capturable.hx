@@ -55,10 +55,11 @@ class Capturable extends FlxSprite {
         this.captureEngine = new CaptureEngine(this.faction.getFaction(), 100.0);
 		
 		// create capturebar and add it to the graphics
-		captureBar = new FlxBar(0, 0, LEFT_TO_RIGHT, 50, 10, null, "", 0, 100, true);
+		captureBar = new FlxBar(0, 0, LEFT_TO_RIGHT, 50, 10, null, "", 0, captureEngine.getMaxControllingPoint(), true);
 		captureBar.x = node.pos.x - 25;
 		captureBar.y = node.pos.y + 20;
 		captureBar.createColoredFilledBar(faction.getColor(), true);
+		captureBar.killOnEmpty = false;
 		captureBar.visible = false;
 		FlxG.state.add(captureBar);
     }
@@ -78,25 +79,38 @@ class Capturable extends FlxSprite {
 			captureEngine.setPoints(f, totalCP[f] * elapsed);
 		}
 		
-		// get the current controlling faction and their cp
-		var currStatus = captureEngine.status();
-		var currFaction = FactionType.NOP;
-		for (f in currStatus.keys()) {
-			currFaction = f;
+		// change bar color to invading faction
+		if (this.faction.getFaction() == FactionType.NOP) {
+			captureBar.color = captureEngine.getCapturingFaction().getColor();
 		}
-		trace(currStatus);
-		var currCP = currStatus[currFaction];
 		
-		
+		// change faction if captured
 		if (captureEngine.checkCaptured()) {
+			// change controlling faction if captured
+			var currStatus = captureEngine.status();
+			var currFaction;
+			for (f in currStatus.keys()) {
+				currFaction = f;
+			}
 			// if captured, change faction and set bar color
 			faction = new Faction(currFaction);
 			captureBar.color = faction.getColor();
 		}
 		
+		// get current cp
+		var currStatus = captureEngine.status();
+		var currFaction;
+		for (f in currStatus.keys()) {
+			currFaction = f;
+		}
+		// keep track of current cp
+		var currCP = currStatus[currFaction];
+		
+		// set value for bar
+		// make sure value does not go out of range
 		captureBar.value = currCP;
 		
-		captureBar.visible = true;
+		captureBar.visible = captureEngine.isContended();
 		
 		trace(captureBar.value);
 		

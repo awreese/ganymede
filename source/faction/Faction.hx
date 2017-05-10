@@ -52,7 +52,7 @@ class Faction {
 	// initializes faction color mapping
 	static function __init__() {
 		faction_color = new Map<FactionType, FlxColor>();
-		faction_color.set(FactionType.NOP, FlxColor.TRANSPARENT);
+		faction_color.set(FactionType.NOP, FlxColor.WHITE);
 		faction_color.set(FactionType.PLAYER, FlxColor.BLUE);
 		faction_color.set(FactionType.NEUTRAL, FlxColor.GREEN);
 		faction_color.set(FactionType.ENEMY_1, FlxColor.RED);

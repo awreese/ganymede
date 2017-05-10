@@ -43,7 +43,7 @@ private class ControlAccumulator {
         //this._controlAccumulator = new Map<FactionType, Float>();
         //this._controlPoints = control_points;
 		this._totalControlPoints = total_control_points;
-		this._currentControlPoints = total_control_points;
+		this._currentControlPoints = control_faction == NOP ? 0.0 : total_control_points;
         
         //this.setControl(control_faction, total_control_points);
         
@@ -97,25 +97,53 @@ private class ControlAccumulator {
 		var oldController = this._currentControlFaction;
 		
 		for (f in Faction.getEnums()) {
-			if (f == this._capturingFaction) {
-				this._currentControlPoints += factions.get(f);
-				
-				// check if capturing faction finally captured
-				if (this._currentControlPoints > this._totalControlPoints) {
-					this._currentControlPoints = this._totalControlPoints;
-					this._currentControlFaction = f;
+			var cp = factions.get(f);
+			if (oldController == NOP) {
+				// if planet is NOP raise bar according to capturingFaction 
+				if (f == this._capturingFaction) {
+					this._currentControlPoints += factions.get(f);
+					
+					// check if capturing faction finally captured
+					if (this._currentControlPoints > this._totalControlPoints) {
+						this._currentControlPoints = this._totalControlPoints;
+						this._currentControlFaction = f;
+					}
+				} else {
+					this._currentControlPoints -= factions.get(f);
+					
+					// check if controling faction lost possession
+					if (this._currentControlPoints < 0) {
+						this._currentControlFaction = NOP;
+						this._capturingFaction = f;
+						this._currentControlPoints = Math.abs(this._currentControlPoints);
+					}
 				}
 			} else {
-				this._currentControlPoints -= factions.get(f);
-				
-				// check if controling faction lost possession
-				if (this._currentControlPoints < 0) {
-					this._currentControlFaction = NOP;
-					this._capturingFaction = f;
-					this._currentControlPoints = Math.abs(this._currentControlPoints);
+				// else, lower bar according to capturingFaction
+				if (f == oldController) {
+					this._currentControlPoints += factions.get(f);
+					
+					// check if capturing faction finally captured
+					if (this._currentControlPoints > this._totalControlPoints) {
+						this._currentControlPoints = this._totalControlPoints;
+						this._currentControlFaction = f;
+					}
+				} else {
+					this._currentControlPoints -= factions.get(f);
+					
+					// check if controling faction lost possession
+					if (this._currentControlPoints < 0) {
+						this._currentControlFaction = NOP;
+						this._capturingFaction = f;
+						this._currentControlPoints = Math.abs(this._currentControlPoints);
+					}
 				}
 			}
 		}
+		// make sure currentControlPoints is not less than 0
+		this._currentControlPoints = this._currentControlPoints < 0.0 ? 0.0 : this._currentControlPoints;
+		// make sure currentControlPoints is not greater than totalControlPoints
+		this._currentControlPoints = this._currentControlPoints > this._totalControlPoints ? this._totalControlPoints : this._currentControlPoints;
 		
 		return this._currentControlFaction != oldController;
     }
@@ -193,6 +221,11 @@ class CaptureEngine {
         var controllingPoints = this._controlAccumulator._controlAccumulator.get(controllingFaction);
         var totalControlPoints = this._controlAccumulator._controlPoints;
         return controllingPoints < totalControlPoints;*/
+		// if planet is NOP, contended if currentControlPoints is greater than 0.0
+		if (_controlAccumulator._currentControlFaction == NOP) {
+			return this._controlAccumulator._currentControlPoints > 0.0;
+		}
+		// if planet is not NOP, contended if currentControlPoints > totalControlPoints
 		return this._controlAccumulator._currentControlPoints < this._controlAccumulator._totalControlPoints;
     }
     
@@ -215,4 +248,20 @@ class CaptureEngine {
         var points = this._controlAccumulator._currentControlPoints;
         return [faction => points];
     }
+	
+	/**
+	 * Returns the total controlling points that this captureEngine can have
+	 * @return float of the total controlling points
+	 */
+	public function getMaxControllingPoint(): Float {
+		return this._controlAccumulator._totalControlPoints;
+	}
+	
+	/**
+	 * Return the Capturing Faction
+	 * @return Faction of capturing faction
+	 */
+	public function getCapturingFaction(): Faction {
+		return new Faction(this._controlAccumulator._capturingFaction);
+	}
 }
