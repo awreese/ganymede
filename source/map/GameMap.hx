@@ -23,12 +23,19 @@ import faction.Faction.FactionType;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.math.FlxVector;
+import flixel.group.FlxGroup.FlxTypedGroup;
 import gameUnits.Ship.ShipStat;
 import gameUnits.Ship.ShipType;
 import gameUnits.capturable.Capturable;
 import gameUnits.capturable.Planet;
 
 using flixel.util.FlxSpriteUtil;
+
+/**
+ * MapNodeList is an array of MapNodes
+ */
+//typedef MapNodeList = Array<MapNode>;
+typedef MapNodeList = FlxTypedGroup<MapNode>;
 
 /**
  * Game Map
@@ -45,23 +52,29 @@ using flixel.util.FlxSpriteUtil;
 class GameMap extends FlxSprite {
 
 	// list of nodes in current game map
-	public var nodes:Array<MapNode> = [];
+	//public var nodes:MapNodeList = [];
+	public var nodes:MapNodeList;
     
     private var selected:MapNode = null;
 	
     private var numPlanets:Int;
 	
     private var factionShipCount:Map<FactionType, Int>; // Global ship count
+	private var factionControlledNodes:Map<FactionType, MapNodeList>;
 
 	public function new(playState:PlayState, level: Int) {
 		super();
         
+		this.nodes = new MapNodeList();
 		this.numPlanets = 0;
         
         this.factionShipCount = new Map<FactionType, Int>();
-        // initialize global faction ship counts
+		this.factionControlledNodes = new Map<FactionType, MapNodeList>();
+		
+        // initialize global faction data
         for (faction in Faction.getEnums()) {
-            factionShipCount.set(faction, 0);
+            this.factionShipCount.set(faction, 0);
+			this.factionControlledNodes.set(faction, new MapNodeList());
         }
 		
         // Load the nodes
@@ -77,7 +90,13 @@ class GameMap extends FlxSprite {
 	}
 
 	public function findNode(v: FlxVector):MapNode {
-		return nodes.filter(function(n) return n.contains(v))[0];
+		//return nodes.filter(function(n) return n.contains(v))[0];
+		for (node in nodes) {
+			if (node.contains(v)) {
+				return node;
+			}
+		}
+		return null;
 	}
 
 	override public function update(elapsed:Float):Void {
@@ -172,6 +191,8 @@ class GameMap extends FlxSprite {
         return this.getShipCount(faction);
     }
 	
+	//public function getNodes(faction:FactionType
+	
 	private function drawNodes():Void {
 		// Loads an empty sprite for the map background
 		loadGraphic("assets/images/mapbg.png", false, 400, 320);
@@ -194,7 +215,9 @@ class GameMap extends FlxSprite {
 		n2.neighbors.push(n1);
 		
 		// draw the nodes
-		nodes = [n1, n2];
+		//nodes = [n1, n2];
+		nodes.add(n1);
+		nodes.add(n2);
 		//drawNodes();
 		
 		// set captureable
@@ -219,7 +242,10 @@ class GameMap extends FlxSprite {
 		n2.neighbors.push(n1);
 		n2.neighbors.push(n3);
 		n3.neighbors.push(n2);
-		nodes = [n1, n2, n3];
+		//nodes = [n1, n2, n3];
+		nodes.add(n1);
+		nodes.add(n2);
+		nodes.add(n3);
 		
 		// set captureable
 		var n1P = new Planet(playState, n1, new Faction(FactionType.PLAYER), new PlanetStat(new ShipStat(ShipType.FRIGATE)));
@@ -257,8 +283,12 @@ class GameMap extends FlxSprite {
 		n3.neighbors.push(n4);
 		n4.neighbors.push(n3);
 
-		nodes = [n1, n2, n3, n4];
-		
+		//nodes = [n1, n2, n3, n4];
+		nodes.add(n1);
+		nodes.add(n2);
+		nodes.add(n3);
+		nodes.add(n4);
+				
 		// set captureable
 		var n1P = new Planet(playState, n1, new Faction(FactionType.PLAYER), new PlanetStat(new ShipStat(ShipType.FRIGATE)));
 		var n2P = new Planet(playState, n2, new Faction(FactionType.NOP), new PlanetStat(new ShipStat(ShipType.FRIGATE)));
