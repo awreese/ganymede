@@ -134,7 +134,6 @@ class Planet extends Capturable
 	private var pStats: PlanetStat;
 
 	private var numShips:Map<FactionType, Int>;
-	private var shipsAtPlanet: Array<Ship>;
 	private var shipTimer:Float;
 
 	// TODO: Move this to captureHUD in Capturable class
@@ -379,11 +378,6 @@ class Planet extends Capturable
 	{
 		numShips.set(shipFaction, ships);
 	}
-	
-	// sets array of ships at planet
-	public function setShips(ships: Array<Ship>): Void {
-		shipsAtPlanet = ships;
-	}
 
 	// return the position of the planet
 	public function getPos():FlxVector
@@ -422,17 +416,7 @@ class Planet extends Capturable
 		{
 			factionProgress = -100;
 		}*/
-		var totalCP = new Map<FactionType, Float>();
-		for (f in Faction.getEnums()) {
-			totalCP[f] = 0.0;
-		}
-		for (s in shipsAtPlanet) {
-			var cp = totalCP[s.getFaction()];
-			totalCP.set(s.getFaction(), cp + (s.stats.cps));
-		}
-		for (f in Faction.getEnums()) {
-			captureEngine.setPoints(f, totalCP[f] * elapsed);
-		}
+		
 	}
 
 	private function setSprite():Void

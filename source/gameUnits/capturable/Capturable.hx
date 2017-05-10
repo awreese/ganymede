@@ -46,6 +46,7 @@ class Capturable extends FlxSprite {
 	private var TOTAL_CP:Float = 100.0;
     
     private var captureEngine:CaptureEngine; // TODO: make this an actual HUD :/
+	private var shipsAtPlanet: Array<Ship>;
     
     public function new(node: MapNode, faction: Faction) {
         super(node.pos.x, node.pos.y);
@@ -64,6 +65,18 @@ class Capturable extends FlxSprite {
     
     override public function update(elapsed:Float):Void {
         // TODO: Monitor capture status, display "contended" bar when active skirmish happening
+		// get accumulative points
+		var totalCP = new Map<FactionType, Float>();
+		for (f in Faction.getEnums()) {
+			totalCP[f] = 0.0;
+		}
+		for (s in shipsAtPlanet) {
+			var cp = totalCP[s.getFaction()];
+			totalCP.set(s.getFaction(), cp + (s.stats.cps));
+		}
+		for (f in Faction.getEnums()) {
+			captureEngine.setPoints(f, totalCP[f] * elapsed);
+		}
 		
 		// get the current controlling faction and their cp
 		var currStatus = captureEngine.status();
@@ -71,7 +84,9 @@ class Capturable extends FlxSprite {
 		for (f in currStatus.keys()) {
 			currFaction = f;
 		}
-		var currCP = currStatus.get(currFaction);
+		trace(currStatus);
+		var currCP = currStatus[currFaction];
+		
 		
 		if (captureEngine.checkCaptured()) {
 			// if captured, change faction and set bar color
@@ -87,4 +102,9 @@ class Capturable extends FlxSprite {
 		
         super.update(elapsed);
     }
+	
+	// sets array of ships at planet
+	public function setShips(ships: Array<Ship>): Void {
+		shipsAtPlanet = ships;
+	}
 }
