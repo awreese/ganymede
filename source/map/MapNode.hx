@@ -18,7 +18,9 @@
 
 package map;
 
-import flixel.FlxG;
+import Std;
+import faction.Faction;
+import faction.Faction.FactionType;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
@@ -27,18 +29,13 @@ import flixel.util.FlxColor;
 import gameUnits.Ship;
 import gameUnits.capturable.Capturable;
 import gameUnits.capturable.Planet;
-import gameUnits.capturable.Planet.PlanetStat;
-import gameUnits.Ship.ShipStat;
-import faction.Faction;
-import faction.Faction.FactionType;
-import Std;
 
 using flixel.util.FlxSpriteUtil;
 
 /**
- * shortcut for flixel typed group for ships
+ * NodeGroup is a group of MapNodes
  */
-typedef ShipGroup = FlxTypedGroup<Ship>;
+typedef NodeGroup = FlxTypedGroup<MapNode>;
 
 /**
  * MapNode
@@ -55,8 +52,9 @@ class MapNode extends FlxObject {
 	public static var NODE_SIZE:Int = 30;
 
 	public var gameMap: GameMap;
-	public var pos: FlxVector;
+	//public var pos: FlxVector;
 	public var neighbors: Array<MapNode> = new Array();
+	//public var neighbors:NodeGroup;
 	
 	// Game objects at this node
 	private var capturable:Capturable;
@@ -69,11 +67,15 @@ class MapNode extends FlxObject {
      * TODO: reduce internal exposure, not everything needs to be public
      */
     
-	public function new(gameMap:GameMap, pos: FlxVector) {
+	//public function new(gameMap:GameMap, pos: FlxVector) {
+	public function new(gameMap:GameMap, x:Float, y:Float) {
 		super();
 		
+		//this.pos = pos;
+		this.x = x;
+		this.y = y;
+		
 		this.gameMap = gameMap;
-		this.pos = pos;
 		
         this.capturable = null;
         
@@ -85,15 +87,17 @@ class MapNode extends FlxObject {
 	}
 
 	public function contains(v: FlxVector): Bool {
-		return pos.dist(v) < NODE_SIZE + 15;
+		//return pos.dist(v) < NODE_SIZE + 15;
+		return this.getPosition().distanceTo(v) < NODE_SIZE + 15;
 	}
 
 	public function distanceTo(n: MapNode): Float {
-		return pos.dist(n.pos);
+		//return pos.dist(n.pos);
+		return this.getPosition().distanceTo(n.getPosition());
 	}
 
 	public function drawTo(sprite: FlxSprite): Void {
-		FlxSpriteUtil.drawCircle(sprite, pos.x, pos.y, NODE_SIZE, FlxColor.TRANSPARENT, {color: FlxColor.WHITE});
+		FlxSpriteUtil.drawCircle(sprite, this.x, this.y, NODE_SIZE, FlxColor.TRANSPARENT, {color: FlxColor.WHITE});
 		for (n in neighbors)
 		{
 			var e = new MapEdge(this, n);
@@ -140,7 +144,8 @@ class MapNode extends FlxObject {
 	}
 	
 	public function getPos():FlxVector {
-		return new FlxVector(pos.x, pos.y);
+		//return new FlxVector(pos.x, pos.y);
+		return new FlxVector(x, y);
 	}
 	
     /**
@@ -190,6 +195,15 @@ class MapNode extends FlxObject {
         this.removeShip(ship);  // decrements count
     }
 	
+	/**
+	 * Retuns a ShipGroup for the specified faction currently at this node.
+	 * @param	faction	faction to return ShipGroup of
+	 * @return	ShipGroup for specified faction currently at this node
+	 */
+	public function getShipGroup(faction:FactionType):ShipGroup {
+		return this.factionShips.get(faction);
+	}
+	
 	/*
 	 * return true if captureable is a planet, false otherwise
 	 */
@@ -200,5 +214,9 @@ class MapNode extends FlxObject {
 	
 	public function getCaptureable(): Capturable {
 		return capturable;
+	}
+	
+	public function getFaction():FactionType {
+		return this.capturable.getFaction().getFaction();
 	}
 }

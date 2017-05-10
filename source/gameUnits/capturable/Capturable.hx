@@ -49,15 +49,15 @@ class Capturable extends FlxSprite {
 	private var shipsAtPlanet: Array<Ship>;
     
     public function new(node: MapNode, faction: Faction) {
-        super(node.pos.x, node.pos.y);
+        super(node.x, node.y);
         this.node = node;
         this.faction = faction;
         this.captureEngine = new CaptureEngine(this.faction.getFaction(), 100.0);
 		
 		// create capturebar and add it to the graphics
 		captureBar = new FlxBar(0, 0, LEFT_TO_RIGHT, 50, 10, null, "", 0, captureEngine.getMaxControllingPoint(), true);
-		captureBar.x = node.pos.x - 25;
-		captureBar.y = node.pos.y + 20;
+		captureBar.x = node.x - 25;
+		captureBar.y = node.y + 20;
 		captureBar.createColoredFilledBar(faction.getColor(), true);
 		captureBar.killOnEmpty = false;
 		captureBar.visible = false;
@@ -135,10 +135,10 @@ class Capturable extends FlxSprite {
 	}
 	
 	/**
-	 * Returns the faction of this planet.
-	 * @return  Faction of this planet
+	 * Returns the faction of this Capturable.
+	 * @return  Faction of this capturable object
 	 */
 	public function getFaction():Faction {
-		return faction;
+		return this.faction;
 	}
 }

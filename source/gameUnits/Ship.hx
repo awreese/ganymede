@@ -19,8 +19,8 @@
 package gameUnits;
 
 import faction.Faction;
-import flixel.FlxG;
 import flixel.FlxSprite;
+import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxVector;
 import flixel.text.FlxText;
 import gameUnits.Ship.ShipStat;
@@ -44,6 +44,11 @@ enum ShipType {
 	CAPITAL;
 	PATROL_CRAFT;
 }
+
+/**
+ * ShipGroup is a group of ships
+ */
+typedef ShipGroup = FlxTypedGroup<Ship>;
 
 /**
  * Ship statistic type.
@@ -154,7 +159,7 @@ class Ship extends FlxSprite {
 		this.destination = destination;
 		this.faction = faction;
 		this.stats = shipStats;
-		this.pos = destination.pos;
+		this.pos = destination.getPos();
 
 		loadGraphic("assets/images/ship_1.png", false, 32, 32);
 
@@ -203,7 +208,7 @@ class Ship extends FlxSprite {
 		if (isMoving()) {
 			return nodePath[0].interpDist(progress);
 		} else {
-			return destination.pos;
+			return destination.getPos();
 		}
 		//return nodePath[0].interpDist(progress);
 	}

@@ -42,12 +42,12 @@ class PlayState extends FlxState
 	private var grpPlanets: FlxTypedGroup<gameUnits.capturable.Planet>;
 	private var rand:FlxRandom;
 	private var numPlayerFaction:Int;
-	private var enemy1: Enemy;
+	//private var enemy1: Enemy;
 
 	override public function create(): Void
 	{
 		rand = new FlxRandom();
-		enemy1 = new Enemy(FactionType.ENEMY_1, 5);
+		//enemy1 = new Enemy(FactionType.ENEMY_1, 5);
 		// Initialize the map
 		grpMap = new FlxTypedGroup<GameMap>();
 		add(grpMap);
@@ -107,7 +107,7 @@ class PlayState extends FlxState
 			}
 			else
 			{
-				trace("Selected node " + n.pos.toString());
+				trace("Selected node " + n.getPosition().toString());
 				for (s in grpShips)
 				{
 					// only move the ships that are the player's
@@ -131,7 +131,7 @@ class PlayState extends FlxState
 			var n = gameMap.findNode(new FlxVector(FlxG.mouse.x, FlxG.mouse.y));
 			if (n != null)
 			{
-				trace("Ordered movement to " + n.pos.toString());
+				trace("Ordered movement to " + n.getPosition().toString());
 				for (s in grpShips)
 				{
 					if (s.isSelected)
@@ -180,7 +180,7 @@ class PlayState extends FlxState
 
 			var shipsAtNode = new Array<Ship>();
 			
-			var nPos:FlxVector = new FlxVector(n.pos.x, n.pos.y);
+			var nPos:FlxVector = new FlxVector(n.x, n.y);
 			//nPos.x -= MapNode.NODE_SIZE / 2;
 			//nPos.y -= MapNode.NODE_SIZE / 2;
 

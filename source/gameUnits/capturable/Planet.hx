@@ -294,7 +294,7 @@ class Planet extends Capturable
 				loadGraphic(AssetPaths.uncontrolled_planet_1__png, false);
 		}
 
-		x = node.pos.x - origin.x;
-		y = node.pos.y - origin.y;
+		x = node.x - origin.x;
+		y = node.y - origin.y;
 	}
 }

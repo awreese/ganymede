@@ -33,17 +33,20 @@ class MapEdge {
     private var distance:Float;
 
 	public function new(n1:MapNode, n2:MapNode) {
-		if (n1.pos.equals(n2.pos)) {
+		//if (n1.pos.equals(n2.pos)) {
+		if (n1.getPosition().equals(n2.getPosition())) {
 			return;
 		}
 		
 		this.n1 = n1;
 		this.n2 = n2;
-        this.distance = n1.pos.dist(n2.pos);
+        //this.distance = n1.pos.dist(n2.pos);
+        this.distance = n1.getPosition().distanceTo(n2.getPosition());
 	}
 
 	public function delta():FlxVector {
-		return n2.pos.subtractNew(n1.pos);
+		//return n2.pos.subtractNew(n1.pos);
+		return n2.getPos().subtractNew(n1.getPos());
 	}
 
 	public function interpDist(d:Float):FlxVector {
@@ -51,7 +54,8 @@ class MapEdge {
 	}
 
 	public function interpPerc(i:Float):FlxVector {
-		return n1.pos.addNew(delta().scale(i));
+		//return n1.pos.addNew(delta().scale(i));
+		return n1.getPos().addNew(delta().scale(i));
 	}
 
 	public function length():Float {
