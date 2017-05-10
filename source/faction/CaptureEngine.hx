@@ -39,10 +39,11 @@ private class ControlAccumulator {
      * @param control_points = 100.0
      */
     public function new(?control_faction:FactionType, ?total_control_points = 100.0) {
-        control_faction = (control_faction == null) ? NOP : control_faction; // sets default
+        this._currentControlFaction = (control_faction == null) ? NOP : control_faction; // sets default
         //this._controlAccumulator = new Map<FactionType, Float>();
         //this._controlPoints = control_points;
 		this._totalControlPoints = total_control_points;
+		this._currentControlPoints = total_control_points;
         
         //this.setControl(control_faction, total_control_points);
         
