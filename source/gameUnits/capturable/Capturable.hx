@@ -79,8 +79,8 @@ class Capturable extends FlxSprite {
 			captureEngine.setPoints(f, totalCP[f] * elapsed);
 		}
 		
-		// change bar color to invading faction
-		if (this.faction.getFaction() == FactionType.NOP) {
+		// change bar color to invading faction if being invaded for NOP
+		if (this.faction.getFaction() == FactionType.NOP && captureEngine.isContended()) {
 			captureBar.createColoredFilledBar(captureEngine.getCapturingFaction().getColor(),true);
 		}
 		
