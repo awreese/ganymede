@@ -25,6 +25,7 @@ import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.util.FlxAxes;
 import flixel.util.FlxColor;
+import tutorial.SelectShipTutorial;
 
 /**
  * ...
@@ -66,8 +67,14 @@ class MenuState extends FlxState
 	}
 	
 	private function clickPlay():Void {
-		FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
-			FlxG.switchState(new PlayState());
-		});
+		if (Main.LEVEL == 1) {
+			FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
+				FlxG.switchState(new SelectShipTutorial());
+			});
+		} else {
+			FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
+				FlxG.switchState(new PlayState());
+			});
+		}
 	}
 }

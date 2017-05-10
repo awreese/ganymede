@@ -109,6 +109,7 @@ class Capturable extends FlxSprite {
 		// set value for bar
 		// make sure value does not go out of range
 		captureBar.value = currCP;
+		captureBar.updateBar();
 		
 		captureBar.visible = captureEngine.isContended();
 		
