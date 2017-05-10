@@ -1,5 +1,3 @@
-package map;
-
 /**
  *  Astrorush: TBD (The Best Defense)
  *  Copyright (C) 2017  Andrew Reese, Daisy Xu, Rory Soiffer
@@ -18,6 +16,8 @@ package map;
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+package map;
+
 import faction.Faction;
 import faction.Faction.FactionType;
 import flixel.FlxG;
@@ -25,28 +25,47 @@ import flixel.FlxSprite;
 import flixel.math.FlxVector;
 import gameUnits.Ship.ShipStat;
 import gameUnits.Ship.ShipType;
+import gameUnits.capturable.Capturable;
 import gameUnits.capturable.Planet;
+
 using flixel.util.FlxSpriteUtil;
 
 /**
- * ...
+ * Game Map
+ * 
+ * Stores game maps and acts as the baseline bus of communication 
+ * accross the graph that represents the game map.  Game objects 
+ * communicate requests/queries to their underlying nodes and nodes
+ * query the game map for global data, or other nodes such as the 
+ * case of finding paths.
+ * 
  * @author Rory Soiffer
+ * @author Drew Reese
  */
-class GameMap extends FlxSprite
-{
+class GameMap extends FlxSprite {
 
 	public var nodes:Array<MapNode> = [];
+    
+    private var selected:MapNode = null;
 	private var level:Int;
-	private var numPlanets:Int;
+	
+    private var numPlanets:Int;
+    private var factionShipCount:Map<FactionType, Int>; // Global ship count
 
-	public function new(playState:PlayState, level: Int)
-	{
+	public function new(playState:PlayState, level: Int) {
 		super();
-		
+        
 		// store the level
 		this.level = level;
-		numPlanets = 0;
-		// Load the nodes
+		this.numPlanets = 0;
+        
+        this.factionShipCount = new Map<FactionType, Int>();
+        // initialize global faction ship counts
+        for (faction in Faction.getEnums()) {
+            factionShipCount.set(faction, 0);
+        }
+		
+        // Load the nodes
 		switch (level) {
 			case 1:
 				levelOne(playState);
@@ -58,17 +77,101 @@ class GameMap extends FlxSprite
 		drawNodes();
 	}
 
-	public function findNode(v: FlxVector): MapNode
-	{
+	public function findNode(v: FlxVector):MapNode {
 		return nodes.filter(function(n) return n.contains(v))[0];
 	}
 
-	private var selected: MapNode = null;
-
-	override public function update(elapsed:Float):Void
-	{
+	override public function update(elapsed:Float):Void {
 		super.update(elapsed);
 	}
+    
+    /*
+     * private graph functions
+     * 
+     * These are convenience methods to help in designing levels.
+     */
+    
+     /**
+      * Adds new node to this graph.
+      * @param node new node to add
+      * @return true iff graph was modified, false otherwise
+      */
+    private function addNode(node:MapNode):Bool {
+        // TODO: Fill this in
+        return false;
+    }
+    
+    /**
+     * Connects two specified nodes by adding an edge between them.
+     * @param node1 one vertex of edge
+     * @param node2 the other vertex of edge
+     * @return true iff graph was modified, false otherwise
+     */
+    private function connect(node1:MapNode, node2:MapNode):Bool {
+        // TODO: Fill this in
+        return false;
+    }
+    
+    /**
+     * Adds specified capturable object to the specified node.
+     * @param node  node to add capturable to
+     * @param capturable    capturable to add
+     * @return true iff node was modified, false otherwise
+     */
+    private function addCapturable(node:MapNode, capturable:Capturable):Bool {
+        // TODO: Fill this in
+        return false;
+    }
+     
+    /*
+     * public Game Map functions
+     * 
+     * These allow for global ship production limit enforcement or
+     * other general queries made via MapNode game object reside on.
+     */
+    
+     /**
+      * Returns the total count of ships on the map.
+      * @return total count of ships on the map
+      */
+    public function getGlobalShipCount():Int {
+        var totalCount = 0;
+        for (shipCount in this.factionShipCount) {
+            totalCount += shipCount;
+        }
+        return totalCount;
+    }
+    
+    /**
+     * Returns the total count of ships on the map for the specified faction.
+     * @param faction   faction to return ship count of
+     * @return  total ship count for specified faction
+     */
+    public function getShipCount(faction:FactionType):Int {
+        return this.factionShipCount.get(faction);
+    }
+    
+    /**
+     * Increments the ship count of the specified faction by 1, returns new 
+     * faction ship count.
+     * @param faction   faction to increment ship count of
+     * @return  new ship count for faction
+     */
+    public function incrementShipCount(faction:FactionType):Int {
+        this.factionShipCount[faction]++;
+        return this.getShipCount(faction);
+    }
+    
+    /**
+     * Decrements the ship count of the specified faction by 1, returns new 
+     * faction ship count.
+     * @param faction   faction to deccrement ship count of
+     * @return  new ship count for faction
+     */
+    public function decrementShipCount(faction:FactionType):Int {
+        this.factionShipCount[faction]--;
+        return this.getShipCount(faction);
+    }
 	
 	private function drawNodes():Void {
 		// Loads an empty sprite for the map background

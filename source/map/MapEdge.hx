@@ -1,5 +1,3 @@
-package map;
-
 /**
  *  Astrorush: TBD (The Best Defense)
  *  Copyright (C) 2017  Andrew Reese, Daisy Xu, Rory Soiffer
@@ -18,6 +16,8 @@ package map;
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+package map;
+
 import flixel.math.FlxVector;
 
 /**
@@ -26,15 +26,13 @@ import flixel.math.FlxVector;
  * @author Rory Soiffer
  * @author Drew Reese
  */
-class MapEdge
-{
+class MapEdge {
 
-	public var n1: MapNode;
-	public var n2: MapNode;
+	public var n1:MapNode;
+	public var n2:MapNode;
     private var distance:Float;
 
-	public function new(n1: MapNode, n2: MapNode)
-	{
+	public function new(n1:MapNode, n2:MapNode) {
 		if (n1.pos.equals(n2.pos)) {
 			return;
 		}
@@ -44,48 +42,39 @@ class MapEdge
         this.distance = n1.pos.dist(n2.pos);
 	}
 
-	public function delta(): FlxVector
-	{
+	public function delta():FlxVector {
 		return n2.pos.subtractNew(n1.pos);
 	}
 
-	public function interpDist(d: Float): FlxVector
-	{
+	public function interpDist(d:Float):FlxVector {
 		return (length() != 0) ? interpPerc(d / length()) : new FlxVector(0,0); // check division by 0!!
 	}
 
-	public function interpPerc(i: Float): FlxVector
-	{
+	public function interpPerc(i:Float):FlxVector {
 		return n1.pos.addNew(delta().scale(i));
 	}
 
-	public function length(): Float
-	{
+	public function length():Float {
 		return n1.distanceTo(n2);
 	}
 
-	public function pathTo(n: MapNode, d: Float): Array<MapEdge>
-	{
+	public function pathTo(n:MapNode, d:Float):Array<MapEdge> {
 		var path1 = n1.pathTo(n);
 		var d1: Float = d;
-		for (e in path1)
-		{
+		for (e in path1) {
 			d1 += e.length();
 		}
 		
 		var path2 = n2.pathTo(n);
 		var d2: Float = length() - d;
-		for (e in path2)
-		{
+		for (e in path2) {
 			d2 += e.length();
 		}
 		
-		if (d1 > d2)
-		{
+		if (d1 > d2) {
 			path2.unshift(this);
 			return path2;
-		}
-		else {
+		} else {
 			path1.unshift(new MapEdge(n2, n1));
 			return path1;
 		}
