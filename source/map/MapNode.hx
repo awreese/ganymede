@@ -19,6 +19,7 @@
 package map;
 
 import flixel.FlxG;
+import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxVector;
@@ -50,7 +51,7 @@ typedef ShipGroup = FlxTypedGroup<Ship>;
  * @author Rory Soiffer
  * @author Drew Reese
  */
-class MapNode {
+class MapNode extends FlxObject {
 	public static var NODE_SIZE:Int = 30;
 
 	public var gameMap: GameMap;
@@ -69,6 +70,8 @@ class MapNode {
      */
     
 	public function new(gameMap:GameMap, pos: FlxVector) {
+		super();
+		
 		this.gameMap = gameMap;
 		this.pos = pos;
 		
@@ -103,7 +106,8 @@ class MapNode {
 		// Dijkstra's algorithm
 		var dists: Map<MapNode, Float> = [this => 0];
 		var parents: Map<MapNode, MapNode> = [this => this];
-		var toCheck: Array<MapNode> = gameMap.nodes.copy();
+		//var toCheck: Array<MapNode> = gameMap.nodes.copy();
+		var toCheck: Array<MapNode> = gameMap.nodes.members.copy();
 
 		while (toCheck.length > 0) {
 			var minEl: MapNode = toCheck[0];
