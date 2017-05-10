@@ -182,15 +182,6 @@ class Planet extends Capturable
 	}
 
 	/**
-	 * Returns the faction of this planet.
-	 * @return  Faction of this planet
-	 */
-	public function getFaction():Faction
-	{
-		return this.faction;
-	}
-
-	/**
 	 * Returns the stats of this planet.
 	 * @return  PlanetStats for this planet
 	 */

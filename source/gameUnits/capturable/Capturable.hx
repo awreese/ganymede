@@ -123,4 +123,22 @@ class Capturable extends FlxSprite {
 	public function setShips(ships: Array<Ship>): Void {
 		shipsAtPlanet = ships;
 	}
+	
+	// get current cp of this
+	public function getCP(): Float {
+		return captureBar.value;
+	}
+	
+	// get max cp this can have
+	public function getTotalCP():Float {
+		return captureEngine.getMaxControllingPoint();
+	}
+	
+	/**
+	 * Returns the faction of this planet.
+	 * @return  Faction of this planet
+	 */
+	public function getFaction():Faction {
+		return faction;
+	}
 }

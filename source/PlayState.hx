@@ -32,6 +32,7 @@ import faction.Faction;
 import gameUnits.Ship;
 import Main;
 import flixel.math.FlxRandom;
+import npc.Enemy;
 
 class PlayState extends FlxState
 {
@@ -41,10 +42,12 @@ class PlayState extends FlxState
 	private var grpPlanets: FlxTypedGroup<gameUnits.capturable.Planet>;
 	private var rand:FlxRandom;
 	private var numPlayerFaction:Int;
+	private var enemy1: Enemy;
 
 	override public function create(): Void
 	{
 		rand = new FlxRandom();
+		enemy1 = new Enemy(FactionType.ENEMY_1, 5);
 		// Initialize the map
 		grpMap = new FlxTypedGroup<GameMap>();
 		add(grpMap);
@@ -138,6 +141,8 @@ class PlayState extends FlxState
 				}
 			}
 		}
+		
+		// enemy turn
 
 		// check where each ships are and updating each planet, and battle if there's opposing factions
 		nodeUpdate(elapsed);
