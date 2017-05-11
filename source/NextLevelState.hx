@@ -39,6 +39,9 @@ class NextLevelState extends FlxState
 		nextLevelBtn.y = (FlxG.height / 2) + nextLevelBtn.height + 10;
 		add(nextLevelBtn);
 		
+        // Log level end and time
+        Main.LOGGER.logLevelEnd(Date.now());
+        
 		super.create();
 	}
 
