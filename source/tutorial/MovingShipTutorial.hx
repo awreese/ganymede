@@ -22,6 +22,8 @@ class MovingShipTutorial extends FlxState {
 		background.loadGraphic(AssetPaths.moving_ship_tutorial_2__png);
 		add(background);
 		
+		timer = 0.0;
+		
 		switchImage = true;
 		
 		super.create();
