@@ -216,7 +216,7 @@ class MapNode extends FlxObject {
 		return capturable;
 	}
 	
-	public function getFaction():FactionType {
+	/*public function getFaction():FactionType {
 		return this.capturable.getFaction().getFaction();
-	}
+	}	*/
 }

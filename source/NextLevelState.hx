@@ -20,7 +20,7 @@ class NextLevelState extends FlxState
 	
 	override public function create():Void
 	{
-		
+		Main.LEVEL++;
 		// create background
 		background = new FlxSprite(0, 0);
 		background.loadGraphic(AssetPaths.nextlevelbg__png);
@@ -36,7 +36,7 @@ class NextLevelState extends FlxState
 		// create and add replay button
 		nextLevelBtn = new FlxButton(0, 0, "Next Level", clickNextLevel);
 		nextLevelBtn.x = (FlxG.width / 2) - (nextLevelBtn.width / 2);
-		nextLevelBtn.y = (FlxG.height / 2) + nextLevelBtn.height + 10;
+		nextLevelBtn.y = (FlxG.height / 2);
 		add(nextLevelBtn);
 		
 		super.create();
