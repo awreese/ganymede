@@ -71,6 +71,9 @@ class GameMap extends FlxSprite {
 			this.factionControlledNodes.set(faction, new NodeGroup());
         }
 		
+        // Log level start and time
+        Main.LOGGER.logLevelStart(level, Date.now());
+        
         // Load the nodes
 		switch (level) {
 			case 1:
@@ -328,7 +331,7 @@ class GameMap extends FlxSprite {
 		for (n in nodes) {
 			if (n.containPlanet()) {
 				var c = cast(n.getCaptureable(), Planet);
-				if (c.getFaction().getFaction() == FactionType.PLAYER) {
+				if (c.getFaction().getFactionType() == FactionType.PLAYER) {
 					numPlayerPlanets++;
 				}
 			}
