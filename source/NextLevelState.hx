@@ -7,6 +7,7 @@ import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.util.FlxAxes;
 import flixel.util.FlxColor;
+import tutorial.CapturingFactionTutorial;
 
 /**
  * ...
@@ -52,6 +53,11 @@ class NextLevelState extends FlxState
 	
 	// action for clicking replay button
 	private function clickNextLevel():Void {
+		if (Main.LEVEL == 2) {
+			FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
+				FlxG.switchState(new CapturingFactionTutorial());
+			});
+		}
 		FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
 			FlxG.switchState(new PlayState());
 		});

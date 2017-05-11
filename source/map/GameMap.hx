@@ -331,7 +331,7 @@ class GameMap extends FlxSprite {
 		for (n in nodes) {
 			if (n.containPlanet()) {
 				var c = cast(n.getCaptureable(), Planet);
-				if (c.getFaction().getFactionType() == FactionType.PLAYER) {
+				if (c.getFaction().getFaction() == FactionType.PLAYER) {
 					numPlayerPlanets++;
 				}
 			}
