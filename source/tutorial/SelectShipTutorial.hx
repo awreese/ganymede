@@ -22,7 +22,7 @@ class SelectShipTutorial extends FlxState
 	{
 		// create and add the background image
 		background = new FlxSprite(0, 0);
-		background.loadGraphic(AssetPaths.select_ship_tutorial_1__png);
+		background.loadGraphic(AssetPaths.select_ship_tutorial_2__png);
 		add(background);
 		
 		// create and add exit button
@@ -31,7 +31,7 @@ class SelectShipTutorial extends FlxState
 		nextBtn.y = FlxG.height - nextBtn.height - 10;
 		add(nextBtn);
 		
-		switchImage = false;
+		switchImage = true;
 		
 		super.create();
 	}
