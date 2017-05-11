@@ -1,10 +1,11 @@
 package npc;
 
 import faction.Faction.FactionType;
-import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.util.FlxTimer;
+import gameUnits.capturable.Capturable;
 import map.MapNode;
+
 /**
  * ...
  * @author Daisy
@@ -58,15 +59,15 @@ class Enemy extends NPC
 				// while there's still more nodes to look through
 				while (queue.length > 0) {
 					var currNode = queue.shift();
-					var captureable = currNode.getCaptureable();
+					var captureable:Capturable = currNode.getCaptureable();
 					// if found nop, go there
-					if (captureable != null && captureable.getFaction().getFaction() == FactionType.NOP) {
+					if (captureable != null && captureable.getFaction().getFactionType() == FactionType.NOP) {
 						des = currNode;
 						break;
 					}
 					// if found a captureable whose faction != this.faction, set des to it, but look at other nodes
 					// before deciding where to go
-					if (captureable != null && captureable.getFaction().getFaction() != this.faction) {
+					if (captureable != null && captureable.getFaction().getFactionType() != this.faction) {
 						des = currNode;
 					}
 					if (des == null) {

@@ -135,8 +135,8 @@ class Ship extends FlxSprite {
 	//private var playState: PlayState; // NO, this is bad style.  If anything access what you want via getter.  I'm trying to push all these calls like this down to the node that everything sits on.  Way too much coupling going on!!
 
 	// Parent/Faction Info
-	private var homePlanet: gameUnits.capturable.Planet;
-	private var faction: Faction;
+	private var homePlanet:Planet;
+	private var faction:Faction;
 
 	public var pos:FlxVector;
 	public var vel: FlxVector = new FlxVector(0,0);  // current velocity
@@ -303,7 +303,7 @@ class Ship extends FlxSprite {
 
 	// Returns this ship's faction
 	public function getFaction(): FactionType {
-		return faction.getFaction();
+		return faction.getFactionType();
 	}
 }
 
