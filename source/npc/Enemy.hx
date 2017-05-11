@@ -56,11 +56,13 @@ class Enemy extends NPC
 				if (ratio >= 0.7 && ships.length > 0) {
 					var des: MapNode = null;
 					var queue: Array<MapNode> = new Array<MapNode>();
+					var visited: Array<MapNode> = new Array<MapNode>();
 					queue.push(n);
 				
 					// while there's still more nodes to look through
 					while (queue.length > 0) {
 						var currNode = queue.shift();
+						visited.push(currNode);
 						var captureable = currNode.getCaptureable();
 						// if found nop, go there
 						if (captureable != null && captureable.getFaction().getFaction() == FactionType.NOP) {
@@ -75,7 +77,10 @@ class Enemy extends NPC
 						if (des == null) {
 							// traverse to farther if there is no destination yet
 							for (neighbor in currNode.neighbors) {
-								queue.push(neighbor);
+								// only add to queue if haven't visited
+								if (visited.indexOf(neighbor) == -1) {
+									queue.push(neighbor);
+								}
 							}
 						}
 					}
