@@ -26,10 +26,11 @@ import flixel.math.FlxVector;
 import flixel.text.FlxText;
 import flixel.ui.FlxBar;
 import flixel.util.FlxColor;
-import gameUnits.ships.Ship;
-import gameUnits.ships.Ship.ShipFactory;
+import gameUnits.Ship;
+import gameUnits.Ship.ShipFactory;
 import gameUnits.capturable.Capturable;
-import source.gameUnits.ships.ShipTypes.ShipType;
+import gameUnits.Ship.ShipStat;
+import gameUnits.Ship.ShipType;
 import gameUnits.capturable.Planet.PlanetStat;
 import js.html.svg.AnimatedBoolean;
 import map.MapNode;
@@ -53,7 +54,7 @@ class PlanetStat
 	public var cap: Int;			// ship capacity
 	public var prod: Float;			// ship production rate in seconds
 	public var prod_thresh: Float;	// production rate threshold for falloff
-	public var shipType: ShipType;      // ship type for production
+	public var ship: ShipStat;      // ship type for production
 
 	// Levels
 	public var cap_lvl: Int;		// current capacity level
@@ -77,7 +78,7 @@ class PlanetStat
      * @param cap_per_lvl=5
      * @param tech_per_lvl=2
      */
-	public function new(?shipType = null, ?cap = 10, ?prod = 5.0, ?prod_thresh = 0.5,
+	public function new(?ship = null, ?cap = 10, ?prod = 5.0, ?prod_thresh = 0.5,
 						?cap_lvl = 0, ?tech_lvl = 0,
 						?base_cost = 10,
 						?cap_per_lvl=5, ?tech_per_lvl=2.0)
@@ -86,7 +87,7 @@ class PlanetStat
 		this.cap = cap;
 		this.prod = prod;
 		this.prod_thresh = prod_thresh;
-		this.shipType = shipType;
+		this.ship = ship;
 		this.cap_lvl = cap_lvl;
 		this.tech_lvl = tech_lvl;
 		this.base_cost = base_cost;
@@ -99,7 +100,7 @@ class PlanetStat
      * @return clone of this PlanetStat
      */
     public function clone():PlanetStat {
-        return new PlanetStat(this.shipType, this.cap, this.prod, this.prod_thresh, 
+        return new PlanetStat(this.ship.clone(), this.cap, this.prod, this.prod_thresh, 
                             this.cap_lvl, this.tech_lvl,
                             this.base_cost, 
                             this.cap_per_lvl, this.tech_per_lvl);
@@ -152,7 +153,7 @@ class Planet extends Capturable
 		this.pStats = pstats;
         
         this.shipFactory = new ShipFactory(this);
-        this.shipFactory.setProduction(this.pStats.shipType);
+        this.shipFactory.setProduction(this.pStats.ship);
 
 		// set number of ships
 		numShips = new Map<FactionType, Int>();
@@ -249,7 +250,9 @@ class Planet extends Capturable
 		{
 			shipTimer = 0.0;
 			numShips.set(faction.getFaction(), numShips.get(faction.getFaction()) + 1);
-			return new Ship(node, faction, pStats.shipType);
+			var stat = new ShipStat(pStats.ship.hull, pStats.ship.speed, pStats.ship.sh, pStats.ship.hp, pStats.ship.as, pStats.ship.ap, pStats.ship.cps);
+			//return new Ship(playState, node, faction, stat);
+			return new Ship(node, faction, stat);
 		}
 		// if can't produce ship, return null
 		return null;

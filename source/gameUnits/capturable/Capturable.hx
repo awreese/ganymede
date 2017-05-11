@@ -22,8 +22,6 @@ import faction.CaptureEngine;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.ui.FlxBar;
-import gameUnits.ships.Ship;
-import source.gameUnits.ships.ShipTypes.ShipStats;
 import map.MapNode;
 import faction.Faction;
 
@@ -75,7 +73,7 @@ class Capturable extends FlxSprite {
 		}
 		for (s in shipsAtPlanet) {
 			var cp = totalCP[s.getFaction()];
-			totalCP.set(s.getFaction(), cp + (ShipStats.getCapturePower(s.type)));
+			totalCP.set(s.getFaction(), cp + (s.stats.cps));
 		}
 		for (f in Faction.getEnums()) {
 			captureEngine.setPoints(f, totalCP[f] * elapsed);

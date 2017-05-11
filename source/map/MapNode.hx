@@ -26,7 +26,7 @@ import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxVector;
 import flixel.util.FlxColor;
-import gameUnits.ships.Ship;
+import gameUnits.Ship;
 import gameUnits.capturable.Capturable;
 import gameUnits.capturable.Planet;
 
