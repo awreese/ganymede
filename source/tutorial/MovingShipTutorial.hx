@@ -12,7 +12,6 @@ import flixel.util.FlxColor;
  */
 class MovingShipTutorial extends FlxState {
 	private var background:FlxSprite;
-	private var continueBtn:FlxButton;
 	private var timer:Float;
 	private var switchImage:Bool;
 	
@@ -22,12 +21,6 @@ class MovingShipTutorial extends FlxState {
 		background = new FlxSprite(0, 0);
 		background.loadGraphic(AssetPaths.moving_ship_tutorial_2__png);
 		add(background);
-		
-		// create and add exit button
-		continueBtn = new FlxButton(0, 0, "Continue", clickContinue);
-		continueBtn.x = FlxG.width - continueBtn.width - 10;
-		continueBtn.y = FlxG.height - continueBtn.height - 10;
-		add(continueBtn);
 		
 		switchImage = true;
 		
@@ -51,10 +44,15 @@ class MovingShipTutorial extends FlxState {
 			flipImage();
 			timer = 0.0;
 		}
+		
+		if (FlxG.mouse.justPressed) {
+			click();
+		}
+		
 		super.update(elapsed);
 	}
 	
-	private function clickContinue():Void {
+	private function click():Void {
 		FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
 			FlxG.switchState(new PlayState());
 		});
