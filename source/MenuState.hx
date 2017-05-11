@@ -3,7 +3,7 @@ package;
 /**
  *  Astrorush: TBD (The Best Defense)
  *  Copyright (C) 2017  Andrew Reese, Daisy Xu, Rory Soiffer
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
@@ -44,20 +44,20 @@ class MenuState extends FlxState
 		background = new FlxSprite(0, 0);
 		background.loadGraphic(AssetPaths.tempmenubg__png);
 		add(background);
-		
+
 		// create and add the title
 		title = new FlxText(0, 20, 0, "AstroRush: TBD");
 		title.setFormat("Consola", 40);
 		title.alignment = CENTER;
 		title.screenCenter(FlxAxes.X);
 		add(title);
-		
+
 		// create and add play button
 		playBtn = new FlxButton(0, 0, "Play", clickPlay);
 		playBtn.x = (FlxG.width / 2) - (playBtn.width/ 2);
 		playBtn.y = FlxG.height / 2;
 		add(playBtn);
-		
+
 		super.create();
 	}
 
@@ -65,14 +65,19 @@ class MenuState extends FlxState
 	{
 		super.update(elapsed);
 	}
-	
-	private function clickPlay():Void {
-		if (Main.LEVEL == 1) {
-			FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
+
+	private function clickPlay():Void
+	{
+		if (Main.LEVEL == 1)
+		{
+			FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function()
+			{
 				FlxG.switchState(new SelectShipTutorial());
 			});
-		} else {
-			FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
+		}
+		else {
+			FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function()
+			{
 				FlxG.switchState(new PlayState());
 			});
 		}

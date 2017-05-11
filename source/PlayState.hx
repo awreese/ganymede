@@ -29,7 +29,7 @@ import gameUnits.capturable.Planet.PlanetStat;
 import map.GameMap;
 import map.MapNode;
 import faction.Faction;
-import gameUnits.Ship;
+import gameUnits.ships.Ship;
 import Main;
 import flixel.math.FlxRandom;
 import npc.Enemy;
@@ -39,7 +39,7 @@ class PlayState extends FlxState
 {
 	private var grpMap: FlxTypedGroup<GameMap>;
 	private var gameMap: GameMap;
-	public var grpShips: FlxTypedGroup<gameUnits.Ship>;
+	public var grpShips: FlxTypedGroup<gameUnits.ships.Ship>;
 	private var grpPlanets: FlxTypedGroup<gameUnits.capturable.Planet>;
 	private var rand:FlxRandom;
 	private var numPlayerFaction:Int;
@@ -57,7 +57,7 @@ class PlayState extends FlxState
 		//add(gameMap);
 
 		// Create the ships
-		grpShips = new FlxTypedGroup<gameUnits.Ship>();
+		grpShips = new FlxTypedGroup<gameUnits.ships.Ship>();
 		add(grpShips);
 
 		super.create();
@@ -196,7 +196,7 @@ class PlayState extends FlxState
 			}
 
 			// if there are more than 1 factions in a node
-			if (numFactions > 1)
+			/*if (numFactions > 1)
 			{
 				for (s in shipsAtNode)
 				{
@@ -217,8 +217,8 @@ class PlayState extends FlxState
 						if (hit)
 						{
 							// if hit, decrease hp
-							target.stats.hp -= s.stats.as * s.stats.ap * elapsed * target.stats.sh;
-							if (target.stats.hp < 0.0)
+							target.stats.maxHP -= s.stats.as * s.stats.ap * elapsed * target.stats.sh;
+							if (target.stats.maxHP < 0.0)
 							{
 								// if run out of hp, kill target
 								target.kill();
@@ -234,7 +234,7 @@ class PlayState extends FlxState
 						}
 					}
 				}
-			}
+			}*/
 						// if there's a planet here
 			if (p != null) 
 			{
