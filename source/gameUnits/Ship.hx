@@ -268,7 +268,26 @@ class Ship extends FlxSprite {
 		if (isSelected) {
 			loadGraphic("assets/images/ship_1_selected.png", false, 32, 32);
 		} else {
-			loadGraphic("assets/images/ship_1.png", false, 32, 32);
+			switch (this.faction.getFaction())
+			{
+				case PLAYER:
+					loadGraphic(AssetPaths.ship_1__png, false);
+				case ENEMY_1:
+					loadGraphic(AssetPaths.enemyship_1__png, false);
+				case ENEMY_2:
+					loadGraphic(AssetPaths.enemyship_1__png, false);
+				case ENEMY_3:
+					loadGraphic(AssetPaths.enemyship_1__png, false);
+				case ENEMY_4:
+					loadGraphic(AssetPaths.enemyship_1__png, false);
+				case ENEMY_5:
+					loadGraphic(AssetPaths.enemyship_1__png, false);
+				case ENEMY_6:
+					loadGraphic(AssetPaths.enemyship_1__png, false);
+				case NEUTRAL:
+					loadGraphic(AssetPaths.ship_1__png, false);
+				default:
+			}
 		}
 
 		//
