@@ -26,7 +26,8 @@ class Main extends Sprite
 		var gameKey:String = "5e1bd5047e378b5fd4912760004f80f4";
 		var gameName:String = "astrorush";
 		var categoryId:Int = 1;
-		Main.LOGGER = new CapstoneLogger(gameId, gameName, gameKey, categoryId, 1, true);
+		var versionID:Int = 1;
+		Main.LOGGER = new CapstoneLogger(gameId, gameName, gameKey, categoryId, versionID, true);
 		
 		// Retrieve the user (saved in local storage for later)
 		var userId:String = Main.LOGGER.getSavedUserId();
