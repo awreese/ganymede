@@ -122,6 +122,7 @@ class PlayState extends FlxState
 				{
 					if (s.isSelected)
 					{
+						s.isSelected = false;
 						s.pathTo(n);
 					}
 				}
