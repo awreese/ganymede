@@ -139,18 +139,18 @@ class Ship extends FlxSprite {
 	private var faction:Faction;
 
 	public var pos:FlxVector;
-	public var vel: FlxVector = new FlxVector(0,0);  // current velocity
-	public var stats: ShipStat; // General stats (should be split into type-specific vs. ship-specific)
+	public var vel:FlxVector = new FlxVector(0,0);  // current velocity
+	public var stats:ShipStat; // General stats (should be split into type-specific vs. ship-specific)
 
-	public var destination: MapNode; // The node this ship is moving towards
-	public var nodePath: Array<MapEdge> = []; // The path this ship is moving along (if any)
-	public var progress: Float; // How far along the path this ship has traveled
+	public var destination:MapNode; // The node this ship is moving towards
+	public var nodePath:Array<MapEdge> = []; // The path this ship is moving along (if any)
+	public var progress:Float; // How far along the path this ship has traveled
 
-	public var isSelected: Bool; // Whether the player has currently selected this ship (should ideally be moved to a Player class in the future)
+	public var isSelected:Bool; // Whether the player has currently selected this ship (should ideally be moved to a Player class in the future)
 
-	public var listOfAllShips: Array<Ship> = []; // The list of all ships, which is needed for flocking
+	public var listOfAllShips:Array<Ship> = []; // The list of all ships, which is needed for flocking
 
-	private var hpBar :FlxText;
+	private var hpBar:FlxText;
 
 	//public function new(playState: PlayState, destination: MapNode, faction: Faction, shipStats: ShipStat) 	{
 	public function new(destination: MapNode, faction: Faction, shipStats: ShipStat) {
