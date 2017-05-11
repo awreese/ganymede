@@ -17,7 +17,6 @@ class NextLevelState extends FlxState
 {
 	private var background:FlxSprite;
 	private var congratulationsTxt:FlxText;
-	private var nextLevelBtn:FlxButton;
 	
 	override public function create():Void
 	{
@@ -34,12 +33,6 @@ class NextLevelState extends FlxState
 		congratulationsTxt.screenCenter(FlxAxes.X);
 		add(congratulationsTxt);
 		
-		// create and add replay button
-		nextLevelBtn = new FlxButton(0, 0, "Next Level", clickNextLevel);
-		nextLevelBtn.x = (FlxG.width / 2) - (nextLevelBtn.width / 2);
-		nextLevelBtn.y = (FlxG.height / 2);
-		add(nextLevelBtn);
-		
         // Log level end and time
         Main.LOGGER.logLevelEnd(Date.now());
         
@@ -48,11 +41,14 @@ class NextLevelState extends FlxState
 
 	override public function update(elapsed:Float):Void
 	{
+		if (FlxG.mouse.justPressed) {
+			click();
+		}
 		super.update(elapsed);
 	}
 	
 	// action for clicking replay button
-	private function clickNextLevel():Void {
+	private function click():Void {
 		if (Main.LEVEL == 2) {
 			FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
 				FlxG.switchState(new CapturingFactionTutorial());
