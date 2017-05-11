@@ -72,12 +72,8 @@ class PlayState extends FlxState
 		/*
 		 * Check and update any game state
 		 */
-		
-		// Update each ship's list of all ships
-		for (s in grpShips) {
-			s.listOfAllShips = grpShips.members;
-		}
 
+		 
 		/*
 		 * Handle any mouse/keyboard events
 		 */
@@ -130,6 +126,12 @@ class PlayState extends FlxState
 		
 		// enemy turn
 		enemy1.makeMove(gameMap.getControlledNodes(enemy1.getFaction()));
+		
+		// Make ships move by flocking
+		shipFlocking(elapsed);
+		
+		// Make ships fight one another
+		shipCombat(elapsed);
 
 		// check where each ships are and updating each planet, and battle if there's opposing factions
 		nodeUpdate(elapsed);
@@ -157,6 +159,69 @@ class PlayState extends FlxState
 		}
 
 		super.update(elapsed);
+	}
+	
+	
+	/*
+	 * This function handles all the flocking behavior of the ships. It does so by iterating
+	 * through all the ships, comparing their position and velocity to the position and velocity
+	 * of nearby ships, and then setting each ship's velocity.
+	 * 
+	 * This flocking algorithm is based primarily off of the Boid algorithm described here:
+	 * https://en.wikipedia.org/wiki/Boids
+	 */
+	private function shipFlocking(elapsed: Float): Void {
+		// Iterates through all the ships
+		for (s1 in grpShips) {
+			
+			// Defines all the forces acting on the ship
+			var toDest = s1.idealPos().subtractNew(s1.pos); // This force pulls the ship towards its destination
+			var desiredSpeed = s1.vel.normalize().scaleNew(s1.stats.speed).subtractNew(s1.vel); // This force accelerates the ship to its desired speed
+			var noise = new FlxVector(Math.random() - .5, Math.random() - .5); // This force provides a bit of noise to make the motion look nicer
+			var seperation = new FlxVector(0, 0); // This force prevents ships from getting too close together
+			var alignment = new FlxVector(0, 0); // This force makes ships tend to point the same direction
+			var cohesion = new FlxVector(0, 0); // This force makes ships tend to group together in clusters
+			
+			// Iterate through all other ships that this ship might flock with
+			for (s2 in grpShips) {
+				// Only flock with other ships of your faction
+				if (s2 != s1 && s1.getFaction() == s2.getFaction()) {
+					var d: FlxVector = s1.pos.subtractNew(s2.pos);
+					// Only flock with nearly ships
+					if (d.length < 30) {
+						seperation = seperation.addNew(d.scaleNew(1/d.lengthSquared));
+						alignment = alignment.addNew(s2.vel.subtractNew(s1.vel));
+						cohesion = cohesion.addNew(d.normalize());
+					}
+				}
+			}
+
+			// Compute the net acceleration, scaling each component by an arbitrary constant
+			// The constants to scale by were determined partially by trial and error until the motion looked good
+			var acceleration = new FlxVector(0, 0)
+			.addNew(toDest.scaleNew(.05 * toDest.length))
+			.addNew(desiredSpeed.scaleNew(50))
+			.addNew(noise.scaleNew(10))
+			.addNew(seperation.scaleNew(100))
+			.addNew(alignment.scaleNew(.5))
+			.addNew(cohesion.scaleNew(0.5));
+
+			// Update the velocity
+			s1.vel = s1.vel.addNew(acceleration.scaleNew(elapsed));
+		}
+	}
+	
+	
+	/*
+	 * This function handles combat between different ships. It iterates through all the ships,
+	 * checks if any ship has enemies nearby that it should attack, and orders ships to fire at
+	 * enemies if needed.
+	 * 
+	 * This function does not handle damaging or destroying ships. That will be handled by the
+	 * ShipAttack class, which represents a single attack by one ship against one ship.
+	 */
+	private function shipCombat(elapsed: Float): Void {
+		// TODO: Implement combat
 	}
 	
     // TODO: Most (if not all) of this should be moved to GameMap and Ship
@@ -195,6 +260,7 @@ class PlayState extends FlxState
 				}
 			}
 
+			// TODO: Replace this combat code with updated combat code in the shipCombat() function
 			// if there are more than 1 factions in a node
 			if (numFactions > 1)
 			{
