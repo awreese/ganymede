@@ -20,7 +20,7 @@ class MovingShipTutorial extends FlxState {
 	{
 		// create and add the background image
 		background = new FlxSprite(0, 0);
-		background.loadGraphic(AssetPaths.moving_ship_tutorial_1__png);
+		background.loadGraphic(AssetPaths.moving_ship_tutorial_2__png);
 		add(background);
 		
 		// create and add exit button
@@ -29,7 +29,7 @@ class MovingShipTutorial extends FlxState {
 		continueBtn.y = FlxG.height - continueBtn.height - 10;
 		add(continueBtn);
 		
-		switchImage = false;
+		switchImage = true;
 		
 		super.create();
 	}
