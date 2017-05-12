@@ -66,13 +66,13 @@ class Enemy extends NPC
 						visited.push(currNode);
 						var captureable = currNode.getCaptureable();
 						// if found nop, go there
-						if (captureable != null && captureable.getFaction().getFaction() == FactionType.NOP) {
+						if (captureable != null && captureable.getFaction().getFactionType() == FactionType.NOP) {
 							des = currNode;
 							break;
 						}
 						// if found a captureable whose faction != this.faction, set des to it, but look at other nodes
 						// before deciding where to go
-						if (captureable != null && captureable.getFaction().getFaction() != this.faction) {
+						if (captureable != null && captureable.getFaction().getFactionType() != this.faction) {
 							des = currNode;
 						}
 						if (des == null) {

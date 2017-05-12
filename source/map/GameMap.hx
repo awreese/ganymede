@@ -23,8 +23,8 @@ import faction.Faction.FactionType;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.math.FlxVector;
-import gameUnits.Ship.ShipStat;
-import gameUnits.Ship.ShipType;
+import gameUnits.Ship.BluePrint;
+import gameUnits.Ship.HullType;
 import gameUnits.capturable.Capturable;
 import gameUnits.capturable.Planet;
 import map.MapNode.NodeGroup;
@@ -87,7 +87,7 @@ class GameMap extends FlxSprite {
 		for (n in nodes) {
 			var captureable = n.getCaptureable();
 			if (captureable != null) {
-				factionControlledNodes.get(captureable.getFaction().getFaction()).add(n);
+				factionControlledNodes.get(captureable.getFaction().getFactionType()).add(n);
 			}
 		}
 	}
@@ -210,7 +210,7 @@ class GameMap extends FlxSprite {
 	public function updateControllingFaction(node:MapNode, faction:FactionType):Void {
 		var captureable = node.getCaptureable();
 		if (captureable != null) {
-			var oldFaction = captureable.getFaction().getFaction();
+			var oldFaction = captureable.getFaction().getFactionType();
 			this.factionControlledNodes.get(oldFaction).remove(node, true);
 			this.factionControlledNodes.get(faction).add(node);
 		}
@@ -244,8 +244,8 @@ class GameMap extends FlxSprite {
 		//drawNodes();
 		
 		// set captureable
-		var n1P:Capturable = new Planet(playState, n1, new Faction(FactionType.PLAYER), new PlanetStat(new ShipStat(ShipType.FRIGATE, 30.0), 10, 3));
-		var n2P:Capturable = new Planet(playState, n2, new Faction(FactionType.NOP), new PlanetStat(new ShipStat(ShipType.FRIGATE)));
+		var n1P = new Planet(playState, n1, new Faction(FactionType.PLAYER), new PlanetStat(new BluePrint(HullType.FRIGATE)));
+		var n2P = new Planet(playState, n2, new Faction(FactionType.NOP), new PlanetStat(new BluePrint(HullType.FRIGATE)));
 
 		n1.setCapturable(n1P);
 		n2.setCapturable(n2P);
@@ -272,10 +272,11 @@ class GameMap extends FlxSprite {
 		nodes.add(n3);
 		
 		// set captureable
-		var n1P = new Planet(playState, n1, new Faction(FactionType.PLAYER), new PlanetStat(new ShipStat(ShipType.FRIGATE, 30.0), 10, 3.0));
-		var n2P = new Planet(playState, n2, new Faction(FactionType.NOP), new PlanetStat(new ShipStat(ShipType.FRIGATE)));
+		var n1P = new Planet(playState, n1, new Faction(FactionType.PLAYER), new PlanetStat(new BluePrint(HullType.FRIGATE, 30.0), 10, 3.0));
+		var n2P = new Planet(playState, n2, new Faction(FactionType.NOP), new PlanetStat(new BluePrint(HullType.FRIGATE)));
+
 		var n3P = new Planet(playState, n3, new Faction(FactionType.ENEMY_1),
-					new PlanetStat(new ShipStat(ShipType.FRIGATE, 15.0, 0.3, 100.0, 1.0, 7.0)));
+					new PlanetStat(new BluePrint(HullType.FRIGATE, 15.0, 0.3, 100.0, 1.0, 7.0)));
 		
 		n1.setCapturable(n1P);
 		n2.setCapturable(n2P);
@@ -313,10 +314,11 @@ class GameMap extends FlxSprite {
 		nodes.add(n4);
 				
 		// set captureable
-		var n1P = new Planet(playState, n1, new Faction(FactionType.PLAYER), new PlanetStat(new ShipStat(ShipType.FRIGATE, 30.0), 10, 3.0));
-		var n3P = new Planet(playState, n3, new Faction(FactionType.NOP), new PlanetStat(new ShipStat(ShipType.FRIGATE)));
+		var n1P = new Planet(playState, n1, new Faction(FactionType.PLAYER), new PlanetStat(new BluePrint(HullType.FRIGATE, 30.0), 10, 3.0));
+		var n3P = new Planet(playState, n3, new Faction(FactionType.NOP), new PlanetStat(new BluePrint(HullType.FRIGATE)));
+
 		var n4P = new Planet(playState, n4, new Faction(FactionType.ENEMY_1),
-					new PlanetStat(new ShipStat(ShipType.FRIGATE, 20.0, 0.3, 100.0, 1.0, 8.0)));
+					new PlanetStat(new BluePrint(HullType.FRIGATE, 20.0, 0.3, 100.0, 1.0, 8.0)));
 		n1.setCapturable(n1P);
 		n3.setCapturable(n3P);
 		n4.setCapturable(n4P);
@@ -334,7 +336,7 @@ class GameMap extends FlxSprite {
 		for (n in nodes) {
 			if (n.containPlanet()) {
 				var c = cast(n.getCaptureable(), Planet);
-				if (c.getFaction().getFaction() == FactionType.PLAYER) {
+				if (c.getFaction().getFactionType() == FactionType.PLAYER) {
 					numPlayerPlanets++;
 				}
 			}

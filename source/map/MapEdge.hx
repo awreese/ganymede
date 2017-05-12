@@ -25,7 +25,7 @@ import flixel.math.FlxVector;
 /**
  * EdgeGroup is a group of MapEdges
  */
-typedef EdgeGroup = FlxTypedGroup<map.MapEdge>;
+//typedef EdgeGroup = FlxTypedGroup<map.MapEdge>;
 
 
 /**
@@ -34,7 +34,8 @@ typedef EdgeGroup = FlxTypedGroup<map.MapEdge>;
  * @author Rory Soiffer
  * @author Drew Reese
  */
-class MapEdge extends FlxBasic {
+//class MapEdge extends FlxBasic {
+class MapEdge {
 
 	public var n1:MapNode;
 	public var n2:MapNode;

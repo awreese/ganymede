@@ -26,18 +26,22 @@ import flixel.math.FlxRect;
 import flixel.math.FlxPoint;
 import flixel.math.FlxVector;
 import flixel.text.FlxText;
+<<<<<<< HEAD
 import flixel.util.helpers.FlxBounds;
 import gameUnits.Ship.ShipStat;
+=======
+import gameUnits.Ship.BluePrint;
+>>>>>>> 1e2ee9bdafcd15160ec5ee59402fac967bf556b6
 import gameUnits.capturable.Planet;
 import map.MapEdge;
 import map.MapNode;
 
 /**
- * Various ship types that exist in-game.
+ * Various ship hull types that exist in-game.
  *
  * @author Drew Reese
  */
-enum ShipType {
+enum HullType {
 	FRIGATE;
 	DESTROYER;
 	CRUISER;
@@ -55,18 +59,16 @@ enum ShipType {
 typedef ShipGroup = FlxTypedGroup<Ship>;
 
 /**
- * Ship statistic type.
+ * Ship blueprint type.
  *
- * This defines ship types by specifying the ShipType and statistics.  Ship
- * statistics must be instanited or cloned before being passed into
- * constructors for ships
+ * This defines ship types by specifying the HullType and statistics.
  *
  * @author Drew Reese
  */
-class ShipStat {
+class BluePrint {
 	// General
-	public var hull: ShipType;	// ship type
-	public var speed: Float;	// speed
+	public var hull:HullType;	    // ship hull type
+	public var maxVelocity:Float;	// maximum ship velocity
 
 	/*
 	 * Defense
@@ -75,27 +77,27 @@ class ShipStat {
 	 *  dmg = enemy.ap * sh
 	 * 	hp -= dmg
 	 */
-	public var sh: Float;		// shields [0.1, 0.9]
-	public var hp: Float;		// hitpoints
+	public var shield:Float;	// shields [0.1, 0.9]
+	public var hitPoints:Float;	// hitpoints
 
 	/*
 	 * Offense
 	 *
-	 * Damage sent is (attack power) every (attack speed) seconds.
-	 * 	dps = as * ap
+	 * Damage sent is (attack damage) every (attack speed) seconds.
+	 * 	dps = attackSpeed * attackDamage
 	 *
 	 * Capturing is structure capture points per second
 	 */
-	public var as: Float;		// attack speed (attacks per second)
-	public var ap: Float;		// attack power (damage per attack)
-	public var cps: Float;		// capture power (capture points per second)
+	public var attackSpeed:Float;	// attack speed (attacks per second)
+	public var attackDamage:Float;	// attack power (damage per attack)
+	public var cps: Float;		    // capture power (capture points per second)
 
 	/**
-	 * Defines a new Ship type.
-	 * - Combines ShipType with a list of specs
+	 * Defines a new ship blueprint.
+	 * - Combines HullType with a list of specs
 	 *
 	 * @param hull = null
-	 * @param speed = 20.0
+	 * @param maxVelocity = 20.0
 	 * @param sh = 0.5 shields
 	 * @param hp = 100.0 hitpoints
 	 * @param as = 2.0 attacks/second
@@ -103,28 +105,32 @@ class ShipStat {
 	 * @param cps = 5.0 capture points/second
 	 */
 	public function new(?hull = null,
-						?speed = 20.0,
+						?maxVel = 20.0,
 						?sh = 0.5,
 						?hp = 100.0,
 						?as = 2.0,
+<<<<<<< HEAD
 						?ap = 25.0,
+=======
+						?ad = 10.0,
+>>>>>>> 1e2ee9bdafcd15160ec5ee59402fac967bf556b6
 						?cps = 5.0)
 	{
 		this.hull = (hull == null) ? FRIGATE : hull;
-		this.speed = speed;
-		this.sh = sh;
-		this.hp = hp;
-		this.as = as;
-		this.ap = ap;
+		this.maxVelocity = maxVel;
+		this.shield = sh;
+		this.hitPoints = hp;
+		this.attackSpeed = as;
+		this.attackDamage = ad;
 		this.cps = cps;
 	}
 
 	/**
-	 * Copies and returns a clone of this ship definition.
+	 * Copies and returns a clone of this ship blueprint.
 	 * @return clone of this ShipStat
 	 */
-	public function clone():ShipStat {
-		return new ShipStat(this.hull, this.speed, this.sh, this.hp, this.as, this.ap, this.cps);
+	public function clone():BluePrint {
+		return new BluePrint(this.hull, this.maxVelocity, this.shield, this.hitPoints, this.attackSpeed, this.attackDamage, this.cps);
 	}
 }
 
@@ -137,12 +143,26 @@ class ShipStat {
 class Ship extends FlxSprite {
 
 	// Parent/Faction Info
-	private var homePlanet:Planet;
+	private var homePlanet:Planet; // probably not needed
 	private var faction:Faction;
+    
+    // Ship specs
+    private var hull:HullType;
+    private var maxVel:Float;
+    private var shield:Float;
+    // health takes hitpoints
+    private var attackSpeed:Float;
+    private var attackDamage:Float;
+    private var capturePerSecond:Float;
 
+    // TODO: convert these to the inherited object fields
 	public var pos:FlxVector;
-	public var vel:FlxVector = new FlxVector(0,0);  // current velocity
-	public var stats:ShipStat; // General stats (should be split into type-specific vs. ship-specific)
+	public var vel:FlxVector = new FlxVector(0, 0);  // current velocity
+    
+	public var stats:BluePrint; // General stats (should be split into type-specific vs. ship-specific)
+    
+    // current base node in game map
+    private var node:MapNode;
 
 	public var destination:MapNode; // The node this ship is moving towards
 	public var nodePath:Array<MapEdge> = []; // The path this ship is moving along (if any)
@@ -160,12 +180,20 @@ class Ship extends FlxSprite {
 	public var weapon: FlxTypedWeapon<ShipAttack>; // This weapon is used to create ShipAttacks
 >>>>>>> rory_working
 
+<<<<<<< HEAD
 	public function new(destination: MapNode, faction: Faction, shipStats: ShipStat) {
+=======
+	//public function new(playState: PlayState, destination: MapNode, faction: Faction, shipStats: ShipStat) 	{
+	public function new(destination:MapNode, faction:Faction, blueprint:BluePrint) {
+>>>>>>> 1e2ee9bdafcd15160ec5ee59402fac967bf556b6
 		super();
+        
 		//this.playState = playState;
+        this.health = blueprint.hitPoints;
+        
 		this.destination = destination;
 		this.faction = faction;
-		this.stats = shipStats;
+		this.stats = blueprint;
 		this.pos = destination.getPos();
 
 		// Creates the weapon that creates bullets
@@ -176,8 +204,7 @@ class Ship extends FlxSprite {
 		this.weapon.bounds = new FlxRect(0, 0, 640, 480);
 		this.weapon.fireRate = Math.round(1000 / stats.as);
 		
-		switch (this.faction.getFaction())
-		{
+		switch (this.faction.getFactionType()) {
 			case PLAYER:
 				loadGraphic(AssetPaths.ship_1__png, false);
 			case ENEMY_1:
@@ -197,10 +224,49 @@ class Ship extends FlxSprite {
 			default:
 		}
 
-		hpBar = new FlxText(this.x, this.y - this.height, 0, "" + stats.hp, 16);
+		hpBar = new FlxText(this.x, this.y - this.height, 0, "" + stats.hitPoints, 16);
 		//FlxG.state.add(hpBar);
 	}
 
+<<<<<<< HEAD
+=======
+	// Moves the ship, following flocking behavior
+	public function flock(elapsed: Float): Void {
+		// All the forces acting on the ship
+		var toDest = idealPos().subtractNew(this.pos);
+		var desiredSpeed = this.vel.normalize().scaleNew(stats.maxVelocity).subtractNew(this.vel);
+		var noise = new FlxVector(Math.random() - .5, Math.random() - .5);
+		var seperation = new FlxVector(0, 0);
+		var alignment = new FlxVector(0, 0);
+		var cohesion = new FlxVector(0, 0);
+
+		for (s in listOfAllShips) {
+			// Only flock with other ships of your faction
+			if (s != this && getFaction() == s.getFaction()) {
+				var d: FlxVector = this.pos.subtractNew(s.pos);
+				if (d.length < 30) {
+					seperation = seperation.addNew(d.scaleNew(1/d.lengthSquared));
+					alignment = alignment.addNew(s.vel.subtractNew(this.vel));
+					cohesion = cohesion.addNew(d.normalize());
+				}
+			}
+		}
+
+		// Compute the net acceleration, scaling each component by a constant to make the final motion look good
+		var acceleration = new FlxVector(0, 0)
+		.addNew(toDest.scaleNew(.05 * toDest.length))
+		.addNew(desiredSpeed.scaleNew(50))
+		.addNew(noise.scaleNew(10))
+		.addNew(seperation.scaleNew(100))
+		.addNew(alignment.scaleNew(.5))
+		.addNew(cohesion.scaleNew(0.5));
+
+		// Update the position and velocity
+		this.vel = this.vel.addNew(acceleration.scaleNew(elapsed));
+		this.pos = this.pos.addNew(this.vel.scaleNew(elapsed));
+	}
+
+>>>>>>> 1e2ee9bdafcd15160ec5ee59402fac967bf556b6
 	// Returns where along its path the ship should be right now if it weren't for flocking behavior
 	public function idealPos(): FlxVector {
 		if (isMoving()) {
@@ -247,8 +313,7 @@ class Ship extends FlxSprite {
 		if (isSelected) {
 			loadGraphic("assets/images/ship_1_selected.png", false, 32, 32);
 		} else {
-			switch (this.faction.getFaction())
-			{
+			switch (this.faction.getFactionType()) {
 				case PLAYER:
 					loadGraphic(AssetPaths.ship_1__png, false);
 				case ENEMY_1:
@@ -272,7 +337,7 @@ class Ship extends FlxSprite {
 		// Whether the ship is currently stationed at one node or is moving between nodes
 		if (isMoving()) {
 			// Update the ship's movement along an edge
-			progress += stats.speed * elapsed;
+			progress += stats.maxVelocity * elapsed;
 			if (progress > nodePath[0].length()) {
 				// If needed, move to the next edge
 				progress -= nodePath[0].length();
@@ -292,7 +357,7 @@ class Ship extends FlxSprite {
 
 		hpBar.x = this.x;
 		hpBar.y = this.y - this.height / 2 + 5;
-		hpBar.text = "" + Math.round(stats.hp);
+		hpBar.text = "" + Math.round(stats.hitPoints);
 
 		super.update(elapsed);
 	}
@@ -319,7 +384,7 @@ class ShipFactory {
 
 	private var _planet:Planet;
 	private var _timeSinceLast:Float;
-	private var _producedShip:ShipStat;
+	private var _producedShip:BluePrint;
 
 	/**
 	 * Instantiates new ShipFactory registered to specified Planet.
@@ -334,7 +399,7 @@ class ShipFactory {
 	 * Sets the ship type procduced by this factory.
 	 * @param producedShip  ShipStat of ship to produce
 	 */
-	public function setProduction(producedShip:ShipStat):Void {
+	public function setProduction(producedShip:BluePrint):Void {
 		this._producedShip = producedShip;
 	}
 

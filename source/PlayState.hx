@@ -306,8 +306,8 @@ class PlayState extends FlxState
 						if (hit)
 						{
 							// if hit, decrease hp
-							target.stats.hp -= s.stats.as * s.stats.ap * elapsed * target.stats.sh;
-							if (target.stats.hp < 0.0)
+							target.stats.hitPoints -= s.stats.attackSpeed * s.stats.attackDamage * elapsed * target.stats.shield;
+							if (target.stats.hitPoints < 0.0)
 							{
 								// if run out of hp, kill target
 								target.kill();

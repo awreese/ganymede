@@ -62,8 +62,6 @@ class Faction {
 		faction_color.set(FactionType.ENEMY_5, FlxColor.MAGENTA);
 		faction_color.set(FactionType.ENEMY_6, FlxColor.CYAN);
         faction_count = Lambda.count(faction_color);
-		trace("faction & color: " + faction_color);
-        trace("faction count: " + faction_count);
 	}
     
     /**

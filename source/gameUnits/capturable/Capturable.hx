@@ -110,8 +110,6 @@ class Capturable extends FlxSprite {
 		// keep track of current cp
 		var currCP = currStatus[currFaction];
 
-        trace("currCP " + currCP); // TODO: remove when no longer needed
-
         // set value for bar
 		captureBar.value = currCP;
 		captureBar.updateBar();
