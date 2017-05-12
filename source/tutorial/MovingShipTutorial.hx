@@ -47,35 +47,22 @@ class MovingShipTutorial extends FlxState {
 		add(ship);
 		
 		// create cursor
-<<<<<<< HEAD
 		cursor = new FlxSprite(ship.x + ship.width / 2, ship.y + ship.height / 2);
-=======
-		cursor = new FlxSprite(182, 236);
->>>>>>> master
 		cursor.loadGraphic(AssetPaths.cursor__png, false, 22, 32);
 		add(cursor);
 		
 		// create mouse
-<<<<<<< HEAD
 		mouse = new FlxSprite(0, 0);
 		mouse.loadGraphic(AssetPaths.mouse_right__png, false, 92, 141);
 		mouse.x = FlxG.width - mouse.width - 20;
 		mouse.y = FlxG.height - mouse.height - 10;
-=======
-		mouse = new FlxSprite(FlxG.width - 112, FlxG.height - 151);
-		mouse.loadGraphic(AssetPaths.mouse_right__png, false, 92, 141);
->>>>>>> master
 		mouse.visible = false;
 		add(mouse);
 		
 		// create capture bar
-<<<<<<< HEAD
 		captureBar = new FlxBar(0, 0, LEFT_TO_RIGHT, 50, 10, null, "", 0, 100, true);
 		captureBar.x = nop.x - (nop.width / 4);
 		captureBar.y = nop.y + nop.height + 2;
-=======
-		captureBar = new FlxBar(397, 254, LEFT_TO_RIGHT, 50, 10, null, "", 0, 100, true);
->>>>>>> master
 		captureBar.createColoredFilledBar(FlxColor.BLUE, true);
 		captureBar.visible = false;
 		captureBar.value = 0;

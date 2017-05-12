@@ -46,14 +46,6 @@ class FinishGameState extends FlxState
 		feedbackBtn.loadGraphic(AssetPaths.feedback_btn__png, false, 114, 44);
 		feedbackBtn.x = FlxG.width - feedbackBtn.width - 20;
 		feedbackBtn.y = FlxG.height - restartBtn.height - 31;
-
-		restartBtn = new FlxButton(20, FlxG.height - 75, "", clickRestart);
-		restartBtn.loadGraphic(AssetPaths.replay_btn__png);
-		add(restartBtn);
-		
-		feedbackBtn = new FlxButton(FlxG.width - 114 - 20, FlxG.height - 75, "", clickFeedback);
-		feedbackBtn.loadGraphic(AssetPaths.feedback_btn__png);
->>>>>>> master
 		add(feedbackBtn);
 
 		Main.LEVEL = 1;

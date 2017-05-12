@@ -39,11 +39,7 @@ class SelectShipTutorial extends FlxState
 		add(shipBtn);
 		
 		// create cursor sprite
-<<<<<<< HEAD
 		cursor = new FlxSprite(shipBtn.x + 41, shipBtn.y + 41);
-=======
-		cursor = new FlxSprite(207, 261);
->>>>>>> master
 		cursor.loadGraphic(AssetPaths.cursor__png, false, 22, 32);
 		add(cursor);
 		
@@ -53,15 +49,10 @@ class SelectShipTutorial extends FlxState
 		add(nop);
 		
 		// create mouse
-<<<<<<< HEAD
 		mouse = new FlxSprite(0, 0);
 		mouse.loadGraphic(AssetPaths.mouse_left__png, false, 92, 141);
 		mouse.x = FlxG.width - mouse.width - 20;
 		mouse.y = FlxG.height - mouse.height - 10;
-=======
-		mouse = new FlxSprite(FlxG.width - 112, FlxG.height - 151);
-		mouse.loadGraphic(AssetPaths.mouse_left__png, false, 92, 141);
->>>>>>> master
 		mouse.visible = false;
 		add(mouse);
 		
