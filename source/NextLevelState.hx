@@ -29,8 +29,9 @@ class NextLevelState extends FlxState
 		add(background);
 		
 		// create foreground
-		foreground = new FlxSprite(0, -FlxG.height);
-		foreground.loadGraphic(AssetPaths.nextlevelbg__png);
+		foreground = new FlxSprite(0, 0);
+		foreground.loadGraphic(AssetPaths.nextlevelbg__png, false, 1280, 922);
+		foreground.y = -foreground.height;
 		add(foreground);
 		
 		// create the congradulation text
