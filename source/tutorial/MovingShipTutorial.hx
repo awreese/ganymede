@@ -47,18 +47,22 @@ class MovingShipTutorial extends FlxState {
 		add(ship);
 		
 		// create cursor
-		cursor = new FlxSprite(182, 236);
+		cursor = new FlxSprite(ship.x + ship.width / 2, ship.y + ship.height / 2);
 		cursor.loadGraphic(AssetPaths.cursor__png, false, 22, 32);
 		add(cursor);
 		
 		// create mouse
-		mouse = new FlxSprite(FlxG.width - 112, FlxG.height - 151);
+		mouse = new FlxSprite(0, 0);
 		mouse.loadGraphic(AssetPaths.mouse_right__png, false, 92, 141);
+		mouse.x = FlxG.width - mouse.width - 20;
+		mouse.y = FlxG.height - mouse.height - 10;
 		mouse.visible = false;
 		add(mouse);
 		
 		// create capture bar
-		captureBar = new FlxBar(397, 254, LEFT_TO_RIGHT, 50, 10, null, "", 0, 100, true);
+		captureBar = new FlxBar(0, 0, LEFT_TO_RIGHT, 50, 10, null, "", 0, 100, true);
+		captureBar.x = nop.x - (nop.width / 4);
+		captureBar.y = nop.y + nop.height + 2;
 		captureBar.createColoredFilledBar(FlxColor.BLUE, true);
 		captureBar.visible = false;
 		captureBar.value = 0;
@@ -101,15 +105,16 @@ class MovingShipTutorial extends FlxState {
 		if (!shipInPlace) {
 			// move the ship to nop planet
 			ship.x += 75 * elapsed;
-			if (ship.x >= 406) {
+			if (ship.x >= nop.x) {
 				shipInPlace = true;
 				captureBar.visible = true;
+				waitTimer = 0.0;
 			}
 		}
 		if (!cursorInPlace) {
 			// move cursor
 			cursor.x += 100 * elapsed;
-			if (cursor.x >= 422.0) {
+			if (cursor.x >= nop.x + nop.width / 2) {
 				cursorInPlace = true;
 				mouse.visible = true;
 			}
@@ -125,22 +130,17 @@ class MovingShipTutorial extends FlxState {
 		if (FlxG.mouse.justPressedRight) {
 			// if pressed right on/near nop planet, move ship and stuff
 			var mousePos = FlxG.mouse.getPosition();
-			var dist = mousePos.distanceTo(new FlxPoint(nop.x + 16, nop.y + 16));
+			var dist = mousePos.distanceTo(new FlxPoint(nop.x + nop.width / 2, nop.y + nop.height / 2));
 			if (dist <= 15) {
 				click();
 			}
 		}
 		
 		if (captureBar.value >= 100.0 && waitTimer >= 0.75) {
-			// wait a sec before progressing
-			timer = 0.0;
-			while (timer <= 1.0) {
-				timer += 0.05;
-			}
 			FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
 			FlxG.switchState(new NextLevelState());
 		});
-    }
+		}
 	}
 	
 	private function click():Void {
@@ -149,6 +149,5 @@ class MovingShipTutorial extends FlxState {
 		cursor.visible = false;
 		mouse.visible = false;
 		cursorInPlace = true;
-		waitTimer = 0.0;
 	}
 }
