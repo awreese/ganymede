@@ -280,8 +280,7 @@ class Ship extends FlxSprite {
 		if (isSelected) {
 			loadGraphic("assets/images/ship_1_selected.png", false, 32, 32);
 		} else {
-			switch (this.faction.getFactionType())
-			{
+			switch (this.faction.getFactionType()) {
 				case PLAYER:
 					loadGraphic(AssetPaths.ship_1__png, false);
 				case ENEMY_1:
