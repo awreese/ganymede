@@ -1,10 +1,11 @@
 package npc;
 
 import faction.Faction.FactionType;
-import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.util.FlxTimer;
+import gameUnits.capturable.Capturable;
 import map.MapNode;
+
 /**
  * ...
  * @author Daisy
