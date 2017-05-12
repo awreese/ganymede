@@ -20,9 +20,13 @@ package gameUnits;
 
 import faction.Faction;
 import flixel.FlxSprite;
+import flixel.addons.weapon.FlxWeapon;
 import flixel.group.FlxGroup.FlxTypedGroup;
+import flixel.math.FlxRect;
+import flixel.math.FlxPoint;
 import flixel.math.FlxVector;
 import flixel.text.FlxText;
+import flixel.util.helpers.FlxBounds;
 import gameUnits.Ship.ShipStat;
 import gameUnits.capturable.Planet;
 import map.MapEdge;
@@ -103,7 +107,7 @@ class ShipStat {
 						?sh = 0.5,
 						?hp = 100.0,
 						?as = 2.0,
-						?ap = 10.0,
+						?ap = 25.0,
 						?cps = 5.0)
 	{
 		this.hull = (hull == null) ? FRIGATE : hull;
@@ -132,8 +136,6 @@ class ShipStat {
  */
 class Ship extends FlxSprite {
 
-	//private var playState: PlayState; // NO, this is bad style.  If anything access what you want via getter.  I'm trying to push all these calls like this down to the node that everything sits on.  Way too much coupling going on!!
-
 	// Parent/Faction Info
 	private var homePlanet:Planet;
 	private var faction:Faction;
@@ -148,11 +150,16 @@ class Ship extends FlxSprite {
 
 	public var isSelected:Bool; // Whether the player has currently selected this ship (should ideally be moved to a Player class in the future)
 
+<<<<<<< HEAD
 	public var listOfAllShips:Array<Ship> = []; // The list of all ships, which is needed for flocking
 
 	private var hpBar:FlxText;
+=======
+	private var hpBar :FlxText;
+	
+	public var weapon: FlxTypedWeapon<ShipAttack>; // This weapon is used to create ShipAttacks
+>>>>>>> rory_working
 
-	//public function new(playState: PlayState, destination: MapNode, faction: Faction, shipStats: ShipStat) 	{
 	public function new(destination: MapNode, faction: Faction, shipStats: ShipStat) {
 		super();
 		//this.playState = playState;
@@ -160,6 +167,14 @@ class Ship extends FlxSprite {
 		this.faction = faction;
 		this.stats = shipStats;
 		this.pos = destination.getPos();
+
+		// Creates the weapon that creates bullets
+		this.weapon = new FlxTypedWeapon<ShipAttack>("Default weapon", function(w) {
+			return new ShipAttack(stats.ap, 500.0);
+		}, FlxWeaponFireFrom.PARENT(this, new FlxBounds(new FlxPoint(), new FlxPoint())),
+			FlxWeaponSpeedMode.SPEED(new FlxBounds(500.0, 500.0)));
+		this.weapon.bounds = new FlxRect(0, 0, 640, 480);
+		this.weapon.fireRate = Math.round(1000 / stats.as);
 		
 		switch (this.faction.getFaction())
 		{
@@ -184,42 +199,6 @@ class Ship extends FlxSprite {
 
 		hpBar = new FlxText(this.x, this.y - this.height, 0, "" + stats.hp, 16);
 		//FlxG.state.add(hpBar);
-	}
-
-	// Moves the ship, following flocking behavior
-	public function flock(elapsed: Float): Void {
-		// All the forces acting on the ship
-		var toDest = idealPos().subtractNew(this.pos);
-		var desiredSpeed = this.vel.normalize().scaleNew(stats.speed).subtractNew(this.vel);
-		var noise = new FlxVector(Math.random() - .5, Math.random() - .5);
-		var seperation = new FlxVector(0, 0);
-		var alignment = new FlxVector(0, 0);
-		var cohesion = new FlxVector(0, 0);
-
-		for (s in listOfAllShips) {
-			// Only flock with other ships of your faction
-			if (s != this && getFaction() == s.getFaction()) {
-				var d: FlxVector = this.pos.subtractNew(s.pos);
-				if (d.length < 30) {
-					seperation = seperation.addNew(d.scaleNew(1/d.lengthSquared));
-					alignment = alignment.addNew(s.vel.subtractNew(this.vel));
-					cohesion = cohesion.addNew(d.normalize());
-				}
-			}
-		}
-
-		// Compute the net acceleration, scaling each component by a constant to make the final motion look good
-		var acceleration = new FlxVector(0, 0)
-		.addNew(toDest.scaleNew(.05 * toDest.length))
-		.addNew(desiredSpeed.scaleNew(50))
-		.addNew(noise.scaleNew(10))
-		.addNew(seperation.scaleNew(100))
-		.addNew(alignment.scaleNew(.5))
-		.addNew(cohesion.scaleNew(0.5));
-
-		// Update the position and velocity
-		this.vel = this.vel.addNew(acceleration.scaleNew(elapsed));
-		this.pos = this.pos.addNew(this.vel.scaleNew(elapsed));
 	}
 
 	// Returns where along its path the ship should be right now if it weren't for flocking behavior
@@ -290,10 +269,6 @@ class Ship extends FlxSprite {
 			}
 		}
 
-		//
-		// TODO: Handle Combat here
-		//
-
 		// Whether the ship is currently stationed at one node or is moving between nodes
 		if (isMoving()) {
 			// Update the ship's movement along an edge
@@ -307,21 +282,9 @@ class Ship extends FlxSprite {
 			progress = 0;
 		}
 
-		// Moving the ship itself, either with or without flocking
-		var USE_FLOCKING = false;
-		if (USE_FLOCKING) {
-			// Accelerate the ship correctly
-			flock(elapsed);
-			// Rotate the sprite to match the velocity
-			angle = this.vel.degrees;
-		} else {
-			// Move the ship to the correct position
-			this.pos = idealPos();
-			if (isMoving()) {
-				// If the ship is moving, rotate it to face along the direction of movement
-				angle = nodePath[0].delta().degrees;
-			}
-		}
+		// Updates the ship's position and angle based on its velocity
+		this.pos = this.pos.addNew(this.vel.scaleNew(elapsed));
+		angle = this.vel.degrees;
 
 		// Set the sprite's position (x,y) to match the actual position (pos)
 		x = this.pos.x - origin.x;
