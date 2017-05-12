@@ -30,7 +30,7 @@ class NextLevelState extends FlxState
 		congratulationsTxt = new FlxText(0, 20, 0, "Congratulations!\nYou Won!");
 		congratulationsTxt.setFormat("Consola", 40, FlxColor.BLACK);
 		congratulationsTxt.alignment = CENTER;
-		congratulationsTxt.screenCenter(FlxAxes.X);
+		congratulationsTxt.screenCenter(FlxAxes.XY);
 		add(congratulationsTxt);
 		
         // Log level end and time

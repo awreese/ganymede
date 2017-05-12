@@ -67,7 +67,7 @@ class MenuState extends FlxState
 	}
 	
 	private function clickPlay():Void {
-		if (Main.LEVEL == 1) {
+		if (Main.LEVEL == 0) {
 			FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
 				FlxG.switchState(new SelectShipTutorial());
 			});

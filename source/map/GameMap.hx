@@ -80,8 +80,10 @@ class GameMap extends FlxSprite {
 				levelOne(playState);
 			case 2:
 				levelTwo(playState);
-			default:
+			case 3:
 				levelThree(playState);
+			default:
+				levelOne(playState);
 		}
 		drawNodes();
 		for (n in nodes) {
