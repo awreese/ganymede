@@ -7,6 +7,8 @@ import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.util.FlxAxes;
 import flixel.util.FlxColor;
+import openfl.Lib;
+import openfl.net.URLRequest;
 
 /**
  * ...
@@ -17,26 +19,30 @@ class FinishGameState extends FlxState
 	private var text:FlxText;
 	private var restartBtn:FlxButton;
 	private var background:FlxSprite;
+	private var feedbackBtn:FlxButton;
 
 	override public function create():Void
 	{
 		// create and add the background image
 		background = new FlxSprite(0, 0);
-		background.loadGraphic(AssetPaths.tempmenubg__png);
+		background.loadGraphic(AssetPaths.finishgamebg__png);
 		add(background);
 
 		// create and add the title
 		text = new FlxText(0, 20, 0, "Congratulations!\nYou finished the game!");
-		text.setFormat("Consola", 22);
+		text.setFormat("Consola", 40, FlxColor.BLACK);
 		text.alignment = CENTER;
 		text.screenCenter(FlxAxes.X);
 		add(text);
 
-		// create and add play button
-		restartBtn = new FlxButton(0, 0, "Restart", clickRestart);
-		restartBtn.x = (FlxG.width / 2) - (restartBtn.width/ 2);
-		restartBtn.y = FlxG.height - restartBtn.height - 10;
+		// create and add replay button
+		restartBtn = new FlxButton(20, FlxG.height - 75, "", clickRestart);
+		restartBtn.loadGraphic(AssetPaths.replay_btn__png);
 		add(restartBtn);
+		
+		feedbackBtn = new FlxButton(FlxG.width - 114 - 20, FlxG.height - 75, "", clickFeedback);
+		feedbackBtn.loadGraphic(AssetPaths.feedback_btn__png);
+		add(feedbackBtn);
 
 		Main.LEVEL = 1;
 
@@ -54,5 +60,10 @@ class FinishGameState extends FlxState
 		{
 			FlxG.switchState(new PlayState());
 		});
+	}
+	
+	private function clickFeedback():Void
+	{
+		openfl.Lib.getURL(new URLRequest("https://goo.gl/forms/6bW2mc7pC7OxQnMy1"));
 	}
 }
