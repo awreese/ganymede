@@ -20,9 +20,13 @@ package gameUnits;
 
 import faction.Faction;
 import flixel.FlxSprite;
+import flixel.addons.weapon.FlxWeapon;
 import flixel.group.FlxGroup.FlxTypedGroup;
+import flixel.math.FlxRect;
+import flixel.math.FlxPoint;
 import flixel.math.FlxVector;
 import flixel.text.FlxText;
+import flixel.util.helpers.FlxBounds;
 import gameUnits.Ship.ShipStat;
 import gameUnits.capturable.Planet;
 import map.MapEdge;
@@ -103,7 +107,7 @@ class ShipStat {
 						?sh = 0.5,
 						?hp = 100.0,
 						?as = 2.0,
-						?ap = 10.0,
+						?ap = 25.0,
 						?cps = 5.0)
 	{
 		this.hull = (hull == null) ? FRIGATE : hull;
@@ -147,6 +151,8 @@ class Ship extends FlxSprite {
 	public var isSelected: Bool; // Whether the player has currently selected this ship (should ideally be moved to a Player class in the future)
 
 	private var hpBar :FlxText;
+	
+	public var weapon: FlxTypedWeapon<ShipAttack>; // This weapon is used to create ShipAttacks
 
 	public function new(destination: MapNode, faction: Faction, shipStats: ShipStat) {
 		super();
@@ -155,6 +161,14 @@ class Ship extends FlxSprite {
 		this.faction = faction;
 		this.stats = shipStats;
 		this.pos = destination.getPos();
+
+		// Creates the weapon that creates bullets
+		this.weapon = new FlxTypedWeapon<ShipAttack>("Default weapon", function(w) {
+			return new ShipAttack(stats.ap, 500.0);
+		}, FlxWeaponFireFrom.PARENT(this, new FlxBounds(new FlxPoint(), new FlxPoint())),
+			FlxWeaponSpeedMode.SPEED(new FlxBounds(500.0, 500.0)));
+		this.weapon.bounds = new FlxRect(0, 0, 640, 480);
+		this.weapon.fireRate = Math.round(1000 / stats.as);
 		
 		switch (this.faction.getFaction())
 		{

@@ -221,7 +221,29 @@ class PlayState extends FlxState
 	 * ShipAttack class, which represents a single attack by one ship against one ship.
 	 */
 	private function shipCombat(elapsed: Float): Void {
-		// TODO: Implement combat
+				
+		// Iterate through each of the ships
+		for (s1 in grpShips) {
+			
+			// If the ship is dead, remove it from the group
+			if (!s1.exists) {
+				trace("Ship dead");
+				grpShips.remove(s1);
+			}
+			
+			// Iterate through each of the potential targets
+			// TODO: Iterate through the potential targets in a random order
+			for (s2 in grpShips) {
+				if (s1.getFaction() != s2.getFaction()) {
+					if (s1.getPos().distanceTo(s2.getPos()) < 50) {
+						if (s1.weapon.fireAtTarget(s2)) {
+							s1.weapon.currentBullet.target = s2;
+							add(s1.weapon.currentBullet);
+						}
+					}
+				}
+			}
+		}
 	}
 	
     // TODO: Most (if not all) of this should be moved to GameMap and Ship
@@ -261,7 +283,7 @@ class PlayState extends FlxState
 			}
 
 			// TODO: Replace this combat code with updated combat code in the shipCombat() function
-			// if there are more than 1 factions in a node
+			/*// if there are more than 1 factions in a node
 			if (numFactions > 1)
 			{
 				for (s in shipsAtNode)
@@ -300,7 +322,7 @@ class PlayState extends FlxState
 						}
 					}
 				}
-			}
+			}*/
 						// if there's a planet here
 			if (p != null) 
 			{
