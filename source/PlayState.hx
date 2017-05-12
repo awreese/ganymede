@@ -33,6 +33,7 @@ import gameUnits.Ship;
 import Main;
 import flixel.math.FlxRandom;
 import npc.Enemy;
+import tutorial.FinishGameState;
 
 class PlayState extends FlxState
 {
@@ -42,31 +43,18 @@ class PlayState extends FlxState
 	private var grpPlanets: FlxTypedGroup<gameUnits.capturable.Planet>;
 	private var rand:FlxRandom;
 	private var numPlayerFaction:Int;
-	//private var enemy1: Enemy;
+	private var enemy1: Enemy;
 
 	override public function create(): Void
 	{
 		rand = new FlxRandom();
-		//enemy1 = new Enemy(FactionType.ENEMY_1, 5);
+		enemy1 = new Enemy(FactionType.ENEMY_1, 10);
 		// Initialize the map
 		grpMap = new FlxTypedGroup<GameMap>();
 		add(grpMap);
 		gameMap = new GameMap(this, Main.LEVEL);
 		grpMap.add(gameMap);
 		//add(gameMap);
-
-		// draw planets
-		/*for (n in gameMap.nodes) {
-			var c = n.getCaptureable();
-			if (c != null) {
-				add(c);
-			}
-		}*/
-		// create planets
-		/*grpPlanets = new FlxTypedGroup<Planet>();
-		add(grpPlanets);
-		grpPlanets.add(new Planet(this, gameMap.nodes[0], new Faction(FactionType.PLAYER), new PlanetStat(new ShipStat(ShipType.FRIGATE))));
-		grpPlanets.add(new Planet(this, gameMap.nodes[1], new Faction(FactionType.ENEMY_1), new PlanetStat(new ShipStat(ShipType.FRIGATE))));*/
 
 		// Create the ships
 		grpShips = new FlxTypedGroup<gameUnits.Ship>();
@@ -113,8 +101,6 @@ class PlayState extends FlxState
 					// only move the ships that are the player's
 					if (s.getFaction() == FactionType.PLAYER)
 					{
-						//s.isSelected = n.contains(s.pos);
-						//s.isSelected = n.contains(s.getPos());
 						// allows player to select multiple ships on the map
 						if (n.contains(s.getPos()))
 						{
@@ -136,6 +122,7 @@ class PlayState extends FlxState
 				{
 					if (s.isSelected)
 					{
+						s.isSelected = false;
 						s.pathTo(n);
 					}
 				}
@@ -143,6 +130,7 @@ class PlayState extends FlxState
 		}
 		
 		// enemy turn
+		enemy1.makeMove(gameMap.getControlledNodes(enemy1.getFaction()));
 
 		// check where each ships are and updating each planet, and battle if there's opposing factions
 		nodeUpdate(elapsed);
@@ -152,9 +140,13 @@ class PlayState extends FlxState
 		
 		// if captured all the planets, progress
 		if (gameMap.getNumPlayerPlanets() == gameMap.getNumPlanets()) {
+			if (Main.LEVEL == 3) {
+				FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
+				FlxG.switchState(new FinishGameState());
+				});
+			}
 			FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
 			FlxG.switchState(new NextLevelState());
-			Main.LEVEL++;
 			});
 		}
 		
@@ -181,8 +173,6 @@ class PlayState extends FlxState
 			var shipsAtNode = new Array<Ship>();
 			
 			var nPos:FlxVector = new FlxVector(n.x, n.y);
-			//nPos.x -= MapNode.NODE_SIZE / 2;
-			//nPos.y -= MapNode.NODE_SIZE / 2;
 
 			// determine which ships are within the range of the node
 			for (s in grpShips)
@@ -275,6 +265,7 @@ class PlayState extends FlxState
 			var ship:Ship = p.produceShip(node);
 			if (ship != null) {
 				grpShips.add(ship);
+				node.addShip(ship);
 			}
 		}
 	}
