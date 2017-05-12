@@ -246,6 +246,7 @@ class GameMap extends FlxSprite {
 		// set captureable
 		var n1P = new Planet(playState, n1, new Faction(FactionType.PLAYER), new PlanetStat(new BluePrint(HullType.FRIGATE)));
 		var n2P = new Planet(playState, n2, new Faction(FactionType.NOP), new PlanetStat(new BluePrint(HullType.FRIGATE)));
+
 		n1.setCapturable(n1P);
 		n2.setCapturable(n2P);
 		FlxG.state.add(n1P);
@@ -273,6 +274,7 @@ class GameMap extends FlxSprite {
 		// set captureable
 		var n1P = new Planet(playState, n1, new Faction(FactionType.PLAYER), new PlanetStat(new BluePrint(HullType.FRIGATE, 30.0), 10, 3.0));
 		var n2P = new Planet(playState, n2, new Faction(FactionType.NOP), new PlanetStat(new BluePrint(HullType.FRIGATE)));
+
 		var n3P = new Planet(playState, n3, new Faction(FactionType.ENEMY_1),
 					new PlanetStat(new BluePrint(HullType.FRIGATE, 15.0, 0.3, 100.0, 1.0, 7.0)));
 		
@@ -314,6 +316,7 @@ class GameMap extends FlxSprite {
 		// set captureable
 		var n1P = new Planet(playState, n1, new Faction(FactionType.PLAYER), new PlanetStat(new BluePrint(HullType.FRIGATE, 30.0), 10, 3.0));
 		var n3P = new Planet(playState, n3, new Faction(FactionType.NOP), new PlanetStat(new BluePrint(HullType.FRIGATE)));
+
 		var n4P = new Planet(playState, n4, new Faction(FactionType.ENEMY_1),
 					new PlanetStat(new BluePrint(HullType.FRIGATE, 20.0, 0.3, 100.0, 1.0, 8.0)));
 		n1.setCapturable(n1P);

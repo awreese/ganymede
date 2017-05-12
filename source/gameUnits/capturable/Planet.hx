@@ -44,8 +44,7 @@ import faction.Faction;
  *
  * @author Drew Reese
  */
-class PlanetStat
-{
+class PlanetStat {
 	// Class Constants
 	public static inline var MAX_CAPACITY_LEVEL:Int = 5; // default as 5 for now
 	public static inline var MAX_TECH_LEVEL:Int = 5; // default as 5 for now
@@ -118,8 +117,7 @@ class PlanetStat
  * Contains the property of the Planets
  * Stores the faction, capacity, production rate, etc
  */
-class Planet extends Capturable
-{
+class Planet extends Capturable {
 	/*
 	 * From Capturable Class
 	 *
@@ -139,8 +137,7 @@ class Planet extends Capturable
     // Ship Factory
     private var shipFactory:ShipFactory;
 
-	public function new(playState: PlayState, location: MapNode, faction: Faction, pstats: PlanetStat)
-	{
+	public function new(playState: PlayState, location: MapNode, faction: Faction, pstats: PlanetStat) {
 		// set position of the planet
 		//super(location.pos.x - (MapNode.NODE_SIZE / 2), location.pos.y - (MapNode.NODE_SIZE / 2));
 		super(location, faction);
@@ -164,8 +161,7 @@ class Planet extends Capturable
 		shipsAtPlanet = new Array<Ship>();
 	}
 
-	override public function update(elapsed:Float):Void
-	{
+	override public function update(elapsed:Float):Void {
 		// increment timer
 		shipTimer += elapsed;
 		super.update(elapsed);
@@ -176,8 +172,7 @@ class Planet extends Capturable
 	 * Returns the underlying graphnode of this Planet
 	 * @return  MapNode under this planet
 	 */
-	public function getNode():MapNode
-	{
+	public function getNode():MapNode {
 		return this.node;
 	}
 
@@ -185,22 +180,19 @@ class Planet extends Capturable
 	 * Returns the stats of this planet.
 	 * @return  PlanetStats for this planet
 	 */
-	public function getStats():PlanetStat
-	{
+	public function getStats():PlanetStat {
 		return this.pStats;
 	}
 
 	// function that'll control the spousing of ships
-	private function canProduceShips():Bool
-	{
+	private function canProduceShips():Bool {
 		// return true if is not an open planet, not a neutral planet, not have reach capacity and if enough time has pass
 		return faction.getFactionType() != FactionType.NOP && faction.getFactionType() != FactionType.NEUTRAL
 		&& numShips.get(faction.getFactionType()) < this.pStats.cap && shipTimer >= pStats.prod;
 	}
 
 	// updates the capacity level and changes teh capacity accordingly
-	public function updateCapacity():Void
-	{
+	public function updateCapacity():Void {
 		if (this.pStats.cap_lvl < PlanetStat.MAX_CAPACITY_LEVEL)
 		{
 			//capacityLevel++;
@@ -211,8 +203,7 @@ class Planet extends Capturable
 	}
 
 	// updates the tech level
-	public function updateTech():Void
-	{
+	public function updateTech():Void {
 		//if (techLevel < MAX_TECH_LEVEL) {
 		//techLevel++;
 		//}
@@ -223,28 +214,24 @@ class Planet extends Capturable
 	}
 
 	// get capacity level
-	public function getCapacityLevel():Int
-	{
+	public function getCapacityLevel():Int {
 		//return capacityLevel;
 		return this.pStats.cap_lvl;
 	}
 
 	// get tech level
-	public function getTechLevel():Int
-	{
+	public function getTechLevel():Int {
 		//return techLevel;
 		return this.pStats.tech_lvl;
 	}
 
 	// get the production rate
-	public function getProductionRate():Float
-	{
+	public function getProductionRate():Float {
 		return this.pStats.prod;
 	}
 
 	// produce a ship
-	public function produceShip(node: MapNode):Ship
-	{
+	public function produceShip(node: MapNode):Ship {
 		// if can produce a ship, produce a ship
 		if (canProduceShips())
 		{
@@ -259,21 +246,17 @@ class Planet extends Capturable
 	}
 
 	// sets the number of ships of the faction to ships
-	public function setNumShips(shipFaction:FactionType, ships:Int):Void
-	{
+	public function setNumShips(shipFaction:FactionType, ships:Int):Void {
 		numShips.set(shipFaction, ships);
 	}
 
 	// return the position of the planet
-	public function getPos():FlxVector
-	{
+	public function getPos():FlxVector {
 		return new FlxVector(this.x, this.y);
 	}
 
-	private function setSprite():Void
-	{
-		switch (this.faction.getFactionType())
-		{
+	private function setSprite():Void {
+		switch (this.faction.getFactionType()) {
 			case PLAYER:
 				loadGraphic(AssetPaths.player_planet_1__png, false);
 			case ENEMY_1:

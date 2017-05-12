@@ -14,7 +14,6 @@ import flixel.util.FlxTimer;
 class SelectShipTutorial extends FlxState 
 {
 	private var background:FlxSprite;
-	private var nextBtn:FlxButton;
 	private var timer:Float;
 	private var switchImage:Bool;
 	
@@ -22,16 +21,12 @@ class SelectShipTutorial extends FlxState
 	{
 		// create and add the background image
 		background = new FlxSprite(0, 0);
-		background.loadGraphic(AssetPaths.select_ship_tutorial_1__png);
+		background.loadGraphic(AssetPaths.select_ship_tutorial_2__png);
 		add(background);
 		
-		// create and add exit button
-		nextBtn = new FlxButton(0, 0, "Next", clickNext);
-		nextBtn.x = FlxG.width - nextBtn.width - 10;
-		nextBtn.y = FlxG.height - nextBtn.height - 10;
-		add(nextBtn);
+		timer = 0.0;
 		
-		switchImage = false;
+		switchImage = true;
 		
 		super.create();
 	}
@@ -49,14 +44,18 @@ class SelectShipTutorial extends FlxState
 	override public function update(elapsed:Float):Void
 	{
 		timer += elapsed;
+		trace("timer " + timer);
 		if (timer >= 0.75) {
 			flipImage();
 			timer = 0.0;
 		}
+		if (FlxG.mouse.justPressed) {
+			click();
+		}
 		super.update(elapsed);
 	}
 	
-	private function clickNext():Void {
+	private function click():Void {
 		FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
 			FlxG.switchState(new MovingShipTutorial());
 		});

@@ -3,57 +3,39 @@ package tutorial;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
+import flixel.text.FlxText;
 import flixel.ui.FlxButton;
+import flixel.util.FlxAxes;
 import flixel.util.FlxColor;
 
 /**
  * ...
  * @author Daisy Xu
  */
-class MovingShipTutorial extends FlxState {
+class CapturingFactionTutorial extends FlxState 
+{
 	private var background:FlxSprite;
-	private var timer:Float;
-	private var switchImage:Bool;
+	private var congratulationsTxt:FlxText;
 	
 	override public function create():Void
 	{
-		// create and add the background image
+		// create background
 		background = new FlxSprite(0, 0);
-		background.loadGraphic(AssetPaths.moving_ship_tutorial_2__png);
+		background.loadGraphic(AssetPaths.capturing_faction_tutorial__png);
 		add(background);
-		
-		timer = 0.0;
-		
-		switchImage = true;
-		
+        
 		super.create();
-	}
-	
-	private function flipImage():Void {
-		if (switchImage) {
-			background.loadGraphic(AssetPaths.moving_ship_tutorial_1__png);
-			switchImage = false;
-		} else {
-			background.loadGraphic(AssetPaths.moving_ship_tutorial_2__png);
-			switchImage = true;
-		}
 	}
 
 	override public function update(elapsed:Float):Void
 	{
-		timer += elapsed;
-		if (timer >= 0.75) {
-			flipImage();
-			timer = 0.0;
-		}
-		
 		if (FlxG.mouse.justPressed) {
 			click();
 		}
-		
 		super.update(elapsed);
 	}
 	
+	// action for clicking continue button
 	private function click():Void {
 		FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
 			FlxG.switchState(new PlayState());
