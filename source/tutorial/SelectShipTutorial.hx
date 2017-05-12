@@ -81,9 +81,7 @@ class SelectShipTutorial extends FlxState
 			flipImage();
 			timer = 0.0;
 		}
-		if (FlxG.mouse.justPressed) {
-			click();
-		}
+
 		super.update(elapsed);
 		if (waitTimer < 0.5) {
 			waitTimer += elapsed;

@@ -24,12 +24,13 @@ import faction.Faction.FactionType;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
+import flixel.math.FlxPoint;
 import flixel.math.FlxVector;
 import flixel.util.FlxColor;
 import gameUnits.Ship;
 import gameUnits.capturable.Capturable;
 import gameUnits.capturable.Planet;
-import map.MapEdge.EdgeGroup;
+//import map.MapEdge.EdgeGroup;
 
 using flixel.util.FlxSpriteUtil;
 
@@ -38,7 +39,7 @@ using flixel.util.FlxSpriteUtil;
  */
 typedef NodeGroup = FlxTypedGroup<MapNode>;
 
-typedef EdgeMap = Map<map.MapNode, EdgeGroup>;
+//typedef EdgeMap = Map<map.MapNode, EdgeGroup>;
 
 /**
  * MapNode
@@ -56,9 +57,9 @@ class MapNode extends FlxObject {
 
 	public var gameMap: GameMap;
 	//public var pos: FlxVector;
-	//public var neighbors: Array<MapNode> = new Array();
-	public var neighbors:NodeGroup;
-    private var edgesOut:EdgeMap;
+	public var neighbors: Array<MapNode> = new Array();
+	//public var neighbors:NodeGroup;
+    //private var edgesOut:EdgeMap; // ???
 	
 	// Game objects at this node
 	private var capturable:Capturable;
@@ -77,10 +78,12 @@ class MapNode extends FlxObject {
 		
 		this.gameMap = gameMap;
         
-        this.neighbors = new NodeGroup();
-        this.edgesOut = new EdgeMap();
+        //this.neighbors = new NodeGroup();
+        //this.edgesOut = new EdgeMap();
 		
         this.capturable = null;
+        
+        trace("node hitbox: " + this.getHitbox().toString());
         
         // create empty faction ship groups
         factionShips = new Map<FactionType, ShipGroup>();
@@ -93,9 +96,13 @@ class MapNode extends FlxObject {
      * Node functions
      */
     
-    public function connectTo(node:MapNode):Bool {
-        var added = this.neighbors.add(node);
-        return added == node;
+    //public function connectTo(node:MapNode):Bool {
+        //var added = this.neighbors.add(node);
+        //return added == node;
+    //}
+    
+    public function clicked(p:FlxPoint):Bool {
+        return this.getHitbox().containsPoint(p);
     }
 
 	public function contains(v: FlxVector): Bool {
