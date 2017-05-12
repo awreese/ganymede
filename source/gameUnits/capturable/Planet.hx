@@ -29,8 +29,8 @@ import flixel.util.FlxColor;
 import gameUnits.Ship;
 import gameUnits.Ship.ShipFactory;
 import gameUnits.capturable.Capturable;
-import gameUnits.Ship.ShipStat;
-import gameUnits.Ship.ShipType;
+import gameUnits.Ship.BluePrint;
+import gameUnits.Ship.HullType;
 import gameUnits.capturable.Planet.PlanetStat;
 import js.html.svg.AnimatedBoolean;
 import map.MapNode;
@@ -54,7 +54,7 @@ class PlanetStat
 	public var cap: Int;			// ship capacity
 	public var prod: Float;			// ship production rate in seconds
 	public var prod_thresh: Float;	// production rate threshold for falloff
-	public var ship: ShipStat;      // ship type for production
+	public var ship: BluePrint;      // ship type for production
 
 	// Levels
 	public var cap_lvl: Int;		// current capacity level
@@ -250,7 +250,7 @@ class Planet extends Capturable
 		{
 			shipTimer = 0.0;
 			numShips.set(faction.getFactionType(), numShips.get(faction.getFactionType()) + 1);
-			var stat = new ShipStat(pStats.ship.hull, pStats.ship.speed, pStats.ship.sh, pStats.ship.hp, pStats.ship.as, pStats.ship.ap, pStats.ship.cps);
+			var stat = new BluePrint(pStats.ship.hull, pStats.ship.maxVelocity, pStats.ship.shield, pStats.ship.hitPoints, pStats.ship.attackSpeed, pStats.ship.attackDamage, pStats.ship.cps);
 			//return new Ship(playState, node, faction, stat);
 			return new Ship(node, faction, stat);
 		}
