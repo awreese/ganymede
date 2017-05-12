@@ -19,11 +19,11 @@
 package gameUnits.capturable;
 
 import faction.CaptureEngine;
+import faction.Faction;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.ui.FlxBar;
 import map.MapNode;
-import faction.Faction;
 
 /**
  * Capturable
@@ -43,16 +43,20 @@ class Capturable extends FlxSprite {
 	private var faction:Faction;
 	
 	private var captureBar:FlxBar;
-	private var TOTAL_CP:Float = 100.0;
     
-    private var captureEngine:CaptureEngine; // TODO: make this an actual HUD :/
-	private var shipsAtPlanet: Array<Ship>;
+    private var captureEngine:CaptureEngine;
+	private var shipsAtPlanet: Array<Ship>; // TODO: Query this from node
     
-    public function new(node: MapNode, faction: Faction) {
+    /**
+     * Private constructor used by extending classes.
+     * @param node  node capturable resides on
+     * @param faction   faction of capturable node
+     */
+    private function new(node: MapNode, faction: Faction) {
         super(node.x, node.y);
         this.node = node;
         this.faction = faction;
-        this.captureEngine = new CaptureEngine(this.faction.getFaction(), 100.0);
+        this.captureEngine = new CaptureEngine(this.faction.getFactionType(), 100.0); // TODO: Move CP to constructor
 		
 		// create capturebar and add it to the graphics
 		captureBar = new FlxBar(0, 0, LEFT_TO_RIGHT, 50, 10, null, "", 0, captureEngine.getMaxControllingPoint(), true);
@@ -76,11 +80,11 @@ class Capturable extends FlxSprite {
 			totalCP.set(s.getFaction(), cp + (s.stats.cps));
 		}
 		for (f in Faction.getEnums()) {
-			captureEngine.setPoints(f, totalCP[f] * elapsed);
+			captureEngine.addPoints(f, totalCP[f] * elapsed);
 		}
 		
 		// change bar color to invading faction if being invaded for NOP
-		if (this.faction.getFaction() == FactionType.NOP && captureEngine.isContended()) {
+		if (this.faction.getFactionType() == FactionType.NOP && captureEngine.isContended()) {
 			captureBar.createColoredFilledBar(captureEngine.getCapturingFaction().getColor(),true);
 		}
 		
@@ -105,8 +109,8 @@ class Capturable extends FlxSprite {
 		}
 		// keep track of current cp
 		var currCP = currStatus[currFaction];
-				
-		// set value for bar
+
+        // set value for bar
 		captureBar.value = currCP;
 		captureBar.updateBar();
 		
@@ -115,16 +119,19 @@ class Capturable extends FlxSprite {
         super.update(elapsed);
     }
 	
+    // TODO: Remove this and query from node
 	// sets array of ships at planet
 	public function setShips(ships: Array<Ship>): Void {
 		shipsAtPlanet = ships;
 	}
 	
+    // TODO: I don't think this is required now, so check if removeable
 	// get current cp of this
 	public function getCP(): Float {
 		return captureBar.value;
 	}
 	
+    // TODO: same as above
 	// get max cp this can have
 	public function getTotalCP():Float {
 		return captureEngine.getMaxControllingPoint();

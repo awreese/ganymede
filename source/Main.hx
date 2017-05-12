@@ -25,7 +25,7 @@ class Main extends Sprite
 		var gameId:Int = 1702;
 		var gameKey:String = "5e1bd5047e378b5fd4912760004f80f4";
 		var gameName:String = "astrorush";
-		var categoryId:Int = 1;
+		var categoryId:Int = 2;
 		var versionID:Int = 1;
 		Main.LOGGER = new CapstoneLogger(gameId, gameName, gameKey, categoryId, versionID, true);
 		
@@ -41,6 +41,6 @@ class Main extends Sprite
 	
 	private function onSessionReady(sessionRecieved:Bool):Void
 	{
-		addChild(new FlxGame(640, 480, MenuState, 1, 60, 60));
+		addChild(new FlxGame(1280, 720, MenuState, 1, 60, 60));
 	}
 }

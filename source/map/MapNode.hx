@@ -24,11 +24,13 @@ import faction.Faction.FactionType;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
+import flixel.math.FlxPoint;
 import flixel.math.FlxVector;
 import flixel.util.FlxColor;
 import gameUnits.Ship;
 import gameUnits.capturable.Capturable;
 import gameUnits.capturable.Planet;
+//import map.MapEdge.EdgeGroup;
 
 using flixel.util.FlxSpriteUtil;
 
@@ -36,6 +38,8 @@ using flixel.util.FlxSpriteUtil;
  * NodeGroup is a group of MapNodes
  */
 typedef NodeGroup = FlxTypedGroup<MapNode>;
+
+//typedef EdgeMap = Map<map.MapNode, EdgeGroup>;
 
 /**
  * MapNode
@@ -55,19 +59,16 @@ class MapNode extends FlxObject {
 	//public var pos: FlxVector;
 	public var neighbors: Array<MapNode> = new Array();
 	//public var neighbors:NodeGroup;
+    //private var edgesOut:EdgeMap; // ???
 	
 	// Game objects at this node
 	private var capturable:Capturable;
     private var factionShips:Map<FactionType, ShipGroup>;
 	
     /*
-     * TODO: remove pos position vector and replace constructor to just use the
-     * baked-in object (x, y) coordinate.  This requires node extending FlxBasic (???)
-     * 
      * TODO: reduce internal exposure, not everything needs to be public
      */
     
-	//public function new(gameMap:GameMap, pos: FlxVector) {
 	public function new(gameMap:GameMap, x:Float, y:Float) {
 		super();
 		
@@ -76,8 +77,13 @@ class MapNode extends FlxObject {
 		this.y = y;
 		
 		this.gameMap = gameMap;
+        
+        //this.neighbors = new NodeGroup();
+        //this.edgesOut = new EdgeMap();
 		
         this.capturable = null;
+        
+        trace("node hitbox: " + this.getHitbox().toString());
         
         // create empty faction ship groups
         factionShips = new Map<FactionType, ShipGroup>();
@@ -85,6 +91,19 @@ class MapNode extends FlxObject {
             factionShips.set(faction, new ShipGroup());
         }
 	}
+    
+    /*
+     * Node functions
+     */
+    
+    //public function connectTo(node:MapNode):Bool {
+        //var added = this.neighbors.add(node);
+        //return added == node;
+    //}
+    
+    public function clicked(p:FlxPoint):Bool {
+        return this.getHitbox().containsPoint(p);
+    }
 
 	public function contains(v: FlxVector): Bool {
 		//return pos.dist(v) < NODE_SIZE + 15;
@@ -204,6 +223,20 @@ class MapNode extends FlxObject {
 		return this.factionShips.get(faction);
 	}
 	
+    // Capturable helpers
+    
+    /**
+     * Returns true if capturable object exists on this node, false otherwise.
+     * @return true iff a capturable object exists at this node, false otherwise
+     */
+    public function isCapturable():Bool {
+        return this.capturable != null;
+    }
+    
+    //public function getCapturableType():Any {
+        //this.capturable.ty
+    //}
+    
 	/*
 	 * return true if captureable is a planet, false otherwise
 	 */
@@ -216,7 +249,7 @@ class MapNode extends FlxObject {
 		return capturable;
 	}
 	
-	/*public function getFaction():FactionType {
-		return this.capturable.getFaction().getFaction();
-	}	*/
+	public function getFaction():FactionType {
+        return (this.capturable == null) ? null : this.capturable.getFaction().getFactionType();
+	}
 }

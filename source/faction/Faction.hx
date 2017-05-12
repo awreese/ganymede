@@ -62,8 +62,6 @@ class Faction {
 		faction_color.set(FactionType.ENEMY_5, FlxColor.MAGENTA);
 		faction_color.set(FactionType.ENEMY_6, FlxColor.CYAN);
         faction_count = Lambda.count(faction_color);
-		trace("faction & color: " + faction_color);
-        trace("faction count: " + faction_count);
 	}
     
     /**
@@ -104,7 +102,7 @@ class Faction {
 	 * Gets the faction type of this faction.
 	 * @return	FactionType of this faction
 	 */
-	public function getFaction():FactionType {
+	public function getFactionType():FactionType {
 		return this._faction;
 	}
 	

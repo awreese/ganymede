@@ -18,7 +18,15 @@
 
 package map;
 
+import flixel.FlxBasic;
+import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxVector;
+
+/**
+ * EdgeGroup is a group of MapEdges
+ */
+//typedef EdgeGroup = FlxTypedGroup<map.MapEdge>;
+
 
 /**
  * Edge connects two nodes in a graph.
@@ -26,6 +34,7 @@ import flixel.math.FlxVector;
  * @author Rory Soiffer
  * @author Drew Reese
  */
+//class MapEdge extends FlxBasic {
 class MapEdge {
 
 	public var n1:MapNode;
