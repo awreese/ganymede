@@ -244,9 +244,9 @@ class GameMap extends FlxSprite {
 		//drawNodes();
 		
 		// set captureable
-
 		var n1P:Capturable = new Planet(playState, n1, new Faction(FactionType.PLAYER), new PlanetStat(new ShipStat(ShipType.FRIGATE, 30.0), 10, 3));
 		var n2P:Capturable = new Planet(playState, n2, new Faction(FactionType.NOP), new PlanetStat(new ShipStat(ShipType.FRIGATE)));
+
 		n1.setCapturable(n1P);
 		n2.setCapturable(n2P);
 		FlxG.state.add(n1P);

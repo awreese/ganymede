@@ -75,6 +75,15 @@ class SelectShipTutorial extends FlxState
 
 	override public function update(elapsed:Float):Void
 	{
+		timer += elapsed;
+		trace("timer " + timer);
+		if (timer >= 0.75) {
+			flipImage();
+			timer = 0.0;
+		}
+		if (FlxG.mouse.justPressed) {
+			click();
+		}
 		super.update(elapsed);
 		if (waitTimer < 0.5) {
 			waitTimer += elapsed;

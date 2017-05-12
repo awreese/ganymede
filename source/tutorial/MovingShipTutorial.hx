@@ -140,7 +140,7 @@ class MovingShipTutorial extends FlxState {
 			FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
 			FlxG.switchState(new NextLevelState());
 		});
-		}
+    }
 	}
 	
 	private function click():Void {
