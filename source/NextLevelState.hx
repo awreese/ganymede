@@ -27,7 +27,7 @@ class NextLevelState extends FlxState
 		add(background);
 		
 		// create the congradulation text
-		congratulationsTxt = new FlxText(0, 20, 0, "Congratulations!\nYou Won!");
+		congratulationsTxt = new FlxText(0, 20, 0, "Yay!\nYou did it!");
 		congratulationsTxt.setFormat("Consola", 40, FlxColor.BLACK);
 		congratulationsTxt.alignment = CENTER;
 		congratulationsTxt.screenCenter(FlxAxes.XY);
@@ -49,11 +49,6 @@ class NextLevelState extends FlxState
 	
 	// action for clicking replay button
 	private function click():Void {
-		if (Main.LEVEL == 2) {
-			FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
-				FlxG.switchState(new CapturingFactionTutorial());
-			});
-		}
 		FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
 			FlxG.switchState(new PlayState());
 		});

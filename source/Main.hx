@@ -10,7 +10,7 @@ class Main extends Sprite
 	public static var LEVEL: Int;
 	public function new()
 	{
-		LEVEL = 0;
+		LEVEL = 1;
 		// This code prevents right-click from opening a menu
 		#if js
 		untyped
