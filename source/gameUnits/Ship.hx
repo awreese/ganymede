@@ -19,6 +19,7 @@
 package gameUnits;
 
 import faction.Faction;
+import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.addons.weapon.FlxWeapon;
 import flixel.group.FlxGroup.FlxTypedGroup;
@@ -26,12 +27,8 @@ import flixel.math.FlxRect;
 import flixel.math.FlxPoint;
 import flixel.math.FlxVector;
 import flixel.text.FlxText;
-<<<<<<< HEAD
 import flixel.util.helpers.FlxBounds;
-import gameUnits.Ship.ShipStat;
-=======
 import gameUnits.Ship.BluePrint;
->>>>>>> 1e2ee9bdafcd15160ec5ee59402fac967bf556b6
 import gameUnits.capturable.Planet;
 import map.MapEdge;
 import map.MapNode;
@@ -109,11 +106,7 @@ class BluePrint {
 						?sh = 0.5,
 						?hp = 100.0,
 						?as = 2.0,
-<<<<<<< HEAD
-						?ap = 25.0,
-=======
-						?ad = 10.0,
->>>>>>> 1e2ee9bdafcd15160ec5ee59402fac967bf556b6
+						?ad = 25.0,
 						?cps = 5.0)
 	{
 		this.hull = (hull == null) ? FRIGATE : hull;
@@ -170,22 +163,11 @@ class Ship extends FlxSprite {
 
 	public var isSelected:Bool; // Whether the player has currently selected this ship (should ideally be moved to a Player class in the future)
 
-<<<<<<< HEAD
-	public var listOfAllShips:Array<Ship> = []; // The list of all ships, which is needed for flocking
-
-	private var hpBar:FlxText;
-=======
 	private var hpBar :FlxText;
 	
 	public var weapon: FlxTypedWeapon<ShipAttack>; // This weapon is used to create ShipAttacks
->>>>>>> rory_working
 
-<<<<<<< HEAD
-	public function new(destination: MapNode, faction: Faction, shipStats: ShipStat) {
-=======
-	//public function new(playState: PlayState, destination: MapNode, faction: Faction, shipStats: ShipStat) 	{
 	public function new(destination:MapNode, faction:Faction, blueprint:BluePrint) {
->>>>>>> 1e2ee9bdafcd15160ec5ee59402fac967bf556b6
 		super();
         
 		//this.playState = playState;
@@ -198,11 +180,11 @@ class Ship extends FlxSprite {
 
 		// Creates the weapon that creates bullets
 		this.weapon = new FlxTypedWeapon<ShipAttack>("Default weapon", function(w) {
-			return new ShipAttack(stats.ap, 500.0);
+			return new ShipAttack(stats.attackDamage, 500.0);
 		}, FlxWeaponFireFrom.PARENT(this, new FlxBounds(new FlxPoint(), new FlxPoint())),
 			FlxWeaponSpeedMode.SPEED(new FlxBounds(500.0, 500.0)));
-		this.weapon.bounds = new FlxRect(0, 0, 640, 480);
-		this.weapon.fireRate = Math.round(1000 / stats.as);
+		this.weapon.bounds = new FlxRect(0, 0, FlxG.width, FlxG.height);
+		this.weapon.fireRate = Math.round(1000 / stats.attackSpeed);
 		
 		switch (this.faction.getFactionType()) {
 			case PLAYER:
@@ -228,45 +210,6 @@ class Ship extends FlxSprite {
 		//FlxG.state.add(hpBar);
 	}
 
-<<<<<<< HEAD
-=======
-	// Moves the ship, following flocking behavior
-	public function flock(elapsed: Float): Void {
-		// All the forces acting on the ship
-		var toDest = idealPos().subtractNew(this.pos);
-		var desiredSpeed = this.vel.normalize().scaleNew(stats.maxVelocity).subtractNew(this.vel);
-		var noise = new FlxVector(Math.random() - .5, Math.random() - .5);
-		var seperation = new FlxVector(0, 0);
-		var alignment = new FlxVector(0, 0);
-		var cohesion = new FlxVector(0, 0);
-
-		for (s in listOfAllShips) {
-			// Only flock with other ships of your faction
-			if (s != this && getFaction() == s.getFaction()) {
-				var d: FlxVector = this.pos.subtractNew(s.pos);
-				if (d.length < 30) {
-					seperation = seperation.addNew(d.scaleNew(1/d.lengthSquared));
-					alignment = alignment.addNew(s.vel.subtractNew(this.vel));
-					cohesion = cohesion.addNew(d.normalize());
-				}
-			}
-		}
-
-		// Compute the net acceleration, scaling each component by a constant to make the final motion look good
-		var acceleration = new FlxVector(0, 0)
-		.addNew(toDest.scaleNew(.05 * toDest.length))
-		.addNew(desiredSpeed.scaleNew(50))
-		.addNew(noise.scaleNew(10))
-		.addNew(seperation.scaleNew(100))
-		.addNew(alignment.scaleNew(.5))
-		.addNew(cohesion.scaleNew(0.5));
-
-		// Update the position and velocity
-		this.vel = this.vel.addNew(acceleration.scaleNew(elapsed));
-		this.pos = this.pos.addNew(this.vel.scaleNew(elapsed));
-	}
-
->>>>>>> 1e2ee9bdafcd15160ec5ee59402fac967bf556b6
 	// Returns where along its path the ship should be right now if it weren't for flocking behavior
 	public function idealPos(): FlxVector {
 		if (isMoving()) {

@@ -38,10 +38,10 @@ class ShipAttack extends FlxBullet
 			if (this.getPosition().distanceTo(target.getPos()) < 10) {
 				
 				// Damage the target
-				target.stats.hp -= damage * target.stats.sh;
+				target.stats.hitPoints -= damage * target.stats.shield;
 				
 				// If needed, destroy the target
-				if (target.stats.hp <= 0) {
+				if (target.stats.hitPoints <= 0) {
 					target.destroy();
 				}
 				
