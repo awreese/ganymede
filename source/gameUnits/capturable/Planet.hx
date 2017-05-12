@@ -194,8 +194,8 @@ class Planet extends Capturable
 	private function canProduceShips():Bool
 	{
 		// return true if is not an open planet, not a neutral planet, not have reach capacity and if enough time has pass
-		return faction.getFaction() != FactionType.NOP && faction.getFaction() != FactionType.NEUTRAL
-		&& numShips.get(faction.getFaction()) < this.pStats.cap && shipTimer >= pStats.prod;
+		return faction.getFactionType() != FactionType.NOP && faction.getFactionType() != FactionType.NEUTRAL
+		&& numShips.get(faction.getFactionType()) < this.pStats.cap && shipTimer >= pStats.prod;
 	}
 
 	// updates the capacity level and changes teh capacity accordingly
@@ -249,7 +249,7 @@ class Planet extends Capturable
 		if (canProduceShips())
 		{
 			shipTimer = 0.0;
-			numShips.set(faction.getFaction(), numShips.get(faction.getFaction()) + 1);
+			numShips.set(faction.getFactionType(), numShips.get(faction.getFactionType()) + 1);
 			var stat = new ShipStat(pStats.ship.hull, pStats.ship.speed, pStats.ship.sh, pStats.ship.hp, pStats.ship.as, pStats.ship.ap, pStats.ship.cps);
 			//return new Ship(playState, node, faction, stat);
 			return new Ship(node, faction, stat);
@@ -272,7 +272,7 @@ class Planet extends Capturable
 
 	private function setSprite():Void
 	{
-		switch (this.faction.getFaction())
+		switch (this.faction.getFactionType())
 		{
 			case PLAYER:
 				loadGraphic(AssetPaths.player_planet_1__png, false);

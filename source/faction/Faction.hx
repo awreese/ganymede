@@ -104,7 +104,7 @@ class Faction {
 	 * Gets the faction type of this faction.
 	 * @return	FactionType of this faction
 	 */
-	public function getFaction():FactionType {
+	public function getFactionType():FactionType {
 		return this._faction;
 	}
 	
