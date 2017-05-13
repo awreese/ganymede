@@ -38,6 +38,7 @@ class SelectShipTutorial extends FlxState
 		// create ship button
 		shipBtn = new FlxButton(472, 344, "", clickShip);
 		shipBtn.loadGraphic(AssetPaths.ship_1__png, false, 32, 32);
+		shipBtn.scrollFactor.set(1, 1);
 		add(shipBtn);
 		
 		// create cursor sprite
