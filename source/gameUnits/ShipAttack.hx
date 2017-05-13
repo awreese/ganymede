@@ -35,7 +35,7 @@ class ShipAttack extends FlxBullet
 			angle = pointToVector(this.velocity).degrees;
 			
 			// If the attack hit the target
-			if (this.getPosition().distanceTo(target.getPos()) < 10) {
+			if (this.getPosition().distanceTo(target.getPos()) < Math.max(target.width, target.height)/2) {
 				
 				// Damage the target
 				target.stats.hitPoints -= damage * target.stats.shield;
