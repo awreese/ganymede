@@ -50,7 +50,7 @@ class NextLevelState extends FlxState
 	override public function update(elapsed:Float):Void
 	{
 		if (foreground.y < 0.0) {
-			foreground.y += 200 * elapsed;
+			foreground.y += 300 * elapsed;
 		}
 		if (FlxG.mouse.justPressed) {
 			click();

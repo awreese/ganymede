@@ -3,6 +3,7 @@ package;
 import flixel.FlxGame;
 import CapstoneLogger;
 import openfl.display.Sprite;
+import tutorial.FinishGameState;
 
 class Main extends Sprite
 {
