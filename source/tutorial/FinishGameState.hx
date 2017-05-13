@@ -36,12 +36,16 @@ class FinishGameState extends FlxState
 		add(text);
 
 		// create and add replay button
-		restartBtn = new FlxButton(20, FlxG.height - 75, "", clickRestart);
-		restartBtn.loadGraphic(AssetPaths.replay_btn__png);
+		restartBtn = new FlxButton(0, 0, "", clickRestart);
+		restartBtn.loadGraphic(AssetPaths.replay_btn__png, false, 114, 44);
+		restartBtn.x = 20;
+		restartBtn.y = FlxG.height - restartBtn.height - 31;
 		add(restartBtn);
 		
-		feedbackBtn = new FlxButton(FlxG.width - 114 - 20, FlxG.height - 75, "", clickFeedback);
-		feedbackBtn.loadGraphic(AssetPaths.feedback_btn__png);
+		feedbackBtn = new FlxButton(0, 0, "", clickFeedback);
+		feedbackBtn.loadGraphic(AssetPaths.feedback_btn__png, false, 114, 44);
+		feedbackBtn.x = FlxG.width - feedbackBtn.width - 20;
+		feedbackBtn.y = FlxG.height - restartBtn.height - 31;
 		add(feedbackBtn);
 
 		Main.LEVEL = 1;
