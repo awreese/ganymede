@@ -181,7 +181,7 @@ class Ship extends FlxSprite {
 		// Creates the weapon that creates bullets
 		this.weapon = new FlxTypedWeapon<ShipAttack>("Default weapon", function(w) {
 			return new ShipAttack(stats.attackDamage, 500.0);
-		}, FlxWeaponFireFrom.PARENT(this, new FlxBounds(this.offset, this.offset)),
+		}, FlxWeaponFireFrom.PARENT(this, new FlxBounds(this.origin, this.origin)),
 			FlxWeaponSpeedMode.SPEED(new FlxBounds(500.0, 500.0)));
 		this.weapon.bounds = new FlxRect(0, 0, FlxG.width, FlxG.height);
 		this.weapon.fireRate = Math.round(1000 / stats.attackSpeed);
