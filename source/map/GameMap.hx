@@ -28,9 +28,8 @@ import gameUnits.Ship.HullType;
 import gameUnits.capturable.Capturable;
 import gameUnits.capturable.Planet;
 import haxe.Json;
-import haxe.io.Input;
 import map.MapNode.NodeGroup;
-import openfl.filesystem.File;
+import openfl.Assets;
 
 using flixel.util.FlxSpriteUtil;
 
@@ -90,10 +89,10 @@ class GameMap extends FlxSprite {
         // Log level start and time
         Main.LOGGER.logLevelStart(level, Date.now());
 		
-		parseLevel();
+		parseLevel(playState);
         
         // Load the nodes
-        trace("Building level: " + level);
+       /* trace("Building level: " + level);
 		switch (level) {
 			case 1:
 				levelOne(playState);
@@ -101,7 +100,7 @@ class GameMap extends FlxSprite {
 				levelTwo(playState);
 			default:
 				levelThree(playState);
-		}
+		}*/
 		drawNodes();
 		//for (n in nodes) {
 		for (n in node_to_neighbors.keys()) {
@@ -380,9 +379,60 @@ class GameMap extends FlxSprite {
 		FlxG.state.add(n4P);
 	}
 	
-	private function parseLevel():Void {
-		var file = File.getContent("assets/data/level" + Main.LEVEL + ".json");
-		var data = Json.parse(file);
+	private function parseLevel(playState:PlayState):Void {
+		var file = Assets.getText("assets/data/level" + Main.LEVEL + ".json"); // get string of json
+		var data = Json.parse(file); // parse json
+		var nodes = data.nodes; // get nodes
+		var neighbors = data.neighbors; // get neighbors
+		for (s in Reflect.fields(nodes)) {
+			var node = data.nodes[Std.parseInt(s)];
+			var n = this.addNode(node.id, node.x, node.y); // make node
+			var faction:FactionType = null; // get faction
+			switch (node.faction) {
+				case "player":
+					faction = FactionType.PLAYER;
+				case "enemy1":
+					faction = FactionType.ENEMY_1;
+				case "enemy2":
+					faction = FactionType.ENEMY_2;
+				case "enemy3":
+					faction = FactionType.ENEMY_3;
+				case "enemy4":
+					faction = FactionType.ENEMY_4;
+				case "enemy5":
+					faction = FactionType.ENEMY_5;
+				case "enemy6":
+					faction = FactionType.ENEMY_6;
+				case "neutral":
+					faction = FactionType.NEUTRAL;
+				case "nop":
+					faction = FactionType.NOP;
+				default:
+					faction = null;
+			}
+			if (faction != null) {
+				// if there'a faction, then not empty node
+				var cap = node.captureable;
+				switch(cap.object) {
+					case "planet":
+						// if planet
+						var bp = cap.blueprint; // get blueprint from json
+						var blueprint = new BluePrint(bp.hull, bp.maxVel, bp.sh, bp.hp, bp.as, bp.ad, bp.cps); // make blueprint
+						// make planet stat
+						var ps = new PlanetStat(blueprint, cap.cap, cap.prod, cap.prod_thresh, cap.cap_lvl, cap.tech_lvl, cap.base_cost, cap.cap_per_level, cap.tech_per_lvl);
+						var planet = new Planet(playState, this.id_to_node.get(node.id), new Faction(faction), ps); // create planet
+						this.addCapturableByID(node.id, planet); // add planet
+						FlxG.state.add(planet);
+				}
+			}
+		}
+		for (s in Reflect.fields(neighbors)) {
+			var node = neighbors[Std.parseInt(s)]; // get node
+			for (i in Reflect.fields(node.neighbor)) {
+				var n2 = node.neighbor[Std.parseInt(i)]; // get id of neighbor
+				this.connectByID(node.id, n2); // create edge
+			}
+		}
 	}
 	
 	/*
@@ -413,4 +463,3 @@ class GameMap extends FlxSprite {
         return planetCount;
 	}
 }
-
