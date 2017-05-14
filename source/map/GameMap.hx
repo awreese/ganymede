@@ -27,7 +27,10 @@ import gameUnits.Ship.BluePrint;
 import gameUnits.Ship.HullType;
 import gameUnits.capturable.Capturable;
 import gameUnits.capturable.Planet;
+import haxe.Json;
+import haxe.io.Input;
 import map.MapNode.NodeGroup;
+import openfl.filesystem.File;
 
 using flixel.util.FlxSpriteUtil;
 
@@ -86,6 +89,8 @@ class GameMap extends FlxSprite {
 		
         // Log level start and time
         Main.LOGGER.logLevelStart(level, Date.now());
+		
+		parseLevel();
         
         // Load the nodes
         trace("Building level: " + level);
@@ -300,8 +305,8 @@ class GameMap extends FlxSprite {
 	// level 1
 	private function levelOne(playState:PlayState):Void {
 		// create nodes
-        var n1 = this.addNode("node1", 100.0, 150.0);
-		var n2 = this.addNode("node2", 300.0, 150.0);
+        var n1 = this.addNode("node1", 474.0, 344.0);
+		var n2 = this.addNode("node2", 697.0, 344.0);
 		
 		// create edges
         this.connectByID("node1", "node2");
@@ -373,6 +378,11 @@ class GameMap extends FlxSprite {
 		FlxG.state.add(n1P);
 		FlxG.state.add(n3P);
 		FlxG.state.add(n4P);
+	}
+	
+	private function parseLevel():Void {
+		var file = File.getContent("assets/data/level" + Main.LEVEL + ".json");
+		var data = Json.parse(file);
 	}
 	
 	/*

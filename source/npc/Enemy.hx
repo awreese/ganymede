@@ -107,7 +107,8 @@ class Enemy extends NPC
 		visited.push(node);
 		var des: MapNode = node;
 		// go through each neighbor
-		for (n in node.neighbors) {
+		var neighbors = node.neighbors.keys();
+		for (n in neighbors) {
 			if (visited.indexOf(n) != -1) {
 				// if already looked at n, skip
 				continue;
