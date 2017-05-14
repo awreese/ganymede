@@ -1,0 +1,29 @@
+// {} define hierarchy
+{
+	"string": "value"
+	"int": 43123
+	"struct": {
+		"hp": 5
+	}
+}
+
+{
+	"planets": [{data for planet}, {}]
+	"ships": []
+	"node": []
+	"name": "my first level"
+	"levelID": 1
+}
+
+haxe have json parsing
+var parseData:Dynamic = json.parse()
+var propa = parseDat["my"]
+
+parseLevel function <-- need to know top level properties
+
+parseLevel():void {}
+	var parseData = json.parse(file);
+	for each planet in planets
+		var newPlanet:Planet = new Planet()
+		newPlanet.deserialize(planet) // take whole data for planet and parse it, or have some method that'll know how to do it
+}
