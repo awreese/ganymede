@@ -141,7 +141,7 @@ class Planet extends Capturable {
 		// set position of the planet
 		//super(location.pos.x - (MapNode.NODE_SIZE / 2), location.pos.y - (MapNode.NODE_SIZE / 2));
 		super(location, faction);
-
+        
 		this.playState = playState;
 
 		// set sprite
@@ -159,6 +159,7 @@ class Planet extends Capturable {
 		}
 		shipTimer = 0;
 		shipsAtPlanet = new Array<Ship>();
+        
 	}
 
 	override public function update(elapsed:Float):Void {
