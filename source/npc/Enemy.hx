@@ -116,6 +116,9 @@ class Enemy extends NPC
 				// or if returned node is of this.faction, check next one
 				continue;
 			}
+			if (recurseNode.getFaction() == FactionType.NOP) {
+				return recurseNode; // enemy aim for nop planets first
+			}
 			if (des.getFaction() == null || des.getFaction() == this.faction) {
 				// if des have no faction, set des to recurseNode
 				// or if des.faction == this.faction, set des to recurseNode
