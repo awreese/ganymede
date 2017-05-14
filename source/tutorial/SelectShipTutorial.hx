@@ -76,7 +76,7 @@ class SelectShipTutorial extends FlxState
 	override public function update(elapsed:Float):Void
 	{
 		timer += elapsed;
-		trace("timer " + timer);
+		//trace("timer " + timer);
 		if (timer >= 0.75) {
 			flipImage();
 			timer = 0.0;

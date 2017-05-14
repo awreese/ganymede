@@ -77,7 +77,7 @@ class Enemy extends NPC
 						}
 						if (des == null) {
 							// traverse to farther if there is no destination yet
-							for (neighbor in currNode.neighbors) {
+							for (neighbor in currNode.neighbors.keys()) {
 								// only add to queue if haven't visited
 								if (visited.indexOf(neighbor) == -1) {
 									queue.push(neighbor);
