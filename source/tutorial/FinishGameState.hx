@@ -30,18 +30,22 @@ class FinishGameState extends FlxState
 
 		// create and add the title
 		text = new FlxText(0, 20, 0, "Congratulations!\nYou finished the game!");
-		text.setFormat("Consola", 40, FlxColor.BLACK);
+		text.setFormat("Consola", 50, FlxColor.BLACK);
 		text.alignment = CENTER;
 		text.screenCenter(FlxAxes.X);
 		add(text);
 
 		// create and add replay button
-		restartBtn = new FlxButton(20, FlxG.height - 75, "", clickRestart);
-		restartBtn.loadGraphic(AssetPaths.replay_btn__png);
+		restartBtn = new FlxButton(0, 0, "", clickRestart);
+		restartBtn.loadGraphic(AssetPaths.replay_btn__png, false, 232, 103);
+		restartBtn.x = 80;
+		restartBtn.y = FlxG.height - restartBtn.height - 40;
 		add(restartBtn);
 		
-		feedbackBtn = new FlxButton(FlxG.width - 114 - 20, FlxG.height - 75, "", clickFeedback);
-		feedbackBtn.loadGraphic(AssetPaths.feedback_btn__png);
+		feedbackBtn = new FlxButton(0, 0, "", clickFeedback);
+		feedbackBtn.loadGraphic(AssetPaths.feedback_btn__png, false, 232, 103);
+		feedbackBtn.x = FlxG.width - feedbackBtn.width - 80;
+		feedbackBtn.y = FlxG.height - restartBtn.height - 40;
 		add(feedbackBtn);
 
 		Main.LEVEL = 1;

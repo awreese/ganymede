@@ -59,12 +59,8 @@ class MapNode extends FlxObject {
 
 	public var gameMap:GameMap;
     
-	//public var pos: FlxVector;
-	//public var neighbors: Array<MapNode> = new Array();
-	
     public var neighbors:NeighborMap;
     
-    //public var neighbors2:Array<NodeEdge>;
     //private var edgesOut:EdgeMap; // ???
 	
 	// Game objects at this node
@@ -84,15 +80,8 @@ class MapNode extends FlxObject {
         
 		this.gameMap = gameMap;
         
-        //this.setPosition(x, y);
-        //this.setSize(NODE_SIZE, NODE_SIZE);
-		
-        
         this.neighbors = new NeighborMap();
         
-        //this.neighbors2 = new Array();
-        //this.edgesOut = new EdgeMap();
-		
         this.capturable = null;
         
         trace("node hitbox: " + this.getHitbox().toString());

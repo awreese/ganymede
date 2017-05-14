@@ -15,20 +15,28 @@ import tutorial.CapturingFactionTutorial;
  */
 class NextLevelState extends FlxState 
 {
-	private var background:FlxSprite;
+	private var foreground:FlxSprite;
 	private var congratulationsTxt:FlxText;
+	private var background:FlxSprite;
 	
 	override public function create():Void
 	{
 		Main.LEVEL++;
+		
 		// create background
 		background = new FlxSprite(0, 0);
-		background.loadGraphic(AssetPaths.nextlevelbg__png);
+		background.loadGraphic(AssetPaths.whitebg__png);
 		add(background);
+		
+		// create foreground
+		foreground = new FlxSprite(0, 0);
+		foreground.loadGraphic(AssetPaths.nextlevelbg__png, false, 1280, 922);
+		foreground.y = -foreground.height;
+		add(foreground);
 		
 		// create the congradulation text
 		congratulationsTxt = new FlxText(0, 20, 0, "Yay!\nYou did it!");
-		congratulationsTxt.setFormat("Consola", 40, FlxColor.BLACK);
+		congratulationsTxt.setFormat("Consola", 60, FlxColor.BLACK);
 		congratulationsTxt.alignment = CENTER;
 		congratulationsTxt.screenCenter(FlxAxes.XY);
 		add(congratulationsTxt);
@@ -41,6 +49,9 @@ class NextLevelState extends FlxState
 
 	override public function update(elapsed:Float):Void
 	{
+		if (foreground.y < 0.0) {
+			foreground.y += 400 * elapsed;
+		}
 		if (FlxG.mouse.justPressed) {
 			click();
 		}
