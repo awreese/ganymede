@@ -54,7 +54,7 @@ class Enemy extends NPC
 				
 				// check if getting captured planet is less than 70%
 				n = ratio >= 0.7 ? nodes.getRandom() : n;
-			
+								
 				var ships = n.getShipGroup(this.faction);
 			
 				// if the cp isn't that low, expand territory
@@ -92,9 +92,7 @@ class Enemy extends NPC
 	
 	// recursively go through nodes up to depth 3 to find best destination to go to
 	private function findDes(node:MapNode, visited:Array<MapNode>, depth:Int) :MapNode {
-		trace("node " + node);
 		var numShip = node.getFaction() == null ? 0 : node.getShipGroup(node.getFaction()).length;
-		trace("node num ships " + numShip);
 		// if hit depth 3, go back
 		if (depth == 3) {
 			return node;
