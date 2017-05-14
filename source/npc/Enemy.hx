@@ -51,6 +51,9 @@ class Enemy extends NPC
 						}
 					}
 				}
+				
+				// check if getting captured planet is less than 70%
+				n = ratio >= 0.7 ? nodes.getRandom() : n;
 			
 				var ships = n.getShipGroup(this.faction);
 			
