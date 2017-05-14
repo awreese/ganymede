@@ -3,6 +3,8 @@ package tutorial;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
+import flixel.input.FlxPointer;
+import flixel.math.FlxPoint;
 import flixel.ui.FlxButton;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
@@ -34,30 +36,35 @@ class SelectShipTutorial extends FlxState
 		waitTimer = 0.0;
 		
 		// create ship button
-		shipBtn = new FlxButton(166, 220, "", clickShip);
+		shipBtn = new FlxButton(472, 344, "", clickShip);
 		shipBtn.loadGraphic(AssetPaths.ship_1__png, false, 32, 32);
+		shipBtn.scrollFactor.set(1, 1);
 		add(shipBtn);
 		
 		// create cursor sprite
-		cursor = new FlxSprite(shipBtn.x + 41, shipBtn.y + 41);
+		cursor = new FlxSprite(shipBtn.x + 40, shipBtn.y + 40);
 		cursor.loadGraphic(AssetPaths.cursor__png, false, 22, 32);
 		add(cursor);
 		
 		// create nop planet
-		nop = new FlxSprite(406, 220);
+		nop = new FlxSprite(697, 344);
 		nop.loadGraphic(AssetPaths.uncontrolled_planet_1__png, false, 32, 32);
 		add(nop);
 		
 		// create mouse
 		mouse = new FlxSprite(0, 0);
 		mouse.loadGraphic(AssetPaths.mouse_left__png, false, 92, 141);
-		mouse.x = FlxG.width - mouse.width - 20;
-		mouse.y = FlxG.height - mouse.height - 10;
+		mouse.x = shipBtn.x - mouse.width / 4;
+		mouse.y = shipBtn.y + shipBtn.height + cursor.height / 2 + 10;
 		mouse.visible = false;
 		add(mouse);
 		
 		switchImage = true;
 		cursorInPlace = false;
+		
+		// zoom in
+		FlxG.camera.focusOn(new FlxPoint(592, 438));
+		FlxG.camera.zoom = FlxG.height / 320;
 		
 		super.create();
 	}

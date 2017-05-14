@@ -174,6 +174,7 @@ class Ship extends FlxSprite {
         this.health = blueprint.hitPoints;
         
 		this.destination = destination;
+		this.node = destination;
 		this.faction = faction;
 		this.stats = blueprint;
 		this.pos = destination.getPos();
@@ -284,7 +285,9 @@ class Ship extends FlxSprite {
 			if (progress > nodePath[0].length()) {
 				// If needed, move to the next edge
 				progress -= nodePath[0].length();
-				nodePath.shift();
+				node.removeShip(this);
+				node = nodePath.shift().n2;
+				node.addShip(this);
 			}
 		} else {
 			progress = 0;

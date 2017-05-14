@@ -36,7 +36,7 @@ class NextLevelState extends FlxState
 		
 		// create the congradulation text
 		congratulationsTxt = new FlxText(0, 20, 0, "Yay!\nYou did it!");
-		congratulationsTxt.setFormat("Consola", 40, FlxColor.BLACK);
+		congratulationsTxt.setFormat("Consola", 60, FlxColor.BLACK);
 		congratulationsTxt.alignment = CENTER;
 		congratulationsTxt.screenCenter(FlxAxes.XY);
 		add(congratulationsTxt);
@@ -50,7 +50,7 @@ class NextLevelState extends FlxState
 	override public function update(elapsed:Float):Void
 	{
 		if (foreground.y < 0.0) {
-			foreground.y += 200 * elapsed;
+			foreground.y += 400 * elapsed;
 		}
 		if (FlxG.mouse.justPressed) {
 			click();
