@@ -82,8 +82,7 @@ class SelectShipTutorial extends FlxState
 		}
 	}
 
-	override public function update(elapsed:Float):Void
-	{
+	override public function update(elapsed:Float):Void {
 		super.update(elapsed);
 		if (waitTimer < 0.75) {
 			waitTimer += elapsed;

@@ -106,7 +106,7 @@ class BluePrint {
 						?sh = 0.5,
 						?hp = 100.0,
 						?as = 2.0,
-						?ad = 25.0,
+						?ad = 10.0,
 						?cps = 5.0)
 	{
 		this.hull = (hull == null) ? FRIGATE : hull;

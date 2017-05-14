@@ -91,7 +91,6 @@ class PlayState extends FlxState
 			}
 			else
 			{
-				trace("Selected node " + n.getPosition().toString());
 				for (s in grpShips)
 				{
 					// only move the ships that are the player's
@@ -113,7 +112,6 @@ class PlayState extends FlxState
 			var n = gameMap.findNode(new FlxVector(FlxG.mouse.x, FlxG.mouse.y));
 			if (n != null)
 			{
-				trace("Ordered movement to " + n.getPosition().toString());
 				for (s in grpShips)
 				{
 					if (s.isSelected)
@@ -249,9 +247,10 @@ class PlayState extends FlxState
 	
     // TODO: Most (if not all) of this should be moved to GameMap and Ship
 	private function nodeUpdate(elapsed : Float):Void {
-		for (n in gameMap.nodes)
+		//for (n in gameMap.nodes)
+		for (n in gameMap.getNodeList())
 		{
-			var p : Planet = n.containPlanet() ? cast(n.getCaptureable(), Planet) : null;
+			var p : Planet = n.isPlanet() ? cast(n.getCaptureable(), Planet) : null;
 			var numShips:Map<FactionType, Int> = new Map<FactionType, Int>();
 			for (f in Faction.getEnums()) {
 				numShips.set(f, 0);
@@ -340,16 +339,17 @@ class PlayState extends FlxState
     // TODO: Move this into PlanetFactory
 	// produce ships for each planet (if they can)
 	private function produceShips(elapsed: Float):Void {
-		for (n in gameMap.nodes) {
+		//for (n in gameMap.nodes) {
+		for (n in gameMap.getNodeList()) {
 			// checks if there's a planet at n
-			if (!n.containPlanet()) {
+			if (!n.isPlanet()) {
 				continue;
 			}
 			// get the planet
 			var p = cast(n.getCaptureable(), Planet);
 			var pPos = p.getPos();
 			// find the MapNode for the planet
-			var node = gameMap.findNode(new FlxVector(pPos.x + (MapNode.NODE_SIZE / 2), pPos.y + (MapNode.NODE_SIZE / 2)));
+			var node = gameMap.findNode(new FlxVector(pPos.x + (MapNode.NODE_RADIUS / 2), pPos.y + (MapNode.NODE_RADIUS / 2)));
 			var ship:Ship = p.produceShip(node);
 			if (ship != null) {
 				grpShips.add(ship);

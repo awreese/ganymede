@@ -31,6 +31,10 @@ import map.MapNode.NodeGroup;
 
 using flixel.util.FlxSpriteUtil;
 
+typedef Id_to_Node = Map<String, MapNode>;
+
+typedef Node_to_Neighbors = Map<MapNode, NodeGroup>;
+
 /**
  * Game Map
  * 
@@ -47,11 +51,12 @@ class GameMap extends FlxSprite {
 
 	// list of nodes in current game map
 	//public var nodes:MapNodeList = [];
-	public var nodes:NodeGroup;
+	//public var nodes:NodeGroup;
+    
+    private var id_to_node:Id_to_Node;
+    private var node_to_neighbors:Node_to_Neighbors;
     
     private var selected:MapNode = null;
-	
-    private var numPlanets:Int;
 	
     private var factionShipCount:Map<FactionType, Int>; // Global ship count
 	private var factionControlledNodes:Map<FactionType, NodeGroup>;
@@ -59,22 +64,31 @@ class GameMap extends FlxSprite {
 	public function new(playState:PlayState, level: Int) {
 		super();
         
-		this.nodes = new NodeGroup();
-		this.numPlanets = 0;
+        loadGraphic("assets/images/mapbg.png", false, 400, 320);
         
-        this.factionShipCount = new Map<FactionType, Int>();
-		this.factionControlledNodes = new Map<FactionType, NodeGroup>();
-		
-        // initialize global faction data
-        for (faction in Faction.getEnums()) {
-            this.factionShipCount.set(faction, 0);
-			this.factionControlledNodes.set(faction, new NodeGroup());
-        }
+		//this.nodes = new NodeGroup();
+        //
+        //this.id_to_node = new Id_to_Node();
+        //this.node_to_neighbors = new Node_to_Neighbors();
+        //
+		//this.numPlanets = 0;
+        //
+        //this.factionShipCount = new Map<FactionType, Int>();
+		//this.factionControlledNodes = new Map<FactionType, NodeGroup>();
+		//
+        //// initialize global faction data
+        //for (faction in Faction.getEnums()) {
+            //this.factionShipCount.set(faction, 0);
+			//this.factionControlledNodes.set(faction, new NodeGroup());
+        //}
+        
+        this.setGraph();
 		
         // Log level start and time
         Main.LOGGER.logLevelStart(level, Date.now());
         
         // Load the nodes
+        trace("Building level: " + level);
 		switch (level) {
 			case 1:
 				levelOne(playState);
@@ -84,7 +98,8 @@ class GameMap extends FlxSprite {
 				levelThree(playState);
 		}
 		drawNodes();
-		for (n in nodes) {
+		//for (n in nodes) {
+		for (n in node_to_neighbors.keys()) {
 			var captureable = n.getCaptureable();
 			if (captureable != null) {
 				factionControlledNodes.get(captureable.getFaction().getFactionType()).add(n);
@@ -94,7 +109,8 @@ class GameMap extends FlxSprite {
 
 	public function findNode(v: FlxVector):MapNode {
 		//return nodes.filter(function(n) return n.contains(v))[0];
-		for (node in nodes) {
+		//for (node in nodes) {
+		for (node in node_to_neighbors.keys()) {
 			if (node.contains(v)) {
 				return node;
 			}
@@ -112,15 +128,56 @@ class GameMap extends FlxSprite {
      * These are convenience methods to help in designing levels.
      */
     
+    private function setGraph():Void {
+        trace("clearing graph");
+        
+        this.id_to_node = new Id_to_Node();
+        this.clearGraph(); // clean up any old entires
+        this.node_to_neighbors = new Node_to_Neighbors();
+        
+        this.factionShipCount = new Map<FactionType, Int>();
+		this.factionControlledNodes = new Map<FactionType, NodeGroup>();
+		
+        // initialize global faction data
+        for (faction in Faction.getEnums()) {
+            this.factionShipCount.set(faction, 0);
+			this.factionControlledNodes.set(faction, new NodeGroup());
+        }
+    }
+    
+    /**
+     * Clears out any pre-existing node neighbors
+     */
+    private function clearGraph():Void {
+        if (node_to_neighbors != null) {
+            for (ng in node_to_neighbors) {
+                for (node in ng) {
+                    if (node != null) node.clearNode();
+                }
+            }
+        }
+    }
+    
      /**
       * Adds new node to this graph.
       * @param node new node to add
       * @return true iff graph was modified, false otherwise
       */
-    private function addNode(node:MapNode):Bool {
-        // TODO: Fill this in
-		var added = this.nodes.add(node);
-        return added == node;
+    private function addNode(id:String, x:Float, y:Float):MapNode {
+        if (!id_to_node.exists(id)) {
+            var node = new MapNode(this, x, y);
+            id_to_node.set(id, node);
+            node_to_neighbors.set(node, new NodeGroup());
+            return node;
+        }
+        return null;
+    }
+    
+    private function connectByID(node_id1:String, node_id2:String):Bool {
+        if (!(id_to_node.exists(node_id1) && id_to_node.exists(node_id2))) {
+            return false;
+        }
+        return connect(id_to_node.get(node_id1), id_to_node.get(node_id2));
     }
     
     /**
@@ -130,9 +187,14 @@ class GameMap extends FlxSprite {
      * @return true iff graph was modified, false otherwise
      */
     private function connect(node1:MapNode, node2:MapNode):Bool {
-        // TODO: Fill this in
-		//var connected = node1.
-        return false;
+        return node1.connect(node2);
+    }
+    
+    private function addCapturableByID(node_id1:String, capturable:Capturable):Bool {
+        if (!(id_to_node.exists(node_id1) || capturable == null)) {
+            return false;
+        }
+        return addCapturable(id_to_node.get(node_id1), capturable);
     }
     
     /**
@@ -142,8 +204,7 @@ class GameMap extends FlxSprite {
      * @return true iff node was modified, false otherwise
      */
     private function addCapturable(node:MapNode, capturable:Capturable):Bool {
-        // TODO: Fill this in
-        return false;
+        return node.setCapturable(capturable);
     }
      
     /*
@@ -153,10 +214,18 @@ class GameMap extends FlxSprite {
      * other general queries made via MapNode game object reside on.
      */
     
-     /**
-      * Returns the total count of ships on the map.
-      * @return total count of ships on the map
-      */
+    public function getNodeList():Array<MapNode> {
+        var result:Array<MapNode> = new Array();
+        for (node in node_to_neighbors.keys()) {
+            result.push(node);
+        }
+        return result.copy();
+    }
+
+    /**
+    * Returns the total count of ships on the map.
+    * @return total count of ships on the map
+    */
     public function getGlobalShipCount():Int {
         var totalCount = 0;
         for (shipCount in this.factionShipCount) {
@@ -218,10 +287,11 @@ class GameMap extends FlxSprite {
 	
 	private function drawNodes():Void {
 		// Loads an empty sprite for the map background
-		loadGraphic("assets/images/mapbg.png", false, 400, 320);
+		//loadGraphic("assets/images/mapbg.png", false, 400, 320);
 
 		// Draw the nodes to the background
-		for (n in nodes)
+		//for (n in nodes)
+		for (n in node_to_neighbors.keys())
 		{
 			n.drawTo(this);
 		}
@@ -230,109 +300,89 @@ class GameMap extends FlxSprite {
 	// level 1
 	private function levelOne(playState:PlayState):Void {
 		// create nodes
-		var n1 = new MapNode(this, 100, 150);
-		var n2 = new MapNode(this, 300, 150);
+        var n1 = this.addNode("node1", 100.0, 150.0);
+		var n2 = this.addNode("node2", 300.0, 150.0);
 		
 		// create edges
-		n1.neighbors.push(n2);
-		n2.neighbors.push(n1);
+        this.connectByID("node1", "node2");
+        this.connectByID("node2", "node1");
 		
 		// draw the nodes
-		//nodes = [n1, n2];
-		nodes.add(n1);
-		nodes.add(n2);
 		//drawNodes();
 		
 		// set captureable
-		var n1P = new Planet(playState, n1, new Faction(FactionType.PLAYER), new PlanetStat(new BluePrint(HullType.FRIGATE)));
-		var n2P = new Planet(playState, n2, new Faction(FactionType.NOP), new PlanetStat(new BluePrint(HullType.FRIGATE)));
+		var n1P = new Planet(playState, this.id_to_node.get("node1"), new Faction(FactionType.PLAYER), new PlanetStat(new BluePrint(HullType.FRIGATE)));
+		var n2P = new Planet(playState, this.id_to_node.get("node2"), new Faction(FactionType.NOP), new PlanetStat(new BluePrint(HullType.FRIGATE)));
 
-		n1.setCapturable(n1P);
-		n2.setCapturable(n2P);
+        this.addCapturableByID("node1", n1P);
+        this.addCapturableByID("node2", n2P);
 		FlxG.state.add(n1P);
 		FlxG.state.add(n2P);
-		numPlanets = 2;
 	}
 	
 	// level 2
 	private function levelTwo(playState:PlayState):Void {
 		// make nodes
-		var n1 = new MapNode(this, 50, 150);
-		var n2 = new MapNode(this, 200, 150);
-		var n3 = new MapNode(this, 350, 150);
+		addNode("node1", 50, 150);
+		addNode("node2", 200, 150);
+        addNode("node3", 350, 150);
 		
 		// make edges
-		n1.neighbors.push(n2);
-		n2.neighbors.push(n1);
-		n2.neighbors.push(n3);
-		n3.neighbors.push(n2);
-		//nodes = [n1, n2, n3];
-		nodes.add(n1);
-		nodes.add(n2);
-		nodes.add(n3);
-		
+        connectByID("node1", "node2");
+        connectByID("node2", "node3");
+        
+        //drawNodes();
+        
 		// set captureable
-		var n1P = new Planet(playState, n1, new Faction(FactionType.PLAYER), new PlanetStat(new BluePrint(HullType.FRIGATE, 30.0), 10, 3.0));
-		var n2P = new Planet(playState, n2, new Faction(FactionType.NOP), new PlanetStat(new BluePrint(HullType.FRIGATE)));
-		var n3P = new Planet(playState, n3, new Faction(FactionType.ENEMY_1),
-					new PlanetStat(new BluePrint(HullType.FRIGATE, 15.0, 0.3, 100.0, 1.0, 7.0)));
+		var n1P = new Planet(playState, id_to_node.get("node1"), new Faction(FactionType.PLAYER), new PlanetStat(new BluePrint(HullType.FRIGATE, 30.0), 10, 3.0));
+		var n2P = new Planet(playState, id_to_node.get("node2"), new Faction(FactionType.NOP), new PlanetStat(new BluePrint(HullType.FRIGATE)));
+		var n3P = new Planet(playState, id_to_node.get("node3"), new Faction(FactionType.ENEMY_1), new PlanetStat(new BluePrint(HullType.FRIGATE, 15.0, 0.3, 100.0, 1.0, 7.0)));
 		
-		n1.setCapturable(n1P);
-		n2.setCapturable(n2P);
-		n3.setCapturable(n3P);
+        addCapturableByID("node1", n1P);
+        addCapturableByID("node2", n2P);
+        addCapturableByID("node3", n3P);
+        
 		FlxG.state.add(n1P);
 		FlxG.state.add(n2P);
 		FlxG.state.add(n3P);
-		numPlanets = 3;
 	}
 	
 	// level 3
 	public function levelThree(playState:PlayState):Void {
 		// make nodes
-		var n1 =  new MapNode(this, 50, 50);
-		var n2 = new MapNode(this, 100, 200);
-		var n3 = new MapNode(this, 300, 70);
-		var n4 = new MapNode(this, 270, 250);
+        var n1 = addNode("node1", 50, 50);
+		var n2 = addNode("node2", 100, 200);
+        var n3 = addNode("node3", 300, 70);
+        var n4 = addNode("node4", 270, 250);
 
 		// make edges
-		n1.neighbors.push(n2);
-		n2.neighbors.push(n1);
+        connectByID("node1", "node2");
+        connectByID("node2", "node3");
+        connectByID("node2", "node4");
+        connectByID("node3", "node4");
 
-		n2.neighbors.push(n3);
-		n3.neighbors.push(n2);
-		n2.neighbors.push(n4);
-		n4.neighbors.push(n2);
-
-		n3.neighbors.push(n4);
-		n4.neighbors.push(n3);
-
-		//nodes = [n1, n2, n3, n4];
-		nodes.add(n1);
-		nodes.add(n2);
-		nodes.add(n3);
-		nodes.add(n4);
-				
 		// set captureable
-		var n1P = new Planet(playState, n1, new Faction(FactionType.PLAYER), new PlanetStat(new BluePrint(HullType.FRIGATE, 30.0), 10, 3.0));
-		var n3P = new Planet(playState, n3, new Faction(FactionType.NOP), new PlanetStat(new BluePrint(HullType.FRIGATE)));
-		var n4P = new Planet(playState, n4, new Faction(FactionType.ENEMY_1),
-					new PlanetStat(new BluePrint(HullType.FRIGATE, 20.0, 0.3, 100.0, 1.0, 8.0)));
-		n1.setCapturable(n1P);
-		n3.setCapturable(n3P);
-		n4.setCapturable(n4P);
+		var n1P = new Planet(playState, id_to_node.get("node1"), new Faction(FactionType.PLAYER), new PlanetStat(new BluePrint(HullType.FRIGATE, 30.0), 10, 3.0));
+		var n3P = new Planet(playState, id_to_node.get("node3"), new Faction(FactionType.NOP), new PlanetStat(new BluePrint(HullType.FRIGATE)));
+		var n4P = new Planet(playState, id_to_node.get("node4"), new Faction(FactionType.ENEMY_1), new PlanetStat(new BluePrint(HullType.FRIGATE, 20.0, 0.3, 100.0, 1.0, 8.0)));
+        
+        addCapturableByID("node1", n1P);
+        addCapturableByID("node3", n3P);
+        addCapturableByID("node4", n4P);
+        
 		FlxG.state.add(n1P);
 		FlxG.state.add(n3P);
 		FlxG.state.add(n4P);
-		numPlanets = 3;
 	}
 	
 	/*
 	 * return the amount of player planet in the map
 	 */
 	public function getNumPlayerPlanets():Int {
-		var numPlayerPlanets = 0;
-		for (n in nodes) {
-			if (n.containPlanet()) {
+        var numPlayerPlanets = 0;
+		//for (n in nodes) {
+		for (n in node_to_neighbors.keys()) {
+			if (n.isPlanet()) {
 				var c = cast(n.getCaptureable(), Planet);
 				if (c.getFaction().getFactionType() == FactionType.PLAYER) {
 					numPlayerPlanets++;
@@ -346,7 +396,11 @@ class GameMap extends FlxSprite {
 	 * return number of planets on map
 	 */
 	public function getNumPlanets():Int {
-		return numPlanets;
+        var planetCount:Int = 0;
+        for (node in node_to_neighbors.keys()){
+            if (node.isPlanet()) planetCount++;
+        }
+        return planetCount;
 	}
 }
 
