@@ -51,6 +51,9 @@ class Enemy extends NPC
 						}
 					}
 				}
+				
+				// check if getting captured planet is less than 70%
+				n = ratio >= 0.7 ? nodes.getRandom() : n;
 			
 				var ships = n.getShipGroup(this.faction);
 			
@@ -115,6 +118,9 @@ class Enemy extends NPC
 				// if the returned node doesn't have a faction, is not captureable, check next one
 				// or if returned node is of this.faction, check next one
 				continue;
+			}
+			if (recurseNode.getFaction() == FactionType.NOP) {
+				return recurseNode; // enemy aim for nop planets first
 			}
 			if (des.getFaction() == null || des.getFaction() == this.faction) {
 				// if des have no faction, set des to recurseNode
