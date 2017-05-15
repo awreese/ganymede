@@ -9,6 +9,7 @@ class Main extends Sprite
 {
 	public static var LOGGER: CapstoneLogger;
 	public static var LEVEL: Int;
+	public static inline var FINAL_LEVEL: Int = 3;
 	public function new()
 	{
 		LEVEL = 1;

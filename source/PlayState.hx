@@ -43,12 +43,12 @@ class PlayState extends FlxState
 	private var grpPlanets: FlxTypedGroup<gameUnits.capturable.Planet>;
 	private var rand:FlxRandom;
 	private var numPlayerFaction:Int;
-	private var enemy1: Enemy;
+	private var enemies: Array<Enemy>;
 
 	override public function create(): Void
 	{
 		rand = new FlxRandom();
-		enemy1 = new Enemy(FactionType.ENEMY_1, 10);
+		enemies = new Array<Enemy>();
 		// Initialize the map
 		grpMap = new FlxTypedGroup<GameMap>();
 		add(grpMap);
@@ -60,6 +60,16 @@ class PlayState extends FlxState
 		grpShips = new FlxTypedGroup<gameUnits.Ship>();
 		add(grpShips);
 
+		// add the enemies
+		for (faction in Faction.getEnums()) {
+			if (faction == null || faction == FactionType.PLAYER || faction ==  FactionType.NOP || faction == FactionType.NEUTRAL) {
+				continue;
+			}
+			if (gameMap.getControlledNodes(faction).length > 0) {
+				enemies.push(new Enemy(faction, 10));
+			}
+		}
+		
 		super.create();
 	}
 
@@ -124,7 +134,14 @@ class PlayState extends FlxState
 		}
 		
 		// enemy turn
-		enemy1.makeMove(gameMap.getControlledNodes(enemy1.getFaction()));
+		for (enemy in enemies) {
+			var nodes = gameMap.getControlledNodes(enemy.getFaction());
+			if (nodes.length > 0) {
+				// make a move if there are controlling factions
+				enemy.makeMove(nodes);
+			}
+		}
+		//enemy1.makeMove(gameMap.getControlledNodes(enemy1.getFaction()));
 		
 		// Make ships move by flocking
 		shipFlocking(elapsed);
@@ -140,7 +157,7 @@ class PlayState extends FlxState
 		
 		// if captured all the planets, progress
 		if (gameMap.getNumPlayerPlanets() == gameMap.getNumPlanets()) {
-			if (Main.LEVEL == 3) {
+			if (Main.LEVEL == Main.FINAL_LEVEL) {
 				FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
 				FlxG.switchState(new FinishGameState());
 				});

@@ -242,39 +242,12 @@ class Ship extends FlxSprite {
 
 	override public function update(elapsed:Float):Void {
 		// check faction, take appropriate actions, etc..
-		/*switch (this.faction.getFaction())  {
-			case NOP:
-				trace("NOP Ship " + this.faction.getColor().toWebString);
-			case PLAYER:
-				trace("Player Ship " + this.faction.getColor().toWebString);
-			case NEUTRAL:
-				trace("Neutral Ship " + this.faction.getColor().toWebString);
-			default:
-				trace("Enemy Ship #" + this.faction.getColor().toWebString);
-		}*/
-
 		// Change the sprite to show when the ship is selected
 		if (isSelected) {
 			loadGraphic("assets/images/ship_1_selected.png", false, 32, 32);
 		} else {
-			switch (this.faction.getFactionType()) {
-				case PLAYER:
-					loadGraphic(AssetPaths.ship_1__png, false);
-				case ENEMY_1:
-					loadGraphic(AssetPaths.enemyship_1__png, false);
-				case ENEMY_2:
-					loadGraphic(AssetPaths.enemyship_1__png, false);
-				case ENEMY_3:
-					loadGraphic(AssetPaths.enemyship_1__png, false);
-				case ENEMY_4:
-					loadGraphic(AssetPaths.enemyship_1__png, false);
-				case ENEMY_5:
-					loadGraphic(AssetPaths.enemyship_1__png, false);
-				case ENEMY_6:
-					loadGraphic(AssetPaths.enemyship_1__png, false);
-				case NEUTRAL:
-					loadGraphic(AssetPaths.ship_1__png, false);
-				default:
+			if (this.faction.getFactionType() == FactionType.PLAYER) {
+				loadGraphic(AssetPaths.ship_1__png, false);
 			}
 		}
 
@@ -285,9 +258,12 @@ class Ship extends FlxSprite {
 			if (progress > nodePath[0].length()) {
 				// If needed, move to the next edge
 				progress -= nodePath[0].length();
-				node.removeShip(this);
+				//node.removeShip(this);
 				node = nodePath.shift().n2;
 				node.addShip(this);
+			} else if (node != null && this.getPosition().distanceTo(node.getPosition()) > 20) {
+				node.removeShip(this); // detach this ship from node if distance is > than 20
+				node = null; // set node to null
 			}
 		} else {
 			progress = 0;

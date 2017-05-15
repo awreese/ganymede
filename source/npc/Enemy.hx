@@ -3,6 +3,7 @@ package npc;
 import faction.CaptureEngine;
 import faction.Faction.FactionType;
 import flixel.group.FlxGroup.FlxTypedGroup;
+import flixel.math.FlxRandom;
 import flixel.util.FlxTimer;
 import gameUnits.Ship;
 import gameUnits.capturable.Capturable;
@@ -16,10 +17,12 @@ class Enemy extends NPC
 {
 	// keep track of how much time has passed
 	private var timer: FlxTimer;
-	// 
 	private var time: Int;
 	
+	private var rand:FlxRandom;
+	
 	public function new(faction:FactionType, time: Int) {
+		rand = new FlxRandom();
 		this.time = time;
 		// timer for checking when enemy make a move
 		timer = new FlxTimer();
@@ -34,15 +37,15 @@ class Enemy extends NPC
 	 */
 	public function makeMove(nodes: FlxTypedGroup<MapNode>/*, elapsed: Float*/) {
 		//timer += elapsed;
-		if (nodes.length > 0) {
+		var nodesArr: Array<MapNode> = nodes.members;
+		if (nodesArr.length > 0) {
 			// checks if timer is finished
 			if (timer.finished) {
 				// if is finished, make a move
-			
 				// find node with lowest cp ratio
-				var n: MapNode = nodes.getRandom();
+				var n: MapNode = nodesArr[rand.int(0, nodesArr.length - 1)];
 				var ratio: Float = 1.0;
-				for (node in nodes) {
+				for (node in nodesArr) {
 					var captureable = node.getCaptureable();
 					if (captureable.getCP() < captureable.getTotalCP()) {
 						if (captureable.getCP() / captureable.getTotalCP() < ratio) {
@@ -53,12 +56,12 @@ class Enemy extends NPC
 				}
 				
 				// check if getting captured planet is less than 70%
-				n = ratio >= 0.7 ? nodes.getRandom() : n;
-			
+				n = ratio >= 0.5 ? nodesArr[rand.int(0, nodesArr.length - 1)] : n;
+								
 				var ships = n.getShipGroup(this.faction);
 			
 				// if the cp isn't that low, expand territory
-				if (ratio >= 0.7 && ships.length > 0) {
+				if (ratio >= 0.5 && ships.length > 0) {
 					var des: MapNode = null;
 					var visited: Array<MapNode> = new Array<MapNode>();
 					des = findDes(n, visited, 0);
@@ -69,14 +72,12 @@ class Enemy extends NPC
 				
 				} else if (ships.length > 0) {
 					// if there's other planet
-					if (nodes.length != 1) {
+					if (nodesArr.length != 1) {
 						// send the ships at n to another planet of this.faction
-						var des:MapNode = nodes.getRandom();
-						var captureable:Capturable = des.getCaptureable();
+						var des:MapNode = nodesArr[rand.int(0, nodesArr.length - 1)];
 						// find a node that's not this one
-						while (captureable.getCP() / captureable.getTotalCP() == ratio) {
-							des = nodes.getRandom();
-							captureable = des.getCaptureable();
+						while (des == n) {
+							des = nodesArr[rand.int(0, nodesArr.length - 1)];
 						}
 						
 						// move ships to des
@@ -92,9 +93,7 @@ class Enemy extends NPC
 	
 	// recursively go through nodes up to depth 3 to find best destination to go to
 	private function findDes(node:MapNode, visited:Array<MapNode>, depth:Int) :MapNode {
-		trace("node " + node);
 		var numShip = node.getFaction() == null ? 0 : node.getShipGroup(node.getFaction()).length;
-		trace("node num ships " + numShip);
 		// if hit depth 3, go back
 		if (depth == 3) {
 			return node;
@@ -107,7 +106,8 @@ class Enemy extends NPC
 		visited.push(node);
 		var des: MapNode = node;
 		// go through each neighbor
-		for (n in node.neighbors) {
+		var neighbors = node.neighbors.keys();
+		for (n in neighbors) {
 			if (visited.indexOf(n) != -1) {
 				// if already looked at n, skip
 				continue;
