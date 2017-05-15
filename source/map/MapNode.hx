@@ -95,6 +95,13 @@ class MapNode extends FlxObject {
     
     override public function update(elapsed:Float):Void {
         super.update(elapsed);
+		/*if (this.isPlanet()) {
+			var p:Planet = cast(capturable, Planet); // turn to planet
+			var ship:Ship = p.produceShip(); // get ship
+			if (ship != null) {
+				this.addShip(ship); // add ship to this
+			}
+		}*/
     }
     
     /*

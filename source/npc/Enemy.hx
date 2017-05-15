@@ -56,12 +56,12 @@ class Enemy extends NPC
 				}
 				
 				// check if getting captured planet is less than 70%
-				n = ratio >= 0.7 ? nodesArr[rand.int(0, nodesArr.length - 1)] : n;
+				n = ratio >= 0.5 ? nodesArr[rand.int(0, nodesArr.length - 1)] : n;
 								
 				var ships = n.getShipGroup(this.faction);
 			
 				// if the cp isn't that low, expand territory
-				if (ratio >= 0.7 && ships.length > 0) {
+				if (ratio >= 0.5 && ships.length > 0) {
 					var des: MapNode = null;
 					var visited: Array<MapNode> = new Array<MapNode>();
 					des = findDes(n, visited, 0);

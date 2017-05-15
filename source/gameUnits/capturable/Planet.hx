@@ -238,9 +238,9 @@ class Planet extends Capturable {
 		{
 			shipTimer = 0.0;
 			numShips.set(faction.getFactionType(), numShips.get(faction.getFactionType()) + 1);
-			var stat = new BluePrint(pStats.ship.hull, pStats.ship.maxVelocity, pStats.ship.shield, pStats.ship.hitPoints, pStats.ship.attackSpeed, pStats.ship.attackDamage, pStats.ship.cps);
+			//var stat = new BluePrint(pStats.ship.hull, pStats.ship.maxVelocity, pStats.ship.shield, pStats.ship.hitPoints, pStats.ship.attackSpeed, pStats.ship.attackDamage, pStats.ship.cps);
 			//return new Ship(playState, node, faction, stat);
-			return new Ship(node, faction, stat);
+			return new Ship(this.node, faction, pStats.ship.clone());
 		}
 		// if can't produce ship, return null
 		return null;
