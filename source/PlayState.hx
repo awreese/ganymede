@@ -150,7 +150,7 @@ class PlayState extends FlxState
 		shipCombat(elapsed);
 
 		// check where each ships are and updating each planet, and battle if there's opposing factions
-		//nodeUpdate(elapsed);
+		nodeUpdate(elapsed);
 		
 		// produce ships
 		produceShips(elapsed);
