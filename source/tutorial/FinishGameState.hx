@@ -46,7 +46,7 @@ class FinishGameState extends FlxState
 
 		// create and add replay button
 		restartBtn = new FlxButton(0, 0, "", clickRestart);
-		restartBtn.loadGraphic(AssetPaths.replay_btn__png, false, 232, 103);
+		restartBtn.loadGraphic(AssetPaths.restart_btn__png, false, 232, 103);
 		restartBtn.x = 80;
 		restartBtn.y = FlxG.height - restartBtn.height - 40;
 		add(restartBtn);
@@ -60,6 +60,7 @@ class FinishGameState extends FlxState
 		Main.LEVEL = 1;
 
 		super.create();
+		applauseSnd.play();
 	}
 
 	override public function update(elapsed:Float):Void
