@@ -1,0 +1,189 @@
+{
+	"ai": 7,
+	"nodes": [
+		{
+			"id": "node1",
+			"x": 540.0,
+			"y": 260.0,
+			"faction": "enemy1",
+			"captureable": {
+				"object": "planet",
+				"blueprint": {
+					"hull": "frigate",
+					"maxVel": 30.0,
+					"sh": 0.6,
+					"hp": 100.0,
+					"as": 2.0,
+					"ad": 12.0,
+					"cps": 5.0
+				},
+				"cap": 10,
+				"prod": 6.0,
+				"prod_thresh": 0.5,
+				"cap_lvl": 0,
+				"tech_lvl": 0,
+				"base_cost": 10,
+				"cap_per_lvl": 5,
+				"tech_per_lvl": 2.0
+			}
+		},
+
+		{
+			"id": "node2",
+			"x": 540.0,
+			"y": 460.0,
+			"faction": "nop",
+			"captureable": {
+				"object": "planet",
+				"blueprint": {
+					"hull": "frigate",
+					"maxVel": 30.0,
+					"sh": 0.5,
+					"hp": 100.0,
+					"as": 2.0,
+					"ad": 10.0,
+					"cps": 5.0
+				},
+				"cap": 10,
+				"prod": 5.0,
+				"prod_thresh": 0.5,
+				"cap_lvl": 0,
+				"tech_lvl": 0,
+				"base_cost": 10,
+				"cap_per_lvl": 5,
+				"tech_per_lvl": 2.0
+			}
+		},
+		{
+			"id": "node3",
+			"x": 640.0,
+			"y": 360.0,
+			"faction": "player",
+			"captureable": {
+				"object": "planet",
+				"blueprint": {
+					"hull": "frigate",
+					"maxVel": 30.0,
+					"sh": 0.5,
+					"hp": 100.0,
+					"as": 2.0,
+					"ad": 10.0,
+					"cps": 5.0
+				},
+				"cap": 10,
+				"prod": 3.0,
+				"prod_thresh": 0.5,
+				"cap_lvl": 0,
+				"tech_lvl": 0,
+				"base_cost": 10,
+				"cap_per_lvl": 5,
+				"tech_per_lvl": 2.0
+			}
+
+		},
+		{
+			"id": "node4",
+			"x": 700.0,
+			"y": 240.0,
+			"faction": "enemy1",
+			"captureable": {
+				"object": "planet",
+				"blueprint": {
+					"hull": "frigate",
+					"maxVel": 30.0,
+					"sh": 0.3,
+					"hp": 100.0,
+					"as": 2.0,
+					"ad": 8.0,
+					"cps": 5.0
+				},
+				"cap": 10,
+				"prod": 5.0,
+				"prod_thresh": 0.5,
+				"cap_lvl": 0,
+				"tech_lvl": 0,
+				"base_cost": 10,
+				"cap_per_lvl": 5,
+				"tech_per_lvl": 2.0
+			}
+		},
+		{
+			"id": "node5",
+			"x": 790.0,
+			"y": 360.0,
+			"faction": "nop",
+			"captureable": {
+				"object": "planet",
+				"blueprint": {
+					"hull": "frigate",
+					"maxVel": 30.0,
+					"sh": 0.5,
+					"hp": 100.0,
+					"as": 2.0,
+					"ad": 10.0,
+					"cps": 5.0
+				},
+				"cap": 10,
+				"prod": 5.0,
+				"prod_thresh": 0.5,
+				"cap_lvl": 0,
+				"tech_lvl": 0,
+				"base_cost": 10,
+				"cap_per_lvl": 5,
+				"tech_per_lvl": 2.0
+			}
+		},
+		{
+			"id": "node6",
+			"x": 700.0,
+			"y": 460.0,
+			"faction": "nop",
+			"captureable": {
+				"object": "planet",
+				"blueprint": {
+					"hull": "frigate",
+					"maxVel": 30.0,
+					"sh": 0.5,
+					"hp": 100.0,
+					"as": 2.0,
+					"ad": 10.0,
+					"cps": 5.0
+				},
+				"cap": 10,
+				"prod": 5.0,
+				"prod_thresh": 0.5,
+				"cap_lvl": 0,
+				"tech_lvl": 0,
+				"base_cost": 10,
+				"cap_per_lvl": 5,
+				"tech_per_lvl": 2.0
+			}
+		}
+	],
+	"neighbors":[ 
+		{
+			"id": "node1",
+			"neighbor": ["node2", "node3", "node4"]
+		},
+		{
+			"id": "node2",
+			"neighbor": ["node1", "node3", "node6"]
+		},
+		{
+			"id": "node3",
+			"neighbor": ["node1", "node2", "node4", "node5", "node6"]
+		},
+		{
+			"id": "node4",
+			"neighbor": ["node1", "node3", "node5"]
+		},
+		{
+			"id": "node5",
+			"neighbor": ["node4", "node3", "node6"]
+		},
+		{
+			"id": "node6",
+			"neighbor": ["node3", "node2", "node5"]
+		}
+	]
+}

@@ -22,6 +22,7 @@ import flixel.FlxG;
 import flixel.FlxState;
 import flixel.group.FlxGroup;
 import flixel.math.FlxVector;
+import flixel.system.FlxSound;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import gameUnits.capturable.Planet;
@@ -44,11 +45,18 @@ class PlayState extends FlxState
 	private var rand:FlxRandom;
 	private var numPlayerFaction:Int;
 	private var enemies: Array<Enemy>;
+	private var laser_snd: FlxSound;
 
 	override public function create(): Void
 	{
 		rand = new FlxRandom();
 		enemies = new Array<Enemy>();
+		#if flash
+			laser_snd = FlxG.sound.load(AssetPaths.laser__mp3);
+		#else
+			laser_snd = FlxG.sound.load(AssetPaths.laser__wav);
+		#end
+		laser_snd.looped = false;
 		// Initialize the map
 		grpMap = new FlxTypedGroup<GameMap>();
 		add(grpMap);
@@ -66,7 +74,7 @@ class PlayState extends FlxState
 				continue;
 			}
 			if (gameMap.getControlledNodes(faction).length > 0) {
-				enemies.push(new Enemy(faction, 10));
+				enemies.push(new Enemy(faction, 7));
 			}
 		}
 		
@@ -155,8 +163,19 @@ class PlayState extends FlxState
 		// produce ships
 		produceShips(elapsed);
 		
+		// check if there are other ships of other factions
+		var noOtherFaction: Bool = true;
+		for (ship in grpShips) {
+			if (ship.exists) {
+				if (ship.getFaction() != FactionType.PLAYER) {
+					noOtherFaction = false;
+					break;
+				}
+			}
+		}
+		
 		// if captured all the planets, progress
-		if (gameMap.getNumPlayerPlanets() == gameMap.getNumPlanets()) {
+		if (gameMap.getNumPlayerPlanets() == gameMap.getNumPlanets() && noOtherFaction) {
 			if (Main.LEVEL == Main.FINAL_LEVEL) {
 				FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
 				FlxG.switchState(new FinishGameState());
@@ -255,6 +274,7 @@ class PlayState extends FlxState
 						if (s1.weapon.fireAtTarget(s2)) {
 							s1.weapon.currentBullet.target = s2;
 							add(s1.weapon.currentBullet);
+							laser_snd.play();
 						}
 					}
 				}

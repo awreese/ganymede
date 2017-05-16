@@ -101,16 +101,6 @@ class GameMap extends FlxSprite {
 		
 		parseLevel(playState);
         
-        // Load the nodes
-       /* trace("Building level: " + level);
-		switch (level) {
-			case 1:
-				levelOne(playState);
-			case 2:
-				levelTwo(playState);
-			default:
-				levelThree(playState);
-		}*/
 		drawNodes();
 		//for (n in nodes) {
 		for (n in node_to_neighbors.keys()) {
@@ -120,7 +110,7 @@ class GameMap extends FlxSprite {
 			}
 		}
 		// TODO: figure out how to not get any gray area when zooming in to the corner of the map
-		/*minX = minX - MapNode.NODE_RADIUS * 2 - 10 < 0.0 ? 0.0 : minX - MapNode.NODE_RADIUS * 2 - 10; // get offset for node
+		minX = minX - MapNode.NODE_RADIUS * 2 - 10 < 0.0 ? 0.0 : minX - MapNode.NODE_RADIUS * 2 - 10; // get offset for node
 		minY = minY - MapNode.NODE_RADIUS * 2 - 10 < 0.0 ? 0.0 : minY - MapNode.NODE_RADIUS * 2 - 10; // get offset for node
 		maxY = maxY + MapNode.NODE_RADIUS * 2 + 10 < 0.0 ? FlxG.width : maxY + MapNode.NODE_RADIUS * 2 + 10; // get offset for node
 		maxX = maxX + MapNode.NODE_RADIUS * 2 + 10 < 0.0 ? FlxG.width : maxX + MapNode.NODE_RADIUS * 2 + 10; // get offset for node
@@ -128,7 +118,7 @@ class GameMap extends FlxSprite {
 		FlxG.camera.focusOn(new FlxPoint((maxX + minX) / 2, (maxY + minY) / 2));
 		var z = FlxG.stage.width  / (maxX - minX);
 		z = z > FlxG.stage.height / (maxY - minY) ? FlxG.stage.height / (maxY - minY) : z; // set to smallest zoom
-		FlxG.camera.zoom = z > 1.25 ? z : 1; // zoom into map*/
+		FlxG.camera.zoom = z > 1.25 ? z : 1; // zoom into map
 	}
 
 	public function findNode(v: FlxVector):MapNode {

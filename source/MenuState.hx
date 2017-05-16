@@ -21,6 +21,7 @@ package;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
+import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.util.FlxAxes;
@@ -70,7 +71,7 @@ class MenuState extends FlxState
 	private function clickPlay():Void {
 		if (Main.LEVEL == 1) {
 			FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
-				FlxG.switchState(new SelectShipTutorial());
+				FlxG.switchState(new GameOverState());
 			});
 		} else {
 			FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {

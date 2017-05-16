@@ -1,8 +1,9 @@
 {
+	"ai": 10,
 	"nodes": [
 		{
 			"id": "node1",
-			"x": 50.0,
+			"x": 150.0,
 			"y": 150.0,
 			"faction": "player",
 			"captureable": {
@@ -29,7 +30,7 @@
 
 		{
 			"id": "node2",
-			"x": 200.0,
+			"x": 300.0,
 			"y": 150.0,
 			"faction": "nop",
 			"captureable": {
@@ -56,7 +57,7 @@
 		},
 		{
 			"id": "node3",
-			"x": 350.0,
+			"x": 450.0,
 			"y": 150.0,
 			"faction": "enemy1",
 			"captureable": {

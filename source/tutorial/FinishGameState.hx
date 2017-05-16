@@ -3,6 +3,7 @@ package tutorial;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
+import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.util.FlxAxes;
@@ -20,9 +21,17 @@ class FinishGameState extends FlxState
 	private var restartBtn:FlxButton;
 	private var background:FlxSprite;
 	private var feedbackBtn:FlxButton;
+	private var applauseSnd:FlxSound;
 
 	override public function create():Void
 	{
+		// load sound effect
+		#if flash
+			applauseSnd = FlxG.sound.load(AssetPaths.applause__mp3);
+		#else
+			applauseSnd = FlxG.sound.load(AssetPaths.applause__wav);
+		#end
+		
 		// create and add the background image
 		background = new FlxSprite(0, 0);
 		background.loadGraphic(AssetPaths.finishgamebg__png);
