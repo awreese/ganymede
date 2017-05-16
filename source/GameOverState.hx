@@ -27,9 +27,9 @@ class GameOverState extends FlxState
 		
 		// create and add replay button
 		replayBtn = new FlxButton(0, 0, "", clickReplay);
-		replayBtn.loadGraphic(AssetPaths.replay_btn__png, false, 232, 103);
-		replayBtn.x = (FlxG.width / 2) - (replayBtn.width / 2);
-		replayBtn.y = (FlxG.height) - replayBtn.height - 10;
+		replayBtn.loadGraphic(AssetPaths.replay_btn__png, false, 176, 78);
+		replayBtn.x = (FlxG.width / 2) - replayBtn.width + 10;
+		replayBtn.y = (FlxG.height) - 2 * replayBtn.height - 60;
 		add(replayBtn);
 		
 		super.create();
