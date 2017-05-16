@@ -21,10 +21,8 @@ package gameUnits;
 import faction.Faction;
 import flixel.FlxG;
 import flixel.FlxSprite;
-import flixel.addons.weapon.FlxWeapon;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxRect;
-import flixel.math.FlxPoint;
 import flixel.math.FlxVector;
 import flixel.text.FlxText;
 import flixel.util.helpers.FlxBounds;
@@ -128,6 +126,89 @@ class BluePrint {
 }
 
 /**
+ * Radar
+ * Represents the ships that can be interacted with.
+ * Friends are ships that can be flocked with.
+ * Foes are ships that can be targeted through combat.
+ * 
+ * @author Drew Reese
+ */
+private class Radar {
+    
+    private var faction:FactionType;
+    private var range:Float;
+    private var friend:ShipGroup;
+    private var foe:ShipGroup;
+    
+    /**
+     * Creates new RADAR object for specified faction object.
+     * @param faction   faction of the owner of this shiney new radar
+     */
+    public function new(faction:FactionType, range:Float = 50.0) {
+        this.faction = faction;
+        this.range = range;
+        this.friend = new ShipGroup();
+        this.foe = new ShipGroup();
+    }
+    
+    /**
+     * Adds specified ship to this ship's RADAR.
+     * @param ship  ship to add to this RADAR
+     */
+    public function addShip(ship:Ship):Void {
+        if (this.faction.equals(ship.getFactionType())) {
+            this.friend.add(ship);
+        } else {
+            this.foe.add(ship);
+        }
+    }
+    
+    /**
+     * Removes specifiec ship from this ship's RADAR.
+     * @param ship  ship to remove from this RADAR
+     */
+    public function removeShip(ship:Ship):Void {
+        if (this.faction.equals(ship.getFactionType())) {
+            this.friend.remove(ship);
+        } else {
+            this.foe.remove(ship, true);
+        }
+    }
+    
+    /**
+     * Returns the range of this radar.
+     * @return  rage of this radar
+     */
+    public function getRadarRange():Float {
+        return this.range;
+    }
+    
+    /**
+     * Returns friendly group of ships.
+     * @return  friendlies
+     */
+    public function getFriends():ShipGroup {
+        return this.friend;
+    }
+    
+    /**
+     * Returns enemy group of ships.
+     * @return  foes
+     */
+    public function getFoes():ShipGroup {
+        return this.foe;
+    }
+    
+    /**
+     * Selects target ship at random.
+     * @return  randomly chosen enemy ship
+     */
+    public function selectTarget():Ship {
+        return this.foe.getRandom();
+    }
+}
+
+/**
  *
  * @author Daisy
  * @author Rory Soiffer
@@ -147,16 +228,21 @@ class Ship extends FlxSprite {
     private var attackSpeed:Float;
     private var attackDamage:Float;
     private var capturePerSecond:Float;
+    
+    // Radar (list of ships this ship can "interact with")
+    private var radar:Radar;
 
     // TODO: convert these to the inherited object fields
 	public var pos:FlxVector;
 	public var vel:FlxVector = new FlxVector(0, 0);  // current velocity
     
+    // TODO: fields stored internally, no need to hold reference to BP
 	public var stats:BluePrint; // General stats (should be split into type-specific vs. ship-specific)
     
     // current base node in game map
     private var node:MapNode;
 
+    // TODO: Convert below to use inherited path field
 	public var destination:MapNode; // The node this ship is moving towards
 	public var nodePath:Array<MapEdge> = []; // The path this ship is moving along (if any)
 	public var progress:Float; // How far along the path this ship has traveled
@@ -165,27 +251,47 @@ class Ship extends FlxSprite {
 
 	private var hpBar :FlxText;
 	
-	public var weapon: FlxTypedWeapon<ShipAttack>; // This weapon is used to create ShipAttacks
+	public var weapon:FlxTypedWeapon<ShipAttack>; // This weapon is used to create ShipAttacks
 
 	public function new(destination:MapNode, faction:Faction, blueprint:BluePrint) {
 		super();
         
-		//this.playState = playState;
+        // Faction info
+        this.faction = faction;
+        
+        // ship stats
+        this.hull = blueprint.hull;
+        this.maxVel = blueprint.maxVelocity;
+        this.shield = blueprint.shield;
         this.health = blueprint.hitPoints;
+        this.attackSpeed = blueprint.attackSpeed;
+        this.attackDamage = blueprint.attackDamage;
+        this.capturePerSecond = blueprint.cps;
+        
+        // initialize ship radar
+        this.radar = new Radar(this.faction.getFactionType(), 50.0);
+        
+        
+        // TODO: organize other stuff
         
 		this.destination = destination;
-		this.node = destination;
-		this.faction = faction;
+		
+        this.node = destination;
+        
 		this.stats = blueprint;
 		this.pos = destination.getPos();
+        this.x = node.x;
+        this.y = node.y;
 
 		// Creates the weapon that creates bullets
-		this.weapon = new FlxTypedWeapon<ShipAttack>("Default weapon", function(w) {
-			return new ShipAttack(stats.attackDamage, 500.0);
-		}, FlxWeaponFireFrom.PARENT(this, new FlxBounds(this.origin, this.origin)),
-			FlxWeaponSpeedMode.SPEED(new FlxBounds(500.0, 500.0)));
+		this.weapon = new FlxTypedWeapon<ShipAttack>("Laser mk. I", 
+            function(w) { return new ShipAttack(stats.attackDamage, 500.0); }, 
+            FlxWeaponFireFrom.PARENT(this, new FlxBounds(this.origin, this.origin)),
+			FlxWeaponSpeedMode.SPEED(new FlxBounds(500.0, 500.0))
+        );
 		this.weapon.bounds = new FlxRect(0, 0, FlxG.width, FlxG.height);
 		this.weapon.fireRate = Math.round(1000 / stats.attackSpeed);
+        FlxG.state.add(this.weapon.group); // Add weapon group here, all bullets part of this group
 		
 		switch (this.faction.getFactionType()) {
 			case PLAYER:
@@ -272,6 +378,15 @@ class Ship extends FlxSprite {
 		// Updates the ship's position and angle based on its velocity
 		this.pos = this.pos.addNew(this.vel.scaleNew(elapsed));
 		angle = this.vel.degrees;
+        
+        //*******************
+        // combat
+        var targetShip = this.radar.selectTarget();
+        if (targetShip != null && this.weapon.fireAtTarget(targetShip)) {
+            this.weapon.currentBullet.target = targetShip;
+        }
+        
+        //*******************
 
 		// Set the sprite's position (x,y) to match the actual position (pos)
 		x = this.pos.x - origin.x;
@@ -283,6 +398,32 @@ class Ship extends FlxSprite {
 
 		super.update(elapsed);
 	}
+    
+    // RADAR Functions
+    
+    public function withinRadarRange(ship:Ship):Bool {
+        return this.getPosition().distanceTo(ship.getPosition()) <= this.radar.getRadarRange();
+    }
+    
+    public function addToRadar(ship:Ship):Void {
+        this.radar.addShip(ship);
+    }
+    
+    public function removeFromRadar(ship:Ship):Void {
+        this.radar.removeShip(ship);
+    }
+    
+    public function getRandomTarget():Ship {
+        return this.radar.selectTarget();
+    }
+    
+    
+    
+    public function getCPS():Float {
+        return this.capturePerSecond;
+    }
+    
+    
 
 	// Returns the position of the ship
 	public function getPos(): FlxVector {
@@ -290,7 +431,7 @@ class Ship extends FlxSprite {
 	}
 
 	// Returns this ship's faction
-	public function getFaction(): FactionType {
+	public function getFactionType(): FactionType {
 		return faction.getFactionType();
 	}
 }
@@ -331,12 +472,16 @@ class ShipFactory {
 	 * @param elapsed   time(ms) from the last call
 	 * @return new specified ship, or null
 	 */
-	public function produceShip(elapsed:Float):Ship {
+	public function produceShip(elapsed:Float):Bool {
 		this._timeSinceLast += elapsed;
 		if (initial() || canProduce()) {
 			this._timeSinceLast = 0.0;
 			//this._planet.playState.add(new Ship(_planet.getNode(), _planet.getFaction(), _producedShip.clone()));
-			return new Ship(_planet.getNode(), _planet.getFaction(), _producedShip.clone());
+			var ship:Ship =  new Ship(_planet.getNode(), _planet.getFaction(), _producedShip.clone());
+            
+            // TODO: add ship to state's shipgroupByFaction map to be rendered
+            // TODO: add ship to node for tracking
+            //FlxG.state.
 		}
 		return null;
 	}
