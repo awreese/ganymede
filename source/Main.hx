@@ -3,11 +3,13 @@ package;
 import flixel.FlxGame;
 import CapstoneLogger;
 import openfl.display.Sprite;
+import tutorial.FinishGameState;
 
 class Main extends Sprite
 {
 	public static var LOGGER: CapstoneLogger;
 	public static var LEVEL: Int;
+	public static inline var FINAL_LEVEL: Int = 5;
 	public function new()
 	{
 		LEVEL = 1;

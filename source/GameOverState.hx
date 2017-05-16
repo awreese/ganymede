@@ -1,6 +1,8 @@
 package;
 
+import flash.display.Sprite;
 import flixel.FlxG;
+import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
@@ -13,22 +15,21 @@ import flixel.util.FlxColor;
  */
 class GameOverState extends FlxState 
 {
-	private var gameoverTxt:FlxText;
+	private var gameover:FlxSprite;
 	private var replayBtn:FlxButton;
 	
 	override public function create():Void
 	{
 		// create the GameOver text
-		gameoverTxt = new FlxText(0, (FlxG.height / 2) - 20, 0, "GAME OVER");
-		gameoverTxt.setFormat("Consola", 40);
-		gameoverTxt.alignment = CENTER;
-		gameoverTxt.screenCenter(FlxAxes.X);
-		add(gameoverTxt);
+		gameover = new FlxSprite();
+		gameover.loadGraphic(AssetPaths.gameover__png);
+		add(gameover);
 		
 		// create and add replay button
-		replayBtn = new FlxButton(0, 0, "Replay", clickReplay);
-		replayBtn.x = (FlxG.width / 2) - (replayBtn.width / 2);
-		replayBtn.y = (FlxG.height / 2) + replayBtn.height + 10;
+		replayBtn = new FlxButton(0, 0, "", clickReplay);
+		replayBtn.loadGraphic(AssetPaths.replay_btn__png, false, 176, 78);
+		replayBtn.x = (FlxG.width / 2) - replayBtn.width + 10;
+		replayBtn.y = (FlxG.height) - 2 * replayBtn.height - 60;
 		add(replayBtn);
 		
 		super.create();

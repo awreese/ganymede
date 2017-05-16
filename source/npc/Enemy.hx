@@ -1,8 +1,11 @@
 package npc;
 
+import faction.CaptureEngine;
 import faction.Faction.FactionType;
 import flixel.group.FlxGroup.FlxTypedGroup;
+import flixel.math.FlxRandom;
 import flixel.util.FlxTimer;
+import gameUnits.Ship;
 import gameUnits.capturable.Capturable;
 import map.MapNode;
 
@@ -14,10 +17,12 @@ class Enemy extends NPC
 {
 	// keep track of how much time has passed
 	private var timer: FlxTimer;
-	// 
 	private var time: Int;
 	
+	private var rand:FlxRandom;
+	
 	public function new(faction:FactionType, time: Int) {
+		rand = new FlxRandom();
 		this.time = time;
 		// timer for checking when enemy make a move
 		timer = new FlxTimer();
@@ -32,15 +37,15 @@ class Enemy extends NPC
 	 */
 	public function makeMove(nodes: FlxTypedGroup<MapNode>/*, elapsed: Float*/) {
 		//timer += elapsed;
-		if (nodes.length > 0) {
+		var nodesArr: Array<MapNode> = nodes.members;
+		if (nodesArr.length > 0) {
 			// checks if timer is finished
 			if (timer.finished) {
 				// if is finished, make a move
-			
 				// find node with lowest cp ratio
-				var n: MapNode = nodes.getRandom();
+				var n: MapNode = nodesArr[rand.int(0, nodesArr.length - 1)];
 				var ratio: Float = 1.0;
-				for (node in nodes) {
+				for (node in nodesArr) {
 					var captureable = node.getCaptureable();
 					if (captureable.getCP() < captureable.getTotalCP()) {
 						if (captureable.getCP() / captureable.getTotalCP() < ratio) {
@@ -49,62 +54,33 @@ class Enemy extends NPC
 						}
 					}
 				}
-			
-				//n = nodes.getRandom(); // I got a compiler warning n was never initialized below, so I did it here to make it stop whining.
+				
+				// check if getting captured planet is less than 70%
+				n = ratio >= 0.5 ? nodesArr[rand.int(0, nodesArr.length - 1)] : n;
+								
 				var ships = n.getShipGroup(this.faction);
 			
 				// if the cp isn't that low, expand territory
-				if (ratio >= 0.7 && ships.length > 0) {
+				if (ratio >= 0.5 && ships.length > 0) {
 					var des: MapNode = null;
-					var queue: Array<MapNode> = new Array<MapNode>();
 					var visited: Array<MapNode> = new Array<MapNode>();
-					queue.push(n);
+					des = findDes(n, visited, 0);
 				
-					// while there's still more nodes to look through
-					while (queue.length > 0) {
-						var currNode = queue.shift();
-						visited.push(currNode);
-						var captureable = currNode.getCaptureable();
-						// if found nop, go there
-						if (captureable != null && captureable.getFaction().getFactionType() == FactionType.NOP) {
-							des = currNode;
-							break;
-						}
-						// if found a captureable whose faction != this.faction, set des to it, but look at other nodes
-						// before deciding where to go
-						if (captureable != null && captureable.getFaction().getFactionType() != this.faction) {
-							des = currNode;
-						}
-						if (des == null) {
-							// traverse to farther if there is no destination yet
-							for (neighbor in currNode.neighbors) {
-								// only add to queue if haven't visited
-								if (visited.indexOf(neighbor) == -1) {
-									queue.push(neighbor);
-								}
-							}
-						}
-					}
-				
-					//var ships = n.getShips(this.faction);
 					for (s in ships) {
 						s.pathTo(des);
 					}
 				
 				} else if (ships.length > 0) {
 					// if there's other planet
-					if (nodes.length != 1) {
+					if (nodesArr.length != 1) {
 						// send the ships at n to another planet of this.faction
-						var des = nodes.getRandom();
-						var captureable = des.getCaptureable();
+						var des:MapNode = nodesArr[rand.int(0, nodesArr.length - 1)];
 						// find a node that's not this one
-						while (captureable.getCP() / captureable.getTotalCP() == ratio) {
-							des = nodes.getRandom();
-							captureable = des.getCaptureable();
+						while (des == n) {
+							des = nodesArr[rand.int(0, nodesArr.length - 1)];
 						}
-				
+						
 						// move ships to des
-						//var ships = n.getShips(this.faction);
 						for (s in ships) {
 							s.pathTo(des);
 						}
@@ -113,5 +89,50 @@ class Enemy extends NPC
 				timer.reset(time);
 			}
 		}
+	}
+	
+	// recursively go through nodes up to depth 3 to find best destination to go to
+	private function findDes(node:MapNode, visited:Array<MapNode>, depth:Int) :MapNode {
+		var numShip = node.getFaction() == null ? 0 : node.getShipGroup(node.getFaction()).length;
+		// if hit depth 3, go back
+		if (depth == 3) {
+			return node;
+		}
+		if (node.getFaction() != null && node.getFaction() == FactionType.NOP) {
+			// if this.node == nop, return it automatically
+			return node;
+		}
+		// add node to visited
+		visited.push(node);
+		var des: MapNode = node;
+		// go through each neighbor
+		var neighbors = node.neighbors.keys();
+		for (n in neighbors) {
+			if (visited.indexOf(n) != -1) {
+				// if already looked at n, skip
+				continue;
+			}
+			// check node at deeper depth
+			var recurseNode:MapNode = findDes(n, visited, depth + 1);
+			if (recurseNode.getFaction() == null || recurseNode.getFaction() == this.faction) {
+				// if the returned node doesn't have a faction, is not captureable, check next one
+				// or if returned node is of this.faction, check next one
+				continue;
+			}
+			if (recurseNode.getFaction() == FactionType.NOP) {
+				return recurseNode; // enemy aim for nop planets first
+			}
+			if (des.getFaction() == null || des.getFaction() == this.faction) {
+				// if des have no faction, set des to recurseNode
+				// or if des.faction == this.faction, set des to recurseNode
+				des = recurseNode;
+				continue;
+			}
+			var numShips:Int = recurseNode.getShipGroup(recurseNode.getFaction()).length; // get num of ships
+			if (numShips < des.getShipGroup(des.getFaction()).length) {
+				des = recurseNode;
+			}
+		}
+		return des;
 	}
 }

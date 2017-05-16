@@ -74,6 +74,9 @@ class Capturable extends FlxSprite {
 		var totalCP = new Map<FactionType, Float>();
 		for (f in Faction.getEnums()) {
 			totalCP[f] = 0.0;
+			/*for (s in node.getShipGroup(f)) {
+				totalCP[f] += s.stats.cps;
+			}*/
 		}
 		for (s in shipsAtPlanet) {
 			var cp = totalCP[s.getFaction()];

@@ -141,7 +141,7 @@ class Planet extends Capturable {
 		// set position of the planet
 		//super(location.pos.x - (MapNode.NODE_SIZE / 2), location.pos.y - (MapNode.NODE_SIZE / 2));
 		super(location, faction);
-
+        
 		this.playState = playState;
 
 		// set sprite
@@ -159,6 +159,7 @@ class Planet extends Capturable {
 		}
 		shipTimer = 0;
 		shipsAtPlanet = new Array<Ship>();
+        
 	}
 
 	override public function update(elapsed:Float):Void {
@@ -237,9 +238,9 @@ class Planet extends Capturable {
 		{
 			shipTimer = 0.0;
 			numShips.set(faction.getFactionType(), numShips.get(faction.getFactionType()) + 1);
-			var stat = new BluePrint(pStats.ship.hull, pStats.ship.maxVelocity, pStats.ship.shield, pStats.ship.hitPoints, pStats.ship.attackSpeed, pStats.ship.attackDamage, pStats.ship.cps);
+			//var stat = new BluePrint(pStats.ship.hull, pStats.ship.maxVelocity, pStats.ship.shield, pStats.ship.hitPoints, pStats.ship.attackSpeed, pStats.ship.attackDamage, pStats.ship.cps);
 			//return new Ship(playState, node, faction, stat);
-			return new Ship(node, faction, stat);
+			return new Ship(this.node, faction, pStats.ship.clone());
 		}
 		// if can't produce ship, return null
 		return null;

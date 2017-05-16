@@ -22,6 +22,7 @@ import flixel.FlxG;
 import flixel.FlxState;
 import flixel.group.FlxGroup;
 import flixel.math.FlxVector;
+import flixel.system.FlxSound;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import gameUnits.capturable.Planet;
@@ -43,12 +44,19 @@ class PlayState extends FlxState
 	private var grpPlanets: FlxTypedGroup<gameUnits.capturable.Planet>;
 	private var rand:FlxRandom;
 	private var numPlayerFaction:Int;
-	private var enemy1: Enemy;
+	private var enemies: Array<Enemy>;
+	private var laser_snd: FlxSound;
 
 	override public function create(): Void
 	{
 		rand = new FlxRandom();
-		enemy1 = new Enemy(FactionType.ENEMY_1, 10);
+		enemies = new Array<Enemy>();
+		#if flash
+			laser_snd = FlxG.sound.load(AssetPaths.laser__mp3);
+		#else
+			laser_snd = FlxG.sound.load(AssetPaths.laser__wav);
+		#end
+		laser_snd.looped = false;
 		// Initialize the map
 		grpMap = new FlxTypedGroup<GameMap>();
 		add(grpMap);
@@ -60,6 +68,16 @@ class PlayState extends FlxState
 		grpShips = new FlxTypedGroup<gameUnits.Ship>();
 		add(grpShips);
 
+		// add the enemies
+		for (faction in Faction.getEnums()) {
+			if (faction == null || faction == FactionType.PLAYER || faction ==  FactionType.NOP || faction == FactionType.NEUTRAL) {
+				continue;
+			}
+			if (gameMap.getControlledNodes(faction).length > 0) {
+				enemies.push(new Enemy(faction, 7));
+			}
+		}
+		
 		super.create();
 	}
 
@@ -91,7 +109,6 @@ class PlayState extends FlxState
 			}
 			else
 			{
-				trace("Selected node " + n.getPosition().toString());
 				for (s in grpShips)
 				{
 					// only move the ships that are the player's
@@ -113,7 +130,6 @@ class PlayState extends FlxState
 			var n = gameMap.findNode(new FlxVector(FlxG.mouse.x, FlxG.mouse.y));
 			if (n != null)
 			{
-				trace("Ordered movement to " + n.getPosition().toString());
 				for (s in grpShips)
 				{
 					if (s.isSelected)
@@ -126,7 +142,14 @@ class PlayState extends FlxState
 		}
 		
 		// enemy turn
-		enemy1.makeMove(gameMap.getControlledNodes(enemy1.getFaction()));
+		for (enemy in enemies) {
+			var nodes = gameMap.getControlledNodes(enemy.getFaction());
+			if (nodes.length > 0) {
+				// make a move if there are controlling factions
+				enemy.makeMove(nodes);
+			}
+		}
+		//enemy1.makeMove(gameMap.getControlledNodes(enemy1.getFaction()));
 		
 		// Make ships move by flocking
 		shipFlocking(elapsed);
@@ -140,9 +163,20 @@ class PlayState extends FlxState
 		// produce ships
 		produceShips(elapsed);
 		
+		// check if there are other ships of other factions
+		var noOtherFaction: Bool = true;
+		for (ship in grpShips) {
+			if (ship.exists) {
+				if (ship.getFaction() != FactionType.PLAYER) {
+					noOtherFaction = false;
+					break;
+				}
+			}
+		}
+		
 		// if captured all the planets, progress
-		if (gameMap.getNumPlayerPlanets() == gameMap.getNumPlanets()) {
-			if (Main.LEVEL == 3) {
+		if (gameMap.getNumPlayerPlanets() == gameMap.getNumPlanets() && noOtherFaction) {
+			if (Main.LEVEL == Main.FINAL_LEVEL) {
 				FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
 				FlxG.switchState(new FinishGameState());
 				});
@@ -240,6 +274,7 @@ class PlayState extends FlxState
 						if (s1.weapon.fireAtTarget(s2)) {
 							s1.weapon.currentBullet.target = s2;
 							add(s1.weapon.currentBullet);
+							laser_snd.play();
 						}
 					}
 				}
@@ -249,9 +284,10 @@ class PlayState extends FlxState
 	
     // TODO: Most (if not all) of this should be moved to GameMap and Ship
 	private function nodeUpdate(elapsed : Float):Void {
-		for (n in gameMap.nodes)
+		//for (n in gameMap.nodes)
+		for (n in gameMap.getNodeList())
 		{
-			var p : Planet = n.containPlanet() ? cast(n.getCaptureable(), Planet) : null;
+			var p : Planet = n.isPlanet() ? cast(n.getCaptureable(), Planet) : null;
 			var numShips:Map<FactionType, Int> = new Map<FactionType, Int>();
 			for (f in Faction.getEnums()) {
 				numShips.set(f, 0);
@@ -340,16 +376,17 @@ class PlayState extends FlxState
     // TODO: Move this into PlanetFactory
 	// produce ships for each planet (if they can)
 	private function produceShips(elapsed: Float):Void {
-		for (n in gameMap.nodes) {
+		//for (n in gameMap.nodes) {
+		for (n in gameMap.getNodeList()) {
 			// checks if there's a planet at n
-			if (!n.containPlanet()) {
+			if (!n.isPlanet()) {
 				continue;
 			}
 			// get the planet
 			var p = cast(n.getCaptureable(), Planet);
 			var pPos = p.getPos();
 			// find the MapNode for the planet
-			var node = gameMap.findNode(new FlxVector(pPos.x + (MapNode.NODE_SIZE / 2), pPos.y + (MapNode.NODE_SIZE / 2)));
+			var node = gameMap.findNode(new FlxVector(pPos.x + (MapNode.NODE_RADIUS / 2), pPos.y + (MapNode.NODE_RADIUS / 2)));
 			var ship:Ship = p.produceShip(node);
 			if (ship != null) {
 				grpShips.add(ship);

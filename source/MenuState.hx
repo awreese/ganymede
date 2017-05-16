@@ -21,6 +21,7 @@ package;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
+import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.util.FlxAxes;
@@ -42,18 +43,19 @@ class MenuState extends FlxState
 	{
 		// create and add the background image
 		background = new FlxSprite(0, 0);
-		background.loadGraphic(AssetPaths.tempmenubg__png);
+		background.loadGraphic(AssetPaths.menubg__png);
 		add(background);
 		
 		// create and add the title
-		title = new FlxText(0, 20, 0, "AstroRush: TBD");
-		title.setFormat("Consola", 40);
+		title = new FlxText(0, 50, 0, "AstroRush: TBD");
+		title.setFormat("Consola", 100);
 		title.alignment = CENTER;
 		title.screenCenter(FlxAxes.X);
 		add(title);
 		
 		// create and add play button
-		playBtn = new FlxButton(0, 0, "Play", clickPlay);
+		playBtn = new FlxButton(0, 0, "", clickPlay);
+		playBtn.loadGraphic(AssetPaths.play_btn__png, false, 232, 103);
 		playBtn.x = (FlxG.width / 2) - (playBtn.width/ 2);
 		playBtn.y = FlxG.height / 2;
 		add(playBtn);
