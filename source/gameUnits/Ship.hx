@@ -163,7 +163,7 @@ class Ship extends FlxSprite {
 
 	public var isSelected:Bool; // Whether the player has currently selected this ship (should ideally be moved to a Player class in the future)
 
-	private var hpBar :FlxText;
+	//private var hpBar :FlxText;
 	
 	public var weapon: FlxTypedWeapon<ShipAttack>; // This weapon is used to create ShipAttacks
 
@@ -187,27 +187,8 @@ class Ship extends FlxSprite {
 		this.weapon.bounds = new FlxRect(0, 0, FlxG.width, FlxG.height);
 		this.weapon.fireRate = Math.round(1000 / stats.attackSpeed);
 		
-		switch (this.faction.getFactionType()) {
-			case PLAYER:
-				loadGraphic(AssetPaths.ship_1__png, false);
-			case ENEMY_1:
-				loadGraphic(AssetPaths.enemyship_1__png, false);
-			case ENEMY_2:
-				loadGraphic(AssetPaths.enemyship_1__png, false);
-			case ENEMY_3:
-				loadGraphic(AssetPaths.enemyship_1__png, false);
-			case ENEMY_4:
-				loadGraphic(AssetPaths.enemyship_1__png, false);
-			case ENEMY_5:
-				loadGraphic(AssetPaths.enemyship_1__png, false);
-			case ENEMY_6:
-				loadGraphic(AssetPaths.enemyship_1__png, false);
-			case NEUTRAL:
-				loadGraphic(AssetPaths.ship_1__png, false);
-			default:
-		}
-
-		hpBar = new FlxText(this.x, this.y - this.height, 0, "" + stats.hitPoints, 16);
+		
+		//hpBar = new FlxText(this.x, this.y - this.height, 0, "" + stats.hitPoints, 16);
 		//FlxG.state.add(hpBar);
 	}
 
@@ -243,12 +224,18 @@ class Ship extends FlxSprite {
 	override public function update(elapsed:Float):Void {
 		// check faction, take appropriate actions, etc..
 		// Change the sprite to show when the ship is selected
-		if (isSelected) {
-			loadGraphic("assets/images/ship_1_selected.png", false, 32, 32);
-		} else {
-			if (this.faction.getFactionType() == FactionType.PLAYER) {
-				loadGraphic(AssetPaths.ship_1__png, false);
-			}
+		switch (this.faction.getFactionType()) {
+			case PLAYER:
+				if (isSelected)
+					loadGraphic(AssetPaths.ship_1_player_selected__png, false);
+				else
+					loadGraphic(AssetPaths.ship_1_player__png, false);
+			case ENEMY_1:
+				loadGraphic(AssetPaths.ship_1_enemy1__png, false);
+			case NEUTRAL:
+				loadGraphic(AssetPaths.ship_1_neutral__png, false);
+			default:
+				loadGraphic(AssetPaths.ship_1_enemy1__png, false);
 		}
 
 		// Whether the ship is currently stationed at one node or is moving between nodes
@@ -277,9 +264,9 @@ class Ship extends FlxSprite {
 		x = this.pos.x - origin.x;
 		y = this.pos.y - origin.y;
 
-		hpBar.x = this.x;
-		hpBar.y = this.y - this.height / 2 + 5;
-		hpBar.text = "" + Math.round(stats.hitPoints);
+		//hpBar.x = this.x;
+		//hpBar.y = this.y - this.height / 2 + 5;
+		//hpBar.text = "" + Math.round(stats.hitPoints);
 
 		super.update(elapsed);
 	}
