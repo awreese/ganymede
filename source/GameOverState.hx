@@ -32,6 +32,9 @@ class GameOverState extends FlxState
 		replayBtn.y = (FlxG.height) - 2 * replayBtn.height - 60;
 		add(replayBtn);
 		
+		// Log level end and time
+        Main.LOGGER.logLevelEnd(Date.now());
+		
 		super.create();
 	}
 

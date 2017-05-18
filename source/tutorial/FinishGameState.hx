@@ -58,6 +58,9 @@ class FinishGameState extends FlxState
 		add(feedbackBtn);
 
 		Main.LEVEL = 1;
+		
+		// Log level end and time
+        Main.LOGGER.logLevelEnd(Date.now());
 
 		super.create();
 		applauseSnd.play();
