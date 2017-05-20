@@ -134,7 +134,7 @@ class MovingShipTutorial extends FlxState {
 		if (!shipInPlace) {
 			// move the ship to nop planet
 			ship.x += 100 * elapsed;
-			if (ship.x >= nop.x) {
+			if (ship.x >= nop.x + nop.width / 4) {
 				shipInPlace = true;
 				captureBar.visible = true;
 				captureTxt.visible = true;
