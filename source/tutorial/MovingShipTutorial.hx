@@ -39,13 +39,17 @@ class MovingShipTutorial extends FlxState {
 		waitTimer = 0.0;
 		
 		// create nop planet
-		nop = new FlxSprite(697, 344);
-		nop.loadGraphic(AssetPaths.uncontrolled_planet_1__png, false, 32, 32);
+		nop = new FlxSprite(697+16, 344+16);
+		nop.loadGraphic(AssetPaths.planet_1_none__png, false, 32, 32);
+		nop.x -= nop.origin.x;
+		nop.y -= nop.origin.y;
 		add(nop);
 		
 		// create ship
-		ship = new FlxSprite(472, 344);
-		ship.loadGraphic(AssetPaths.ship_1_selected__png, false, 32, 32);
+		ship = new FlxSprite(472+16, 344+16);
+		ship.loadGraphic(AssetPaths.ship_1_player_selected__png, false, 32, 32);
+		ship.x -= ship.origin.x;
+		ship.y -= ship.origin.y;
 		add(ship);
 		
 		// create cursor
@@ -123,14 +127,14 @@ class MovingShipTutorial extends FlxState {
 			}
 			if (captureBar.value == 100.0) {
 				captureTxt.text = "Captured";
-				nop.loadGraphic(AssetPaths.player_planet_1__png, false, 32, 32);
+				nop.loadGraphic(AssetPaths.planet_1_player__png, false, 32, 32);
 				waitTimer += elapsed;
 			}
 		}
 		if (!shipInPlace) {
 			// move the ship to nop planet
 			ship.x += 100 * elapsed;
-			if (ship.x >= nop.x) {
+			if (ship.x >= nop.x + nop.width / 4) {
 				shipInPlace = true;
 				captureBar.visible = true;
 				captureTxt.visible = true;
@@ -158,7 +162,7 @@ class MovingShipTutorial extends FlxState {
 			// if pressed right on/near nop planet, move ship and stuff
 			var mousePos = FlxG.mouse.getPosition();
 			var dist = mousePos.distanceTo(new FlxPoint(nop.x + nop.width / 2, nop.y + nop.height / 2));
-			if (dist <= 15) {
+			if (dist <= 30) {
 				click();
 			}
 		}
@@ -171,7 +175,11 @@ class MovingShipTutorial extends FlxState {
 	}
 	
 	private function click():Void {
-		ship.loadGraphic(AssetPaths.ship_1__png, false, 32, 32);
+		ship.x += ship.origin.x;
+		ship.y += ship.origin.y;
+		ship.loadGraphic(AssetPaths.ship_1_player__png, false, 32, 32);
+		ship.x -= ship.origin.x;
+		ship.y -= ship.origin.y;
 		shipInPlace = false;
 		cursor.visible = false;
 		mouse.visible = false;

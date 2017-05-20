@@ -259,24 +259,18 @@ class Planet extends Capturable {
 	private function setSprite():Void {
 		switch (this.faction.getFactionType()) {
 			case PLAYER:
-				loadGraphic(AssetPaths.player_planet_1__png, false);
+				loadGraphic(AssetPaths.planet_1_player__png, false);
 			case ENEMY_1:
-				loadGraphic(AssetPaths.enemy_planet_1__png, false);
-			case ENEMY_2:
-				loadGraphic(AssetPaths.enemy_planet_1__png, false);
-			case ENEMY_3:
-				loadGraphic(AssetPaths.enemy_planet_1__png, false);
-			case ENEMY_4:
-				loadGraphic(AssetPaths.enemy_planet_1__png, false);
-			case ENEMY_5:
-				loadGraphic(AssetPaths.enemy_planet_1__png, false);
-			case ENEMY_6:
-				loadGraphic(AssetPaths.enemy_planet_1__png, false);
+				loadGraphic(AssetPaths.planet_1_enemy1__png, false);
 			case NEUTRAL:
-				loadGraphic(AssetPaths.neutral_planet_1__png, false);
+				loadGraphic(AssetPaths.planet_1_neutral__png, false);
+			case NOP:
+				loadGraphic(AssetPaths.planet_1_none__png, false);
 			default:
-				loadGraphic(AssetPaths.uncontrolled_planet_1__png, false);
+				loadGraphic(AssetPaths.planet_1_enemy1__png, false);
 		}
+		
+		this.setGraphicSize(32, 32); // This scales down the planets from their default size of 48x48
 
 		x = node.x - origin.x;
 		y = node.y - origin.y;
