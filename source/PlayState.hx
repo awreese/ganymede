@@ -74,7 +74,7 @@ class PlayState extends FlxState
 				continue;
 			}
 			if (gameMap.getControlledNodes(faction).length > 0) {
-				enemies.push(new Enemy(faction, 7));
+				enemies.push(new Enemy(faction, gameMap.getAiTime()));
 			}
 		}
 		
@@ -241,12 +241,12 @@ class PlayState extends FlxState
 			// Compute the net acceleration, scaling each component by an arbitrary constant
 			// The constants to scale by were determined partially by trial and error until the motion looked good
 			var acceleration = new FlxVector(0, 0)
-			.addNew(toDest.scaleNew(.1 * toDest.length))
+			.addNew(toDest.scaleNew(.01 * s1.stats.maxVelocity * toDest.length))
 			.addNew(desiredSpeed.scaleNew(50))
 			.addNew(noise.scaleNew(10))
-			.addNew(seperation.scaleNew(100))
-			.addNew(alignment.scaleNew(.5))
-			.addNew(cohesion.scaleNew(0.5));
+			.addNew(seperation.scaleNew(500))
+			.addNew(alignment.scaleNew(.3))
+			.addNew(cohesion.scaleNew(.1));
 
 			// Update the velocity
 			s1.vel = s1.vel.addNew(acceleration.scaleNew(elapsed));
