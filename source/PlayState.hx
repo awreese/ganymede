@@ -74,7 +74,7 @@ class PlayState extends FlxState
 				continue;
 			}
 			if (gameMap.getControlledNodes(faction).length > 0) {
-				enemies.push(new Enemy(faction, 7));
+				enemies.push(new Enemy(faction, gameMap.getAiTime()));
 			}
 		}
 		
