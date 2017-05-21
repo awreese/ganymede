@@ -20,7 +20,9 @@ package gameUnits;
 
 import faction.Faction;
 import flixel.FlxG;
+import flixel.FlxObject;
 import flixel.FlxSprite;
+import flixel.addons.weapon.FlxWeapon.FlxTypedWeapon;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxRect;
 import flixel.math.FlxVector;
@@ -30,6 +32,7 @@ import gameUnits.Ship.BluePrint;
 import gameUnits.capturable.Planet;
 import map.MapEdge;
 import map.MapNode;
+import flixel.math.FlxRandom;
 
 /**
  * Various ship hull types that exist in-game.
@@ -136,67 +139,48 @@ class BluePrint {
 private class Radar {
     
     private var faction:FactionType;
-    private var range:Float;
-    private var friend:ShipGroup;
-    private var foe:ShipGroup;
+    private var friend:Array<Ship>;
+    private var foe:Array<Ship>;
+    
+    private var rand:FlxRandom = new FlxRandom();
     
     /**
      * Creates new RADAR object for specified faction object.
      * @param faction   faction of the owner of this shiney new radar
      */
-    public function new(faction:FactionType, range:Float = 50.0) {
+    public function new(faction:FactionType) {
         this.faction = faction;
-        this.range = range;
-        this.friend = new ShipGroup();
-        this.foe = new ShipGroup();
+        this.friend = new Array<Ship>();
+        this.foe = new Array<Ship>();
     }
     
-    /**
-     * Adds specified ship to this ship's RADAR.
-     * @param ship  ship to add to this RADAR
-     */
-    public function addShip(ship:Ship):Void {
-        if (this.faction.equals(ship.getFactionType())) {
-            this.friend.add(ship);
-        } else {
-            this.foe.add(ship);
+    public function setRadar(ships:Array<Ship>):Void {
+        this.friend.splice(0, friend.length);
+        this.foe.splice(0, foe.length);
+        
+        for (ship in ships) {
+            if (this.faction.equals(ship.getFactionType())) {
+                this.friend.push(ship);
+            } else {
+                this.foe.push(ship);
+            }
         }
-    }
-    
-    /**
-     * Removes specifiec ship from this ship's RADAR.
-     * @param ship  ship to remove from this RADAR
-     */
-    public function removeShip(ship:Ship):Void {
-        if (this.faction.equals(ship.getFactionType())) {
-            this.friend.remove(ship);
-        } else {
-            this.foe.remove(ship, true);
-        }
-    }
-    
-    /**
-     * Returns the range of this radar.
-     * @return  rage of this radar
-     */
-    public function getRadarRange():Float {
-        return this.range;
     }
     
     /**
      * Returns friendly group of ships.
      * @return  friendlies
      */
-    public function getFriends():ShipGroup {
-        return this.friend;
+    public function getFriends():Array<Ship> {
+        return this.friend.copy();
     }
     
     /**
      * Returns enemy group of ships.
      * @return  foes
      */
-    public function getFoes():ShipGroup {
-        return this.foe;
+    public function getFoes():Array<Ship> {
+        return this.foe.copy();
     }
     
     /**
@@ -204,7 +188,7 @@ private class Radar {
      * @return  randomly chosen enemy ship
      */
     public function selectTarget():Ship {
-        return this.foe.getRandom();
+        return rand.getObject(this.foe, 0);
     }
 }
 
@@ -224,9 +208,15 @@ class Ship extends FlxSprite {
     private var hull:HullType;
     private var maxVel:Float;
     private var shield:Float;
+    
     // health takes hitpoints
+    
+    // TODO: move these stats to weapons class
     private var attackSpeed:Float;
     private var attackDamage:Float;
+    
+    private var sensorRange:Float;
+    
     private var capturePerSecond:Float;
     
     // Radar (list of ships this ship can "interact with")
@@ -235,9 +225,6 @@ class Ship extends FlxSprite {
     // TODO: convert these to the inherited object fields
 	public var pos:FlxVector;
 	public var vel:FlxVector = new FlxVector(0, 0);  // current velocity
-    
-    // TODO: fields stored internally, no need to hold reference to BP
-	public var stats:BluePrint; // General stats (should be split into type-specific vs. ship-specific)
     
     // current base node in game map
     private var node:MapNode;
@@ -264,12 +251,15 @@ class Ship extends FlxSprite {
         this.maxVel = blueprint.maxVelocity;
         this.shield = blueprint.shield;
         this.health = blueprint.hitPoints;
+        
         this.attackSpeed = blueprint.attackSpeed;
         this.attackDamage = blueprint.attackDamage;
+        
+        this.sensorRange = 50.0;
         this.capturePerSecond = blueprint.cps;
         
         // initialize ship radar
-        this.radar = new Radar(this.faction.getFactionType(), 50.0);
+        this.radar = new Radar(this.faction.getFactionType());
         
         
         // TODO: organize other stuff
@@ -278,19 +268,20 @@ class Ship extends FlxSprite {
 		
         this.node = destination;
         
-		this.stats = blueprint;
 		this.pos = destination.getPos();
         this.x = node.x;
         this.y = node.y;
 
+        // TODO: Move weapon definition into a Weapons Class, just instantiate here
 		// Creates the weapon that creates bullets
 		this.weapon = new FlxTypedWeapon<ShipAttack>("Laser mk. I", 
-            function(w) { return new ShipAttack(stats.attackDamage, 500.0); }, 
+            function(w) { return new ShipAttack(this.attackDamage, 50.0); }, 
             FlxWeaponFireFrom.PARENT(this, new FlxBounds(this.origin, this.origin)),
-			FlxWeaponSpeedMode.SPEED(new FlxBounds(500.0, 500.0))
+			FlxWeaponSpeedMode.SPEED(new FlxBounds(50.0, 50.0))
         );
+        this.weapon.bulletLifeSpan = new FlxBounds(2.0, 2.0);
 		this.weapon.bounds = new FlxRect(0, 0, FlxG.width, FlxG.height);
-		this.weapon.fireRate = Math.round(1000 / stats.attackSpeed);
+		this.weapon.fireRate = Math.round(this.attackSpeed * 1000); // attacks per second * 1000ms/s = attacks per ms
         FlxG.state.add(this.weapon.group); // Add weapon group here, all bullets part of this group
 		
 		switch (this.faction.getFactionType()) {
@@ -313,10 +304,13 @@ class Ship extends FlxSprite {
 			default:
 		}
 
-		hpBar = new FlxText(this.x, this.y - this.height, 0, "" + stats.hitPoints, 16);
+		hpBar = new FlxText(this.x, this.y - this.height, 0, "" + this.health, 16);
 		//FlxG.state.add(hpBar);
 	}
+    
 
+    
+    
 	// Returns where along its path the ship should be right now if it weren't for flocking behavior
 	public function idealPos(): FlxVector {
 		if (isMoving()) {
@@ -360,14 +354,15 @@ class Ship extends FlxSprite {
 		// Whether the ship is currently stationed at one node or is moving between nodes
 		if (isMoving()) {
 			// Update the ship's movement along an edge
-			progress += stats.maxVelocity * elapsed;
+			progress += this.maxVel * elapsed;
 			if (progress > nodePath[0].length()) {
 				// If needed, move to the next edge
 				progress -= nodePath[0].length();
 				//node.removeShip(this);
 				node = nodePath.shift().n2;
 				node.addShip(this);
-			} else if (node != null && this.getPosition().distanceTo(node.getPosition()) > 20) {
+			//} else if (node != null && this.getPosition().distanceTo(node.getPosition()) > 20) {
+			} else if (node != null && !this.inSensorRange(node)) {
 				node.removeShip(this); // detach this ship from node if distance is > than 20
 				node = null; // set node to null
 			}
@@ -394,23 +389,51 @@ class Ship extends FlxSprite {
 
 		hpBar.x = this.x;
 		hpBar.y = this.y - this.height / 2 + 5;
-		hpBar.text = "" + Math.round(stats.hitPoints);
+		hpBar.text = "" + Math.round(this.health);
 
 		super.update(elapsed);
 	}
     
+    /**
+     * Applies incoming damage/health regeneration to this ship.
+     * If damage is less than 0, it is applied as a health bonus, if greater
+     * than 0, it is applied against this ship's shields first, then applied
+     * as damage.
+     * @param Damage    incoming damage/health regen
+     */
+    override public function hurt(Damage:Float):Void {
+        if (Damage > 0.0) {
+            Damage *= this.shield;  // reduce damage by shield amount
+        }
+        //trace(this.toString() + " took " + Damage + " damage.");
+        super.hurt(Damage);
+    }
+    
+    override public function destroy():Void {
+        trace("ship destroyed: " + this.toString());
+        if (this.node != null) {
+            this.node.removeShip(this);
+            trace("\tremoved from node: " + this.node.toString());
+        }
+        super.destroy();
+    }
+    
+    public function getMaxVelocity():Float {
+        return this.maxVel;
+    }
+    
     // RADAR Functions
     
-    public function withinRadarRange(ship:Ship):Bool {
-        return this.getPosition().distanceTo(ship.getPosition()) <= this.radar.getRadarRange();
+    public function inSensorRange(object:FlxObject):Bool {
+        //if (this == ship) {
+        if (object == null || this == object) {
+            return false;
+        }
+        return this.getPosition().distanceTo(object.getPosition()) <= this.sensorRange;
     }
     
-    public function addToRadar(ship:Ship):Void {
-        this.radar.addShip(ship);
-    }
-    
-    public function removeFromRadar(ship:Ship):Void {
-        this.radar.removeShip(ship);
+    public function setRadar(ships:Array<Ship>):Void {
+        this.radar.setRadar(ships);
     }
     
     public function getRandomTarget():Ship {

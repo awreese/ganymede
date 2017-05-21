@@ -40,7 +40,8 @@ class PlayState extends FlxState {
 	
     //public var grpShips: ShipGroup;
     // TODO: turn above into below
-	private var shipgroupByFaction:Map<FactionType, ShipGroup>;
+	//private var shipgroupByFaction:Map<FactionType, ShipGroup>;
+    private var shipGroup:ShipGroup;
     
     private var grpPlanets: FlxTypedGroup<gameUnits.capturable.Planet>;
 	private var rand:FlxRandom;
@@ -62,12 +63,14 @@ class PlayState extends FlxState {
 		//add(grpShips);
         
         // create empty faction ship groups
-        shipgroupByFaction = new Map<FactionType, ShipGroup>();
-        for (faction in Faction.getEnums()) {
-            var shipgroup:ShipGroup = new ShipGroup();  // create new ship group
-            shipgroupByFaction.set(faction, shipgroup); // add to faction mapping
-            this.add(shipgroup);                        // add to scene to be rendered
-        }
+        //shipgroupByFaction = new Map<FactionType, ShipGroup>();
+        //for (faction in Faction.getEnums()) {
+            //var shipgroup:ShipGroup = new ShipGroup();  // create new ship group
+            //shipgroupByFaction.set(faction, shipgroup); // add to faction mapping
+            //this.add(shipgroup);                        // add to scene to be rendered
+        //}
+        shipGroup = new ShipGroup();
+        add(shipGroup);
 
 		// add the enemies
 		for (faction in Faction.getEnums()) {
@@ -91,18 +94,22 @@ class PlayState extends FlxState {
 		 * Check and update any game state
 		 */
         
-        // update all ships' radars
-        for (shipGroupOuter in shipgroupByFaction) {
-            for (shipOuter in shipGroupOuter) {
-                
-                for (shipGroupInner in shipgroupByFaction) {
-                    for (shipInner in shipGroupInner) {
-                        if (shipInner == shipOuter) { continue; }
-                        if (shipInner.withinRadarRange(shipOuter)) {
-                            shipInner.addToRadar(shipOuter);
+        
+        for (ship in shipGroup) {
+            if (ship.exists) {
+                // update all ships' radars
+                ship.setRadar(
+                    shipGroup.members.copy().filter(
+                        function(other:Ship) {
+                            return ship != other && other.exists && ship.inSensorRange(other);
                         }
-                    }
-                }
+                    )
+                );
+            } else {
+                //trace("Ship destroyed: " + ship.toString());
+                
+                ship.destroy();
+                this.shipGroup.remove(ship, true);
             }
         }
 
@@ -122,8 +129,13 @@ class PlayState extends FlxState {
 				//}
                 
                 // new loop
-                for (ship in shipgroupByFaction.get(PLAYER)) {
-                    ship.isSelected =  false;
+                //for (ship in shipgroupByFaction.get(PLAYER)) {
+                    //ship.isSelected =  false;
+                //}
+                for (ship in shipGroup) {
+                    if (ship.getFactionType() == PLAYER) {
+                        ship.isSelected = false;
+                    }
                 }
                 
 			} else {
@@ -139,9 +151,10 @@ class PlayState extends FlxState {
 				//}
                 
                 // new loop
-                for (ship in shipgroupByFaction.get(PLAYER)) {
+                //for (ship in shipgroupByFaction.get(PLAYER)) {
+                for (ship in shipGroup) {
                     // allows player to select multiple ships on the map
-                    if (n.contains(ship.getPos())) {
+                    if (ship.getFactionType() == PLAYER && n.contains(ship.getPos())) {
                         ship.isSelected = true;
                     }
                 }
@@ -162,8 +175,10 @@ class PlayState extends FlxState {
 				//}
                 
                 // new loop
-                for (ship in shipgroupByFaction.get(PLAYER)) {
-                    if (ship.isSelected) {
+                //for (ship in shipgroupByFaction.get(PLAYER)) {
+                for (ship in shipGroup) {
+                    //if (ship.isSelected) {
+                    if (ship.getFactionType() == PLAYER && ship.isSelected) {
 						ship.isSelected = false;
 						ship.pathTo(n);
 					}
@@ -217,7 +232,8 @@ class PlayState extends FlxState {
 	}
     
     public function addShip(ship:Ship):Void {
-        this.shipgroupByFaction.get(ship.getFactionType()).add(ship);
+        //this.shipgroupByFaction.get(ship.getFactionType()).add(ship);
+        this.shipGroup.add(ship);
     }
 	
 	
@@ -233,7 +249,7 @@ class PlayState extends FlxState {
 		// Iterates through all the ships
         
         // Outer loop goes by faction
-        for (shipGroup in shipgroupByFaction) {
+        //for (shipGroup in shipgroupByFaction) {
             
             // Inner loop covers factions group of ships
             //for (s1 in grpShips) {
@@ -241,7 +257,8 @@ class PlayState extends FlxState {
                 
                 // Defines all the forces acting on the ship
                 var toDest = s1.idealPos().subtractNew(s1.pos); // This force pulls the ship towards its destination
-                var desiredSpeed = s1.vel.normalize().scaleNew(s1.stats.maxVelocity).subtractNew(s1.vel); // This force accelerates the ship to its desired speed
+                //var desiredSpeed = s1.vel.normalize().scaleNew(s1.stats.maxVelocity).subtractNew(s1.vel); // This force accelerates the ship to its desired speed
+                var desiredSpeed = s1.vel.normalize().scaleNew(s1.getMaxVelocity()).subtractNew(s1.vel); // This force accelerates the ship to its desired speed
                 var noise = new FlxVector(Math.random() - .5, Math.random() - .5); // This force provides a bit of noise to make the motion look nicer
                 var seperation = new FlxVector(0, 0); // This force prevents ships from getting too close together
                 var alignment = new FlxVector(0, 0); // This force makes ships tend to point the same direction
@@ -278,7 +295,7 @@ class PlayState extends FlxState {
                 s1.vel = s1.vel.addNew(acceleration.scaleNew(elapsed));
             }
             
-        }
+        //}
         
 	}
 	
@@ -454,7 +471,8 @@ class PlayState extends FlxState {
 				//grpShips.add(ship);
 				//node.addShip(ship);
                 
-                shipgroupByFaction.get(ship.getFactionType()).add(ship);
+                //shipgroupByFaction.get(ship.getFactionType()).add(ship);
+                this.shipGroup.add(ship);
                 node.addShip(ship);
 			}
 		}
