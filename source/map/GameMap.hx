@@ -328,52 +328,79 @@ class GameMap extends FlxSprite {
 		enemyAi = data.ai; // get ai time
 		var nodes = data.nodes; // get nodes
 		var neighbors = data.neighbors; // get neighbors
+		
+		// For each node in the level
 		for (s in Reflect.fields(nodes)) {
 			var node = data.nodes[Std.parseInt(s)];
-			var n = this.addNode(node.id, node.x, node.y); // make node
+			var n = this.addNode(node.id, node.x, node.y); // Add the node to the game
+			
+			// Update the level bounds
 			minX = node.x < minX ? node.x : minX; // set smallest x
 			maxX = node.x > maxX ? node.x : maxX; // set biggest x
 			minY = node.y < minY ? node.y : minY; // set smallest y
 			maxY = node.y > maxY ? node.y : maxY; // set biggest y
-			var faction:FactionType = null; // get faction
-			switch (node.faction) {
-				case "player":
-					faction = FactionType.PLAYER;
-				case "enemy1":
-					faction = FactionType.ENEMY_1;
-				case "enemy2":
-					faction = FactionType.ENEMY_2;
-				case "enemy3":
-					faction = FactionType.ENEMY_3;
-				case "enemy4":
-					faction = FactionType.ENEMY_4;
-				case "enemy5":
-					faction = FactionType.ENEMY_5;
-				case "enemy6":
-					faction = FactionType.ENEMY_6;
-				case "neutral":
-					faction = FactionType.NEUTRAL;
-				case "nop":
-					faction = FactionType.NOP;
-				default:
-					faction = null;
+			
+			// Get the node's faction
+			var faction:FactionType = null; 
+			if (Reflect.hasField(node, "faction")) {
+				switch (node.faction) {
+					case "player":
+						faction = FactionType.PLAYER;
+					case "enemy1":
+						faction = FactionType.ENEMY_1;
+					case "enemy2":
+						faction = FactionType.ENEMY_2;
+					case "enemy3":
+						faction = FactionType.ENEMY_3;
+					case "enemy4":
+						faction = FactionType.ENEMY_4;
+					case "enemy5":
+						faction = FactionType.ENEMY_5;
+					case "enemy6":
+						faction = FactionType.ENEMY_6;
+					case "neutral":
+						faction = FactionType.NEUTRAL;
+					case "nop":
+						faction = FactionType.NOP;
+					default:
+						faction = null;
+				}
 			}
-			if (faction != null) {
-				// if there'a faction, then not empty node
-				var cap = node.captureable;
-				switch(cap.object) {
-					case "planet":
-						// if planet
-						var bp = cap.blueprint; // get blueprint from json
-						var blueprint = new BluePrint(bp.hull, bp.maxVel, bp.sh, bp.hp, bp.as, bp.ad, bp.cps); // make blueprint
-						// make planet stat
-						var ps = new PlanetStat(blueprint, cap.cap, cap.prod, cap.prod_thresh, cap.cap_lvl, cap.tech_lvl, cap.base_cost, cap.cap_per_level, cap.tech_per_lvl);
-						var planet = new Planet(playState, this.id_to_node.get(node.id), new Faction(faction), ps); // create planet
-						this.addCapturableByID(node.id, planet); // add planet
-						FlxG.state.add(planet);
+			
+			// Defining planets and ships by templates
+			if (Reflect.hasField(node, "planet")) {
+				// Load the planet and ship templates
+				var planetstat = PlanetStat.getPlanetStat(node.planet.planet_template);
+				planetstat.ship = BluePrint.getBluePrint(node.planet.ship_template);
+				
+				// Create the planet and add it the to game
+				var planet = new Planet(playState, this.id_to_node.get(node.id), new Faction(faction), planetstat);
+				this.addCapturableByID(node.id, planet);
+				FlxG.state.add(planet);
+			}
+			
+			// Defining planets and ships by custom stats
+			// Keeping the same format allows compatibility with old level files
+			if (Reflect.hasField(node, "captureable")) {
+				if (faction != null) {
+					// if there'a faction, then not empty node
+					var cap = node.captureable;
+					switch(cap.object) {
+						case "planet":
+							// if planet
+							var bp = cap.blueprint; // get blueprint from json
+							var blueprint = new BluePrint(bp.hull, bp.maxVel, bp.sh, bp.hp, bp.as, bp.ad, bp.cps); // make blueprint
+							// make planet stat
+							var ps = new PlanetStat(blueprint, cap.cap, cap.prod, cap.prod_thresh, cap.cap_lvl, cap.tech_lvl, cap.base_cost, cap.cap_per_level, cap.tech_per_lvl);
+							var planet = new Planet(playState, this.id_to_node.get(node.id), new Faction(faction), ps); // create planet
+							this.addCapturableByID(node.id, planet); // add planet
+							FlxG.state.add(planet);
+					}
 				}
 			}
 		}
+		
+		// For each edge between nodes
 		for (s in Reflect.fields(neighbors)) {
 			var node = neighbors[Std.parseInt(s)]; // get node
 			for (i in Reflect.fields(node.neighbor)) {
