@@ -165,13 +165,20 @@ class PlayState extends FlxState
 		
 		// check if there are other ships of other factions
 		var noOtherFaction: Bool = true;
+		var noPlayerShips: Bool = true;
 		for (ship in grpShips) {
+			if (ship.getFaction() == FactionType.PLAYER) {
+				// found a player ship
+				noPlayerShips = false;
+			}
 			if (ship.exists) {
 				if (ship.getFaction() != FactionType.PLAYER) {
+					// found a ship that's not of player faction
 					noOtherFaction = false;
-					break;
 				}
 			}
+			// break out of loop if found both
+			if (!noPlayerShips && !noOtherFaction) break;
 		}
 		
 		// if captured all the planets, progress
@@ -187,7 +194,7 @@ class PlayState extends FlxState
 		}
 		
 		// if player lose all planets, gameover
-		if (gameMap.getNumPlayerPlanets() == 0) {
+		if (gameMap.getNumPlayerPlanets() == 0 && noPlayerShips) {
 			FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
 			FlxG.switchState(new GameOverState());
 			});

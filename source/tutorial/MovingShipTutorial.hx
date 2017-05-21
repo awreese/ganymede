@@ -134,7 +134,7 @@ class MovingShipTutorial extends FlxState {
 		if (!shipInPlace) {
 			// move the ship to nop planet
 			ship.x += 100 * elapsed;
-			if (ship.x >= nop.x) {
+			if (ship.x >= nop.x + nop.width / 4) {
 				shipInPlace = true;
 				captureBar.visible = true;
 				captureTxt.visible = true;
@@ -162,7 +162,7 @@ class MovingShipTutorial extends FlxState {
 			// if pressed right on/near nop planet, move ship and stuff
 			var mousePos = FlxG.mouse.getPosition();
 			var dist = mousePos.distanceTo(new FlxPoint(nop.x + nop.width / 2, nop.y + nop.height / 2));
-			if (dist <= 30) {
+			if (dist <= 45) {
 				click();
 			}
 		}

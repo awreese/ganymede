@@ -70,6 +70,9 @@ class SelectShipTutorial extends FlxState
 		FlxG.camera.focusOn(new FlxPoint(592, 438));
 		FlxG.camera.zoom = FlxG.height / 320;
 		
+		// Log level start and time
+        Main.LOGGER.logLevelStart(Main.LEVEL, Date.now());
+		
 		super.create();
 	}
 	
