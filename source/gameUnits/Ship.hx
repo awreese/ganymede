@@ -63,6 +63,30 @@ typedef ShipGroup = FlxTypedGroup<Ship>;
  * @author Drew Reese
  */
 class BluePrint {
+	
+	// Stores default BluePrints that can be referenced in level files. This allows for easier
+	// creation and editing of game levels, and allows us to change the stats of all ships of
+    // a type at once.
+	private static var shipTemplateMap = new Map<String, BluePrint>();
+	
+	// Whether or not the templates have been initialized yet
+	private static var hasInitialized = false;
+	
+	// Guarantees that the values in the template map have been initialized
+	private static function checkInitTemplates(): Void {
+		if (!hasInitialized) {
+			hasInitialized = true;
+			shipTemplateMap.set("frigate", new BluePrint(null, 60.0, 0.5, 100.0, 2.0, 10.0, 5.0));
+		}
+	}
+	
+	// Returns the ship template with the given name, using clone() to guarantee safety
+	public static function getBluePrint(name: String): BluePrint {
+		checkInitTemplates();
+		return shipTemplateMap.get(name).clone();
+	}
+	
+	
 	// General
 	public var hull:HullType;	    // ship hull type
 	public var maxVelocity:Float;	// maximum ship velocity
