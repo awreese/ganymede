@@ -64,6 +64,30 @@ typedef ShipGroup = FlxTypedGroup<Ship>;
  * @author Drew Reese
  */
 class BluePrint {
+	
+	// Stores default BluePrints that can be referenced in level files. This allows for easier
+	// creation and editing of game levels, and allows us to change the stats of all ships of
+    // a type at once.
+	private static var shipTemplateMap = new Map<String, BluePrint>();
+	
+	// Whether or not the templates have been initialized yet
+	private static var hasInitialized = false;
+	
+	// Guarantees that the values in the template map have been initialized
+	private static function checkInitTemplates(): Void {
+		if (!hasInitialized) {
+			hasInitialized = true;
+			shipTemplateMap.set("frigate", new BluePrint(null, 60.0, 0.5, 100.0, 2.0, 10.0, 5.0));
+		}
+	}
+	
+	// Returns the ship template with the given name, using clone() to guarantee safety
+	public static function getBluePrint(name: String): BluePrint {
+		checkInitTemplates();
+		return shipTemplateMap.get(name).clone();
+	}
+	
+	
 	// General
 	public var hull:HullType;	    // ship hull type
 	public var maxVelocity:Float;	// maximum ship velocity
@@ -236,7 +260,7 @@ class Ship extends FlxSprite {
 
 	public var isSelected:Bool; // Whether the player has currently selected this ship (should ideally be moved to a Player class in the future)
 
-	private var hpBar :FlxText;
+	//private var hpBar :FlxText;
 	
 	public var weapon:FlxTypedWeapon<ShipAttack>; // This weapon is used to create ShipAttacks
 
@@ -284,27 +308,8 @@ class Ship extends FlxSprite {
 		this.weapon.fireRate = Math.round(this.attackSpeed * 1000); // attacks per second * 1000ms/s = attacks per ms
         FlxG.state.add(this.weapon.group); // Add weapon group here, all bullets part of this group
 		
-		switch (this.faction.getFactionType()) {
-			case PLAYER:
-				loadGraphic(AssetPaths.ship_1__png, false);
-			case ENEMY_1:
-				loadGraphic(AssetPaths.enemyship_1__png, false);
-			case ENEMY_2:
-				loadGraphic(AssetPaths.enemyship_1__png, false);
-			case ENEMY_3:
-				loadGraphic(AssetPaths.enemyship_1__png, false);
-			case ENEMY_4:
-				loadGraphic(AssetPaths.enemyship_1__png, false);
-			case ENEMY_5:
-				loadGraphic(AssetPaths.enemyship_1__png, false);
-			case ENEMY_6:
-				loadGraphic(AssetPaths.enemyship_1__png, false);
-			case NEUTRAL:
-				loadGraphic(AssetPaths.ship_1__png, false);
-			default:
-		}
-
-		hpBar = new FlxText(this.x, this.y - this.height, 0, "" + this.health, 16);
+		
+		//hpBar = new FlxText(this.x, this.y - this.height, 0, "" + stats.hitPoints, 16);
 		//FlxG.state.add(hpBar);
 	}
     
@@ -343,12 +348,18 @@ class Ship extends FlxSprite {
 	override public function update(elapsed:Float):Void {
 		// check faction, take appropriate actions, etc..
 		// Change the sprite to show when the ship is selected
-		if (isSelected) {
-			loadGraphic("assets/images/ship_1_selected.png", false, 32, 32);
-		} else {
-			if (this.faction.getFactionType() == FactionType.PLAYER) {
-				loadGraphic(AssetPaths.ship_1__png, false);
-			}
+		switch (this.faction.getFactionType()) {
+			case PLAYER:
+				if (isSelected)
+					loadGraphic(AssetPaths.ship_1_player_selected__png, false);
+				else
+					loadGraphic(AssetPaths.ship_1_player__png, false);
+			case ENEMY_1:
+				loadGraphic(AssetPaths.ship_1_enemy1__png, false);
+			case NEUTRAL:
+				loadGraphic(AssetPaths.ship_1_neutral__png, false);
+			default:
+				loadGraphic(AssetPaths.ship_1_enemy1__png, false);
 		}
 
 		// Whether the ship is currently stationed at one node or is moving between nodes
@@ -387,9 +398,9 @@ class Ship extends FlxSprite {
 		x = this.pos.x - origin.x;
 		y = this.pos.y - origin.y;
 
-		hpBar.x = this.x;
-		hpBar.y = this.y - this.height / 2 + 5;
-		hpBar.text = "" + Math.round(this.health);
+		//hpBar.x = this.x;
+		//hpBar.y = this.y - this.height / 2 + 5;
+		//hpBar.text = "" + Math.round(stats.hitPoints);
 
 		super.update(elapsed);
 	}

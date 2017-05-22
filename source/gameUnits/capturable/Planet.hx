@@ -45,6 +45,31 @@ import faction.Faction;
  * @author Drew Reese
  */
 class PlanetStat {
+	
+	// Stores default PlanetStats that can be referenced in level files. This allows for easier
+	// creation and editing of game levels, and allows us to change the stats of all planets of
+    // a type at once.
+	private static var planetTemplateMap = new Map<String, PlanetStat>();
+	
+	// Whether or not the templates have been initialized yet
+	private static var hasInitialized = false;
+	
+	// Guarantees that the values in the template map have been initialized
+	private static function checkInitTemplates(): Void {
+		if (!hasInitialized) {
+			hasInitialized = true;
+			planetTemplateMap.set("level1", new PlanetStat(null, 10, 5.0, 0.5, 0, 0, 10, 5, 2.0));
+			planetTemplateMap.set("level2", new PlanetStat(null, 15, 3.0, 0.5, 0, 0, 10, 5, 2.0));
+		}
+	}
+	
+	// Returns the planet template with the given name, using clone() to guarantee safety
+	public static function getPlanetStat(name: String): PlanetStat {
+		checkInitTemplates();
+		return planetTemplateMap.get(name).clone();
+	}
+	
+	
 	// Class Constants
 	public static inline var MAX_CAPACITY_LEVEL:Int = 5; // default as 5 for now
 	public static inline var MAX_TECH_LEVEL:Int = 5; // default as 5 for now
@@ -99,7 +124,7 @@ class PlanetStat {
      * @return clone of this PlanetStat
      */
     public function clone():PlanetStat {
-        return new PlanetStat(this.ship.clone(), this.cap, this.prod, this.prod_thresh, 
+        return new PlanetStat(ship == null ? null : this.ship.clone(), this.cap, this.prod, this.prod_thresh, 
                             this.cap_lvl, this.tech_lvl,
                             this.base_cost, 
                             this.cap_per_lvl, this.tech_per_lvl);
@@ -264,24 +289,18 @@ class Planet extends Capturable {
 	private function setSprite():Void {
 		switch (this.faction.getFactionType()) {
 			case PLAYER:
-				loadGraphic(AssetPaths.player_planet_1__png, false);
+				loadGraphic(AssetPaths.planet_1_player__png, false);
 			case ENEMY_1:
-				loadGraphic(AssetPaths.enemy_planet_1__png, false);
-			case ENEMY_2:
-				loadGraphic(AssetPaths.enemy_planet_1__png, false);
-			case ENEMY_3:
-				loadGraphic(AssetPaths.enemy_planet_1__png, false);
-			case ENEMY_4:
-				loadGraphic(AssetPaths.enemy_planet_1__png, false);
-			case ENEMY_5:
-				loadGraphic(AssetPaths.enemy_planet_1__png, false);
-			case ENEMY_6:
-				loadGraphic(AssetPaths.enemy_planet_1__png, false);
+				loadGraphic(AssetPaths.planet_1_enemy1__png, false);
 			case NEUTRAL:
-				loadGraphic(AssetPaths.neutral_planet_1__png, false);
+				loadGraphic(AssetPaths.planet_1_neutral__png, false);
+			case NOP:
+				loadGraphic(AssetPaths.planet_1_none__png, false);
 			default:
-				loadGraphic(AssetPaths.uncontrolled_planet_1__png, false);
+				loadGraphic(AssetPaths.planet_1_enemy1__png, false);
 		}
+		
+		this.setGraphicSize(32, 32); // This scales down the planets from their default size of 48x48
 
 		x = node.x - origin.x;
 		y = node.y - origin.y;
