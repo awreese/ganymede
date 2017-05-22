@@ -308,7 +308,6 @@ class Ship extends FlxSprite {
 		this.weapon.fireRate = Math.round(this.attackSpeed * 1000); // attacks per second * 1000ms/s = attacks per ms
         FlxG.state.add(this.weapon.group); // Add weapon group here, all bullets part of this group
 		
-		
 		//hpBar = new FlxText(this.x, this.y - this.height, 0, "" + stats.hitPoints, 16);
 		//FlxG.state.add(hpBar);
 	}

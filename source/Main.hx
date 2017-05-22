@@ -10,8 +10,8 @@ class Main extends Sprite
 	public static var LOGGER: CapstoneLogger;
 	public static var LEVEL: Int;
 	public static inline var FINAL_LEVEL: Int = 5;
-	public function new()
-	{
+
+	public function new() {
 		LEVEL = 1;
 		// This code prevents right-click from opening a menu
 		#if js

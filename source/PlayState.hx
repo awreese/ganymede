@@ -53,12 +53,14 @@ class PlayState extends FlxState {
 	override public function create():Void {
 		rand = new FlxRandom();
 		enemies = new Array<Enemy>();
+
 		#if flash
 			laser_snd = FlxG.sound.load(AssetPaths.laser__mp3);
 		#else
 			laser_snd = FlxG.sound.load(AssetPaths.laser__wav);
 		#end
 		laser_snd.looped = false;
+
 		// Initialize the map
 		grpMap = new FlxTypedGroup<GameMap>();        ///
 		add(grpMap);                                    //____ WTF is this?
@@ -67,16 +69,6 @@ class PlayState extends FlxState {
 		//add(gameMap);
 
 		// Create the ships
-		//grpShips = new FlxTypedGroup<gameUnits.Ship>();
-		//add(grpShips);
-        
-        // create empty faction ship groups
-        //shipgroupByFaction = new Map<FactionType, ShipGroup>();
-        //for (faction in Faction.getEnums()) {
-            //var shipgroup:ShipGroup = new ShipGroup();  // create new ship group
-            //shipgroupByFaction.set(faction, shipgroup); // add to faction mapping
-            //this.add(shipgroup);                        // add to scene to be rendered
-        //}
         shipGroup = new ShipGroup();
         add(shipGroup);
 
@@ -273,7 +265,6 @@ class PlayState extends FlxState {
 	 */
 	private function shipFlocking(elapsed: Float): Void {
 		// Iterates through all the ships
-
 		for (s1 in shipGroup) {
 			
 			// Defines all the forces acting on the ship
