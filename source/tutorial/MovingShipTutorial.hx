@@ -59,7 +59,7 @@ class MovingShipTutorial extends FlxState {
 		
 		// create capture bar
 		captureBar = new FlxBar(0, 0, LEFT_TO_RIGHT, 50, 10, null, "", 0, 100, true);
-		captureBar.x = nop.x - (nop.width / 4);
+		captureBar.x = nop.x;
 		captureBar.y = nop.y + nop.height + 2;
 		captureBar.createColoredFilledBar(FlxColor.BLUE, true);
 		captureBar.visible = false;
