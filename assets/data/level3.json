@@ -14,7 +14,12 @@
 		{
 			"id": "node2",
 			"x": 200.0,
-			"y": 350.0,
+			"y": 300.0
+		},
+		{
+			"id": "node3",
+			"x": 400.0,
+			"y": 170.0,
 			"faction": "nop",
 			"planet": {
 				"planet_template": "level1",
@@ -22,13 +27,8 @@
 			}
 		},
 		{
-			"id": "node3",
-			"x": 350.0,
-			"y": 150.0
-		},
-		{
 			"id": "node4",
-			"x": 400.0,
+			"x": 370.0,
 			"y": 350.0,
 			"faction": "enemy1",
 			"planet": {
@@ -40,7 +40,7 @@
 	"neighbors":[ 
 		{
 			"id": "node1",
-			"neighbor": ["node2", "node3"]
+			"neighbor": ["node2"]
 		},
 		{
 			"id": "node2",
@@ -48,7 +48,7 @@
 		},
 		{
 			"id": "node3",
-			"neighbor": ["node1", "node2", "node4"]
+			"neighbor": ["node2", "node4"]
 		},
 		{
 			"id": "node4",

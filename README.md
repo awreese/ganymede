@@ -12,3 +12,6 @@ Gather your forces and test your fortitude against a rising threat.  Command you
 * Andrew Reese
 * Daisy Xu
 * Rory Soiffer
+
+# Play Online (* demo)
+[newgrounds.com](http://www.newgrounds.com/portal/view/693430 "AstroRush") *

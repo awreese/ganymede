@@ -7,13 +7,14 @@ import flixel.math.FlxVector;
 /**
  * This class represents one projectile fired by a ship at a given target ship.
  * @author Rory Soiffer
+ * @author Drew Reese
  */
 class ShipAttack extends FlxBullet
 {
 
-	public var target: Ship; // Which ship this attack is targeting
-	private var damage: Float; // How much damage this attack deals
-	private var speed: Float; // How fast this attack travels
+	public var target: Ship;    // Which ship this attack is targeting
+	private var damage: Float;  // How much damage this attack deals
+	private var speed: Float;   // How fast this attack travels
 
 	public function new(damage: Float, speed: Float) {
 		super();
@@ -35,15 +36,10 @@ class ShipAttack extends FlxBullet
 			angle = pointToVector(this.velocity).degrees;
 			
 			// If the attack hit the target
-			if (this.getPosition().distanceTo(target.getPos()) < Math.max(target.width, target.height)/2) {
+			if (this.overlaps(target)) {
 				
 				// Damage the target
-				target.stats.hitPoints -= damage * target.stats.shield;
-				
-				// If needed, destroy the target
-				if (target.stats.hitPoints <= 0) {
-					target.destroy();
-				}
+                target.hurt(damage);
 				
 				// Destroy the bullet
 				this.kill();
