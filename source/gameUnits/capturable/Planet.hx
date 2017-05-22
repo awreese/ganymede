@@ -49,18 +49,25 @@ class PlanetStat {
 	// Stores default PlanetStats that can be referenced in level files. This allows for easier
 	// creation and editing of game levels, and allows us to change the stats of all planets of
     // a type at once.
-	private static var planetTemplateMap = new Map<String, PlanetStat>();
+	private static var _planet_template:Map<String, PlanetStat>();
 	
 	// Whether or not the templates have been initialized yet
-	private static var hasInitialized = false;
+	//private static var hasInitialized = false;
 	
 	// Guarantees that the values in the template map have been initialized
-	private static function checkInitTemplates(): Void {
-		if (!hasInitialized) {
-			hasInitialized = true;
-			planetTemplateMap.set("level1", new PlanetStat(null, 10, 5.0, 0.5, 0, 0, 10, 5, 2.0));
-			planetTemplateMap.set("level2", new PlanetStat(null, 15, 3.0, 0.5, 0, 0, 10, 5, 2.0));
-		}
+	//private static function checkInitTemplates(): Void {
+		//if (!hasInitialized) {
+			//hasInitialized = true;
+			//planetTemplateMap.set("level1", new PlanetStat(null, 10, 5.0, 0.5, 0, 0, 10, 5, 2.0));
+			//planetTemplateMap.set("level2", new PlanetStat(null, 15, 3.0, 0.5, 0, 0, 10, 5, 2.0));
+		//}
+	//}
+	
+	static function __init__() {
+		_planet_template = new Map<String, PlanetStat>();
+		_planet_template.set("level1", new PlanetStat(null, 10, 5.0, 0.5, 0, 0, 10, 5, 2.0));
+		_planet_template.set("level2", new PlanetStat(null, 15, 3.0, 0.5, 0, 0, 10, 5, 2.0));
+		// etc...
 	}
 	
 	// Returns the planet template with the given name, using clone() to guarantee safety
