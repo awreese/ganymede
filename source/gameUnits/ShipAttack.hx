@@ -36,7 +36,7 @@ class ShipAttack extends FlxBullet
 			angle = pointToVector(this.velocity).degrees;
 			
 			// If the attack hit the target
-			if (target.getHitbox().containsPoint(this.getMidpoint())) {
+			if (this.overlaps(target)) {
 				
 				// Damage the target
                 target.hurt(damage);

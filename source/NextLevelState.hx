@@ -3,11 +3,11 @@ package;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
+import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.util.FlxAxes;
 import flixel.util.FlxColor;
-import tutorial.CapturingFactionTutorial;
 
 /**
  * ...
@@ -18,10 +18,18 @@ class NextLevelState extends FlxState
 	private var foreground:FlxSprite;
 	private var congratulationsTxt:FlxText;
 	private var background:FlxSprite;
+	private var applauseSnd:FlxSound;
 	
 	override public function create():Void
 	{
 		Main.LEVEL++;
+		
+		// load sound effect
+		#if flash
+			applauseSnd = FlxG.sound.load(AssetPaths.applause__mp3);
+		#else
+			applauseSnd = FlxG.sound.load(AssetPaths.applause__wav);
+		#end
 		
 		// create background
 		background = new FlxSprite(0, 0);
@@ -45,6 +53,7 @@ class NextLevelState extends FlxState
         Main.LOGGER.logLevelEnd(Date.now());
         
 		super.create();
+		applauseSnd.play();
 	}
 
 	override public function update(elapsed:Float):Void

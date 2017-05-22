@@ -3,6 +3,7 @@ package tutorial;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
+import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.util.FlxAxes;
@@ -20,9 +21,17 @@ class FinishGameState extends FlxState
 	private var restartBtn:FlxButton;
 	private var background:FlxSprite;
 	private var feedbackBtn:FlxButton;
+	private var applauseSnd:FlxSound;
 
 	override public function create():Void
 	{
+		// load sound effect
+		#if flash
+			applauseSnd = FlxG.sound.load(AssetPaths.applause__mp3);
+		#else
+			applauseSnd = FlxG.sound.load(AssetPaths.applause__wav);
+		#end
+		
 		// create and add the background image
 		background = new FlxSprite(0, 0);
 		background.loadGraphic(AssetPaths.finishgamebg__png);
@@ -37,7 +46,7 @@ class FinishGameState extends FlxState
 
 		// create and add replay button
 		restartBtn = new FlxButton(0, 0, "", clickRestart);
-		restartBtn.loadGraphic(AssetPaths.replay_btn__png, false, 232, 103);
+		restartBtn.loadGraphic(AssetPaths.restart_btn__png, false, 232, 103);
 		restartBtn.x = 80;
 		restartBtn.y = FlxG.height - restartBtn.height - 40;
 		add(restartBtn);
@@ -49,8 +58,12 @@ class FinishGameState extends FlxState
 		add(feedbackBtn);
 
 		Main.LEVEL = 1;
+		
+		// Log level end and time
+        Main.LOGGER.logLevelEnd(Date.now());
 
 		super.create();
+		applauseSnd.play();
 	}
 
 	override public function update(elapsed:Float):Void

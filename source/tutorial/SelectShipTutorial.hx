@@ -36,8 +36,10 @@ class SelectShipTutorial extends FlxState
 		waitTimer = 0.0;
 		
 		// create ship button
-		shipBtn = new FlxButton(472, 344, "", clickShip);
-		shipBtn.loadGraphic(AssetPaths.ship_1__png, false, 32, 32);
+		shipBtn = new FlxButton(472+16, 344+16, "", clickShip);
+		shipBtn.loadGraphic(AssetPaths.ship_1_player__png, false, 32, 32);
+		shipBtn.x -= shipBtn.origin.x;
+		shipBtn.y -= shipBtn.origin.y;
 		shipBtn.scrollFactor.set(1, 1);
 		add(shipBtn);
 		
@@ -47,8 +49,10 @@ class SelectShipTutorial extends FlxState
 		add(cursor);
 		
 		// create nop planet
-		nop = new FlxSprite(697, 344);
-		nop.loadGraphic(AssetPaths.uncontrolled_planet_1__png, false, 32, 32);
+		nop = new FlxSprite(697+16, 344+16);
+		nop.loadGraphic(AssetPaths.planet_1_none__png, false, 32, 32);
+		nop.x -= nop.origin.x;
+		nop.y -= nop.origin.y;
 		add(nop);
 		
 		// create mouse
@@ -65,6 +69,9 @@ class SelectShipTutorial extends FlxState
 		// zoom in
 		FlxG.camera.focusOn(new FlxPoint(592, 438));
 		FlxG.camera.zoom = FlxG.height / 320;
+		
+		// Log level start and time
+        Main.LOGGER.logLevelStart(Main.LEVEL, Date.now());
 		
 		super.create();
 	}

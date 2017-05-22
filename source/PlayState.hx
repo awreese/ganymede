@@ -25,6 +25,7 @@ import flixel.FlxState;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxRandom;
 import flixel.math.FlxVector;
+import flixel.system.FlxSound;
 import flixel.util.FlxColor;
 import gameUnits.Ship;
 import gameUnits.Ship.ShipGroup;
@@ -47,10 +48,19 @@ class PlayState extends FlxState {
 	private var rand:FlxRandom;
 	private var numPlayerFaction:Int;
 	private var enemies: Array<Enemy>;
+	private var laser_snd: FlxSound;
 
 	override public function create():Void {
 		rand = new FlxRandom();
 		enemies = new Array<Enemy>();
+
+		#if flash
+			laser_snd = FlxG.sound.load(AssetPaths.laser__mp3);
+		#else
+			laser_snd = FlxG.sound.load(AssetPaths.laser__wav);
+		#end
+		laser_snd.looped = false;
+
 		// Initialize the map
 		grpMap = new FlxTypedGroup<GameMap>();        ///
 		add(grpMap);                                    //____ WTF is this?
@@ -59,16 +69,6 @@ class PlayState extends FlxState {
 		//add(gameMap);
 
 		// Create the ships
-		//grpShips = new FlxTypedGroup<gameUnits.Ship>();
-		//add(grpShips);
-        
-        // create empty faction ship groups
-        //shipgroupByFaction = new Map<FactionType, ShipGroup>();
-        //for (faction in Faction.getEnums()) {
-            //var shipgroup:ShipGroup = new ShipGroup();  // create new ship group
-            //shipgroupByFaction.set(faction, shipgroup); // add to faction mapping
-            //this.add(shipgroup);                        // add to scene to be rendered
-        //}
         shipGroup = new ShipGroup();
         add(shipGroup);
 
@@ -78,7 +78,7 @@ class PlayState extends FlxState {
 				continue;
 			}
 			if (gameMap.getControlledNodes(faction).length > 0) {
-				enemies.push(new Enemy(faction, 10));
+				enemies.push(new Enemy(faction, gameMap.getAiTime()));
 			}
 		}
 		
@@ -209,8 +209,26 @@ class PlayState extends FlxState {
 		// produce ships
 		produceShips(elapsed);
 		
+		// check if there are other ships of other factions
+		var noOtherFaction: Bool = true;
+		var noPlayerShips: Bool = true;
+		for (ship in shipGroup) {
+			if (ship.getFactionType() == FactionType.PLAYER) {
+				// found a player ship
+				noPlayerShips = false;
+			}
+			if (ship.exists) {
+				if (ship.getFactionType() != FactionType.PLAYER) {
+					// found a ship that's not of player faction
+					noOtherFaction = false;
+				}
+			}
+			// break out of loop if found both
+			if (!noPlayerShips && !noOtherFaction) break;
+		}
+		
 		// if captured all the planets, progress
-		if (gameMap.getNumPlayerPlanets() == gameMap.getNumPlanets()) {
+		if (gameMap.getNumPlayerPlanets() == gameMap.getNumPlanets() && noOtherFaction) {
 			if (Main.LEVEL == Main.FINAL_LEVEL) {
 				FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
 				FlxG.switchState(new FinishGameState());
@@ -222,7 +240,7 @@ class PlayState extends FlxState {
 		}
 		
 		// if player lose all planets, gameover
-		if (gameMap.getNumPlayerPlanets() == 0) {
+		if (gameMap.getNumPlayerPlanets() == 0 && noPlayerShips) {
 			FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
 			FlxG.switchState(new GameOverState());
 			});
@@ -247,56 +265,43 @@ class PlayState extends FlxState {
 	 */
 	private function shipFlocking(elapsed: Float): Void {
 		// Iterates through all the ships
-        
-        // Outer loop goes by faction
-        //for (shipGroup in shipgroupByFaction) {
-            
-            // Inner loop covers factions group of ships
-            //for (s1 in grpShips) {
-            for (s1 in shipGroup) {
-                
-                // Defines all the forces acting on the ship
-                var toDest = s1.idealPos().subtractNew(s1.pos); // This force pulls the ship towards its destination
-                //var desiredSpeed = s1.vel.normalize().scaleNew(s1.stats.maxVelocity).subtractNew(s1.vel); // This force accelerates the ship to its desired speed
-                var desiredSpeed = s1.vel.normalize().scaleNew(s1.getMaxVelocity()).subtractNew(s1.vel); // This force accelerates the ship to its desired speed
-                var noise = new FlxVector(Math.random() - .5, Math.random() - .5); // This force provides a bit of noise to make the motion look nicer
-                var seperation = new FlxVector(0, 0); // This force prevents ships from getting too close together
-                var alignment = new FlxVector(0, 0); // This force makes ships tend to point the same direction
-                var cohesion = new FlxVector(0, 0); // This force makes ships tend to group together in clusters
-                
-                // Iterate through all other ships that this ship might flock with
-                //for (s2 in grpShips) {
-                for (s2 in shipGroup) {
-                    // Only flock with other ships of your faction
-                    //if (s2 != s1 && s1.getFaction() == s2.getFaction()) {
-                    if (s1 != s2) {
-                        var d: FlxVector = s1.pos.subtractNew(s2.pos);
-                        // Only flock with nearly ships
-                        if (d.length < 30) {    // TODO: need to pull this magic # out into Ship Class
-                            seperation = seperation.addNew(d.scaleNew(1/d.lengthSquared));
-                            alignment = alignment.addNew(s2.vel.subtractNew(s1.vel));
-                            cohesion = cohesion.addNew(d.normalize());
-                        }
-                    }
-                    //}
-                }
-    
-                // Compute the net acceleration, scaling each component by an arbitrary constant
-                // The constants to scale by were determined partially by trial and error until the motion looked good
-                var acceleration = new FlxVector(0, 0)
-                .addNew(toDest.scaleNew(.1 * toDest.length))
-                .addNew(desiredSpeed.scaleNew(50))
-                .addNew(noise.scaleNew(10))
-                .addNew(seperation.scaleNew(100))
-                .addNew(alignment.scaleNew(.5))
-                .addNew(cohesion.scaleNew(0.5));
-    
-                // Update the velocity
-                s1.vel = s1.vel.addNew(acceleration.scaleNew(elapsed));
-            }
-            
-        //}
-        
+		for (s1 in shipGroup) {
+			
+			// Defines all the forces acting on the ship
+			var toDest = s1.idealPos().subtractNew(s1.pos); // This force pulls the ship towards its destination
+			var desiredSpeed = s1.vel.normalize().scaleNew(s1.getMaxVelocity()).subtractNew(s1.vel); // This force accelerates the ship to its desired speed
+			var noise = new FlxVector(Math.random() - .5, Math.random() - .5); // This force provides a bit of noise to make the motion look nicer
+			var seperation = new FlxVector(0, 0); // This force prevents ships from getting too close together
+			var alignment = new FlxVector(0, 0); // This force makes ships tend to point the same direction
+			var cohesion = new FlxVector(0, 0); // This force makes ships tend to group together in clusters
+			
+			// Iterate through all other ships that this ship might flock with
+			for (s2 in shipGroup) {
+				// Only flock with other ships of your faction
+				if (s2 != s1 && s1.getFactionType() == s2.getFactionType()) {
+					var d: FlxVector = s1.pos.subtractNew(s2.pos);
+					// Only flock with nearly ships
+					if (d.length < 30) {
+						seperation = seperation.addNew(d.scaleNew(1/d.lengthSquared));
+						alignment = alignment.addNew(s2.vel.subtractNew(s1.vel));
+						cohesion = cohesion.addNew(d.normalize());
+					}
+				}
+			}
+
+			// Compute the net acceleration, scaling each component by an arbitrary constant
+			// The constants to scale by were determined partially by trial and error until the motion looked good
+			var acceleration = new FlxVector(0, 0)
+			.addNew(toDest.scaleNew(.01 * s1.getMaxVelocity() * toDest.length))
+			.addNew(desiredSpeed.scaleNew(50))
+			.addNew(noise.scaleNew(10))
+			.addNew(seperation.scaleNew(500))
+			.addNew(alignment.scaleNew(.3))
+			.addNew(cohesion.scaleNew(.1));
+
+			// Update the velocity
+			s1.vel = s1.vel.addNew(acceleration.scaleNew(elapsed));
+		}
 	}
 	
 	
