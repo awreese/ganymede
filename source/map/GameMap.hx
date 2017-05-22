@@ -120,7 +120,8 @@ class GameMap extends FlxSprite {
 		FlxG.camera.focusOn(new FlxPoint((maxX + minX) / 2, (maxY + minY) / 2));
 		var z = FlxG.stage.width  / (maxX - minX);
 		z = z > FlxG.stage.height / (maxY - minY) ? FlxG.stage.height / (maxY - minY) : z; // set to smallest zoom
-		FlxG.camera.zoom = z > 1.25 ? z : 1; // zoom into map
+
+		FlxG.camera.zoom = z > 1.25 ? z : 1; // zoom into map*/
 	}
 
 	public function findNode(v: FlxVector):MapNode {

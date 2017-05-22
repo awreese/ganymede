@@ -213,8 +213,13 @@ class Planet extends Capturable {
 	// function that'll control the spousing of ships
 	private function canProduceShips():Bool {
 		// return true if is not an open planet, not a neutral planet, not have reach capacity and if enough time has pass
-		return faction.getFactionType() != FactionType.NOP && faction.getFactionType() != FactionType.NEUTRAL
-		&& numShips.get(faction.getFactionType()) < this.pStats.cap && shipTimer >= pStats.prod;
+		//return faction.getFactionType() != FactionType.NOP && faction.getFactionType() != FactionType.NEUTRAL
+		//&& numShips.get(faction.getFactionType()) < this.pStats.cap && shipTimer >= pStats.prod;
+        
+        return faction.getFactionType() != FactionType.NOP && 
+            faction.getFactionType() != FactionType.NEUTRAL && 
+            this.node.getShipGroup(this.faction.getFactionType()).length < this.pStats.cap && 
+            shipTimer >= pStats.prod;
 	}
 
 	// updates the capacity level and changes teh capacity accordingly

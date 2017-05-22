@@ -18,55 +18,59 @@
 
 package;
 
+import Main;
+import faction.Faction;
 import flixel.FlxG;
 import flixel.FlxState;
-import flixel.group.FlxGroup;
+import flixel.group.FlxGroup.FlxTypedGroup;
+import flixel.math.FlxRandom;
 import flixel.math.FlxVector;
 import flixel.system.FlxSound;
 import flixel.util.FlxColor;
-import flixel.util.FlxTimer;
+import gameUnits.Ship;
+import gameUnits.Ship.ShipGroup;
 import gameUnits.capturable.Planet;
-import gameUnits.capturable.Planet.PlanetStat;
 import map.GameMap;
 import map.MapNode;
-import faction.Faction;
-import gameUnits.Ship;
-import Main;
-import flixel.math.FlxRandom;
 import npc.Enemy;
 import tutorial.FinishGameState;
 
-class PlayState extends FlxState
-{
+class PlayState extends FlxState {
 	private var grpMap: FlxTypedGroup<GameMap>;
 	private var gameMap: GameMap;
-	public var grpShips: FlxTypedGroup<gameUnits.Ship>;
-	private var grpPlanets: FlxTypedGroup<gameUnits.capturable.Planet>;
+	
+    //public var grpShips: ShipGroup;
+    // TODO: turn above into below
+	//private var shipgroupByFaction:Map<FactionType, ShipGroup>;
+    private var shipGroup:ShipGroup;
+    
+    private var grpPlanets: FlxTypedGroup<gameUnits.capturable.Planet>;
 	private var rand:FlxRandom;
 	private var numPlayerFaction:Int;
 	private var enemies: Array<Enemy>;
 	private var laser_snd: FlxSound;
 
-	override public function create(): Void
-	{
+	override public function create():Void {
 		rand = new FlxRandom();
 		enemies = new Array<Enemy>();
+
 		#if flash
 			laser_snd = FlxG.sound.load(AssetPaths.laser__mp3);
 		#else
 			laser_snd = FlxG.sound.load(AssetPaths.laser__wav);
 		#end
 		laser_snd.looped = false;
+
 		// Initialize the map
-		grpMap = new FlxTypedGroup<GameMap>();
-		add(grpMap);
-		gameMap = new GameMap(this, Main.LEVEL);
-		grpMap.add(gameMap);
+		grpMap = new FlxTypedGroup<GameMap>();        ///
+		add(grpMap);                                    //____ WTF is this?
+		gameMap = new GameMap(this, Main.LEVEL);        //     no other game map is ever added to the group
+		grpMap.add(gameMap);                          ///
 		//add(gameMap);
 
 		// Create the ships
-		grpShips = new FlxTypedGroup<gameUnits.Ship>();
-		add(grpShips);
+        shipGroup = new ShipGroup();
+        add(shipGroup);
 
 		// add the enemies
 		for (faction in Faction.getEnums()) {
@@ -84,12 +88,30 @@ class PlayState extends FlxState
 	/*
 	 * This is the main game engine.
 	 */
-	override public function update(elapsed: Float): Void
-	{
+	override public function update(elapsed:Float):Void {
 
 		/*
 		 * Check and update any game state
 		 */
+        
+        
+        for (ship in shipGroup) {
+            if (ship.exists) {
+                // update all ships' radars
+                ship.setRadar(
+                    shipGroup.members.copy().filter(
+                        function(other:Ship) {
+                            return ship != other && other.exists && ship.inSensorRange(other);
+                        }
+                    )
+                );
+            } else {
+                //trace("Ship destroyed: " + ship.toString());
+                
+                ship.destroy();
+                this.shipGroup.remove(ship, true);
+            }
+        }
 
 		 
 		/*
@@ -97,47 +119,70 @@ class PlayState extends FlxState
 		 */
 
 		// Selecting ships
-		if (FlxG.mouse.justPressed)
-		{
+		if (FlxG.mouse.justPressed) {
 			var n = gameMap.findNode(new FlxVector(FlxG.mouse.x, FlxG.mouse.y));
-			if (n == null)
-			{
-				for (s in grpShips)
-				{
-					s.isSelected = false;
-				}
-			}
-			else
-			{
-				for (s in grpShips)
-				{
-					// only move the ships that are the player's
-					if (s.getFaction() == FactionType.PLAYER)
-					{
-						// allows player to select multiple ships on the map
-						if (n.contains(s.getPos()))
-						{
-							s.isSelected = true;
-						}
-					}
-				}
+			//var n = gameMap.findNode(FlxG.mouse.getPosition());
+			if (n == null) {
+                // old loop
+				//for (s in grpShips) {
+					//s.isSelected = false;
+				//}
+                
+                // new loop
+                //for (ship in shipgroupByFaction.get(PLAYER)) {
+                    //ship.isSelected =  false;
+                //}
+                for (ship in shipGroup) {
+                    if (ship.getFactionType() == PLAYER) {
+                        ship.isSelected = false;
+                    }
+                }
+                
+			} else {
+                // old loop
+				//for (s in grpShips) {
+					//// only move the ships that are the player's
+					//if (s.getFaction() == FactionType.PLAYER) {
+						//// allows player to select multiple ships on the map
+						//if (n.contains(s.getPos())) {
+							//s.isSelected = true;
+						//}
+					//}
+				//}
+                
+                // new loop
+                //for (ship in shipgroupByFaction.get(PLAYER)) {
+                for (ship in shipGroup) {
+                    // allows player to select multiple ships on the map
+                    if (ship.getFactionType() == PLAYER && n.contains(ship.getPos())) {
+                        ship.isSelected = true;
+                    }
+                }
 			}
 		}
 
 		// Ordering ships to move
-		if (FlxG.mouse.justPressedRight)
-		{
+		if (FlxG.mouse.justPressedRight) {
 			var n = gameMap.findNode(new FlxVector(FlxG.mouse.x, FlxG.mouse.y));
-			if (n != null)
-			{
-				for (s in grpShips)
-				{
-					if (s.isSelected)
-					{
-						s.isSelected = false;
-						s.pathTo(n);
+			if (n != null) {
+				// old loop
+                //for (s in grpShips) {
+					//if (s.isSelected) {
+						//s.isSelected = false;
+						//s.pathTo(n);
+					//}
+				//}
+                
+                // new loop
+                //for (ship in shipgroupByFaction.get(PLAYER)) {
+                for (ship in shipGroup) {
+                    //if (ship.isSelected) {
+                    if (ship.getFactionType() == PLAYER && ship.isSelected) {
+						ship.isSelected = false;
+						ship.pathTo(n);
 					}
-				}
+                }
+                
 			}
 		}
 		
@@ -155,10 +200,10 @@ class PlayState extends FlxState
 		shipFlocking(elapsed);
 		
 		// Make ships fight one another
-		shipCombat(elapsed);
+		//shipCombat(elapsed); // Handled in Ship.hx now
 
 		// check where each ships are and updating each planet, and battle if there's opposing factions
-		nodeUpdate(elapsed);
+		//nodeUpdate(elapsed);
 		
 		// produce ships
 		produceShips(elapsed);
@@ -166,13 +211,13 @@ class PlayState extends FlxState
 		// check if there are other ships of other factions
 		var noOtherFaction: Bool = true;
 		var noPlayerShips: Bool = true;
-		for (ship in grpShips) {
-			if (ship.getFaction() == FactionType.PLAYER) {
+		for (ship in shipGroup) {
+			if (ship.getFactionType() == FactionType.PLAYER) {
 				// found a player ship
 				noPlayerShips = false;
 			}
 			if (ship.exists) {
-				if (ship.getFaction() != FactionType.PLAYER) {
+				if (ship.getFactionType() != FactionType.PLAYER) {
 					// found a ship that's not of player faction
 					noOtherFaction = false;
 				}
@@ -202,6 +247,11 @@ class PlayState extends FlxState
 
 		super.update(elapsed);
 	}
+    
+    public function addShip(ship:Ship):Void {
+        //this.shipgroupByFaction.get(ship.getFactionType()).add(ship);
+        this.shipGroup.add(ship);
+    }
 	
 	
 	/*
@@ -214,20 +264,20 @@ class PlayState extends FlxState
 	 */
 	private function shipFlocking(elapsed: Float): Void {
 		// Iterates through all the ships
-		for (s1 in grpShips) {
+		for (s1 in shipGroup) {
 			
 			// Defines all the forces acting on the ship
 			var toDest = s1.idealPos().subtractNew(s1.pos); // This force pulls the ship towards its destination
-			var desiredSpeed = s1.vel.normalize().scaleNew(s1.stats.maxVelocity).subtractNew(s1.vel); // This force accelerates the ship to its desired speed
+			var desiredSpeed = s1.vel.normalize().scaleNew(s1.getMaxVelocity()).subtractNew(s1.vel); // This force accelerates the ship to its desired speed
 			var noise = new FlxVector(Math.random() - .5, Math.random() - .5); // This force provides a bit of noise to make the motion look nicer
 			var seperation = new FlxVector(0, 0); // This force prevents ships from getting too close together
 			var alignment = new FlxVector(0, 0); // This force makes ships tend to point the same direction
 			var cohesion = new FlxVector(0, 0); // This force makes ships tend to group together in clusters
 			
 			// Iterate through all other ships that this ship might flock with
-			for (s2 in grpShips) {
+			for (s2 in shipGroup) {
 				// Only flock with other ships of your faction
-				if (s2 != s1 && s1.getFaction() == s2.getFaction()) {
+				if (s2 != s1 && s1.getFactionType() == s2.getFactionType()) {
 					var d: FlxVector = s1.pos.subtractNew(s2.pos);
 					// Only flock with nearly ships
 					if (d.length < 30) {
@@ -241,7 +291,7 @@ class PlayState extends FlxState
 			// Compute the net acceleration, scaling each component by an arbitrary constant
 			// The constants to scale by were determined partially by trial and error until the motion looked good
 			var acceleration = new FlxVector(0, 0)
-			.addNew(toDest.scaleNew(.01 * s1.stats.maxVelocity * toDest.length))
+			.addNew(toDest.scaleNew(.01 * s1.getMaxVelocity() * toDest.length))
 			.addNew(desiredSpeed.scaleNew(50))
 			.addNew(noise.scaleNew(10))
 			.addNew(seperation.scaleNew(500))
@@ -262,125 +312,151 @@ class PlayState extends FlxState
 	 * This function does not handle damaging or destroying ships. That will be handled by the
 	 * ShipAttack class, which represents a single attack by one ship against one ship.
 	 */
-	private function shipCombat(elapsed: Float): Void {
-				
-		// Iterate through each of the ships
-		for (s1 in grpShips) {
-			
-			// If the ship is dead, remove it from the group
-			if (!s1.exists) {
-				trace("Ship dead");
-				grpShips.remove(s1);
-			}
-			
-			// Iterate through each of the potential targets
-			// TODO: Iterate through the potential targets in a random order
-			for (s2 in grpShips) {
-				if (s1.getFaction() != s2.getFaction()) {
-					if (s1.getPos().distanceTo(s2.getPos()) < 50) {
-						if (s1.weapon.fireAtTarget(s2)) {
-							s1.weapon.currentBullet.target = s2;
-							add(s1.weapon.currentBullet);
-							laser_snd.play();
-						}
-					}
-				}
-			}
-		}
-	}
+	//private function shipCombat(elapsed: Float): Void {
+	//
+        //// outer loop groups by faction
+        //for (shipGroup in shipgroupByFaction) {
+            //
+            //// Iterate through each of the ships
+            ////for (s1 in grpShips) {
+            //for (s1 in shipGroup) {
+                //
+                //// If the ship is dead, remove it from the group
+                //if (!s1.exists) {
+                    //trace("Ship dead");
+                    //grpShips.remove(s1, true); // need to splice out ship!!  Maybe destroy it too?
+                //}
+                //
+                //// Iterate through each of the potential targets
+                //// TODO: Iterate through the potential targets in a random order
+                ////for (s2 in grpShips) {
+                //for (s2 in shipGroup) {
+                    ////if (s1.getFaction() != s2.getFaction()) {
+                        //if (s1.getPos().distanceTo(s2.getPos()) < 50) { // TODO: Add this range to ShipBlueprint, weapon, or combo of both
+                            //if (s1.weapon.fireAtTarget(s2)) {
+                                //s1.weapon.currentBullet.target = s2;
+                                //add(s1.weapon.currentBullet);
+                            //}
+                        //}
+                    ////}
+                //}
+            //}
+            //
+        //}
+	//}
 	
     // TODO: Most (if not all) of this should be moved to GameMap and Ship
-	private function nodeUpdate(elapsed : Float):Void {
-		//for (n in gameMap.nodes)
-		for (n in gameMap.getNodeList())
-		{
-			var p : Planet = n.isPlanet() ? cast(n.getCaptureable(), Planet) : null;
-			var numShips:Map<FactionType, Int> = new Map<FactionType, Int>();
-			for (f in Faction.getEnums()) {
-				numShips.set(f, 0);
-			}
-
-			var shipsAtNode = new Array<Ship>();
-			
-			var nPos:FlxVector = new FlxVector(n.x, n.y);
-
-			// determine which ships are within the range of the node
-			for (s in grpShips)
-			{
-				var sPos:FlxVector = s.getPos();
-				var distance:Float = nPos.dist(sPos);
-				if (distance < 30 && s.exists)
-				{
-					numShips.set(s.getFaction(), numShips.get(s.getFaction()) + 1);
-					shipsAtNode[shipsAtNode.length] = s;
-				}
-			}
-
-			var numFactions:Int = 0;
-			// checks for number of factions
-			for (f in numShips.keys())
-			{
-				if (numShips.get(f) > 0)
-				{
-					numFactions++;
-				}
-			}
-
-			// TODO: Replace this combat code with updated combat code in the shipCombat() function
-			/*// if there are more than 1 factions in a node
-			if (numFactions > 1)
-			{
-				for (s in shipsAtNode)
-				{
-					if (s.exists)
-					{
-						// if the ship is not killed
-
-						// select target
-						var target : Ship = shipsAtNode[rand.int(0, shipsAtNode.length - 1)];
-						while (target.getFaction() == s.getFaction() || !target.exists)
-						{
-							// if target is the same faction or target does not exist
-							target = shipsAtNode[rand.int(0, shipsAtNode.length - 1)];
-						}
-
-						// random chance of hitting
-						var hit : Bool = rand.int() % 2 == 0;
-						if (hit)
-						{
-							// if hit, decrease hp
-							target.stats.hitPoints -= s.stats.attackSpeed * s.stats.attackDamage * elapsed * target.stats.shield;
-							if (target.stats.hitPoints < 0.0)
-							{
-								// if run out of hp, kill target
-								target.kill();
-								target.visible = false;
-								// decrease num ships at the planet
-								numShips.set(target.getFaction(), numShips.get(target.getFaction()) - 1);
-								numFactions = numShips.get(target.getFaction()) > 0 ? numFactions : numFactions - 1;
-							}
-						}
-						// if there is less than 2 factions, break out of loop
-						if (numFactions < 2) {
-							break;
-						}
-					}
-				}
-			}*/
-						// if there's a planet here
-			if (p != null) 
-			{
-				// update number of ships of each faction in
-				for (f in numShips.keys())
-				{
-					p.setNumShips(f, numShips.get(f));
-				}
-				p.setShips(shipsAtNode);
-			}
-		}
-	}
+	//private function nodeUpdate(elapsed : Float):Void {
+		////for (n in gameMap.nodes)
+		//for (n in gameMap.getNodeList())
+		//{
+			//var p : Planet = n.isPlanet() ? cast(n.getCaptureable(), Planet) : null;
+			//var numShips:Map<FactionType, Int> = new Map<FactionType, Int>();
+			//for (f in Faction.getEnums()) {
+				//numShips.set(f, 0);
+			//}
+//
+			//var shipsAtNode = new Array<Ship>();
+			//
+			//var nPos:FlxVector = new FlxVector(n.x, n.y);
+//
+			//// determine which ships are within the range of the node
+			//for (s in grpShips)
+			//{
+				//var sPos:FlxVector = s.getPos();
+				//var distance:Float = nPos.dist(sPos);
+				//if (distance < 30 && s.exists)
+				//{
+					//numShips.set(s.getFaction(), numShips.get(s.getFaction()) + 1);
+					//shipsAtNode[shipsAtNode.length] = s;
+				//}
+			//}
+            //
+            ///*
+             //* Current status - 5/14/2017 11:29 PM
+             //* Converting grpShips use to shipgroupByFaction use
+             //* 
+             //* I'm not entirely sure all this code in nodeUpdate is needed, but I'm super tired
+             //* right now and can't concentrate well enough.  Will revisist tomorrow after rest.
+             //*/
+            //
+            //for (shipGroup in shipgroupByFaction) {
+                //for (ship in shipGroup) {
+                    //var sPos:FlxVector = ship.getPos();
+                    //var distance:Float = nPos.dist(sPos);
+                    //if (distance < 30 && s.exists) {
+                        //numShips.set(s.getFaction(), numShips.get(s.getFaction()) + 1);
+                        //shipsAtNode[shipsAtNode.length] = s;
+                    //}
+                //}
+            //}
+            //
+//
+			//var numFactions:Int = 0;
+			//// checks for number of factions
+			//for (f in numShips.keys())
+			//{
+				//if (numShips.get(f) > 0)
+				//{
+					//numFactions++;
+				//}
+			//}
+//
+			//// TODO: Replace this combat code with updated combat code in the shipCombat() function
+			///*// if there are more than 1 factions in a node
+			//if (numFactions > 1)
+			//{
+				//for (s in shipsAtNode)
+				//{
+					//if (s.exists)
+					//{
+						//// if the ship is not killed
+//
+						//// select target
+						//var target : Ship = shipsAtNode[rand.int(0, shipsAtNode.length - 1)];
+						//while (target.getFaction() == s.getFaction() || !target.exists)
+						//{
+							//// if target is the same faction or target does not exist
+							//target = shipsAtNode[rand.int(0, shipsAtNode.length - 1)];
+						//}
+//
+						//// random chance of hitting
+						//var hit : Bool = rand.int() % 2 == 0;
+						//if (hit)
+						//{
+							//// if hit, decrease hp
+							//target.stats.hitPoints -= s.stats.attackSpeed * s.stats.attackDamage * elapsed * target.stats.shield;
+							//if (target.stats.hitPoints < 0.0)
+							//{
+								//// if run out of hp, kill target
+								//target.kill();
+								//target.visible = false;
+								//// decrease num ships at the planet
+								//numShips.set(target.getFaction(), numShips.get(target.getFaction()) - 1);
+								//numFactions = numShips.get(target.getFaction()) > 0 ? numFactions : numFactions - 1;
+							//}
+						//}
+						//// if there is less than 2 factions, break out of loop
+						//if (numFactions < 2) {
+							//break;
+						//}
+					//}
+				//}
+			//}*/
+						//// if there's a planet here
+			//if (p != null) 
+			//{
+				//// update number of ships of each faction in
+				//for (f in numShips.keys())
+				//{
+					//p.setNumShips(f, numShips.get(f));
+				//}
+				//p.setShips(shipsAtNode);
+			//}
+		//}
+	//}
 	
-    // TODO: Move this into PlanetFactory
+    // TODO: Swap ownership of production to real ship factory and test
 	// produce ships for each planet (if they can)
 	private function produceShips(elapsed: Float):Void {
 		//for (n in gameMap.nodes) {
@@ -396,8 +472,12 @@ class PlayState extends FlxState
 			var node = gameMap.findNode(new FlxVector(pPos.x + (MapNode.NODE_RADIUS / 2), pPos.y + (MapNode.NODE_RADIUS / 2)));
 			var ship:Ship = p.produceShip(node);
 			if (ship != null) {
-				grpShips.add(ship);
-				node.addShip(ship);
+				//grpShips.add(ship);
+				//node.addShip(ship);
+                
+                //shipgroupByFaction.get(ship.getFactionType()).add(ship);
+                this.shipGroup.add(ship);
+                node.addShip(ship);
 			}
 		}
 	}
