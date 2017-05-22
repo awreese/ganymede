@@ -220,13 +220,13 @@ class PlayState extends FlxState {
 		// check if there are other ships of other factions
 		var noOtherFaction: Bool = true;
 		var noPlayerShips: Bool = true;
-		for (ship in grpShips) {
-			if (ship.getFaction() == FactionType.PLAYER) {
+		for (ship in shipGroup) {
+			if (ship.getFactionType() == FactionType.PLAYER) {
 				// found a player ship
 				noPlayerShips = false;
 			}
 			if (ship.exists) {
-				if (ship.getFaction() != FactionType.PLAYER) {
+				if (ship.getFactionType() != FactionType.PLAYER) {
 					// found a ship that's not of player faction
 					noOtherFaction = false;
 				}
@@ -274,20 +274,20 @@ class PlayState extends FlxState {
 	private function shipFlocking(elapsed: Float): Void {
 		// Iterates through all the ships
 
-		for (s1 in grpShips) {
+		for (s1 in shipGroup) {
 			
 			// Defines all the forces acting on the ship
 			var toDest = s1.idealPos().subtractNew(s1.pos); // This force pulls the ship towards its destination
-			var desiredSpeed = s1.vel.normalize().scaleNew(s1.stats.maxVelocity).subtractNew(s1.vel); // This force accelerates the ship to its desired speed
+			var desiredSpeed = s1.vel.normalize().scaleNew(s1.getMaxVelocity()).subtractNew(s1.vel); // This force accelerates the ship to its desired speed
 			var noise = new FlxVector(Math.random() - .5, Math.random() - .5); // This force provides a bit of noise to make the motion look nicer
 			var seperation = new FlxVector(0, 0); // This force prevents ships from getting too close together
 			var alignment = new FlxVector(0, 0); // This force makes ships tend to point the same direction
 			var cohesion = new FlxVector(0, 0); // This force makes ships tend to group together in clusters
 			
 			// Iterate through all other ships that this ship might flock with
-			for (s2 in grpShips) {
+			for (s2 in shipGroup) {
 				// Only flock with other ships of your faction
-				if (s2 != s1 && s1.getFaction() == s2.getFaction()) {
+				if (s2 != s1 && s1.getFactionType() == s2.getFactionType()) {
 					var d: FlxVector = s1.pos.subtractNew(s2.pos);
 					// Only flock with nearly ships
 					if (d.length < 30) {
@@ -301,7 +301,7 @@ class PlayState extends FlxState {
 			// Compute the net acceleration, scaling each component by an arbitrary constant
 			// The constants to scale by were determined partially by trial and error until the motion looked good
 			var acceleration = new FlxVector(0, 0)
-			.addNew(toDest.scaleNew(.01 * s1.stats.maxVelocity * toDest.length))
+			.addNew(toDest.scaleNew(.01 * s1.getMaxVelocity() * toDest.length))
 			.addNew(desiredSpeed.scaleNew(50))
 			.addNew(noise.scaleNew(10))
 			.addNew(seperation.scaleNew(500))
