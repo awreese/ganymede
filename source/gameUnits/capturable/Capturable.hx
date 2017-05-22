@@ -71,15 +71,26 @@ class Capturable extends FlxSprite {
     override public function update(elapsed:Float):Void {
         // TODO: Monitor capture status, display "contended" bar when active skirmish happening
 		// get accumulative points
-		var totalCP = new Map<FactionType, Float>();
+		var totalCP:Map<FactionType, Float> = new Map<FactionType, Float>();
 		for (f in Faction.getEnums()) {
 			totalCP[f] = 0.0;
+			/*for (s in node.getShipGroup(f)) {
+				totalCP[f] += s.stats.cps;
+			}*/
 		}
-		for (s in shipsAtPlanet) {
-			var cp = totalCP[s.getFaction()];
-			totalCP.set(s.getFaction(), cp + (s.stats.cps));
-		}
-		for (f in Faction.getEnums()) {
+        
+        for (shipGroup in this.node.getShipGroups()) {
+            for (ship in shipGroup) {
+                totalCP[ship.getFactionType()] += ship.getCPS();
+            }
+        }
+        
+		//for (s in shipsAtPlanet) {
+			//var cp = totalCP[s.getFactionType()];
+			//totalCP.set(s.getFactionType(), cp + (s.stats.cps));
+		//}
+		
+        for (f in Faction.getEnums()) {
 			captureEngine.addPoints(f, totalCP[f] * elapsed);
 		}
 		

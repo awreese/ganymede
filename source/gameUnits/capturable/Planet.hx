@@ -188,8 +188,13 @@ class Planet extends Capturable {
 	// function that'll control the spousing of ships
 	private function canProduceShips():Bool {
 		// return true if is not an open planet, not a neutral planet, not have reach capacity and if enough time has pass
-		return faction.getFactionType() != FactionType.NOP && faction.getFactionType() != FactionType.NEUTRAL
-		&& numShips.get(faction.getFactionType()) < this.pStats.cap && shipTimer >= pStats.prod;
+		//return faction.getFactionType() != FactionType.NOP && faction.getFactionType() != FactionType.NEUTRAL
+		//&& numShips.get(faction.getFactionType()) < this.pStats.cap && shipTimer >= pStats.prod;
+        
+        return faction.getFactionType() != FactionType.NOP && 
+            faction.getFactionType() != FactionType.NEUTRAL && 
+            this.node.getShipGroup(this.faction.getFactionType()).length < this.pStats.cap && 
+            shipTimer >= pStats.prod;
 	}
 
 	// updates the capacity level and changes teh capacity accordingly
@@ -238,9 +243,9 @@ class Planet extends Capturable {
 		{
 			shipTimer = 0.0;
 			numShips.set(faction.getFactionType(), numShips.get(faction.getFactionType()) + 1);
-			var stat = new BluePrint(pStats.ship.hull, pStats.ship.maxVelocity, pStats.ship.shield, pStats.ship.hitPoints, pStats.ship.attackSpeed, pStats.ship.attackDamage, pStats.ship.cps);
+			//var stat = new BluePrint(pStats.ship.hull, pStats.ship.maxVelocity, pStats.ship.shield, pStats.ship.hitPoints, pStats.ship.attackSpeed, pStats.ship.attackDamage, pStats.ship.cps);
 			//return new Ship(playState, node, faction, stat);
-			return new Ship(node, faction, stat);
+			return new Ship(this.node, faction, pStats.ship.clone());
 		}
 		// if can't produce ship, return null
 		return null;

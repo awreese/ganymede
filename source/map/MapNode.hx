@@ -30,7 +30,6 @@ import flixel.util.FlxColor;
 import gameUnits.Ship;
 import gameUnits.capturable.Capturable;
 import gameUnits.capturable.Planet;
-//import map.MapEdge.EdgeGroup;
 
 using flixel.util.FlxSpriteUtil;
 
@@ -95,6 +94,13 @@ class MapNode extends FlxObject {
     
     override public function update(elapsed:Float):Void {
         super.update(elapsed);
+		/*if (this.isPlanet()) {
+			var p:Planet = cast(capturable, Planet); // turn to planet
+			var ship:Ship = p.produceShip(); // get ship
+			if (ship != null) {
+				this.addShip(ship); // add ship to this
+			}
+		}*/
     }
     
     /*
@@ -209,9 +215,9 @@ class MapNode extends FlxObject {
      * @param ship  ship to add to this node
      */
     public function addShip(ship:Ship):Void {
-        var group:ShipGroup = this.factionShips.get(ship.getFaction());
+        var group:ShipGroup = this.factionShips.get(ship.getFactionType());
         group.add(ship);
-        this.gameMap.incrementShipCount(ship.getFaction());
+        this.gameMap.incrementShipCount(ship.getFactionType());
     }
     
     /**
@@ -219,9 +225,9 @@ class MapNode extends FlxObject {
      * @param ship  shit to remove from this node
      */
     public function removeShip(ship:Ship):Void {
-        var group:ShipGroup = this.factionShips.get(ship.getFaction());
+        var group:ShipGroup = this.factionShips.get(ship.getFactionType());
         group.remove(ship, true);
-        this.gameMap.decrementShipCount(ship.getFaction());
+        this.gameMap.decrementShipCount(ship.getFactionType());
     }
     
     /**
@@ -249,6 +255,10 @@ class MapNode extends FlxObject {
 	public function getShipGroup(faction:FactionType):ShipGroup {
 		return this.factionShips.get(faction);
 	}
+    
+    public function getShipGroups():Iterator<ShipGroup> {
+        return this.factionShips.iterator();
+    }
 	
     // Capturable helpers
     
@@ -260,21 +270,23 @@ class MapNode extends FlxObject {
         return this.capturable != null;
     }
     
-    //public function getCapturableType():Any {
-        //this.capturable.ty
-    //}
+    public function getCaptureable(): Capturable {
+		return capturable;
+	}
     
 	/*
 	 * return true if captureable is a planet, false otherwise
 	 */
 	public function isPlanet():Bool {
 		//var v = Std.instance(capturable, Planet);
-		return !(Std.instance(capturable, Planet) == null);
+		//return !(Std.instance(capturable, Planet) == null);
+        return Std.is(capturable, Planet);
 	}
 	
-	public function getCaptureable(): Capturable {
-		return capturable;
-	}
+	public function getPlanet():Planet {
+        //return isPlanet() ? capturable : null;
+        return null;
+    }
 	
 	public function getFaction():FactionType {
         return (this.capturable == null) ? null : this.capturable.getFaction().getFactionType();
