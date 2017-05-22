@@ -266,6 +266,16 @@ class Ship extends FlxSprite {
 
 	public function new(destination:MapNode, faction:Faction, blueprint:BluePrint) {
 		super();
+		
+		// set sprite graphic (to set proper width & height for hitbox)
+		switch (faction.getFactionType()) {
+			case PLAYER:
+				loadGraphic(AssetPaths.ship_1_player__png, false);
+			case NEUTRAL:
+				loadGraphic(AssetPaths.ship_1_neutral__png, false);
+			default:
+				loadGraphic(AssetPaths.ship_1_enemy1__png, false);
+		}
         
         // Faction info
         this.faction = faction;
@@ -295,17 +305,18 @@ class Ship extends FlxSprite {
 		this.pos = destination.getPos();
         this.x = node.x;
         this.y = node.y;
-
+		
         // TODO: Move weapon definition into a Weapons Class, just instantiate here
 		// Creates the weapon that creates bullets
 		this.weapon = new FlxTypedWeapon<ShipAttack>("Laser mk. I", 
-            function(w) { return new ShipAttack(this.attackDamage, 50.0); }, 
+            function(w) { return new ShipAttack(this.attackDamage, 500.0); }, 
             FlxWeaponFireFrom.PARENT(this, new FlxBounds(this.origin, this.origin)),
-			FlxWeaponSpeedMode.SPEED(new FlxBounds(50.0, 50.0))
+			FlxWeaponSpeedMode.SPEED(new FlxBounds(450.0, 550.0))
         );
-        this.weapon.bulletLifeSpan = new FlxBounds(2.0, 2.0);
+        this.weapon.bulletLifeSpan = new FlxBounds(0.5, 0.5);
 		this.weapon.bounds = new FlxRect(0, 0, FlxG.width, FlxG.height);
-		this.weapon.fireRate = Math.round(this.attackSpeed * 1000); // attacks per second * 1000ms/s = attacks per ms
+		// firerate = (attacks/second)^-1 * (1000 ms/second) = (second/attack) * 1000 (ms/second) = 1000/attackspeed
+		this.weapon.fireRate = Math.round(1000 / this.attackSpeed);
         FlxG.state.add(this.weapon.group); // Add weapon group here, all bullets part of this group
 		
 		//hpBar = new FlxText(this.x, this.y - this.height, 0, "" + stats.hitPoints, 16);
@@ -353,12 +364,12 @@ class Ship extends FlxSprite {
 					loadGraphic(AssetPaths.ship_1_player_selected__png, false);
 				else
 					loadGraphic(AssetPaths.ship_1_player__png, false);
-			case ENEMY_1:
-				loadGraphic(AssetPaths.ship_1_enemy1__png, false);
-			case NEUTRAL:
-				loadGraphic(AssetPaths.ship_1_neutral__png, false);
+			//case ENEMY_1:
+				//loadGraphic(AssetPaths.ship_1_enemy1__png, false);
+			//case NEUTRAL:
+				//loadGraphic(AssetPaths.ship_1_neutral__png, false);
 			default:
-				loadGraphic(AssetPaths.ship_1_enemy1__png, false);
+				//loadGraphic(AssetPaths.ship_1_enemy1__png, false);
 		}
 
 		// Whether the ship is currently stationed at one node or is moving between nodes
@@ -420,10 +431,10 @@ class Ship extends FlxSprite {
     }
     
     override public function destroy():Void {
-        trace("ship destroyed: " + this.toString());
+        //trace("ship destroyed: " + this.toString());
         if (this.node != null) {
             this.node.removeShip(this);
-            trace("\tremoved from node: " + this.node.toString());
+            //trace("\tremoved from node: " + this.node.toString());
         }
         super.destroy();
     }
