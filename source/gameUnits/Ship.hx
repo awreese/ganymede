@@ -410,7 +410,7 @@ class Ship extends FlxSprite {
         var targetShip = this.radar.selectTarget();
         if (targetShip != null && this.weapon.fireAtTarget(targetShip)) {
             this.weapon.currentBullet.target = targetShip;
-			      laser_snd.play();
+			laser_snd.play();
         }
         
         //*******************

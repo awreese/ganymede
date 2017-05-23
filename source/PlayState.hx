@@ -49,18 +49,9 @@ class PlayState extends FlxState {
 	private var numPlayerFaction:Int;
 	private var enemies: Array<Enemy>;
 	
-	private var laser_snd:FlxSound;
-
 	override public function create():Void {
 		rand = new FlxRandom();
 		enemies = new Array<Enemy>();
-
-		#if flash
-			laser_snd = FlxG.sound.load(AssetPaths.laser__mp3);
-		#else
-			laser_snd = FlxG.sound.load(AssetPaths.laser__wav);
-		#end
-		laser_snd.looped = false;
 
 		// Initialize the map
 		grpMap = new FlxTypedGroup<GameMap>();        ///
