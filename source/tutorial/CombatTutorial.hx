@@ -120,8 +120,8 @@ class CombatTutorial extends FlxState
 		laser = null;
 		
 		// zoom in
-		FlxG.camera.focusOn(new FlxPoint(713, 438));
-		FlxG.camera.zoom = FlxG.height / 320;
+		FlxG.camera.focusOn(new FlxPoint(720, 438));
+		FlxG.camera.zoom = FlxG.height / 330;
 		
 		// Log level start and time
         //Main.LOGGER.logLevelStart(Main.LEVEL, Date.now());
@@ -243,7 +243,7 @@ class CombatTutorial extends FlxState
 			// if destroyed enemy ship, start capturing
 			if (isRed) {
 				// if bar is red, decrease value
-				captureBar.value -= 20 * elapsed;
+				captureBar.value -= 50 * elapsed;
 				if (captureBar.value <= 0.0) {
 					enemyPlanet.loadGraphic(AssetPaths.planet_1_none__png, false, 32, 32);
 					// if emptied the bar, set the bar to fill with blue
@@ -253,7 +253,7 @@ class CombatTutorial extends FlxState
 				}
 			} else {
 				// if bar is blue, increase value
-				captureBar.value += 20 * elapsed;
+				captureBar.value += 50 * elapsed;
 				if (captureBar.value == 100.0) {
 					// change planet color
 					enemyPlanet.loadGraphic(AssetPaths.planet_1_player__png, false, 32, 32);
