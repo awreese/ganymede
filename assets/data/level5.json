@@ -89,7 +89,7 @@
 			"y": 460.0,
 			"faction": "player",
 			"planet": {
-				"planet_template": "level1",
+				"planet_template": "level2",
 				"ship_template": "frigate"
 			}
 		}
