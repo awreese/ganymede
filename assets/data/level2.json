@@ -14,21 +14,32 @@
 		{
 			"id": "node2",
 			"x": 300.0,
-			"y": 150.0,
-			"faction": "nop",
-			"planet": {
-				"planet_template": "level1",
-				"ship_template": "frigate"
-			}
+			"y": 150.0
 		},
 		{
 			"id": "node3",
 			"x": 450.0,
 			"y": 150.0,
 			"faction": "enemy1",
-			"planet": {
-				"planet_template": "level1",
-				"ship_template": "frigate"
+			"captureable": {
+				"object": "planet",
+				"blueprint": {
+					"hull": "frigate",
+					"maxVel": 50.0,
+					"sh": 0.3,
+					"hp": 100.0,
+					"as": 1.0,
+					"ad": 7.0,
+					"cps": 5.0
+				},
+				"cap": 10,
+				"prod": 5.0,
+				"prod_thresh": 0.5,
+				"cap_lvl": 0,
+				"tech_lvl": 0,
+				"base_cost": 10,
+				"cap_per_lvl": 5,
+				"tech_per_lvl": 2.0
 			}
 		}
 	],

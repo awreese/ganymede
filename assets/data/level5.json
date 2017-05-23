@@ -1,14 +1,30 @@
 {
-	"ai": 7,
+	"ai": 5,
 	"nodes": [
 		{
 			"id": "node1",
 			"x": 540.0,
 			"y": 260.0,
 			"faction": "enemy1",
-			"planet": {
-				"planet_template": "level1",
-				"ship_template": "frigate"
+			"captureable": {
+				"object": "planet",
+				"blueprint": {
+					"hull": "frigate",
+					"maxVel": 60.0,
+					"sh": 0.6,
+					"hp": 100.0,
+					"as": 2.0,
+					"ad": 12.0,
+					"cps": 5.0
+				},
+				"cap": 10,
+				"prod": 7.0,
+				"prod_thresh": 0.5,
+				"cap_lvl": 0,
+				"tech_lvl": 0,
+				"base_cost": 10,
+				"cap_per_lvl": 5,
+				"tech_per_lvl": 2.0
 			}
 		},
 		{
@@ -25,19 +41,35 @@
 			"id": "node3",
 			"x": 640.0,
 			"y": 360.0,
-			"faction": "player",
-			"planet": {
-				"planet_template": "level2",
-				"ship_template": "frigate"
+			"faction": "enemy1",
+			"captureable": {
+				"object": "planet",
+				"blueprint": {
+					"hull": "frigate",
+					"maxVel": 60.0,
+					"sh": 0.6,
+					"hp": 100.0,
+					"as": 2.0,
+					"ad": 12.0,
+					"cps": 5.0
+				},
+				"cap": 10,
+				"prod": 7.0,
+				"prod_thresh": 0.5,
+				"cap_lvl": 0,
+				"tech_lvl": 0,
+				"base_cost": 10,
+				"cap_per_lvl": 5,
+				"tech_per_lvl": 2.0
 			}
 		},
 		{
 			"id": "node4",
 			"x": 700.0,
 			"y": 240.0,
-			"faction": "enemy1",
+			"faction": "nop",
 			"planet": {
-				"planet_template": "level1",
+				"planet_template": "level2",
 				"ship_template": "frigate"
 			}
 		},
@@ -55,9 +87,9 @@
 			"id": "node6",
 			"x": 700.0,
 			"y": 460.0,
-			"faction": "nop",
+			"faction": "player",
 			"planet": {
-				"planet_template": "level1",
+				"planet_template": "level2",
 				"ship_template": "frigate"
 			}
 		}

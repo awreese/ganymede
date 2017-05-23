@@ -64,6 +64,8 @@ class GameMap extends FlxSprite {
     private var factionShipCount:Map<FactionType, Int>; // Global ship count
 	private var factionControlledNodes:Map<FactionType, NodeGroup>;
 	
+	private var enemyAi:Int;
+	
 	private var minX: Float;
 	private var maxX: Float;
 	private var minY: Float;
@@ -118,6 +120,7 @@ class GameMap extends FlxSprite {
 		FlxG.camera.focusOn(new FlxPoint((maxX + minX) / 2, (maxY + minY) / 2));
 		var z = FlxG.stage.width  / (maxX - minX);
 		z = z > FlxG.stage.height / (maxY - minY) ? FlxG.stage.height / (maxY - minY) : z; // set to smallest zoom
+
 		FlxG.camera.zoom = z > 1.25 ? z : 1; // zoom into map
 	}
 
@@ -323,6 +326,7 @@ class GameMap extends FlxSprite {
 	private function parseLevel(playState:PlayState):Void {
 		var file = Assets.getText("assets/data/level" + Main.LEVEL + ".json"); // get string of json
 		var data = Json.parse(file); // parse json
+		enemyAi = data.ai; // get ai time
 		var nodes = data.nodes; // get nodes
 		var neighbors = data.neighbors; // get neighbors
 		
@@ -433,5 +437,12 @@ class GameMap extends FlxSprite {
             if (node.isPlanet()) planetCount++;
         }
         return planetCount;
+	}
+	
+	/*
+	 * return the timer for the enemy AI
+	 */
+	public function getAiTime():Int {
+		return enemyAi;
 	}
 }
