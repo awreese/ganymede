@@ -18,7 +18,7 @@
 					"cps": 5.0
 				},
 				"cap": 10,
-				"prod": 5.0,
+				"prod": 7.0,
 				"prod_thresh": 0.5,
 				"cap_lvl": 0,
 				"tech_lvl": 0,
@@ -54,7 +54,7 @@
 					"cps": 5.0
 				},
 				"cap": 10,
-				"prod": 5.0,
+				"prod": 7.0,
 				"prod_thresh": 0.5,
 				"cap_lvl": 0,
 				"tech_lvl": 0,

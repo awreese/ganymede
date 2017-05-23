@@ -121,11 +121,6 @@ class DefaultAssetLibrary extends AssetLibrary {
 		
 		
 		
-		
-		
-		
-		
-		
 		openfl.text.Font.registerFont (__ASSET__OPENFL__flixel_fonts_nokiafc22_ttf);
 		openfl.text.Font.registerFont (__ASSET__OPENFL__flixel_fonts_monsterrat_ttf);
 		
@@ -147,8 +142,8 @@ class DefaultAssetLibrary extends AssetLibrary {
 		type.set ("assets/data/level1.json", AssetType.TEXT);
 		className.set ("assets/data/level2.json", __ASSET__assets_data_level2_json);
 		type.set ("assets/data/level2.json", AssetType.TEXT);
-		className.set ("assets/data/level2_harder.json", __ASSET__assets_data_level2_harder_json);
-		type.set ("assets/data/level2_harder.json", AssetType.TEXT);
+		className.set ("assets/data/level2_easier.json", __ASSET__assets_data_level2_easier_json);
+		type.set ("assets/data/level2_easier.json", AssetType.TEXT);
 		className.set ("assets/data/level3.json", __ASSET__assets_data_level3_json);
 		type.set ("assets/data/level3.json", AssetType.TEXT);
 		className.set ("assets/data/level4.json", __ASSET__assets_data_level4_json);
@@ -165,10 +160,6 @@ class DefaultAssetLibrary extends AssetLibrary {
 		type.set ("assets/images/background.png", AssetType.IMAGE);
 		className.set ("assets/images/backgrounds/move background images here", __ASSET__assets_images_backgrounds_move_background_images_here);
 		type.set ("assets/images/backgrounds/move background images here", AssetType.TEXT);
-		className.set ("assets/images/capturing_faction_tutorial.png", __ASSET__assets_images_capturing_faction_tutorial_png);
-		type.set ("assets/images/capturing_faction_tutorial.png", AssetType.IMAGE);
-		className.set ("assets/images/capturing_faction_tutorial.psd", __ASSET__assets_images_capturing_faction_tutorial_psd);
-		type.set ("assets/images/capturing_faction_tutorial.psd", AssetType.BINARY);
 		className.set ("assets/images/combat_tutorial.png", __ASSET__assets_images_combat_tutorial_png);
 		type.set ("assets/images/combat_tutorial.png", AssetType.IMAGE);
 		className.set ("assets/images/cursor.png", __ASSET__assets_images_cursor_png);
@@ -185,24 +176,18 @@ class DefaultAssetLibrary extends AssetLibrary {
 		type.set ("assets/images/mapbg.png", AssetType.IMAGE);
 		className.set ("assets/images/menubg.png", __ASSET__assets_images_menubg_png);
 		type.set ("assets/images/menubg.png", AssetType.IMAGE);
-		className.set ("assets/images/MenuBG.psd", __ASSET__assets_images_menubg_psd);
-		type.set ("assets/images/MenuBG.psd", AssetType.BINARY);
 		className.set ("assets/images/mouse.png", __ASSET__assets_images_mouse_png);
 		type.set ("assets/images/mouse.png", AssetType.IMAGE);
 		className.set ("assets/images/mouse_left.png", __ASSET__assets_images_mouse_left_png);
 		type.set ("assets/images/mouse_left.png", AssetType.IMAGE);
 		className.set ("assets/images/mouse_right.png", __ASSET__assets_images_mouse_right_png);
 		type.set ("assets/images/mouse_right.png", AssetType.IMAGE);
-		className.set ("assets/images/moving_ship_tutorial.psd", __ASSET__assets_images_moving_ship_tutorial_psd);
-		type.set ("assets/images/moving_ship_tutorial.psd", AssetType.BINARY);
 		className.set ("assets/images/moving_ship_tutorial_1.png", __ASSET__assets_images_moving_ship_tutorial_1_png);
 		type.set ("assets/images/moving_ship_tutorial_1.png", AssetType.IMAGE);
 		className.set ("assets/images/moving_ship_tutorial_2.png", __ASSET__assets_images_moving_ship_tutorial_2_png);
 		type.set ("assets/images/moving_ship_tutorial_2.png", AssetType.IMAGE);
 		className.set ("assets/images/nextlevelbg.png", __ASSET__assets_images_nextlevelbg_png);
 		type.set ("assets/images/nextlevelbg.png", AssetType.IMAGE);
-		className.set ("assets/images/planet.psd", __ASSET__assets_images_planet_psd);
-		type.set ("assets/images/planet.psd", AssetType.BINARY);
 		className.set ("assets/images/planets/planet_1_enemy1.png", __ASSET__assets_images_planets_planet_1_enemy1_png);
 		type.set ("assets/images/planets/planet_1_enemy1.png", AssetType.IMAGE);
 		className.set ("assets/images/planets/planet_1_neutral.png", __ASSET__assets_images_planets_planet_1_neutral_png);
@@ -217,16 +202,16 @@ class DefaultAssetLibrary extends AssetLibrary {
 		type.set ("assets/images/replay_btn.png", AssetType.IMAGE);
 		className.set ("assets/images/restart_btn.png", __ASSET__assets_images_restart_btn_png);
 		type.set ("assets/images/restart_btn.png", AssetType.IMAGE);
+		className.set ("assets/images/restart_btn.png~HEAD", __ASSET__assets_images_restart_btn_png_head);
+		type.set ("assets/images/restart_btn.png~HEAD", AssetType.BINARY);
+		className.set ("assets/images/restart_btn.png~master", __ASSET__assets_images_restart_btn_png_master);
+		type.set ("assets/images/restart_btn.png~master", AssetType.BINARY);
 		className.set ("assets/images/select_ship_tutorial.png", __ASSET__assets_images_select_ship_tutorial_png);
 		type.set ("assets/images/select_ship_tutorial.png", AssetType.IMAGE);
-		className.set ("assets/images/select_ship_tutorial.psd", __ASSET__assets_images_select_ship_tutorial_psd);
-		type.set ("assets/images/select_ship_tutorial.psd", AssetType.BINARY);
 		className.set ("assets/images/select_ship_tutorial_1.png", __ASSET__assets_images_select_ship_tutorial_1_png);
 		type.set ("assets/images/select_ship_tutorial_1.png", AssetType.IMAGE);
 		className.set ("assets/images/select_ship_tutorial_2.png", __ASSET__assets_images_select_ship_tutorial_2_png);
 		type.set ("assets/images/select_ship_tutorial_2.png", AssetType.IMAGE);
-		className.set ("assets/images/ship.psd", __ASSET__assets_images_ship_psd);
-		type.set ("assets/images/ship.psd", AssetType.BINARY);
 		className.set ("assets/images/ships/ship_1_enemy1.png", __ASSET__assets_images_ships_ship_1_enemy1_png);
 		type.set ("assets/images/ships/ship_1_enemy1.png", AssetType.IMAGE);
 		className.set ("assets/images/ships/ship_1_neutral.png", __ASSET__assets_images_ships_ship_1_neutral_png);
@@ -322,7 +307,7 @@ class DefaultAssetLibrary extends AssetLibrary {
 		path.set (id, id);
 		
 		type.set (id, AssetType.TEXT);
-		id = "assets/data/level2_harder.json";
+		id = "assets/data/level2_easier.json";
 		path.set (id, id);
 		
 		type.set (id, AssetType.TEXT);
@@ -358,14 +343,6 @@ class DefaultAssetLibrary extends AssetLibrary {
 		path.set (id, id);
 		
 		type.set (id, AssetType.TEXT);
-		id = "assets/images/capturing_faction_tutorial.png";
-		path.set (id, id);
-		
-		type.set (id, AssetType.IMAGE);
-		id = "assets/images/capturing_faction_tutorial.psd";
-		path.set (id, id);
-		
-		type.set (id, AssetType.BINARY);
 		id = "assets/images/combat_tutorial.png";
 		path.set (id, id);
 		
@@ -398,10 +375,6 @@ class DefaultAssetLibrary extends AssetLibrary {
 		path.set (id, id);
 		
 		type.set (id, AssetType.IMAGE);
-		id = "assets/images/MenuBG.psd";
-		path.set (id, id);
-		
-		type.set (id, AssetType.BINARY);
 		id = "assets/images/mouse.png";
 		path.set (id, id);
 		
@@ -414,10 +387,6 @@ class DefaultAssetLibrary extends AssetLibrary {
 		path.set (id, id);
 		
 		type.set (id, AssetType.IMAGE);
-		id = "assets/images/moving_ship_tutorial.psd";
-		path.set (id, id);
-		
-		type.set (id, AssetType.BINARY);
 		id = "assets/images/moving_ship_tutorial_1.png";
 		path.set (id, id);
 		
@@ -430,10 +399,6 @@ class DefaultAssetLibrary extends AssetLibrary {
 		path.set (id, id);
 		
 		type.set (id, AssetType.IMAGE);
-		id = "assets/images/planet.psd";
-		path.set (id, id);
-		
-		type.set (id, AssetType.BINARY);
 		id = "assets/images/planets/planet_1_enemy1.png";
 		path.set (id, id);
 		
@@ -462,14 +427,18 @@ class DefaultAssetLibrary extends AssetLibrary {
 		path.set (id, id);
 		
 		type.set (id, AssetType.IMAGE);
+		id = "assets/images/restart_btn.png~HEAD";
+		path.set (id, id);
+		
+		type.set (id, AssetType.BINARY);
+		id = "assets/images/restart_btn.png~master";
+		path.set (id, id);
+		
+		type.set (id, AssetType.BINARY);
 		id = "assets/images/select_ship_tutorial.png";
 		path.set (id, id);
 		
 		type.set (id, AssetType.IMAGE);
-		id = "assets/images/select_ship_tutorial.psd";
-		path.set (id, id);
-		
-		type.set (id, AssetType.BINARY);
 		id = "assets/images/select_ship_tutorial_1.png";
 		path.set (id, id);
 		
@@ -478,10 +447,6 @@ class DefaultAssetLibrary extends AssetLibrary {
 		path.set (id, id);
 		
 		type.set (id, AssetType.IMAGE);
-		id = "assets/images/ship.psd";
-		path.set (id, id);
-		
-		type.set (id, AssetType.BINARY);
 		id = "assets/images/ships/ship_1_enemy1.png";
 		path.set (id, id);
 		
@@ -650,8 +615,8 @@ class DefaultAssetLibrary extends AssetLibrary {
 		className.set ("assets/data/level2.json", __ASSET__assets_data_level2_json);
 		type.set ("assets/data/level2.json", AssetType.TEXT);
 		
-		className.set ("assets/data/level2_harder.json", __ASSET__assets_data_level2_harder_json);
-		type.set ("assets/data/level2_harder.json", AssetType.TEXT);
+		className.set ("assets/data/level2_easier.json", __ASSET__assets_data_level2_easier_json);
+		type.set ("assets/data/level2_easier.json", AssetType.TEXT);
 		
 		className.set ("assets/data/level3.json", __ASSET__assets_data_level3_json);
 		type.set ("assets/data/level3.json", AssetType.TEXT);
@@ -677,12 +642,6 @@ class DefaultAssetLibrary extends AssetLibrary {
 		className.set ("assets/images/backgrounds/move background images here", __ASSET__assets_images_backgrounds_move_background_images_here);
 		type.set ("assets/images/backgrounds/move background images here", AssetType.TEXT);
 		
-		className.set ("assets/images/capturing_faction_tutorial.png", __ASSET__assets_images_capturing_faction_tutorial_png);
-		type.set ("assets/images/capturing_faction_tutorial.png", AssetType.IMAGE);
-		
-		className.set ("assets/images/capturing_faction_tutorial.psd", __ASSET__assets_images_capturing_faction_tutorial_psd);
-		type.set ("assets/images/capturing_faction_tutorial.psd", AssetType.BINARY);
-		
 		className.set ("assets/images/combat_tutorial.png", __ASSET__assets_images_combat_tutorial_png);
 		type.set ("assets/images/combat_tutorial.png", AssetType.IMAGE);
 		
@@ -707,9 +666,6 @@ class DefaultAssetLibrary extends AssetLibrary {
 		className.set ("assets/images/menubg.png", __ASSET__assets_images_menubg_png);
 		type.set ("assets/images/menubg.png", AssetType.IMAGE);
 		
-		className.set ("assets/images/MenuBG.psd", __ASSET__assets_images_menubg_psd);
-		type.set ("assets/images/MenuBG.psd", AssetType.BINARY);
-		
 		className.set ("assets/images/mouse.png", __ASSET__assets_images_mouse_png);
 		type.set ("assets/images/mouse.png", AssetType.IMAGE);
 		
@@ -719,9 +675,6 @@ class DefaultAssetLibrary extends AssetLibrary {
 		className.set ("assets/images/mouse_right.png", __ASSET__assets_images_mouse_right_png);
 		type.set ("assets/images/mouse_right.png", AssetType.IMAGE);
 		
-		className.set ("assets/images/moving_ship_tutorial.psd", __ASSET__assets_images_moving_ship_tutorial_psd);
-		type.set ("assets/images/moving_ship_tutorial.psd", AssetType.BINARY);
-		
 		className.set ("assets/images/moving_ship_tutorial_1.png", __ASSET__assets_images_moving_ship_tutorial_1_png);
 		type.set ("assets/images/moving_ship_tutorial_1.png", AssetType.IMAGE);
 		
@@ -730,9 +683,6 @@ class DefaultAssetLibrary extends AssetLibrary {
 		
 		className.set ("assets/images/nextlevelbg.png", __ASSET__assets_images_nextlevelbg_png);
 		type.set ("assets/images/nextlevelbg.png", AssetType.IMAGE);
-		
-		className.set ("assets/images/planet.psd", __ASSET__assets_images_planet_psd);
-		type.set ("assets/images/planet.psd", AssetType.BINARY);
 		
 		className.set ("assets/images/planets/planet_1_enemy1.png", __ASSET__assets_images_planets_planet_1_enemy1_png);
 		type.set ("assets/images/planets/planet_1_enemy1.png", AssetType.IMAGE);
@@ -755,20 +705,20 @@ class DefaultAssetLibrary extends AssetLibrary {
 		className.set ("assets/images/restart_btn.png", __ASSET__assets_images_restart_btn_png);
 		type.set ("assets/images/restart_btn.png", AssetType.IMAGE);
 		
+		className.set ("assets/images/restart_btn.png~HEAD", __ASSET__assets_images_restart_btn_png_head);
+		type.set ("assets/images/restart_btn.png~HEAD", AssetType.BINARY);
+		
+		className.set ("assets/images/restart_btn.png~master", __ASSET__assets_images_restart_btn_png_master);
+		type.set ("assets/images/restart_btn.png~master", AssetType.BINARY);
+		
 		className.set ("assets/images/select_ship_tutorial.png", __ASSET__assets_images_select_ship_tutorial_png);
 		type.set ("assets/images/select_ship_tutorial.png", AssetType.IMAGE);
-		
-		className.set ("assets/images/select_ship_tutorial.psd", __ASSET__assets_images_select_ship_tutorial_psd);
-		type.set ("assets/images/select_ship_tutorial.psd", AssetType.BINARY);
 		
 		className.set ("assets/images/select_ship_tutorial_1.png", __ASSET__assets_images_select_ship_tutorial_1_png);
 		type.set ("assets/images/select_ship_tutorial_1.png", AssetType.IMAGE);
 		
 		className.set ("assets/images/select_ship_tutorial_2.png", __ASSET__assets_images_select_ship_tutorial_2_png);
 		type.set ("assets/images/select_ship_tutorial_2.png", AssetType.IMAGE);
-		
-		className.set ("assets/images/ship.psd", __ASSET__assets_images_ship_psd);
-		type.set ("assets/images/ship.psd", AssetType.BINARY);
 		
 		className.set ("assets/images/ships/ship_1_enemy1.png", __ASSET__assets_images_ships_ship_1_enemy1_png);
 		type.set ("assets/images/ships/ship_1_enemy1.png", AssetType.IMAGE);
@@ -1519,7 +1469,7 @@ class DefaultAssetLibrary extends AssetLibrary {
 @:keep @:bind #if display private #end class __ASSET__assets_sounds_laser_wav extends null { }
 @:keep @:bind #if display private #end class __ASSET__assets_data_level1_json extends null { }
 @:keep @:bind #if display private #end class __ASSET__assets_data_level2_json extends null { }
-@:keep @:bind #if display private #end class __ASSET__assets_data_level2_harder_json extends null { }
+@:keep @:bind #if display private #end class __ASSET__assets_data_level2_easier_json extends null { }
 @:keep @:bind #if display private #end class __ASSET__assets_data_level3_json extends null { }
 @:keep @:bind #if display private #end class __ASSET__assets_data_level4_json extends null { }
 @:keep @:bind #if display private #end class __ASSET__assets_data_level5_json extends null { }
@@ -1528,8 +1478,6 @@ class DefaultAssetLibrary extends AssetLibrary {
 @:keep @:bind #if display private #end class __ASSET__assets_data_level8_json extends null { }
 @:keep @:bind #if display private #end class __ASSET__assets_images_background_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
 @:keep @:bind #if display private #end class __ASSET__assets_images_backgrounds_move_background_images_here extends null { }
-@:keep @:bind #if display private #end class __ASSET__assets_images_capturing_faction_tutorial_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
-@:keep @:bind #if display private #end class __ASSET__assets_images_capturing_faction_tutorial_psd extends null { }
 @:keep @:bind #if display private #end class __ASSET__assets_images_combat_tutorial_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
 @:keep @:bind #if display private #end class __ASSET__assets_images_cursor_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
 @:keep @:bind #if display private #end class __ASSET__assets_images_feedback_btn_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
@@ -1538,15 +1486,12 @@ class DefaultAssetLibrary extends AssetLibrary {
 @:keep @:bind #if display private #end class __ASSET__assets_images_images_go_here_txt extends null { }
 @:keep @:bind #if display private #end class __ASSET__assets_images_mapbg_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
 @:keep @:bind #if display private #end class __ASSET__assets_images_menubg_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
-@:keep @:bind #if display private #end class __ASSET__assets_images_menubg_psd extends null { }
 @:keep @:bind #if display private #end class __ASSET__assets_images_mouse_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
 @:keep @:bind #if display private #end class __ASSET__assets_images_mouse_left_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
 @:keep @:bind #if display private #end class __ASSET__assets_images_mouse_right_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
-@:keep @:bind #if display private #end class __ASSET__assets_images_moving_ship_tutorial_psd extends null { }
 @:keep @:bind #if display private #end class __ASSET__assets_images_moving_ship_tutorial_1_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
 @:keep @:bind #if display private #end class __ASSET__assets_images_moving_ship_tutorial_2_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
 @:keep @:bind #if display private #end class __ASSET__assets_images_nextlevelbg_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
-@:keep @:bind #if display private #end class __ASSET__assets_images_planet_psd extends null { }
 @:keep @:bind #if display private #end class __ASSET__assets_images_planets_planet_1_enemy1_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
 @:keep @:bind #if display private #end class __ASSET__assets_images_planets_planet_1_neutral_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
 @:keep @:bind #if display private #end class __ASSET__assets_images_planets_planet_1_none_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
@@ -1554,11 +1499,11 @@ class DefaultAssetLibrary extends AssetLibrary {
 @:keep @:bind #if display private #end class __ASSET__assets_images_play_btn_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
 @:keep @:bind #if display private #end class __ASSET__assets_images_replay_btn_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
 @:keep @:bind #if display private #end class __ASSET__assets_images_restart_btn_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
+@:keep @:bind #if display private #end class __ASSET__assets_images_restart_btn_png_head extends null { }
+@:keep @:bind #if display private #end class __ASSET__assets_images_restart_btn_png_master extends null { }
 @:keep @:bind #if display private #end class __ASSET__assets_images_select_ship_tutorial_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
-@:keep @:bind #if display private #end class __ASSET__assets_images_select_ship_tutorial_psd extends null { }
 @:keep @:bind #if display private #end class __ASSET__assets_images_select_ship_tutorial_1_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
 @:keep @:bind #if display private #end class __ASSET__assets_images_select_ship_tutorial_2_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
-@:keep @:bind #if display private #end class __ASSET__assets_images_ship_psd extends null { }
 @:keep @:bind #if display private #end class __ASSET__assets_images_ships_ship_1_enemy1_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
 @:keep @:bind #if display private #end class __ASSET__assets_images_ships_ship_1_neutral_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
 @:keep @:bind #if display private #end class __ASSET__assets_images_ships_ship_1_player_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
@@ -1666,11 +1611,6 @@ class DefaultAssetLibrary extends AssetLibrary {
 
 
 
-
-
-
-
-
 @:keep #if display private #end class __ASSET__flixel_fonts_nokiafc22_ttf extends lime.text.Font { public function new () { super (); name = "Nokia Cellphone FC Small"; } } 
 @:keep #if display private #end class __ASSET__flixel_fonts_monsterrat_ttf extends lime.text.Font { public function new () { super (); name = "Monsterrat"; } } 
 
@@ -1690,7 +1630,7 @@ class DefaultAssetLibrary extends AssetLibrary {
 @:file("assets/sounds/laser.wav") #if display private #end class __ASSET__assets_sounds_laser_wav extends lime.utils.Bytes {}
 @:file("assets/data/level1.json") #if display private #end class __ASSET__assets_data_level1_json extends lime.utils.Bytes {}
 @:file("assets/data/level2.json") #if display private #end class __ASSET__assets_data_level2_json extends lime.utils.Bytes {}
-@:file("assets/data/level2_harder.json") #if display private #end class __ASSET__assets_data_level2_harder_json extends lime.utils.Bytes {}
+@:file("assets/data/level2_easier.json") #if display private #end class __ASSET__assets_data_level2_easier_json extends lime.utils.Bytes {}
 @:file("assets/data/level3.json") #if display private #end class __ASSET__assets_data_level3_json extends lime.utils.Bytes {}
 @:file("assets/data/level4.json") #if display private #end class __ASSET__assets_data_level4_json extends lime.utils.Bytes {}
 @:file("assets/data/level5.json") #if display private #end class __ASSET__assets_data_level5_json extends lime.utils.Bytes {}
@@ -1699,8 +1639,6 @@ class DefaultAssetLibrary extends AssetLibrary {
 @:file("assets/data/level8.json") #if display private #end class __ASSET__assets_data_level8_json extends lime.utils.Bytes {}
 @:image("assets/images/background.png") #if display private #end class __ASSET__assets_images_background_png extends lime.graphics.Image {}
 @:file("assets/images/backgrounds/move background images here") #if display private #end class __ASSET__assets_images_backgrounds_move_background_images_here extends lime.utils.Bytes {}
-@:image("assets/images/capturing_faction_tutorial.png") #if display private #end class __ASSET__assets_images_capturing_faction_tutorial_png extends lime.graphics.Image {}
-@:file("assets/images/capturing_faction_tutorial.psd") #if display private #end class __ASSET__assets_images_capturing_faction_tutorial_psd extends lime.utils.Bytes {}
 @:image("assets/images/combat_tutorial.png") #if display private #end class __ASSET__assets_images_combat_tutorial_png extends lime.graphics.Image {}
 @:image("assets/images/cursor.png") #if display private #end class __ASSET__assets_images_cursor_png extends lime.graphics.Image {}
 @:image("assets/images/feedback_btn.png") #if display private #end class __ASSET__assets_images_feedback_btn_png extends lime.graphics.Image {}
@@ -1709,15 +1647,12 @@ class DefaultAssetLibrary extends AssetLibrary {
 @:file("assets/images/images-go-here.txt") #if display private #end class __ASSET__assets_images_images_go_here_txt extends lime.utils.Bytes {}
 @:image("assets/images/mapbg.png") #if display private #end class __ASSET__assets_images_mapbg_png extends lime.graphics.Image {}
 @:image("assets/images/menubg.png") #if display private #end class __ASSET__assets_images_menubg_png extends lime.graphics.Image {}
-@:file("assets/images/MenuBG.psd") #if display private #end class __ASSET__assets_images_menubg_psd extends lime.utils.Bytes {}
 @:image("assets/images/mouse.png") #if display private #end class __ASSET__assets_images_mouse_png extends lime.graphics.Image {}
 @:image("assets/images/mouse_left.png") #if display private #end class __ASSET__assets_images_mouse_left_png extends lime.graphics.Image {}
 @:image("assets/images/mouse_right.png") #if display private #end class __ASSET__assets_images_mouse_right_png extends lime.graphics.Image {}
-@:file("assets/images/moving_ship_tutorial.psd") #if display private #end class __ASSET__assets_images_moving_ship_tutorial_psd extends lime.utils.Bytes {}
 @:image("assets/images/moving_ship_tutorial_1.png") #if display private #end class __ASSET__assets_images_moving_ship_tutorial_1_png extends lime.graphics.Image {}
 @:image("assets/images/moving_ship_tutorial_2.png") #if display private #end class __ASSET__assets_images_moving_ship_tutorial_2_png extends lime.graphics.Image {}
 @:image("assets/images/nextlevelbg.png") #if display private #end class __ASSET__assets_images_nextlevelbg_png extends lime.graphics.Image {}
-@:file("assets/images/planet.psd") #if display private #end class __ASSET__assets_images_planet_psd extends lime.utils.Bytes {}
 @:image("assets/images/planets/planet_1_enemy1.png") #if display private #end class __ASSET__assets_images_planets_planet_1_enemy1_png extends lime.graphics.Image {}
 @:image("assets/images/planets/planet_1_neutral.png") #if display private #end class __ASSET__assets_images_planets_planet_1_neutral_png extends lime.graphics.Image {}
 @:image("assets/images/planets/planet_1_none.png") #if display private #end class __ASSET__assets_images_planets_planet_1_none_png extends lime.graphics.Image {}
@@ -1725,11 +1660,11 @@ class DefaultAssetLibrary extends AssetLibrary {
 @:image("assets/images/play_btn.png") #if display private #end class __ASSET__assets_images_play_btn_png extends lime.graphics.Image {}
 @:image("assets/images/replay_btn.png") #if display private #end class __ASSET__assets_images_replay_btn_png extends lime.graphics.Image {}
 @:image("assets/images/restart_btn.png") #if display private #end class __ASSET__assets_images_restart_btn_png extends lime.graphics.Image {}
+@:file("assets/images/restart_btn.png~HEAD") #if display private #end class __ASSET__assets_images_restart_btn_png_head extends lime.utils.Bytes {}
+@:file("assets/images/restart_btn.png~master") #if display private #end class __ASSET__assets_images_restart_btn_png_master extends lime.utils.Bytes {}
 @:image("assets/images/select_ship_tutorial.png") #if display private #end class __ASSET__assets_images_select_ship_tutorial_png extends lime.graphics.Image {}
-@:file("assets/images/select_ship_tutorial.psd") #if display private #end class __ASSET__assets_images_select_ship_tutorial_psd extends lime.utils.Bytes {}
 @:image("assets/images/select_ship_tutorial_1.png") #if display private #end class __ASSET__assets_images_select_ship_tutorial_1_png extends lime.graphics.Image {}
 @:image("assets/images/select_ship_tutorial_2.png") #if display private #end class __ASSET__assets_images_select_ship_tutorial_2_png extends lime.graphics.Image {}
-@:file("assets/images/ship.psd") #if display private #end class __ASSET__assets_images_ship_psd extends lime.utils.Bytes {}
 @:image("assets/images/ships/ship_1_enemy1.png") #if display private #end class __ASSET__assets_images_ships_ship_1_enemy1_png extends lime.graphics.Image {}
 @:image("assets/images/ships/ship_1_neutral.png") #if display private #end class __ASSET__assets_images_ships_ship_1_neutral_png extends lime.graphics.Image {}
 @:image("assets/images/ships/ship_1_player.png") #if display private #end class __ASSET__assets_images_ships_ship_1_player_png extends lime.graphics.Image {}

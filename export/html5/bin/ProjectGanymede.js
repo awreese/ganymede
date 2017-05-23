@@ -36,7 +36,7 @@ ApplicationMain.create = function() {
 	types.push("TEXT");
 	urls.push("assets/data/level2.json");
 	types.push("TEXT");
-	urls.push("assets/data/level2_harder.json");
+	urls.push("assets/data/level2_easier.json");
 	types.push("TEXT");
 	urls.push("assets/data/level3.json");
 	types.push("TEXT");
@@ -54,10 +54,6 @@ ApplicationMain.create = function() {
 	types.push("IMAGE");
 	urls.push("assets/images/backgrounds/move background images here");
 	types.push("TEXT");
-	urls.push("assets/images/capturing_faction_tutorial.png");
-	types.push("IMAGE");
-	urls.push("assets/images/capturing_faction_tutorial.psd");
-	types.push("BINARY");
 	urls.push("assets/images/combat_tutorial.png");
 	types.push("IMAGE");
 	urls.push("assets/images/cursor.png");
@@ -74,24 +70,18 @@ ApplicationMain.create = function() {
 	types.push("IMAGE");
 	urls.push("assets/images/menubg.png");
 	types.push("IMAGE");
-	urls.push("assets/images/MenuBG.psd");
-	types.push("BINARY");
 	urls.push("assets/images/mouse.png");
 	types.push("IMAGE");
 	urls.push("assets/images/mouse_left.png");
 	types.push("IMAGE");
 	urls.push("assets/images/mouse_right.png");
 	types.push("IMAGE");
-	urls.push("assets/images/moving_ship_tutorial.psd");
-	types.push("BINARY");
 	urls.push("assets/images/moving_ship_tutorial_1.png");
 	types.push("IMAGE");
 	urls.push("assets/images/moving_ship_tutorial_2.png");
 	types.push("IMAGE");
 	urls.push("assets/images/nextlevelbg.png");
 	types.push("IMAGE");
-	urls.push("assets/images/planet.psd");
-	types.push("BINARY");
 	urls.push("assets/images/planets/planet_1_enemy1.png");
 	types.push("IMAGE");
 	urls.push("assets/images/planets/planet_1_neutral.png");
@@ -106,16 +96,16 @@ ApplicationMain.create = function() {
 	types.push("IMAGE");
 	urls.push("assets/images/restart_btn.png");
 	types.push("IMAGE");
+	urls.push("assets/images/restart_btn.png~HEAD");
+	types.push("BINARY");
+	urls.push("assets/images/restart_btn.png~master");
+	types.push("BINARY");
 	urls.push("assets/images/select_ship_tutorial.png");
 	types.push("IMAGE");
-	urls.push("assets/images/select_ship_tutorial.psd");
-	types.push("BINARY");
 	urls.push("assets/images/select_ship_tutorial_1.png");
 	types.push("IMAGE");
 	urls.push("assets/images/select_ship_tutorial_2.png");
 	types.push("IMAGE");
-	urls.push("assets/images/ship.psd");
-	types.push("BINARY");
 	urls.push("assets/images/ships/ship_1_enemy1.png");
 	types.push("IMAGE");
 	urls.push("assets/images/ships/ship_1_neutral.png");
@@ -210,7 +200,7 @@ ApplicationMain.init = function() {
 	}
 };
 ApplicationMain.main = function() {
-	ApplicationMain.config = { build : "141", company : "DDR", file : "ProjectGanymede", fps : 60, name : "Project Ganymede", orientation : "", packageName : "com.example.myapp", version : "0.0.1", windows : [{ antialiasing : 0, background : 8421504, borderless : false, depthBuffer : false, display : 0, fullscreen : false, hardware : false, height : 720, parameters : "{}", resizable : true, stencilBuffer : true, title : "Project Ganymede", vsync : true, width : 1280, x : null, y : null}]};
+	ApplicationMain.config = { build : "176", company : "DDR", file : "ProjectGanymede", fps : 60, name : "Project Ganymede", orientation : "", packageName : "com.example.myapp", version : "0.0.1", windows : [{ antialiasing : 0, background : 8421504, borderless : false, depthBuffer : false, display : 0, fullscreen : false, hardware : false, height : 720, parameters : "{}", resizable : true, stencilBuffer : true, title : "Project Ganymede", vsync : true, width : 1280, x : null, y : null}]};
 };
 ApplicationMain.start = function() {
 	var hasMain = false;
@@ -2155,7 +2145,7 @@ openfl_display_Sprite.prototype = $extend(openfl_display_DisplayObjectContainer.
 	,__properties__: $extend(openfl_display_DisplayObjectContainer.prototype.__properties__,{get_graphics:"get_graphics"})
 });
 var Main = function() {
-	Main.LEVEL = 1;
+	Main.LEVEL = 2;
 	document.oncontextmenu = document.body.oncontextmenu = function() {
 		return false;
 	};
@@ -2541,7 +2531,7 @@ var DefaultAssetLibrary = function() {
 	} else {
 		_this11.h[id] = value5;
 	}
-	id = "assets/data/level2_harder.json";
+	id = "assets/data/level2_easier.json";
 	var _this12 = this.path;
 	if(__map_reserved[id] != null) {
 		_this12.setReserved(id,id);
@@ -2667,7 +2657,7 @@ var DefaultAssetLibrary = function() {
 	} else {
 		_this29.h[id] = value14;
 	}
-	id = "assets/images/capturing_faction_tutorial.png";
+	id = "assets/images/combat_tutorial.png";
 	var _this30 = this.path;
 	if(__map_reserved[id] != null) {
 		_this30.setReserved(id,id);
@@ -2681,7 +2671,7 @@ var DefaultAssetLibrary = function() {
 	} else {
 		_this31.h[id] = value15;
 	}
-	id = "assets/images/capturing_faction_tutorial.psd";
+	id = "assets/images/cursor.png";
 	var _this32 = this.path;
 	if(__map_reserved[id] != null) {
 		_this32.setReserved(id,id);
@@ -2689,13 +2679,13 @@ var DefaultAssetLibrary = function() {
 		_this32.h[id] = id;
 	}
 	var _this33 = this.type;
-	var value16 = "BINARY";
+	var value16 = "IMAGE";
 	if(__map_reserved[id] != null) {
 		_this33.setReserved(id,value16);
 	} else {
 		_this33.h[id] = value16;
 	}
-	id = "assets/images/combat_tutorial.png";
+	id = "assets/images/feedback_btn.png";
 	var _this34 = this.path;
 	if(__map_reserved[id] != null) {
 		_this34.setReserved(id,id);
@@ -2709,7 +2699,7 @@ var DefaultAssetLibrary = function() {
 	} else {
 		_this35.h[id] = value17;
 	}
-	id = "assets/images/cursor.png";
+	id = "assets/images/finishgamebg.png";
 	var _this36 = this.path;
 	if(__map_reserved[id] != null) {
 		_this36.setReserved(id,id);
@@ -2723,7 +2713,7 @@ var DefaultAssetLibrary = function() {
 	} else {
 		_this37.h[id] = value18;
 	}
-	id = "assets/images/feedback_btn.png";
+	id = "assets/images/gameover.png";
 	var _this38 = this.path;
 	if(__map_reserved[id] != null) {
 		_this38.setReserved(id,id);
@@ -2737,7 +2727,7 @@ var DefaultAssetLibrary = function() {
 	} else {
 		_this39.h[id] = value19;
 	}
-	id = "assets/images/finishgamebg.png";
+	id = "assets/images/images-go-here.txt";
 	var _this40 = this.path;
 	if(__map_reserved[id] != null) {
 		_this40.setReserved(id,id);
@@ -2745,13 +2735,13 @@ var DefaultAssetLibrary = function() {
 		_this40.h[id] = id;
 	}
 	var _this41 = this.type;
-	var value20 = "IMAGE";
+	var value20 = "TEXT";
 	if(__map_reserved[id] != null) {
 		_this41.setReserved(id,value20);
 	} else {
 		_this41.h[id] = value20;
 	}
-	id = "assets/images/gameover.png";
+	id = "assets/images/mapbg.png";
 	var _this42 = this.path;
 	if(__map_reserved[id] != null) {
 		_this42.setReserved(id,id);
@@ -2765,7 +2755,7 @@ var DefaultAssetLibrary = function() {
 	} else {
 		_this43.h[id] = value21;
 	}
-	id = "assets/images/images-go-here.txt";
+	id = "assets/images/menubg.png";
 	var _this44 = this.path;
 	if(__map_reserved[id] != null) {
 		_this44.setReserved(id,id);
@@ -2773,13 +2763,13 @@ var DefaultAssetLibrary = function() {
 		_this44.h[id] = id;
 	}
 	var _this45 = this.type;
-	var value22 = "TEXT";
+	var value22 = "IMAGE";
 	if(__map_reserved[id] != null) {
 		_this45.setReserved(id,value22);
 	} else {
 		_this45.h[id] = value22;
 	}
-	id = "assets/images/mapbg.png";
+	id = "assets/images/mouse.png";
 	var _this46 = this.path;
 	if(__map_reserved[id] != null) {
 		_this46.setReserved(id,id);
@@ -2793,7 +2783,7 @@ var DefaultAssetLibrary = function() {
 	} else {
 		_this47.h[id] = value23;
 	}
-	id = "assets/images/menubg.png";
+	id = "assets/images/mouse_left.png";
 	var _this48 = this.path;
 	if(__map_reserved[id] != null) {
 		_this48.setReserved(id,id);
@@ -2807,7 +2797,7 @@ var DefaultAssetLibrary = function() {
 	} else {
 		_this49.h[id] = value24;
 	}
-	id = "assets/images/MenuBG.psd";
+	id = "assets/images/mouse_right.png";
 	var _this50 = this.path;
 	if(__map_reserved[id] != null) {
 		_this50.setReserved(id,id);
@@ -2815,13 +2805,13 @@ var DefaultAssetLibrary = function() {
 		_this50.h[id] = id;
 	}
 	var _this51 = this.type;
-	var value25 = "BINARY";
+	var value25 = "IMAGE";
 	if(__map_reserved[id] != null) {
 		_this51.setReserved(id,value25);
 	} else {
 		_this51.h[id] = value25;
 	}
-	id = "assets/images/mouse.png";
+	id = "assets/images/moving_ship_tutorial_1.png";
 	var _this52 = this.path;
 	if(__map_reserved[id] != null) {
 		_this52.setReserved(id,id);
@@ -2835,7 +2825,7 @@ var DefaultAssetLibrary = function() {
 	} else {
 		_this53.h[id] = value26;
 	}
-	id = "assets/images/mouse_left.png";
+	id = "assets/images/moving_ship_tutorial_2.png";
 	var _this54 = this.path;
 	if(__map_reserved[id] != null) {
 		_this54.setReserved(id,id);
@@ -2849,7 +2839,7 @@ var DefaultAssetLibrary = function() {
 	} else {
 		_this55.h[id] = value27;
 	}
-	id = "assets/images/mouse_right.png";
+	id = "assets/images/nextlevelbg.png";
 	var _this56 = this.path;
 	if(__map_reserved[id] != null) {
 		_this56.setReserved(id,id);
@@ -2863,7 +2853,7 @@ var DefaultAssetLibrary = function() {
 	} else {
 		_this57.h[id] = value28;
 	}
-	id = "assets/images/moving_ship_tutorial.psd";
+	id = "assets/images/planets/planet_1_enemy1.png";
 	var _this58 = this.path;
 	if(__map_reserved[id] != null) {
 		_this58.setReserved(id,id);
@@ -2871,13 +2861,13 @@ var DefaultAssetLibrary = function() {
 		_this58.h[id] = id;
 	}
 	var _this59 = this.type;
-	var value29 = "BINARY";
+	var value29 = "IMAGE";
 	if(__map_reserved[id] != null) {
 		_this59.setReserved(id,value29);
 	} else {
 		_this59.h[id] = value29;
 	}
-	id = "assets/images/moving_ship_tutorial_1.png";
+	id = "assets/images/planets/planet_1_neutral.png";
 	var _this60 = this.path;
 	if(__map_reserved[id] != null) {
 		_this60.setReserved(id,id);
@@ -2891,7 +2881,7 @@ var DefaultAssetLibrary = function() {
 	} else {
 		_this61.h[id] = value30;
 	}
-	id = "assets/images/moving_ship_tutorial_2.png";
+	id = "assets/images/planets/planet_1_none.png";
 	var _this62 = this.path;
 	if(__map_reserved[id] != null) {
 		_this62.setReserved(id,id);
@@ -2905,7 +2895,7 @@ var DefaultAssetLibrary = function() {
 	} else {
 		_this63.h[id] = value31;
 	}
-	id = "assets/images/nextlevelbg.png";
+	id = "assets/images/planets/planet_1_player.png";
 	var _this64 = this.path;
 	if(__map_reserved[id] != null) {
 		_this64.setReserved(id,id);
@@ -2919,7 +2909,7 @@ var DefaultAssetLibrary = function() {
 	} else {
 		_this65.h[id] = value32;
 	}
-	id = "assets/images/planet.psd";
+	id = "assets/images/play_btn.png";
 	var _this66 = this.path;
 	if(__map_reserved[id] != null) {
 		_this66.setReserved(id,id);
@@ -2927,13 +2917,13 @@ var DefaultAssetLibrary = function() {
 		_this66.h[id] = id;
 	}
 	var _this67 = this.type;
-	var value33 = "BINARY";
+	var value33 = "IMAGE";
 	if(__map_reserved[id] != null) {
 		_this67.setReserved(id,value33);
 	} else {
 		_this67.h[id] = value33;
 	}
-	id = "assets/images/planets/planet_1_enemy1.png";
+	id = "assets/images/replay_btn.png";
 	var _this68 = this.path;
 	if(__map_reserved[id] != null) {
 		_this68.setReserved(id,id);
@@ -2947,7 +2937,7 @@ var DefaultAssetLibrary = function() {
 	} else {
 		_this69.h[id] = value34;
 	}
-	id = "assets/images/planets/planet_1_neutral.png";
+	id = "assets/images/restart_btn.png";
 	var _this70 = this.path;
 	if(__map_reserved[id] != null) {
 		_this70.setReserved(id,id);
@@ -2961,7 +2951,7 @@ var DefaultAssetLibrary = function() {
 	} else {
 		_this71.h[id] = value35;
 	}
-	id = "assets/images/planets/planet_1_none.png";
+	id = "assets/images/restart_btn.png~HEAD";
 	var _this72 = this.path;
 	if(__map_reserved[id] != null) {
 		_this72.setReserved(id,id);
@@ -2969,13 +2959,13 @@ var DefaultAssetLibrary = function() {
 		_this72.h[id] = id;
 	}
 	var _this73 = this.type;
-	var value36 = "IMAGE";
+	var value36 = "BINARY";
 	if(__map_reserved[id] != null) {
 		_this73.setReserved(id,value36);
 	} else {
 		_this73.h[id] = value36;
 	}
-	id = "assets/images/planets/planet_1_player.png";
+	id = "assets/images/restart_btn.png~master";
 	var _this74 = this.path;
 	if(__map_reserved[id] != null) {
 		_this74.setReserved(id,id);
@@ -2983,13 +2973,13 @@ var DefaultAssetLibrary = function() {
 		_this74.h[id] = id;
 	}
 	var _this75 = this.type;
-	var value37 = "IMAGE";
+	var value37 = "BINARY";
 	if(__map_reserved[id] != null) {
 		_this75.setReserved(id,value37);
 	} else {
 		_this75.h[id] = value37;
 	}
-	id = "assets/images/play_btn.png";
+	id = "assets/images/select_ship_tutorial.png";
 	var _this76 = this.path;
 	if(__map_reserved[id] != null) {
 		_this76.setReserved(id,id);
@@ -3003,7 +2993,7 @@ var DefaultAssetLibrary = function() {
 	} else {
 		_this77.h[id] = value38;
 	}
-	id = "assets/images/replay_btn.png";
+	id = "assets/images/select_ship_tutorial_1.png";
 	var _this78 = this.path;
 	if(__map_reserved[id] != null) {
 		_this78.setReserved(id,id);
@@ -3017,7 +3007,7 @@ var DefaultAssetLibrary = function() {
 	} else {
 		_this79.h[id] = value39;
 	}
-	id = "assets/images/restart_btn.png";
+	id = "assets/images/select_ship_tutorial_2.png";
 	var _this80 = this.path;
 	if(__map_reserved[id] != null) {
 		_this80.setReserved(id,id);
@@ -3031,7 +3021,7 @@ var DefaultAssetLibrary = function() {
 	} else {
 		_this81.h[id] = value40;
 	}
-	id = "assets/images/select_ship_tutorial.png";
+	id = "assets/images/ships/ship_1_enemy1.png";
 	var _this82 = this.path;
 	if(__map_reserved[id] != null) {
 		_this82.setReserved(id,id);
@@ -3045,7 +3035,7 @@ var DefaultAssetLibrary = function() {
 	} else {
 		_this83.h[id] = value41;
 	}
-	id = "assets/images/select_ship_tutorial.psd";
+	id = "assets/images/ships/ship_1_neutral.png";
 	var _this84 = this.path;
 	if(__map_reserved[id] != null) {
 		_this84.setReserved(id,id);
@@ -3053,13 +3043,13 @@ var DefaultAssetLibrary = function() {
 		_this84.h[id] = id;
 	}
 	var _this85 = this.type;
-	var value42 = "BINARY";
+	var value42 = "IMAGE";
 	if(__map_reserved[id] != null) {
 		_this85.setReserved(id,value42);
 	} else {
 		_this85.h[id] = value42;
 	}
-	id = "assets/images/select_ship_tutorial_1.png";
+	id = "assets/images/ships/ship_1_player.png";
 	var _this86 = this.path;
 	if(__map_reserved[id] != null) {
 		_this86.setReserved(id,id);
@@ -3073,7 +3063,7 @@ var DefaultAssetLibrary = function() {
 	} else {
 		_this87.h[id] = value43;
 	}
-	id = "assets/images/select_ship_tutorial_2.png";
+	id = "assets/images/ships/ship_1_player_selected.png";
 	var _this88 = this.path;
 	if(__map_reserved[id] != null) {
 		_this88.setReserved(id,id);
@@ -3087,7 +3077,7 @@ var DefaultAssetLibrary = function() {
 	} else {
 		_this89.h[id] = value44;
 	}
-	id = "assets/images/ship.psd";
+	id = "assets/images/ships/ship_2_enemy1.png";
 	var _this90 = this.path;
 	if(__map_reserved[id] != null) {
 		_this90.setReserved(id,id);
@@ -3095,13 +3085,13 @@ var DefaultAssetLibrary = function() {
 		_this90.h[id] = id;
 	}
 	var _this91 = this.type;
-	var value45 = "BINARY";
+	var value45 = "IMAGE";
 	if(__map_reserved[id] != null) {
 		_this91.setReserved(id,value45);
 	} else {
 		_this91.h[id] = value45;
 	}
-	id = "assets/images/ships/ship_1_enemy1.png";
+	id = "assets/images/ships/ship_2_neutral.png";
 	var _this92 = this.path;
 	if(__map_reserved[id] != null) {
 		_this92.setReserved(id,id);
@@ -3115,7 +3105,7 @@ var DefaultAssetLibrary = function() {
 	} else {
 		_this93.h[id] = value46;
 	}
-	id = "assets/images/ships/ship_1_neutral.png";
+	id = "assets/images/ships/ship_2_player.png";
 	var _this94 = this.path;
 	if(__map_reserved[id] != null) {
 		_this94.setReserved(id,id);
@@ -3129,7 +3119,7 @@ var DefaultAssetLibrary = function() {
 	} else {
 		_this95.h[id] = value47;
 	}
-	id = "assets/images/ships/ship_1_player.png";
+	id = "assets/images/ships/ship_2_player_selected.png";
 	var _this96 = this.path;
 	if(__map_reserved[id] != null) {
 		_this96.setReserved(id,id);
@@ -3143,7 +3133,7 @@ var DefaultAssetLibrary = function() {
 	} else {
 		_this97.h[id] = value48;
 	}
-	id = "assets/images/ships/ship_1_player_selected.png";
+	id = "assets/images/ships/ship_3_enemy1.png";
 	var _this98 = this.path;
 	if(__map_reserved[id] != null) {
 		_this98.setReserved(id,id);
@@ -3157,7 +3147,7 @@ var DefaultAssetLibrary = function() {
 	} else {
 		_this99.h[id] = value49;
 	}
-	id = "assets/images/ships/ship_2_enemy1.png";
+	id = "assets/images/ships/ship_3_neutral.png";
 	var _this100 = this.path;
 	if(__map_reserved[id] != null) {
 		_this100.setReserved(id,id);
@@ -3171,7 +3161,7 @@ var DefaultAssetLibrary = function() {
 	} else {
 		_this101.h[id] = value50;
 	}
-	id = "assets/images/ships/ship_2_neutral.png";
+	id = "assets/images/ships/ship_3_player.png";
 	var _this102 = this.path;
 	if(__map_reserved[id] != null) {
 		_this102.setReserved(id,id);
@@ -3185,7 +3175,7 @@ var DefaultAssetLibrary = function() {
 	} else {
 		_this103.h[id] = value51;
 	}
-	id = "assets/images/ships/ship_2_player.png";
+	id = "assets/images/ships/ship_3_player_selected.png";
 	var _this104 = this.path;
 	if(__map_reserved[id] != null) {
 		_this104.setReserved(id,id);
@@ -3199,7 +3189,7 @@ var DefaultAssetLibrary = function() {
 	} else {
 		_this105.h[id] = value52;
 	}
-	id = "assets/images/ships/ship_2_player_selected.png";
+	id = "assets/images/temp_laser.png";
 	var _this106 = this.path;
 	if(__map_reserved[id] != null) {
 		_this106.setReserved(id,id);
@@ -3213,7 +3203,7 @@ var DefaultAssetLibrary = function() {
 	} else {
 		_this107.h[id] = value53;
 	}
-	id = "assets/images/ships/ship_3_enemy1.png";
+	id = "assets/images/thumbnail.png";
 	var _this108 = this.path;
 	if(__map_reserved[id] != null) {
 		_this108.setReserved(id,id);
@@ -3227,7 +3217,7 @@ var DefaultAssetLibrary = function() {
 	} else {
 		_this109.h[id] = value54;
 	}
-	id = "assets/images/ships/ship_3_neutral.png";
+	id = "assets/images/tutorials/move tutorial images and files here";
 	var _this110 = this.path;
 	if(__map_reserved[id] != null) {
 		_this110.setReserved(id,id);
@@ -3235,13 +3225,13 @@ var DefaultAssetLibrary = function() {
 		_this110.h[id] = id;
 	}
 	var _this111 = this.type;
-	var value55 = "IMAGE";
+	var value55 = "TEXT";
 	if(__map_reserved[id] != null) {
 		_this111.setReserved(id,value55);
 	} else {
 		_this111.h[id] = value55;
 	}
-	id = "assets/images/ships/ship_3_player.png";
+	id = "assets/images/whitebg.png";
 	var _this112 = this.path;
 	if(__map_reserved[id] != null) {
 		_this112.setReserved(id,id);
@@ -3255,7 +3245,7 @@ var DefaultAssetLibrary = function() {
 	} else {
 		_this113.h[id] = value56;
 	}
-	id = "assets/images/ships/ship_3_player_selected.png";
+	id = "assets/music/menu.mp3";
 	var _this114 = this.path;
 	if(__map_reserved[id] != null) {
 		_this114.setReserved(id,id);
@@ -3263,13 +3253,13 @@ var DefaultAssetLibrary = function() {
 		_this114.h[id] = id;
 	}
 	var _this115 = this.type;
-	var value57 = "IMAGE";
+	var value57 = "MUSIC";
 	if(__map_reserved[id] != null) {
 		_this115.setReserved(id,value57);
 	} else {
 		_this115.h[id] = value57;
 	}
-	id = "assets/images/temp_laser.png";
+	id = "assets/music/menu.ogg";
 	var _this116 = this.path;
 	if(__map_reserved[id] != null) {
 		_this116.setReserved(id,id);
@@ -3277,13 +3267,13 @@ var DefaultAssetLibrary = function() {
 		_this116.h[id] = id;
 	}
 	var _this117 = this.type;
-	var value58 = "IMAGE";
+	var value58 = "SOUND";
 	if(__map_reserved[id] != null) {
 		_this117.setReserved(id,value58);
 	} else {
 		_this117.h[id] = value58;
 	}
-	id = "assets/images/thumbnail.png";
+	id = "assets/music/menu.wav";
 	var _this118 = this.path;
 	if(__map_reserved[id] != null) {
 		_this118.setReserved(id,id);
@@ -3291,13 +3281,13 @@ var DefaultAssetLibrary = function() {
 		_this118.h[id] = id;
 	}
 	var _this119 = this.type;
-	var value59 = "IMAGE";
+	var value59 = "SOUND";
 	if(__map_reserved[id] != null) {
 		_this119.setReserved(id,value59);
 	} else {
 		_this119.h[id] = value59;
 	}
-	id = "assets/images/tutorials/move tutorial images and files here";
+	id = "assets/music/music-goes-here.txt";
 	var _this120 = this.path;
 	if(__map_reserved[id] != null) {
 		_this120.setReserved(id,id);
@@ -3311,7 +3301,7 @@ var DefaultAssetLibrary = function() {
 	} else {
 		_this121.h[id] = value60;
 	}
-	id = "assets/images/whitebg.png";
+	id = "assets/sounds/applause.mp3";
 	var _this122 = this.path;
 	if(__map_reserved[id] != null) {
 		_this122.setReserved(id,id);
@@ -3319,13 +3309,13 @@ var DefaultAssetLibrary = function() {
 		_this122.h[id] = id;
 	}
 	var _this123 = this.type;
-	var value61 = "IMAGE";
+	var value61 = "MUSIC";
 	if(__map_reserved[id] != null) {
 		_this123.setReserved(id,value61);
 	} else {
 		_this123.h[id] = value61;
 	}
-	id = "assets/music/menu.mp3";
+	id = "assets/sounds/applause.ogg";
 	var _this124 = this.path;
 	if(__map_reserved[id] != null) {
 		_this124.setReserved(id,id);
@@ -3333,13 +3323,13 @@ var DefaultAssetLibrary = function() {
 		_this124.h[id] = id;
 	}
 	var _this125 = this.type;
-	var value62 = "MUSIC";
+	var value62 = "SOUND";
 	if(__map_reserved[id] != null) {
 		_this125.setReserved(id,value62);
 	} else {
 		_this125.h[id] = value62;
 	}
-	id = "assets/music/menu.ogg";
+	id = "assets/sounds/applause.wav";
 	var _this126 = this.path;
 	if(__map_reserved[id] != null) {
 		_this126.setReserved(id,id);
@@ -3353,7 +3343,7 @@ var DefaultAssetLibrary = function() {
 	} else {
 		_this127.h[id] = value63;
 	}
-	id = "assets/music/menu.wav";
+	id = "assets/sounds/laser.mp3";
 	var _this128 = this.path;
 	if(__map_reserved[id] != null) {
 		_this128.setReserved(id,id);
@@ -3361,13 +3351,13 @@ var DefaultAssetLibrary = function() {
 		_this128.h[id] = id;
 	}
 	var _this129 = this.type;
-	var value64 = "SOUND";
+	var value64 = "MUSIC";
 	if(__map_reserved[id] != null) {
 		_this129.setReserved(id,value64);
 	} else {
 		_this129.h[id] = value64;
 	}
-	id = "assets/music/music-goes-here.txt";
+	id = "assets/sounds/laser.ogg";
 	var _this130 = this.path;
 	if(__map_reserved[id] != null) {
 		_this130.setReserved(id,id);
@@ -3375,13 +3365,13 @@ var DefaultAssetLibrary = function() {
 		_this130.h[id] = id;
 	}
 	var _this131 = this.type;
-	var value65 = "TEXT";
+	var value65 = "SOUND";
 	if(__map_reserved[id] != null) {
 		_this131.setReserved(id,value65);
 	} else {
 		_this131.h[id] = value65;
 	}
-	id = "assets/sounds/applause.mp3";
+	id = "assets/sounds/laser.wav";
 	var _this132 = this.path;
 	if(__map_reserved[id] != null) {
 		_this132.setReserved(id,id);
@@ -3389,13 +3379,13 @@ var DefaultAssetLibrary = function() {
 		_this132.h[id] = id;
 	}
 	var _this133 = this.type;
-	var value66 = "MUSIC";
+	var value66 = "SOUND";
 	if(__map_reserved[id] != null) {
 		_this133.setReserved(id,value66);
 	} else {
 		_this133.h[id] = value66;
 	}
-	id = "assets/sounds/applause.ogg";
+	id = "assets/sounds/sounds-go-here.txt";
 	var _this134 = this.path;
 	if(__map_reserved[id] != null) {
 		_this134.setReserved(id,id);
@@ -3403,13 +3393,13 @@ var DefaultAssetLibrary = function() {
 		_this134.h[id] = id;
 	}
 	var _this135 = this.type;
-	var value67 = "SOUND";
+	var value67 = "TEXT";
 	if(__map_reserved[id] != null) {
 		_this135.setReserved(id,value67);
 	} else {
 		_this135.h[id] = value67;
 	}
-	id = "assets/sounds/applause.wav";
+	id = "flixel/sounds/beep.ogg";
 	var _this136 = this.path;
 	if(__map_reserved[id] != null) {
 		_this136.setReserved(id,id);
@@ -3423,7 +3413,7 @@ var DefaultAssetLibrary = function() {
 	} else {
 		_this137.h[id] = value68;
 	}
-	id = "assets/sounds/laser.mp3";
+	id = "flixel/sounds/flixel.ogg";
 	var _this138 = this.path;
 	if(__map_reserved[id] != null) {
 		_this138.setReserved(id,id);
@@ -3431,41 +3421,43 @@ var DefaultAssetLibrary = function() {
 		_this138.h[id] = id;
 	}
 	var _this139 = this.type;
-	var value69 = "MUSIC";
+	var value69 = "SOUND";
 	if(__map_reserved[id] != null) {
 		_this139.setReserved(id,value69);
 	} else {
 		_this139.h[id] = value69;
 	}
-	id = "assets/sounds/laser.ogg";
-	var _this140 = this.path;
+	id = "flixel/fonts/nokiafc22.ttf";
+	var _this140 = this.className;
+	var value70 = _$_$ASSET_$_$flixel_$fonts_$nokiafc22_$ttf;
 	if(__map_reserved[id] != null) {
-		_this140.setReserved(id,id);
+		_this140.setReserved(id,value70);
 	} else {
-		_this140.h[id] = id;
+		_this140.h[id] = value70;
 	}
 	var _this141 = this.type;
-	var value70 = "SOUND";
+	var value71 = "FONT";
 	if(__map_reserved[id] != null) {
-		_this141.setReserved(id,value70);
+		_this141.setReserved(id,value71);
 	} else {
-		_this141.h[id] = value70;
+		_this141.h[id] = value71;
 	}
-	id = "assets/sounds/laser.wav";
-	var _this142 = this.path;
+	id = "flixel/fonts/monsterrat.ttf";
+	var _this142 = this.className;
+	var value72 = _$_$ASSET_$_$flixel_$fonts_$monsterrat_$ttf;
 	if(__map_reserved[id] != null) {
-		_this142.setReserved(id,id);
+		_this142.setReserved(id,value72);
 	} else {
-		_this142.h[id] = id;
+		_this142.h[id] = value72;
 	}
 	var _this143 = this.type;
-	var value71 = "SOUND";
+	var value73 = "FONT";
 	if(__map_reserved[id] != null) {
-		_this143.setReserved(id,value71);
+		_this143.setReserved(id,value73);
 	} else {
-		_this143.h[id] = value71;
+		_this143.h[id] = value73;
 	}
-	id = "assets/sounds/sounds-go-here.txt";
+	id = "flixel/images/ui/button.png";
 	var _this144 = this.path;
 	if(__map_reserved[id] != null) {
 		_this144.setReserved(id,id);
@@ -3473,13 +3465,13 @@ var DefaultAssetLibrary = function() {
 		_this144.h[id] = id;
 	}
 	var _this145 = this.type;
-	var value72 = "TEXT";
+	var value74 = "IMAGE";
 	if(__map_reserved[id] != null) {
-		_this145.setReserved(id,value72);
+		_this145.setReserved(id,value74);
 	} else {
-		_this145.h[id] = value72;
+		_this145.h[id] = value74;
 	}
-	id = "flixel/sounds/beep.ogg";
+	id = "flixel/images/logo/default.png";
 	var _this146 = this.path;
 	if(__map_reserved[id] != null) {
 		_this146.setReserved(id,id);
@@ -3487,83 +3479,11 @@ var DefaultAssetLibrary = function() {
 		_this146.h[id] = id;
 	}
 	var _this147 = this.type;
-	var value73 = "SOUND";
+	var value75 = "IMAGE";
 	if(__map_reserved[id] != null) {
-		_this147.setReserved(id,value73);
+		_this147.setReserved(id,value75);
 	} else {
-		_this147.h[id] = value73;
-	}
-	id = "flixel/sounds/flixel.ogg";
-	var _this148 = this.path;
-	if(__map_reserved[id] != null) {
-		_this148.setReserved(id,id);
-	} else {
-		_this148.h[id] = id;
-	}
-	var _this149 = this.type;
-	var value74 = "SOUND";
-	if(__map_reserved[id] != null) {
-		_this149.setReserved(id,value74);
-	} else {
-		_this149.h[id] = value74;
-	}
-	id = "flixel/fonts/nokiafc22.ttf";
-	var _this150 = this.className;
-	var value75 = _$_$ASSET_$_$flixel_$fonts_$nokiafc22_$ttf;
-	if(__map_reserved[id] != null) {
-		_this150.setReserved(id,value75);
-	} else {
-		_this150.h[id] = value75;
-	}
-	var _this151 = this.type;
-	var value76 = "FONT";
-	if(__map_reserved[id] != null) {
-		_this151.setReserved(id,value76);
-	} else {
-		_this151.h[id] = value76;
-	}
-	id = "flixel/fonts/monsterrat.ttf";
-	var _this152 = this.className;
-	var value77 = _$_$ASSET_$_$flixel_$fonts_$monsterrat_$ttf;
-	if(__map_reserved[id] != null) {
-		_this152.setReserved(id,value77);
-	} else {
-		_this152.h[id] = value77;
-	}
-	var _this153 = this.type;
-	var value78 = "FONT";
-	if(__map_reserved[id] != null) {
-		_this153.setReserved(id,value78);
-	} else {
-		_this153.h[id] = value78;
-	}
-	id = "flixel/images/ui/button.png";
-	var _this154 = this.path;
-	if(__map_reserved[id] != null) {
-		_this154.setReserved(id,id);
-	} else {
-		_this154.h[id] = id;
-	}
-	var _this155 = this.type;
-	var value79 = "IMAGE";
-	if(__map_reserved[id] != null) {
-		_this155.setReserved(id,value79);
-	} else {
-		_this155.h[id] = value79;
-	}
-	id = "flixel/images/logo/default.png";
-	var _this156 = this.path;
-	if(__map_reserved[id] != null) {
-		_this156.setReserved(id,id);
-	} else {
-		_this156.h[id] = id;
-	}
-	var _this157 = this.type;
-	var value80 = "IMAGE";
-	if(__map_reserved[id] != null) {
-		_this157.setReserved(id,value80);
-	} else {
-		_this157.h[id] = value80;
+		_this147.h[id] = value75;
 	}
 	var assetsPrefix = null;
 	if(ApplicationMain.config != null && Object.prototype.hasOwnProperty.call(ApplicationMain.config,"assetsPrefix")) {
@@ -3574,13 +3494,13 @@ var DefaultAssetLibrary = function() {
 		while(k.hasNext()) {
 			var k1 = k.next();
 			var this1 = this.path;
-			var _this158 = this.path;
-			var value81 = assetsPrefix + (__map_reserved[k1] != null ? _this158.getReserved(k1) : _this158.h[k1]);
-			var _this159 = this1;
+			var _this148 = this.path;
+			var value76 = assetsPrefix + (__map_reserved[k1] != null ? _this148.getReserved(k1) : _this148.h[k1]);
+			var _this149 = this1;
 			if(__map_reserved[k1] != null) {
-				_this159.setReserved(k1,value81);
+				_this149.setReserved(k1,value76);
 			} else {
-				_this159.h[k1] = value81;
+				_this149.h[k1] = value76;
 			}
 		}
 	}
@@ -3726,7 +3646,7 @@ DefaultAssetLibrary.prototype = $extend(lime_AssetLibrary.prototype,{
 				promise.error(msg);
 			});
 			future.onComplete(function(bytes) {
-				var tmp = (132462700).getString(0,bytes.length);
+				var tmp = bytes.getString(0,bytes.length);
 				promise.complete(tmp);
 			});
 		} else {
@@ -4808,7 +4728,7 @@ MenuState.prototype = $extend(flixel_FlxState.prototype,{
 	,clickPlay: function() {
 		if(Main.LEVEL == 1) {
 			flixel_FlxG.camera.fade(-16777216,0.33,false,function() {
-				var nextState = new tutorial_CombatTutorial();
+				var nextState = new tutorial_SelectShipTutorial();
 				if(flixel_FlxG.game._state.switchTo(nextState)) {
 					flixel_FlxG.game._requestedState = nextState;
 				}
@@ -4953,8 +4873,8 @@ PlayState.prototype = $extend(flixel_FlxState.prototype,{
 		this.add(this.grpMap);
 		this.gameMap = new map_GameMap(this,Main.LEVEL);
 		this.grpMap.add(this.gameMap);
-		this.grpShips = new flixel_group_FlxTypedGroup();
-		this.add(this.grpShips);
+		this.shipGroup = new flixel_group_FlxTypedGroup();
+		this.add(this.shipGroup);
 		var _g = 0;
 		var _g1 = faction_Faction.getEnums();
 		while(_g < _g1.length) {
@@ -4970,22 +4890,42 @@ PlayState.prototype = $extend(flixel_FlxState.prototype,{
 		flixel_FlxState.prototype.create.call(this);
 	}
 	,update: function(elapsed) {
+		var ship = new flixel_group_FlxTypedGroupIterator(this.shipGroup.members,null);
+		while(ship.hasNext()) {
+			var ship1 = ship.next();
+			var ship2 = [ship1];
+			if(ship2[0].exists) {
+				var tmp = this.shipGroup.members.slice().filter((function(ship3) {
+					return function(other) {
+						if(ship3[0] != other && other.exists) {
+							return ship3[0].inSensorRange(other);
+						} else {
+							return false;
+						}
+					};
+				})(ship2));
+				ship2[0].setRadar(tmp);
+			} else {
+				ship2[0].destroy();
+				this.shipGroup.remove(ship2[0],true);
+			}
+		}
 		if(flixel_FlxG.mouse._leftButton.current == 2) {
 			var n = this.gameMap.findNode(new flixel_math_FlxVector(flixel_FlxG.mouse.x,flixel_FlxG.mouse.y));
 			if(n == null) {
-				var s = new flixel_group_FlxTypedGroupIterator(this.grpShips.members,null);
-				while(s.hasNext()) {
-					var s1 = s.next();
-					s1.isSelected = false;
+				var ship4 = new flixel_group_FlxTypedGroupIterator(this.shipGroup.members,null);
+				while(ship4.hasNext()) {
+					var ship5 = ship4.next();
+					if(ship5.getFactionType() == faction_FactionType.PLAYER) {
+						ship5.isSelected = false;
+					}
 				}
 			} else {
-				var s2 = new flixel_group_FlxTypedGroupIterator(this.grpShips.members,null);
-				while(s2.hasNext()) {
-					var s3 = s2.next();
-					if(s3.getFaction() == faction_FactionType.PLAYER) {
-						if(n.contains(s3.getPos())) {
-							s3.isSelected = true;
-						}
+				var ship6 = new flixel_group_FlxTypedGroupIterator(this.shipGroup.members,null);
+				while(ship6.hasNext()) {
+					var ship7 = ship6.next();
+					if(ship7.getFactionType() == faction_FactionType.PLAYER && n.contains(ship7.getPos())) {
+						ship7.isSelected = true;
 					}
 				}
 			}
@@ -4993,12 +4933,12 @@ PlayState.prototype = $extend(flixel_FlxState.prototype,{
 		if(flixel_FlxG.mouse._rightButton.current == 2) {
 			var n1 = this.gameMap.findNode(new flixel_math_FlxVector(flixel_FlxG.mouse.x,flixel_FlxG.mouse.y));
 			if(n1 != null) {
-				var s4 = new flixel_group_FlxTypedGroupIterator(this.grpShips.members,null);
-				while(s4.hasNext()) {
-					var s5 = s4.next();
-					if(s5.isSelected) {
-						s5.isSelected = false;
-						s5.pathTo(n1);
+				var ship8 = new flixel_group_FlxTypedGroupIterator(this.shipGroup.members,null);
+				while(ship8.hasNext()) {
+					var ship9 = ship8.next();
+					if(ship9.getFactionType() == faction_FactionType.PLAYER && ship9.isSelected) {
+						ship9.isSelected = false;
+						ship9.pathTo(n1);
 					}
 				}
 			}
@@ -5014,19 +4954,17 @@ PlayState.prototype = $extend(flixel_FlxState.prototype,{
 			}
 		}
 		this.shipFlocking(elapsed);
-		this.shipCombat(elapsed);
-		this.nodeUpdate(elapsed);
 		this.produceShips(elapsed);
 		var noOtherFaction = true;
 		var noPlayerShips = true;
-		var ship = new flixel_group_FlxTypedGroupIterator(this.grpShips.members,null);
-		while(ship.hasNext()) {
-			var ship1 = ship.next();
-			if(ship1.getFaction() == faction_FactionType.PLAYER) {
+		var ship10 = new flixel_group_FlxTypedGroupIterator(this.shipGroup.members,null);
+		while(ship10.hasNext()) {
+			var ship11 = ship10.next();
+			if(ship11.getFactionType() == faction_FactionType.PLAYER) {
 				noPlayerShips = false;
 			}
-			if(ship1.exists) {
-				if(ship1.getFaction() != faction_FactionType.PLAYER) {
+			if(ship11.exists) {
+				if(ship11.getFactionType() != faction_FactionType.PLAYER) {
 					noOtherFaction = false;
 				}
 			}
@@ -5060,8 +4998,11 @@ PlayState.prototype = $extend(flixel_FlxState.prototype,{
 		}
 		flixel_FlxState.prototype.update.call(this,elapsed);
 	}
+	,addShip: function(ship) {
+		this.shipGroup.add(ship);
+	}
 	,shipFlocking: function(elapsed) {
-		var s1 = new flixel_group_FlxTypedGroupIterator(this.grpShips.members,null);
+		var s1 = new flixel_group_FlxTypedGroupIterator(this.shipGroup.members,null);
 		while(s1.hasNext()) {
 			var s11 = s1.next();
 			var _this = s11.idealPos();
@@ -5070,7 +5011,7 @@ PlayState.prototype = $extend(flixel_FlxState.prototype,{
 			nv.subtractPoint(v);
 			var toDest = nv;
 			var _this1 = s11.vel.normalize();
-			var k = s11.stats.maxVelocity;
+			var k = s11.getMaxVelocity();
 			var _this2 = _this1.clone().scale(k);
 			var v1 = s11.vel;
 			var nv1 = _this2.clone();
@@ -5080,10 +5021,10 @@ PlayState.prototype = $extend(flixel_FlxState.prototype,{
 			var seperation = new flixel_math_FlxVector(0,0);
 			var alignment = new flixel_math_FlxVector(0,0);
 			var cohesion = new flixel_math_FlxVector(0,0);
-			var s2 = new flixel_group_FlxTypedGroupIterator(this.grpShips.members,null);
+			var s2 = new flixel_group_FlxTypedGroupIterator(this.shipGroup.members,null);
 			while(s2.hasNext()) {
 				var s21 = s2.next();
-				if(s21 != s11 && s11.getFaction() == s21.getFaction()) {
+				if(s21 != s11 && s11.getFactionType() == s21.getFactionType()) {
 					var v2 = s21.pos;
 					var nv2 = s11.pos.clone();
 					nv2.subtractPoint(v2);
@@ -5108,7 +5049,7 @@ PlayState.prototype = $extend(flixel_FlxState.prototype,{
 				}
 			}
 			var _this3 = new flixel_math_FlxVector(0,0);
-			var k2 = .01 * s11.stats.maxVelocity * Math.sqrt(toDest.x * toDest.x + toDest.y * toDest.y);
+			var k2 = .01 * s11.getMaxVelocity() * Math.sqrt(toDest.x * toDest.x + toDest.y * toDest.y);
 			var v6 = toDest.clone().scale(k2);
 			var nv7 = _this3.clone();
 			nv7.addPoint(v6);
@@ -5135,76 +5076,6 @@ PlayState.prototype = $extend(flixel_FlxState.prototype,{
 			s11.vel = nv13;
 		}
 	}
-	,shipCombat: function(elapsed) {
-		var s1 = new flixel_group_FlxTypedGroupIterator(this.grpShips.members,null);
-		while(s1.hasNext()) {
-			var s11 = s1.next();
-			if(!s11.exists) {
-				haxe_Log.trace("Ship dead",{ fileName : "PlayState.hx", lineNumber : 272, className : "PlayState", methodName : "shipCombat"});
-				this.grpShips.remove(s11);
-			}
-			var s2 = new flixel_group_FlxTypedGroupIterator(this.grpShips.members,null);
-			while(s2.hasNext()) {
-				var s21 = s2.next();
-				if(s11.getFaction() != s21.getFaction()) {
-					if(s11.getPos().distanceTo(s21.getPos()) < 50) {
-						if(s11.weapon.runFire(flixel_addons_weapon_FlxWeaponFireMode.FIRE_AT_TARGET(s21))) {
-							s11.weapon.currentBullet.target = s21;
-							this.add(s11.weapon.currentBullet);
-							this.laser_snd.play();
-						}
-					}
-				}
-			}
-		}
-	}
-	,nodeUpdate: function(elapsed) {
-		var _g = 0;
-		var _g1 = this.gameMap.getNodeList();
-		while(_g < _g1.length) {
-			var n = _g1[_g];
-			++_g;
-			var p = n.isPlanet() ? js_Boot.__cast(n.getCaptureable() , gameUnits_capturable_Planet) : null;
-			var numShips = new haxe_ds_EnumValueMap();
-			var _g2 = 0;
-			var _g3 = faction_Faction.getEnums();
-			while(_g2 < _g3.length) {
-				var f = _g3[_g2];
-				++_g2;
-				numShips.set(f,0);
-			}
-			var shipsAtNode = [];
-			var nPos = new flixel_math_FlxVector(n.x,n.y);
-			var s = new flixel_group_FlxTypedGroupIterator(this.grpShips.members,null);
-			while(s.hasNext()) {
-				var s1 = s.next();
-				var sPos = s1.getPos();
-				var dx = sPos.x - nPos.x;
-				var dy = sPos.y - nPos.y;
-				var distance = Math.sqrt(dx * dx + dy * dy);
-				if(distance < 30 && s1.exists) {
-					numShips.set(s1.getFaction(),numShips.get(s1.getFaction()) + 1);
-					shipsAtNode[shipsAtNode.length] = s1;
-				}
-			}
-			var numFactions = 0;
-			var f1 = numShips.keys();
-			while(f1.hasNext()) {
-				var f2 = f1.next();
-				if(numShips.get(f2) > 0) {
-					++numFactions;
-				}
-			}
-			if(p != null) {
-				var f3 = numShips.keys();
-				while(f3.hasNext()) {
-					var f4 = f3.next();
-					p.setNumShips(f4,numShips.get(f4));
-				}
-				p.setShips(shipsAtNode);
-			}
-		}
-	}
 	,produceShips: function(elapsed) {
 		var _g = 0;
 		var _g1 = this.gameMap.getNodeList();
@@ -5219,7 +5090,7 @@ PlayState.prototype = $extend(flixel_FlxState.prototype,{
 			var node = this.gameMap.findNode(new flixel_math_FlxVector(pPos.x + map_MapNode.NODE_RADIUS / 2,pPos.y + map_MapNode.NODE_RADIUS / 2));
 			var ship = p.produceShip(node);
 			if(ship != null) {
-				this.grpShips.add(ship);
+				this.shipGroup.add(ship);
 				node.addShip(ship);
 			}
 		}
@@ -9488,7 +9359,52 @@ flixel_math_FlxRandom.rangeBound = function(Value) {
 	return (lowerBound > 2147483646 ? 2147483646 : lowerBound) | 0;
 };
 flixel_math_FlxRandom.prototype = {
-	getObject_flixel_group_FlxTypedGroup_T: function(Objects,WeightsArray,StartIndex,EndIndex) {
+	getObject_gameUnits_Ship: function(Objects,WeightsArray,StartIndex,EndIndex) {
+		if(StartIndex == null) {
+			StartIndex = 0;
+		}
+		var selected = null;
+		if(Objects.length != 0) {
+			if(WeightsArray == null) {
+				var _g = [];
+				var _g2 = 0;
+				var _g1 = Objects.length;
+				while(_g2 < _g1) {
+					var i = _g2++;
+					_g.push(1);
+				}
+				WeightsArray = _g;
+			}
+			if(EndIndex == null) {
+				EndIndex = Objects.length - 1;
+			}
+			var Max = Objects.length - 1;
+			var lowerBound = StartIndex < 0 ? 0 : StartIndex;
+			StartIndex = (Max != null && lowerBound > Max ? Max : lowerBound) | 0;
+			var Max1 = Objects.length - 1;
+			var lowerBound1 = EndIndex < 0 ? 0 : EndIndex;
+			EndIndex = (Max1 != null && lowerBound1 > Max1 ? Max1 : lowerBound1) | 0;
+			if(EndIndex < StartIndex) {
+				StartIndex += EndIndex;
+				EndIndex = StartIndex - EndIndex;
+				StartIndex -= EndIndex;
+			}
+			if(EndIndex > WeightsArray.length - 1) {
+				EndIndex = WeightsArray.length - 1;
+			}
+			var _g3 = [];
+			var _g21 = StartIndex;
+			var _g11 = EndIndex + 1;
+			while(_g21 < _g11) {
+				var i1 = _g21++;
+				_g3.push(WeightsArray[i1]);
+			}
+			flixel_math_FlxRandom._arrayFloatHelper = _g3;
+			selected = Objects[this.weightedPick(flixel_math_FlxRandom._arrayFloatHelper)];
+		}
+		return selected;
+	}
+	,getObject_flixel_group_FlxTypedGroup_T: function(Objects,WeightsArray,StartIndex,EndIndex) {
 		if(StartIndex == null) {
 			StartIndex = 0;
 		}
@@ -40073,22 +39989,78 @@ gameUnits_BluePrint.prototype = {
 	}
 	,__class__: gameUnits_BluePrint
 };
+var gameUnits__$Ship_Radar = function(faction) {
+	this.rand = new flixel_math_FlxRandom();
+	this.faction = faction;
+	this.friend = [];
+	this.foe = [];
+};
+$hxClasses["gameUnits._Ship.Radar"] = gameUnits__$Ship_Radar;
+gameUnits__$Ship_Radar.__name__ = ["gameUnits","_Ship","Radar"];
+gameUnits__$Ship_Radar.prototype = {
+	setRadar: function(ships) {
+		this.friend.splice(0,this.friend.length);
+		this.foe.splice(0,this.foe.length);
+		var _g = 0;
+		while(_g < ships.length) {
+			var ship = ships[_g];
+			++_g;
+			if(Type.enumEq(this.faction,ship.getFactionType())) {
+				this.friend.push(ship);
+			} else {
+				this.foe.push(ship);
+			}
+		}
+	}
+	,getFriends: function() {
+		return this.friend.slice();
+	}
+	,getFoes: function() {
+		return this.foe.slice();
+	}
+	,selectTarget: function() {
+		return this.rand.getObject_gameUnits_Ship(this.foe,null,0);
+	}
+	,__class__: gameUnits__$Ship_Radar
+};
 var gameUnits_Ship = function(destination,faction,blueprint) {
 	this.nodePath = [];
 	this.vel = new flixel_math_FlxVector(0,0);
 	var _gthis = this;
 	flixel_FlxSprite.call(this);
+	var _g = faction.getFactionType();
+	switch(_g[1]) {
+	case 1:
+		this.loadGraphic("assets/images/ships/ship_1_player.png",false);
+		break;
+	case 2:
+		this.loadGraphic("assets/images/ships/ship_1_neutral.png",false);
+		break;
+	default:
+		this.loadGraphic("assets/images/ships/ship_1_enemy1.png",false);
+	}
+	this.faction = faction;
+	this.hull = blueprint.hull;
+	this.maxVel = blueprint.maxVelocity;
+	this.shield = blueprint.shield;
 	this.health = blueprint.hitPoints;
+	this.attackSpeed = blueprint.attackSpeed;
+	this.attackDamage = blueprint.attackDamage;
+	this.sensorRange = 50.0;
+	this.capturePerSecond = blueprint.cps;
+	this.radar = new gameUnits__$Ship_Radar(this.faction.getFactionType());
 	this.destination = destination;
 	this.node = destination;
-	this.faction = faction;
-	this.stats = blueprint;
 	this.pos = destination.getPos();
-	this.weapon = new flixel_addons_weapon_FlxTypedWeapon("Default weapon",function(w) {
-		return new gameUnits_ShipAttack(_gthis.stats.attackDamage,500.0);
-	},flixel_addons_weapon_FlxWeaponFireFrom.PARENT(this,new flixel_util_helpers_FlxBounds(this.origin,this.origin)),flixel_addons_weapon_FlxWeaponSpeedMode.SPEED(new flixel_util_helpers_FlxBounds(500.0,500.0)));
+	this.set_x(this.node.x);
+	this.set_y(this.node.y);
+	this.weapon = new flixel_addons_weapon_FlxTypedWeapon("Laser mk. I",function(w) {
+		return new gameUnits_ShipAttack(_gthis.attackDamage,500.0);
+	},flixel_addons_weapon_FlxWeaponFireFrom.PARENT(this,new flixel_util_helpers_FlxBounds(this.origin,this.origin)),flixel_addons_weapon_FlxWeaponSpeedMode.SPEED(new flixel_util_helpers_FlxBounds(450.0,550.0)));
+	this.weapon.bulletLifeSpan = new flixel_util_helpers_FlxBounds(0.5,0.5);
 	this.weapon.bounds = new flixel_math_FlxRect(0,0,flixel_FlxG.width,flixel_FlxG.height);
-	this.weapon.fireRate = Math.round(1000 / this.stats.attackSpeed);
+	this.weapon.fireRate = Math.round(1000 / this.attackSpeed);
+	flixel_FlxG.game._state.add(this.weapon.group);
 };
 $hxClasses["gameUnits.Ship"] = gameUnits_Ship;
 gameUnits_Ship.__name__ = ["gameUnits","Ship"];
@@ -40118,29 +40090,19 @@ gameUnits_Ship.prototype = $extend(flixel_FlxSprite.prototype,{
 	}
 	,update: function(elapsed) {
 		var _g = this.faction.getFactionType();
-		switch(_g[1]) {
-		case 1:
+		if(_g[1] == 1) {
 			if(this.isSelected) {
 				this.loadGraphic("assets/images/ships/ship_1_player_selected.png",false);
 			} else {
 				this.loadGraphic("assets/images/ships/ship_1_player.png",false);
 			}
-			break;
-		case 2:
-			this.loadGraphic("assets/images/ships/ship_1_neutral.png",false);
-			break;
-		case 3:
-			this.loadGraphic("assets/images/ships/ship_1_enemy1.png",false);
-			break;
-		default:
-			this.loadGraphic("assets/images/ships/ship_1_enemy1.png",false);
 		}
 		if(this.isMoving()) {
-			if((this.progress += this.stats.maxVelocity * elapsed) > this.nodePath[0].length()) {
+			if((this.progress += this.maxVel * elapsed) > this.nodePath[0].length()) {
 				this.progress -= this.nodePath[0].length();
 				this.node = this.nodePath.shift().n2;
 				this.node.addShip(this);
-			} else if(this.node != null && this.getPosition().distanceTo(this.node.getPosition()) > 20) {
+			} else if(this.node != null && !this.inSensorRange(this.node)) {
 				this.node.removeShip(this);
 				this.node = null;
 			}
@@ -40153,14 +40115,48 @@ gameUnits_Ship.prototype = $extend(flixel_FlxSprite.prototype,{
 		nv.addPoint(v);
 		this.pos = nv;
 		this.set_angle(this.vel.get_radians() * (180 / Math.PI));
+		var targetShip = this.radar.selectTarget();
+		if(targetShip != null && this.weapon.runFire(flixel_addons_weapon_FlxWeaponFireMode.FIRE_AT_TARGET(targetShip))) {
+			this.weapon.currentBullet.target = targetShip;
+		}
 		this.set_x(this.pos.x - this.origin.x);
 		this.set_y(this.pos.y - this.origin.y);
 		flixel_FlxSprite.prototype.update.call(this,elapsed);
 	}
+	,hurt: function(Damage) {
+		if(Damage > 0.0) {
+			Damage *= this.shield;
+		}
+		flixel_FlxSprite.prototype.hurt.call(this,Damage);
+	}
+	,destroy: function() {
+		if(this.node != null) {
+			this.node.removeShip(this);
+		}
+		flixel_FlxSprite.prototype.destroy.call(this);
+	}
+	,getMaxVelocity: function() {
+		return this.maxVel;
+	}
+	,inSensorRange: function(object) {
+		if(object == null || this == object) {
+			return false;
+		}
+		return this.getPosition().distanceTo(object.getPosition()) <= this.sensorRange;
+	}
+	,setRadar: function(ships) {
+		this.radar.setRadar(ships);
+	}
+	,getRandomTarget: function() {
+		return this.radar.selectTarget();
+	}
+	,getCPS: function() {
+		return this.capturePerSecond;
+	}
 	,getPos: function() {
 		return this.pos;
 	}
-	,getFaction: function() {
+	,getFactionType: function() {
 		return this.faction.getFactionType();
 	}
 	,__class__: gameUnits_Ship
@@ -40179,7 +40175,7 @@ gameUnits_ShipFactory.prototype = {
 		this._timeSinceLast += elapsed;
 		if(this.initial() || this.canProduce()) {
 			this._timeSinceLast = 0.0;
-			return new gameUnits_Ship(this._planet.getNode(),this._planet.getFaction(),this._producedShip.clone());
+			var ship = new gameUnits_Ship(this._planet.getNode(),this._planet.getFaction(),this._producedShip.clone());
 		}
 		return null;
 	}
@@ -40220,11 +40216,8 @@ gameUnits_ShipAttack.prototype = $extend(flixel_addons_weapon_FlxBullet.prototyp
 			this.velocity = _this1.clone().scale(k);
 			var point1 = this.velocity;
 			this.set_angle(new flixel_math_FlxVector(point1.x,point1.y).get_radians() * (180 / Math.PI));
-			if(this.getPosition().distanceTo(this.target.getPos()) < Math.max(this.target.get_width(),this.target.get_height()) / 2) {
-				this.target.stats.hitPoints -= this.damage * this.target.stats.shield;
-				if(this.target.stats.hitPoints <= 0) {
-					this.target.destroy();
-				}
+			if(this.overlaps(this.target)) {
+				this.target.hurt(this.damage);
 				this.kill();
 			}
 		} else {
@@ -40260,13 +40253,17 @@ gameUnits_capturable_Capturable.prototype = $extend(flixel_FlxSprite.prototype,{
 			++_g;
 			totalCP.set(f,0.0);
 		}
-		var _g2 = 0;
-		var _g11 = this.shipsAtPlanet;
-		while(_g2 < _g11.length) {
-			var s = _g11[_g2];
-			++_g2;
-			var cp = totalCP.get(s.getFaction());
-			totalCP.set(s.getFaction(),cp + s.stats.cps);
+		var shipGroup = this.node.getShipGroups();
+		while(shipGroup.hasNext()) {
+			var shipGroup1 = shipGroup.next();
+			var ship = new flixel_group_FlxTypedGroupIterator(shipGroup1.members,null);
+			while(ship.hasNext()) {
+				var ship1 = ship.next();
+				var _g2 = ship1.getFactionType();
+				var _g11 = totalCP;
+				var v = _g11.get(_g2) + ship1.getCPS();
+				_g11.set(_g2,v);
+			}
 		}
 		var _g3 = 0;
 		var _g12 = faction_Faction.getEnums();
@@ -40419,7 +40416,7 @@ gameUnits_capturable_Planet.prototype = $extend(gameUnits_capturable_Capturable.
 		return this.pStats;
 	}
 	,canProduceShips: function() {
-		if(this.faction.getFactionType() != faction_FactionType.NOP && this.faction.getFactionType() != faction_FactionType.NEUTRAL && this.numShips.get(this.faction.getFactionType()) < this.pStats.cap) {
+		if(this.faction.getFactionType() != faction_FactionType.NOP && this.node.getShipGroup(this.faction.getFactionType()).members.length < this.pStats.cap) {
 			return this.shipTimer >= this.pStats.prod;
 		} else {
 			return false;
@@ -56706,7 +56703,7 @@ map_GameMap.prototype = $extend(flixel_FlxSprite.prototype,{
 		}
 	}
 	,setGraph: function() {
-		haxe_Log.trace("clearing graph",{ fileName : "GameMap.hx", lineNumber : 157, className : "map.GameMap", methodName : "setGraph"});
+		haxe_Log.trace("clearing graph",{ fileName : "GameMap.hx", lineNumber : 158, className : "map.GameMap", methodName : "setGraph"});
 		this.id_to_node = new haxe_ds_StringMap();
 		this.clearGraph();
 		this.node_to_neighbors = new haxe_ds_ObjectMap();
@@ -57059,7 +57056,7 @@ var map_MapNode = function(gameMap,x,y) {
 	var _this4 = flixel_util_LabelValuePair._pool.get();
 	_this4.label = "h";
 	_this4.value = value3;
-	haxe_Log.trace("node hitbox: " + flixel_util_FlxStringUtil.getDebugString([_this1,_this2,_this3,_this4]),{ fileName : "MapNode.hx", lineNumber : 87, className : "map.MapNode", methodName : "new"});
+	haxe_Log.trace("node hitbox: " + flixel_util_FlxStringUtil.getDebugString([_this1,_this2,_this3,_this4]),{ fileName : "MapNode.hx", lineNumber : 86, className : "map.MapNode", methodName : "new"});
 	this.factionShips = new haxe_ds_EnumValueMap();
 	var _g = 0;
 	var _g1 = faction_Faction.getEnums();
@@ -57170,14 +57167,14 @@ map_MapNode.prototype = $extend(flixel_FlxObject.prototype,{
 		return false;
 	}
 	,addShip: function(ship) {
-		var group = this.factionShips.get(ship.getFaction());
+		var group = this.factionShips.get(ship.getFactionType());
 		group.add(ship);
-		this.gameMap.incrementShipCount(ship.getFaction());
+		this.gameMap.incrementShipCount(ship.getFactionType());
 	}
 	,removeShip: function(ship) {
-		var group = this.factionShips.get(ship.getFaction());
+		var group = this.factionShips.get(ship.getFactionType());
 		group.remove(ship,true);
-		this.gameMap.decrementShipCount(ship.getFaction());
+		this.gameMap.decrementShipCount(ship.getFactionType());
 	}
 	,moveShip: function(ship,node) {
 		node.addShip(ship);
@@ -57186,15 +57183,20 @@ map_MapNode.prototype = $extend(flixel_FlxObject.prototype,{
 	,getShipGroup: function(faction) {
 		return this.factionShips.get(faction);
 	}
+	,getShipGroups: function() {
+		return this.factionShips.iterator();
+	}
 	,isCapturable: function() {
 		return this.capturable != null;
 	}
-	,isPlanet: function() {
-		var value = this.capturable;
-		return ((value instanceof gameUnits_capturable_Planet) ? value : null) != null;
-	}
 	,getCaptureable: function() {
 		return this.capturable;
+	}
+	,isPlanet: function() {
+		return js_Boot.__instanceof(this.capturable,gameUnits_capturable_Planet);
+	}
+	,getPlanet: function() {
+		return null;
 	}
 	,getFaction: function() {
 		if(this.capturable == null) {
@@ -79950,35 +79952,6 @@ haxe_lang_Iterable.__name__ = ["haxe","lang","Iterable"];
 haxe_lang_Iterable.prototype = {
 	__class__: haxe_lang_Iterable
 };
-var tutorial_CapturingFactionTutorial = function(MaxSize) {
-	flixel_FlxState.call(this,MaxSize);
-};
-$hxClasses["tutorial.CapturingFactionTutorial"] = tutorial_CapturingFactionTutorial;
-tutorial_CapturingFactionTutorial.__name__ = ["tutorial","CapturingFactionTutorial"];
-tutorial_CapturingFactionTutorial.__super__ = flixel_FlxState;
-tutorial_CapturingFactionTutorial.prototype = $extend(flixel_FlxState.prototype,{
-	create: function() {
-		this.background = new flixel_FlxSprite(0,0);
-		this.background.loadGraphic("assets/images/capturing_faction_tutorial.png");
-		this.add(this.background);
-		flixel_FlxState.prototype.create.call(this);
-	}
-	,update: function(elapsed) {
-		if(flixel_FlxG.mouse._leftButton.current == 2) {
-			this.click();
-		}
-		flixel_FlxState.prototype.update.call(this,elapsed);
-	}
-	,click: function() {
-		flixel_FlxG.camera.fade(-16777216,0.33,false,function() {
-			var nextState = new PlayState();
-			if(flixel_FlxG.game._state.switchTo(nextState)) {
-				flixel_FlxG.game._requestedState = nextState;
-			}
-		});
-	}
-	,__class__: tutorial_CapturingFactionTutorial
-});
 var tutorial_CombatTutorial = function(MaxSize) {
 	flixel_FlxState.call(this,MaxSize);
 };
@@ -79987,6 +79960,7 @@ tutorial_CombatTutorial.__name__ = ["tutorial","CombatTutorial"];
 tutorial_CombatTutorial.__super__ = flixel_FlxState;
 tutorial_CombatTutorial.prototype = $extend(flixel_FlxState.prototype,{
 	create: function() {
+		this.laserSnd = flixel_FlxG.sound.load("assets/sounds/laser.wav");
 		this.background = new flixel_FlxSprite(0,0);
 		this.background.loadGraphic("assets/images/combat_tutorial.png");
 		this.add(this.background);
@@ -80040,6 +80014,10 @@ tutorial_CombatTutorial.prototype = $extend(flixel_FlxState.prototype,{
 		this.switchImage = true;
 		this.cursorInPlace = false;
 		this.moveRight = false;
+		this.hitPlayer = false;
+		this.isRed = true;
+		this.numHit = 0;
+		this.laser = null;
 		var _this = flixel_FlxG.camera;
 		var point = new flixel_math_FlxPoint(713,344);
 		_this.scroll.set(point.x - _this.width * 0.5,point.y - _this.height * 0.5);
@@ -80047,7 +80025,6 @@ tutorial_CombatTutorial.prototype = $extend(flixel_FlxState.prototype,{
 			point.put();
 		}
 		flixel_FlxG.camera.set_zoom(flixel_FlxG.height / 420);
-		Main.LOGGER.logLevelStart(Main.LEVEL,new Date());
 		flixel_FlxState.prototype.create.call(this);
 	}
 	,flipImage: function() {
@@ -80090,7 +80067,7 @@ tutorial_CombatTutorial.prototype = $extend(flixel_FlxState.prototype,{
 				this.flipImage();
 				this.timer = 0.0;
 			}
-			if(this.moveShip && this.playerShip.x < this.enemyPlanet.x + this.enemyPlanet.get_width() / 2) {
+			if(this.moveShip && this.playerShip.x < this.enemyPlanet.x + this.enemyPlanet.get_width() / 4) {
 				var _g3 = this.playerShip;
 				_g3.set_x(_g3.x + 150 * elapsed);
 			}
@@ -80102,18 +80079,73 @@ tutorial_CombatTutorial.prototype = $extend(flixel_FlxState.prototype,{
 				this.click();
 			}
 		}
+		if(this.playerShip.x >= this.enemyPlanet.x + this.enemyPlanet.get_width() / 4 && this.numHit < 3) {
+			if(this.laser == null) {
+				this.laser = new flixel_FlxSprite(0,0);
+				this.laser.loadGraphic("assets/images/temp_laser.png",false,16,16);
+				this.laser.set_visible(true);
+				if(this.hitPlayer) {
+					this.laser.set_x(this.enemyShip.x - 16);
+					this.laser.set_y(this.enemyShip.y);
+					this.numHit++;
+				} else {
+					this.laser.set_x(this.playerShip.x + 16);
+					this.laser.set_y(this.playerShip.y);
+				}
+				this.laserSnd.play();
+				this.add(this.laser);
+			}
+			if(this.hitPlayer) {
+				var _g4 = this.laser;
+				_g4.set_x(_g4.x - 50 * elapsed);
+			} else {
+				var _g5 = this.laser;
+				_g5.set_x(_g5.x + 50 * elapsed);
+			}
+			if(this.hitPlayer && this.laser.overlaps(this.playerShip)) {
+				this.hitPlayer = false;
+				this.laser.kill();
+				this.laser = null;
+				this.waitTimer = 0.0;
+				this.combatTxt.set_visible(false);
+			} else if(this.laser.overlaps(this.enemyShip)) {
+				this.hitPlayer = true;
+				this.laser.kill();
+				this.laser = null;
+				this.waitTimer = 0.0;
+				this.combatTxt.set_visible(true);
+			}
+			if(this.numHit == 3) {
+				this.enemyShip.set_visible(false);
+				this.captureBar.set_visible(true);
+				this.combatTxt.set_visible(false);
+				this.laser.kill();
+			}
+		}
 		if(!this.enemyShip.visible) {
-			if(this.captureBar.color == -65536) {
-				var _g4 = this.captureBar;
-				_g4.set_value(_g4.get_value() - 20 * elapsed);
+			if(this.isRed) {
+				var _g6 = this.captureBar;
+				_g6.set_value(_g6.get_value() - 20 * elapsed);
 				if(this.captureBar.get_value() <= 0.0) {
 					this.enemyPlanet.loadGraphic("assets/images/planets/planet_1_none.png",false,32,32);
 					this.captureBar.createColoredFilledBar(-16776961,true);
 					this.captureBar.set_value(0);
+					this.isRed = false;
 				}
 			} else {
-				var _g5 = this.captureBar;
-				_g5.set_value(_g5.get_value() + 20 * elapsed);
+				var _g7 = this.captureBar;
+				_g7.set_value(_g7.get_value() + 20 * elapsed);
+				if(this.captureBar.get_value() == 100.0) {
+					this.waitTimer = 0.0;
+				}
+			}
+			if(!this.isRed && this.captureBar.get_value() >= 100.0) {
+				flixel_FlxG.camera.fade(-16777216,0.33,false,function() {
+					var nextState = new NextLevelState();
+					if(flixel_FlxG.game._state.switchTo(nextState)) {
+						flixel_FlxG.game._requestedState = nextState;
+					}
+				});
 			}
 		}
 	}
@@ -80326,7 +80358,7 @@ tutorial_MovingShipTutorial.prototype = $extend(flixel_FlxState.prototype,{
 		}
 		if(this.captureBar.get_value() >= 100.0 && this.waitTimer >= 0.75) {
 			flixel_FlxG.camera.fade(-16777216,0.33,false,function() {
-				var nextState = new NextLevelState();
+				var nextState = new tutorial_CombatTutorial();
 				if(flixel_FlxG.game._state.switchTo(nextState)) {
 					flixel_FlxG.game._requestedState = nextState;
 				}
@@ -80514,7 +80546,7 @@ openfl_display_DisplayObject.__cacheAsBitmapMode = false;
 Main.FINAL_LEVEL = 8;
 AssetPaths.level1__json = "assets/data/level1.json";
 AssetPaths.level2__json = "assets/data/level2.json";
-AssetPaths.level2_harder__json = "assets/data/level2_harder.json";
+AssetPaths.level2_easier__json = "assets/data/level2_easier.json";
 AssetPaths.level3__json = "assets/data/level3.json";
 AssetPaths.level4__json = "assets/data/level4.json";
 AssetPaths.level5__json = "assets/data/level5.json";
@@ -80523,8 +80555,6 @@ AssetPaths.level7__json = "assets/data/level7.json";
 AssetPaths.level8__json = "assets/data/level8.json";
 AssetPaths.background__png = "assets/images/background.png";
 AssetPaths["move background images here"] = "assets/images/backgrounds/move background images here";
-AssetPaths.capturing_faction_tutorial__png = "assets/images/capturing_faction_tutorial.png";
-AssetPaths.capturing_faction_tutorial__psd = "assets/images/capturing_faction_tutorial.psd";
 AssetPaths.combat_tutorial__png = "assets/images/combat_tutorial.png";
 AssetPaths.cursor__png = "assets/images/cursor.png";
 AssetPaths.feedback_btn__png = "assets/images/feedback_btn.png";
@@ -80533,15 +80563,12 @@ AssetPaths.gameover__png = "assets/images/gameover.png";
 AssetPaths.images_go_here__txt = "assets/images/images-go-here.txt";
 AssetPaths.mapbg__png = "assets/images/mapbg.png";
 AssetPaths.menubg__png = "assets/images/menubg.png";
-AssetPaths.MenuBG__psd = "assets/images/MenuBG.psd";
 AssetPaths.mouse__png = "assets/images/mouse.png";
 AssetPaths.mouse_left__png = "assets/images/mouse_left.png";
 AssetPaths.mouse_right__png = "assets/images/mouse_right.png";
-AssetPaths.moving_ship_tutorial__psd = "assets/images/moving_ship_tutorial.psd";
 AssetPaths.moving_ship_tutorial_1__png = "assets/images/moving_ship_tutorial_1.png";
 AssetPaths.moving_ship_tutorial_2__png = "assets/images/moving_ship_tutorial_2.png";
 AssetPaths.nextlevelbg__png = "assets/images/nextlevelbg.png";
-AssetPaths.planet__psd = "assets/images/planet.psd";
 AssetPaths.planet_1_enemy1__png = "assets/images/planets/planet_1_enemy1.png";
 AssetPaths.planet_1_neutral__png = "assets/images/planets/planet_1_neutral.png";
 AssetPaths.planet_1_none__png = "assets/images/planets/planet_1_none.png";
@@ -80549,11 +80576,11 @@ AssetPaths.planet_1_player__png = "assets/images/planets/planet_1_player.png";
 AssetPaths.play_btn__png = "assets/images/play_btn.png";
 AssetPaths.replay_btn__png = "assets/images/replay_btn.png";
 AssetPaths.restart_btn__png = "assets/images/restart_btn.png";
+AssetPaths["restart_btn__png~HEAD"] = "assets/images/restart_btn.png~HEAD";
+AssetPaths["restart_btn__png~master"] = "assets/images/restart_btn.png~master";
 AssetPaths.select_ship_tutorial__png = "assets/images/select_ship_tutorial.png";
-AssetPaths.select_ship_tutorial__psd = "assets/images/select_ship_tutorial.psd";
 AssetPaths.select_ship_tutorial_1__png = "assets/images/select_ship_tutorial_1.png";
 AssetPaths.select_ship_tutorial_2__png = "assets/images/select_ship_tutorial_2.png";
-AssetPaths.ship__psd = "assets/images/ship.psd";
 AssetPaths.ship_1_enemy1__png = "assets/images/ships/ship_1_enemy1.png";
 AssetPaths.ship_1_neutral__png = "assets/images/ships/ship_1_neutral.png";
 AssetPaths.ship_1_player__png = "assets/images/ships/ship_1_player.png";

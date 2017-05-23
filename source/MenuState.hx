@@ -72,7 +72,7 @@ class MenuState extends FlxState
 	private function clickPlay():Void {
 		if (Main.LEVEL == 1) {
 			FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
-				FlxG.switchState(new CombatTutorial());
+				FlxG.switchState(new SelectShipTutorial());
 			});
 		} else {
 			FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {

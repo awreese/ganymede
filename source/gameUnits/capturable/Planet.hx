@@ -216,9 +216,8 @@ class Planet extends Capturable {
 		//return faction.getFactionType() != FactionType.NOP && faction.getFactionType() != FactionType.NEUTRAL
 		//&& numShips.get(faction.getFactionType()) < this.pStats.cap && shipTimer >= pStats.prod;
         
-        return faction.getFactionType() != FactionType.NOP && 
-            faction.getFactionType() != FactionType.NEUTRAL && 
-            this.node.getShipGroup(this.faction.getFactionType()).length < this.pStats.cap && 
+        return faction.getFactionType() != FactionType.NOP &&
+            this.node.getShipGroup(this.faction.getFactionType()).members.length < this.pStats.cap && 
             shipTimer >= pStats.prod;
 	}
 

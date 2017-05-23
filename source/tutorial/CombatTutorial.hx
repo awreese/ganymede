@@ -3,7 +3,10 @@ package tutorial;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
+import flixel.addons.weapon.FlxBullet;
 import flixel.math.FlxPoint;
+import flixel.math.FlxVector;
+import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.ui.FlxBar;
 import flixel.ui.FlxButton;
@@ -31,9 +34,21 @@ class CombatTutorial extends FlxState
 	private var captureBar:FlxBar;
 	private var shipInPlace:Bool;
 	private var combatTxt:FlxText;
+	private var numHit:Int;
+	private var laser:FlxSprite;
+	private var hitPlayer:Bool;
+	private var laserSnd:FlxSound;
+	private var isRed:Bool;
 	
 	override public function create():Void
 	{
+		// create laser sound
+		#if flash
+			laserSnd = FlxG.sound.load(AssetPaths.laser__mp3);
+		#else
+			laserSnd = FlxG.sound.load(AssetPaths.laser__wav);
+		#end
+		
 		// create and add the background image
 		background = new FlxSprite(0, 0);
 		background.loadGraphic(AssetPaths.combat_tutorial__png);
@@ -98,13 +113,18 @@ class CombatTutorial extends FlxState
 		switchImage = true;
 		cursorInPlace = false;
 		moveRight = false;
+		hitPlayer = false;
+		isRed = true;
+		numHit = 0;
+		
+		laser = null;
 		
 		// zoom in
 		FlxG.camera.focusOn(new FlxPoint(713, 344));
 		FlxG.camera.zoom = FlxG.height / 420;
 		
 		// Log level start and time
-        Main.LOGGER.logLevelStart(Main.LEVEL, Date.now());
+        //Main.LOGGER.logLevelStart(Main.LEVEL, Date.now());
 		
 		super.create();
 	}
@@ -152,7 +172,7 @@ class CombatTutorial extends FlxState
 				flipImage();
 				timer = 0.0;
 			}
-			if (moveShip && playerShip.x < enemyPlanet.x + enemyPlanet.width / 2) {
+			if (moveShip && playerShip.x < enemyPlanet.x + enemyPlanet.width / 4) {
 				playerShip.x += 150 * elapsed;
 			}
 		}
@@ -166,9 +186,60 @@ class CombatTutorial extends FlxState
 			}
 		}
 		
+		if (playerShip.x >= enemyPlanet.x + enemyPlanet.width / 4 && numHit < 3) {
+			// if ship is at place
+			
+			// if laser is null
+			if (laser == null) {
+				laser = new FlxSprite(0, 0);
+				laser.loadGraphic("assets/images/temp_laser.png", false, 16, 16);
+				laser.visible = true;
+				if (hitPlayer) {
+					laser.x = enemyShip.x - 16;
+					laser.y = enemyShip.y;
+					numHit++;
+				} else {
+					laser.x = playerShip.x + 16;
+					laser.y = playerShip.y;
+				}
+				laserSnd.play();
+				add(laser);
+			}
+			
+			if (hitPlayer) {
+				// go to player
+				laser.x -= 50 * elapsed;
+			} else {
+				// go to enemy
+				laser.x += 50 * elapsed;
+			}
+			
+			if (hitPlayer && laser.overlaps(playerShip)) {
+				// hit player ship
+				hitPlayer = false;
+				laser.kill();
+				laser = null;
+				waitTimer = 0.0;
+				combatTxt.visible = false;
+			} else if (laser.overlaps(enemyShip)) {
+				// hit enemy ship
+				hitPlayer = true;
+				laser.kill();
+				laser = null;
+				waitTimer = 0.0;
+				combatTxt.visible = true;
+			}
+			if (numHit == 3) {
+				enemyShip.visible = false;
+				captureBar.visible = true;
+				combatTxt.visible = false;
+				laser.kill();
+			}
+		}
+		
 		if (!enemyShip.visible) {
 			// if destroyed enemy ship, start capturing
-			if (captureBar.color == FlxColor.RED) {
+			if (isRed) {
 				// if bar is red, decrease value
 				captureBar.value -= 20 * elapsed;
 				if (captureBar.value <= 0.0) {
@@ -176,10 +247,21 @@ class CombatTutorial extends FlxState
 					// if emptied the bar, set the bar to fill with blue
 					captureBar.createColoredFilledBar(FlxColor.BLUE, true);
 					captureBar.value = 0;
+					isRed = false;
 				}
 			} else {
 				// if bar is blue, increase value
 				captureBar.value += 20 * elapsed;
+				if (captureBar.value == 100.0) {
+					// change planet color
+					enemyPlanet.loadGraphic(AssetPaths.planet_1_player__png, false, 32, 32);
+					waitTimer = 0.0;
+				}
+			}
+			if (!isRed && captureBar.value >= 100.0) {
+				FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
+					FlxG.switchState(new NextLevelState());
+				});
 			}
 		}
 	}

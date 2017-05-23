@@ -1,10 +1,10 @@
 {
-	"ai": 12,
+	"ai": 7,
 	"nodes": [
 		{
 			"id": "node1",
 			"x": 150.0,
-			"y": 150.0,
+			"y": 250.0,
 			"faction": "player",
 			"planet": {
 				"planet_template": "level2",
@@ -13,7 +13,7 @@
 		},
 		{
 			"id": "node2",
-			"x": 300.0,
+			"x": 250.0,
 			"y": 150.0,
 			"faction": "nop",
 			"planet": {
@@ -23,9 +23,19 @@
 		},
 		{
 			"id": "node3",
-			"x": 450.0,
-			"y": 150.0,
+			"x": 350.0,
+			"y": 250.0,
 			"faction": "enemy1",
+			"planet": {
+				"planet_template": "level1",
+				"ship_template": "frigate"
+			}
+		},
+		{
+			"id": "node4",
+			"x": 250.0,
+			"y": 350.0,
+			"faction": "nop",
 			"planet": {
 				"planet_template": "level1",
 				"ship_template": "frigate"
@@ -35,7 +45,7 @@
 	"neighbors":[ 
 		{
 			"id": "node1",
-			"neighbor": ["node2"]
+			"neighbor": ["node2", "node3", "node4"]
 		},
 		{
 			"id": "node2",
@@ -43,7 +53,11 @@
 		},
 		{
 			"id": "node3",
-			"neighbor": ["node2"]
+			"neighbor": ["node1", "node2", "node4"]
+		},
+		{
+			"id": "node4",
+			"neighbor": ["node1", "node3"]
 		}
 	]
 }

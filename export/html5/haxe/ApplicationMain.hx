@@ -54,7 +54,7 @@ class ApplicationMain {
 		types.push (lime.Assets.AssetType.TEXT);
 		
 		
-		urls.push ("assets/data/level2_harder.json");
+		urls.push ("assets/data/level2_easier.json");
 		types.push (lime.Assets.AssetType.TEXT);
 		
 		
@@ -90,14 +90,6 @@ class ApplicationMain {
 		types.push (lime.Assets.AssetType.TEXT);
 		
 		
-		urls.push ("assets/images/capturing_faction_tutorial.png");
-		types.push (lime.Assets.AssetType.IMAGE);
-		
-		
-		urls.push ("assets/images/capturing_faction_tutorial.psd");
-		types.push (lime.Assets.AssetType.BINARY);
-		
-		
 		urls.push ("assets/images/combat_tutorial.png");
 		types.push (lime.Assets.AssetType.IMAGE);
 		
@@ -130,10 +122,6 @@ class ApplicationMain {
 		types.push (lime.Assets.AssetType.IMAGE);
 		
 		
-		urls.push ("assets/images/MenuBG.psd");
-		types.push (lime.Assets.AssetType.BINARY);
-		
-		
 		urls.push ("assets/images/mouse.png");
 		types.push (lime.Assets.AssetType.IMAGE);
 		
@@ -146,10 +134,6 @@ class ApplicationMain {
 		types.push (lime.Assets.AssetType.IMAGE);
 		
 		
-		urls.push ("assets/images/moving_ship_tutorial.psd");
-		types.push (lime.Assets.AssetType.BINARY);
-		
-		
 		urls.push ("assets/images/moving_ship_tutorial_1.png");
 		types.push (lime.Assets.AssetType.IMAGE);
 		
@@ -160,10 +144,6 @@ class ApplicationMain {
 		
 		urls.push ("assets/images/nextlevelbg.png");
 		types.push (lime.Assets.AssetType.IMAGE);
-		
-		
-		urls.push ("assets/images/planet.psd");
-		types.push (lime.Assets.AssetType.BINARY);
 		
 		
 		urls.push ("assets/images/planets/planet_1_enemy1.png");
@@ -194,12 +174,16 @@ class ApplicationMain {
 		types.push (lime.Assets.AssetType.IMAGE);
 		
 		
+		urls.push ("assets/images/restart_btn.png~HEAD");
+		types.push (lime.Assets.AssetType.BINARY);
+		
+		
+		urls.push ("assets/images/restart_btn.png~master");
+		types.push (lime.Assets.AssetType.BINARY);
+		
+		
 		urls.push ("assets/images/select_ship_tutorial.png");
 		types.push (lime.Assets.AssetType.IMAGE);
-		
-		
-		urls.push ("assets/images/select_ship_tutorial.psd");
-		types.push (lime.Assets.AssetType.BINARY);
 		
 		
 		urls.push ("assets/images/select_ship_tutorial_1.png");
@@ -208,10 +192,6 @@ class ApplicationMain {
 		
 		urls.push ("assets/images/select_ship_tutorial_2.png");
 		types.push (lime.Assets.AssetType.IMAGE);
-		
-		
-		urls.push ("assets/images/ship.psd");
-		types.push (lime.Assets.AssetType.BINARY);
 		
 		
 		urls.push ("assets/images/ships/ship_1_enemy1.png");
@@ -407,7 +387,7 @@ class ApplicationMain {
 		
 		config = {
 			
-			build: "141",
+			build: "176",
 			company: "DDR",
 			file: "ProjectGanymede",
 			fps: 60,
