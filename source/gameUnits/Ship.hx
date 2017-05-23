@@ -286,8 +286,7 @@ class Ship extends FlxSprite {
 				loadGraphic(AssetPaths.ship_1_neutral__png, false);
 			default:
 				loadGraphic(AssetPaths.ship_1_enemy1__png, false);
-		}
-        
+		}        
         // Faction info
         this.faction = faction;
         
@@ -411,7 +410,7 @@ class Ship extends FlxSprite {
         var targetShip = this.radar.selectTarget();
         if (targetShip != null && this.weapon.fireAtTarget(targetShip)) {
             this.weapon.currentBullet.target = targetShip;
-			laser_snd.play();
+			      laser_snd.play();
         }
         
         //*******************
