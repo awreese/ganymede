@@ -48,6 +48,8 @@ class PlayState extends FlxState {
 	private var rand:FlxRandom;
 	private var numPlayerFaction:Int;
 	private var enemies: Array<Enemy>;
+	
+	private var laser_snd:FlxSound;
 
 	override public function create():Void {
 		rand = new FlxRandom();
