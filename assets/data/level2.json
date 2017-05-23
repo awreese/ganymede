@@ -14,12 +14,7 @@
 		{
 			"id": "node2",
 			"x": 300.0,
-			"y": 150.0,
-			"faction": "nop",
-			"planet": {
-				"planet_template": "level1",
-				"ship_template": "frigate"
-			}
+			"y": 150.0
 		},
 		{
 			"id": "node3",
