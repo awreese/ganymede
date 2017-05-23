@@ -73,6 +73,7 @@ class FinishGameState extends FlxState
 
 	private function clickRestart():Void
 	{
+		Main.RESTART = true;
 		FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function()
 		{
 			FlxG.switchState(new PlayState());

@@ -120,7 +120,6 @@ class DefaultAssetLibrary extends AssetLibrary {
 		
 		
 		
-		
 		openfl.text.Font.registerFont (__ASSET__OPENFL__flixel_fonts_nokiafc22_ttf);
 		openfl.text.Font.registerFont (__ASSET__OPENFL__flixel_fonts_monsterrat_ttf);
 		
@@ -142,8 +141,6 @@ class DefaultAssetLibrary extends AssetLibrary {
 		type.set ("assets/data/level1.json", AssetType.TEXT);
 		className.set ("assets/data/level2.json", __ASSET__assets_data_level2_json);
 		type.set ("assets/data/level2.json", AssetType.TEXT);
-		className.set ("assets/data/level2_easier.json", __ASSET__assets_data_level2_easier_json);
-		type.set ("assets/data/level2_easier.json", AssetType.TEXT);
 		className.set ("assets/data/level3.json", __ASSET__assets_data_level3_json);
 		type.set ("assets/data/level3.json", AssetType.TEXT);
 		className.set ("assets/data/level4.json", __ASSET__assets_data_level4_json);
@@ -304,10 +301,6 @@ class DefaultAssetLibrary extends AssetLibrary {
 		
 		type.set (id, AssetType.TEXT);
 		id = "assets/data/level2.json";
-		path.set (id, id);
-		
-		type.set (id, AssetType.TEXT);
-		id = "assets/data/level2_easier.json";
 		path.set (id, id);
 		
 		type.set (id, AssetType.TEXT);
@@ -614,9 +607,6 @@ class DefaultAssetLibrary extends AssetLibrary {
 		
 		className.set ("assets/data/level2.json", __ASSET__assets_data_level2_json);
 		type.set ("assets/data/level2.json", AssetType.TEXT);
-		
-		className.set ("assets/data/level2_easier.json", __ASSET__assets_data_level2_easier_json);
-		type.set ("assets/data/level2_easier.json", AssetType.TEXT);
 		
 		className.set ("assets/data/level3.json", __ASSET__assets_data_level3_json);
 		type.set ("assets/data/level3.json", AssetType.TEXT);
@@ -1469,7 +1459,6 @@ class DefaultAssetLibrary extends AssetLibrary {
 @:keep @:bind #if display private #end class __ASSET__assets_sounds_laser_wav extends null { }
 @:keep @:bind #if display private #end class __ASSET__assets_data_level1_json extends null { }
 @:keep @:bind #if display private #end class __ASSET__assets_data_level2_json extends null { }
-@:keep @:bind #if display private #end class __ASSET__assets_data_level2_easier_json extends null { }
 @:keep @:bind #if display private #end class __ASSET__assets_data_level3_json extends null { }
 @:keep @:bind #if display private #end class __ASSET__assets_data_level4_json extends null { }
 @:keep @:bind #if display private #end class __ASSET__assets_data_level5_json extends null { }
@@ -1610,7 +1599,6 @@ class DefaultAssetLibrary extends AssetLibrary {
 
 
 
-
 @:keep #if display private #end class __ASSET__flixel_fonts_nokiafc22_ttf extends lime.text.Font { public function new () { super (); name = "Nokia Cellphone FC Small"; } } 
 @:keep #if display private #end class __ASSET__flixel_fonts_monsterrat_ttf extends lime.text.Font { public function new () { super (); name = "Monsterrat"; } } 
 
@@ -1630,7 +1618,6 @@ class DefaultAssetLibrary extends AssetLibrary {
 @:file("assets/sounds/laser.wav") #if display private #end class __ASSET__assets_sounds_laser_wav extends lime.utils.Bytes {}
 @:file("assets/data/level1.json") #if display private #end class __ASSET__assets_data_level1_json extends lime.utils.Bytes {}
 @:file("assets/data/level2.json") #if display private #end class __ASSET__assets_data_level2_json extends lime.utils.Bytes {}
-@:file("assets/data/level2_easier.json") #if display private #end class __ASSET__assets_data_level2_easier_json extends lime.utils.Bytes {}
 @:file("assets/data/level3.json") #if display private #end class __ASSET__assets_data_level3_json extends lime.utils.Bytes {}
 @:file("assets/data/level4.json") #if display private #end class __ASSET__assets_data_level4_json extends lime.utils.Bytes {}
 @:file("assets/data/level5.json") #if display private #end class __ASSET__assets_data_level5_json extends lime.utils.Bytes {}

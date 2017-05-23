@@ -120,8 +120,8 @@ class CombatTutorial extends FlxState
 		laser = null;
 		
 		// zoom in
-		FlxG.camera.focusOn(new FlxPoint(713, 344));
-		FlxG.camera.zoom = FlxG.height / 420;
+		FlxG.camera.focusOn(new FlxPoint(713, 438));
+		FlxG.camera.zoom = FlxG.height / 320;
 		
 		// Log level start and time
         //Main.LOGGER.logLevelStart(Main.LEVEL, Date.now());
@@ -197,13 +197,15 @@ class CombatTutorial extends FlxState
 				if (hitPlayer) {
 					laser.x = enemyShip.x - 16;
 					laser.y = enemyShip.y;
-					numHit++;
+					//numHit++;
 				} else {
 					laser.x = playerShip.x + 16;
 					laser.y = playerShip.y;
 				}
-				laserSnd.play();
-				add(laser);
+				if (numHit < 3) {
+					laserSnd.play();
+					add(laser);
+				}
 			}
 			
 			if (hitPlayer) {
@@ -214,26 +216,26 @@ class CombatTutorial extends FlxState
 				laser.x += 50 * elapsed;
 			}
 			
-			if (hitPlayer && laser.overlaps(playerShip)) {
+			if (numHit < 3 && hitPlayer && laser.overlaps(playerShip)) {
 				// hit player ship
 				hitPlayer = false;
 				laser.kill();
 				laser = null;
 				waitTimer = 0.0;
 				combatTxt.visible = false;
-			} else if (laser.overlaps(enemyShip)) {
+			} else if (numHit < 3 && laser.overlaps(enemyShip)) {
 				// hit enemy ship
 				hitPlayer = true;
 				laser.kill();
 				laser = null;
 				waitTimer = 0.0;
 				combatTxt.visible = true;
+				numHit++;
 			}
 			if (numHit == 3) {
 				enemyShip.visible = false;
 				captureBar.visible = true;
 				combatTxt.visible = false;
-				laser.kill();
 			}
 		}
 		

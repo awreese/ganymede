@@ -54,10 +54,6 @@ class ApplicationMain {
 		types.push (lime.Assets.AssetType.TEXT);
 		
 		
-		urls.push ("assets/data/level2_easier.json");
-		types.push (lime.Assets.AssetType.TEXT);
-		
-		
 		urls.push ("assets/data/level3.json");
 		types.push (lime.Assets.AssetType.TEXT);
 		
@@ -387,7 +383,7 @@ class ApplicationMain {
 		
 		config = {
 			
-			build: "176",
+			build: "181",
 			company: "DDR",
 			file: "ProjectGanymede",
 			fps: 60,
