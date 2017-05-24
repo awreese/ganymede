@@ -26,6 +26,7 @@ import flixel.addons.weapon.FlxWeapon.FlxTypedWeapon;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxRect;
 import flixel.math.FlxVector;
+import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.util.helpers.FlxBounds;
 import gameUnits.Ship.BluePrint;
@@ -270,6 +271,8 @@ class Ship extends FlxSprite {
 	public var progress:Float; // How far along the path this ship has traveled
 
 	public var isSelected:Bool; // Whether the player has currently selected this ship (should ideally be moved to a Player class in the future)
+	
+	private var laser_snd:FlxSound; // play a sound when laser fires
 
 	//private var hpBar :FlxText;
 	
@@ -277,6 +280,14 @@ class Ship extends FlxSprite {
 
 	public function new(destination:MapNode, faction:Faction, blueprint:BluePrint) {
 		super();
+		
+		// initialize laser sound
+		#if flash
+			laser_snd = FlxG.sound.load(AssetPaths.laser__mp3);
+		#else
+			laser_snd = FlxG.sound.load(AssetPaths.laser__wav);
+		#end
+		laser_snd.looped = false;
 		
 		// set sprite graphic (to set proper width & height for hitbox)
 		switch (faction.getFactionType()) {
@@ -286,8 +297,7 @@ class Ship extends FlxSprite {
 				loadGraphic(AssetPaths.ship_1_neutral__png, false);
 			default:
 				loadGraphic(AssetPaths.ship_1_enemy1__png, false);
-		}
-        
+		}        
         // Faction info
         this.faction = faction;
         
@@ -332,10 +342,15 @@ class Ship extends FlxSprite {
 		
 		//hpBar = new FlxText(this.x, this.y - this.height, 0, "" + stats.hitPoints, 16);
 		//FlxG.state.add(hpBar);
+		
+		// Log ship creation
+        Main.LOGGER.logLevelAction(5, 
+            {
+                x: pos.x, 
+                y: pos.y, 
+                faction: faction.getFactionType()
+            });
 	}
-    
-
-    
     
 	// Returns where along its path the ship should be right now if it weren't for flocking behavior
 	public function idealPos(): FlxVector {
@@ -411,6 +426,7 @@ class Ship extends FlxSprite {
         var targetShip = this.radar.selectTarget();
         if (targetShip != null && this.weapon.fireAtTarget(targetShip)) {
             this.weapon.currentBullet.target = targetShip;
+			laser_snd.play();
         }
         
         //*******************
@@ -442,6 +458,14 @@ class Ship extends FlxSprite {
     }
     
     override public function destroy():Void {
+		// Log ship destroyed
+        Main.LOGGER.logLevelAction(6, 
+            {
+                x: pos.x, 
+                y: pos.y, 
+                faction: faction.getFactionType()
+            });
+		
         //trace("ship destroyed: " + this.toString());
         if (this.node != null) {
             this.node.removeShip(this);

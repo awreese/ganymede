@@ -1,4 +1,4 @@
-package tutorial;
+package states;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -60,7 +60,7 @@ class FinishGameState extends FlxState
 		Main.LEVEL = 1;
 		
 		// Log level end and time
-        Main.LOGGER.logLevelEnd(Date.now());
+        Main.LOGGER.logLevelEnd({victory: true});
 
 		super.create();
 		applauseSnd.play();
@@ -73,9 +73,10 @@ class FinishGameState extends FlxState
 
 	private function clickRestart():Void
 	{
+		Main.RESTART = true;
 		FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function()
 		{
-			FlxG.switchState(new PlayState());
+			FlxG.switchState(new states.PlayState());
 		});
 	}
 	
