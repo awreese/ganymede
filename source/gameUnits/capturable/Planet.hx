@@ -151,10 +151,10 @@ class Planet extends Capturable {
 	 *
 	 */
 
-	public var playState: PlayState;
+	public var playState:PlayState;
 
 	// internal fields
-	private var pStats: PlanetStat;
+	private var pStats:PlanetStat;
 
 	private var numShips:Map<FactionType, Int>;
 	private var shipTimer:Float;
@@ -162,7 +162,7 @@ class Planet extends Capturable {
     // Ship Factory
     private var shipFactory:ShipFactory;
 
-	public function new(playState: PlayState, location: MapNode, faction: Faction, pstats: PlanetStat) {
+	public function new(playState:PlayState, location:MapNode, faction:Faction, pstats:PlanetStat) {
 		// set position of the planet
 		//super(location.pos.x - (MapNode.NODE_SIZE / 2), location.pos.y - (MapNode.NODE_SIZE / 2));
 		super(location, faction);
@@ -216,7 +216,7 @@ class Planet extends Capturable {
 		//return faction.getFactionType() != FactionType.NOP && faction.getFactionType() != FactionType.NEUTRAL
 		//&& numShips.get(faction.getFactionType()) < this.pStats.cap && shipTimer >= pStats.prod;
         
-        return faction.getFactionType() != FactionType.NOP &&
+        return faction.getFactionType() != FactionType.NOP && 
             this.node.getShipGroup(this.faction.getFactionType()).members.length < this.pStats.cap && 
             shipTimer >= pStats.prod;
 	}

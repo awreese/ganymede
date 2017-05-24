@@ -24,6 +24,7 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.math.FlxPoint;
 import flixel.math.FlxVector;
+import gameUnits.Ship;
 import gameUnits.Ship.BluePrint;
 import gameUnits.Ship.HullType;
 import gameUnits.capturable.Capturable;
@@ -99,7 +100,7 @@ class GameMap extends FlxSprite {
         this.setGraph();
 		
         // Log level start and time
-        Main.LOGGER.logLevelStart(level, Date.now());
+        Main.LOGGER.logLevelStart(level);
 		
 		parseLevel(playState);
         

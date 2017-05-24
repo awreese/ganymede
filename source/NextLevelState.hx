@@ -51,7 +51,7 @@ class NextLevelState extends FlxState
 		add(congratulationsTxt);
 		
         // Log level end and time
-        Main.LOGGER.logLevelEnd(Date.now());
+        Main.LOGGER.logLevelEnd({victory: true});
         
 		super.create();
 		applauseSnd.play();
