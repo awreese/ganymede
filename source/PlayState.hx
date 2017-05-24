@@ -109,6 +109,24 @@ class PlayState extends FlxState {
 		/*
 		 * Handle any mouse/keyboard events
 		 */
+		
+		// Logging mouse clicks
+		if (FlxG.mouse.justPressed) {
+			details = new Dynamic();
+			details.time = Date.now();
+			details.x = FlxG.mouse.x;
+			details.y = FlxG.mouse.y;
+			details.button = 1;
+			Main.LOGGER.logLevelAction(1, details);
+		}
+		if (FlxG.mouse.justPressedRight) {
+			details = new Dynamic();
+			details.time = Date.now();
+			details.x = FlxG.mouse.x;
+			details.y = FlxG.mouse.y;
+			details.button = 2;
+			Main.LOGGER.logLevelAction(1, details);
+		}
 
 		// Selecting ships
 		if (FlxG.mouse.justPressed) {
@@ -151,6 +169,12 @@ class PlayState extends FlxState {
                     }
                 }
                 
+				// Log selecting a planet
+				details = new Dynamic();
+				details.time = Date.now();
+				details.x = n.x;
+				details.y = n.y;
+				Main.LOGGER.logLevelAction(2, details);
 			}
 		}
 
@@ -166,6 +190,7 @@ class PlayState extends FlxState {
 					//}
 				//}
                 
+				var shipCount = 0;
                 // new loop
                 //for (ship in shipgroupByFaction.get(PLAYER)) {
                 for (ship in shipGroup) {
@@ -173,9 +198,17 @@ class PlayState extends FlxState {
                     if (ship.getFactionType() == PLAYER && ship.isSelected) {
 						ship.isSelected = false;
 						ship.pathTo(n);
+						shipCount++;
 					}
                 }
                 
+				// Log ordering ships
+				details = new Dynamic();
+				details.time = Date.now();
+				details.x = n.x;
+				details.y = n.y;
+				details.num = shipCount;
+				Main.LOGGER.logLevelAction(2, details);
 			}
 		}
 		

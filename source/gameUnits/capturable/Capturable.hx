@@ -108,8 +108,18 @@ class Capturable extends FlxSprite {
 				currFaction = f;
 			}
 			// if captured, change faction and set bar color
+			oldFaction = faction;
 			faction = new Faction(currFaction);
 			captureBar.color = faction.getColor();
+			
+			// Log capturing planets
+			details = new Dynamic();
+			details.time = Date.now();
+			details.x = x;
+			details.y = y;
+			details.oldFaction = oldFaction.getFactionType();
+			details.newFaction = faction.getFactionType();
+			Main.LOGGER.logLevelAction(4, details);
 		}
 		
 		// get current cp

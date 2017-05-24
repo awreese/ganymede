@@ -331,10 +331,15 @@ class Ship extends FlxSprite {
 		
 		//hpBar = new FlxText(this.x, this.y - this.height, 0, "" + stats.hitPoints, 16);
 		//FlxG.state.add(hpBar);
+		
+		// Log ship creation
+		details = new Dynamic();
+		details.time = Date.now();
+		details.x = pos.x;
+		details.y = pos.y;
+		details.faction = faction.getFactionType();
+        Main.LOGGER.logLevelAction(5, details);
 	}
-    
-
-    
     
 	// Returns where along its path the ship should be right now if it weren't for flocking behavior
 	public function idealPos(): FlxVector {
@@ -442,6 +447,14 @@ class Ship extends FlxSprite {
     }
     
     override public function destroy():Void {
+		// Log ship destroyed
+		details = new Dynamic();
+		details.time = Date.now();
+		details.x = pos.x;
+		details.y = pos.y;
+		details.faction = faction.getFactionType();
+        Main.LOGGER.logLevelAction(6, details);
+		
         //trace("ship destroyed: " + this.toString());
         if (this.node != null) {
             this.node.removeShip(this);

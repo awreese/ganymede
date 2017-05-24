@@ -1,0 +1,46 @@
+This file describes how the game logs data. It says which numbers correspond to which actions and what data is stored in each action.
+
+Level start: {
+	time: current time
+}
+Level end: {
+	time: current time,
+	victory: whether the player won or lost
+}
+
+1: Mouse Click: {
+	time: current time,
+	x: mouse's x position,
+	y: mouse's y position,
+	button: the mouse button (1 for left, 2 for right)
+}
+2: Select Planet: {
+	time: current time,
+	x: node's x position,
+	y: node's y position
+}
+3: Order Ships: {
+	time: current time,
+	x: target node's x position,
+	y: target's node's y position,
+	num: number of ships ordered
+}
+4: Capture Planet: {
+	time: current time,
+	x: node's x position,
+	y: node's y position,
+	oldFaction: old faction,
+	newFaction: new faction
+}
+5: Create Ship: {
+	time: current time,
+	x: ship's x position,
+	y: ship's y position,
+	faction: ship's faction
+}
+6: Destroy Ship: {
+	time: current time,
+	x: ship's x position,
+	y: ship's y position,
+	faction: ship's faction
+}
