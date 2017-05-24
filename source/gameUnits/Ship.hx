@@ -261,8 +261,6 @@ class Ship extends FlxSprite {
 
 	public var isSelected:Bool; // Whether the player has currently selected this ship (should ideally be moved to a Player class in the future)
 	
-	private var laser_snd:FlxSound; // play a sound when laser fires
-
 	//private var hpBar :FlxText;
 	
 	public var weapon:FlxTypedWeapon<ShipAttack>; // This weapon is used to create ShipAttacks
@@ -287,6 +285,7 @@ class Ship extends FlxSprite {
 				loadGraphic(AssetPaths.ship_1_neutral__png, false);
 			default:
 				loadGraphic(AssetPaths.ship_1_enemy1__png, false);
+		}
         
         // Faction info
         this.faction = faction;
