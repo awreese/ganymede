@@ -35,7 +35,8 @@ class Missile extends FlxBullet  {
 			if (this.overlaps(target)) {
 				// Do damage to target & destroy missile
 				target.hurt(damage);
-				this.
+				// maybe show explosion animation?
+				this.kill();
 			}
 		}
 		

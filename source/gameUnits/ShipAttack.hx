@@ -3,6 +3,8 @@ package gameUnits;
 import flixel.addons.weapon.FlxBullet;
 import flixel.math.FlxPoint;
 import flixel.math.FlxVector;
+import flixel.util.FlxSpriteUtil;
+import flixel.util.FlxColor;
 
 /**
  * This class represents one projectile fired by a ship at a given target ship.
@@ -20,12 +22,25 @@ class ShipAttack extends FlxBullet
 		super();
 		this.damage = damage;
 		this.speed = speed;
-		loadGraphic("assets/images/temp_laser.png", false, 16, 16);
+		//loadGraphic("assets/images/temp_laser.png", false, 16, 16);
+		this.makeGraphic(16, 16, FlxColor.TRANSPARENT);
 	}
 
 	override public function update(elapsed: Float) {
 				
 		super.update(elapsed);
+		
+		var width = Math.abs(target.x - this.x);
+		var height = Math.abs(target.y - this.y);
+		
+		this.width = width;
+		this.height = height;
+		
+		
+		
+		var lineStyle:LineStyle = {color: FlxColor.RED, thickness: 1.0};
+		var drawStyle:DrawStyle = {smoothing:true};
+		FlxSpriteUtil.drawLine(this, this.x, this.y, target.x, target.y, lineStyle, drawStyle);
 		
 		// Make sure that the target hasn't been destroyed already
 		if (target.exists) {
