@@ -113,8 +113,13 @@ class Capturable extends FlxSprite {
 			captureBar.color = faction.getColor();
 			
 			// Log capturing planets
-			Main.LOGGER.logLevelAction(4, {time: Date.now(), x: x, y: y,
-				oldFaction: oldFaction.getFactionType(), newFaction: faction.getFactionType()});
+			Main.LOGGER.logLevelAction(4, 
+                {
+                    x: x, 
+                    y: y,
+                    oldFaction: oldFaction.getFactionType(), 
+                    newFaction: faction.getFactionType()
+                });
 		}
 		
 		// get current cp

@@ -333,7 +333,12 @@ class Ship extends FlxSprite {
 		//FlxG.state.add(hpBar);
 		
 		// Log ship creation
-        Main.LOGGER.logLevelAction(5, {time: Date.now(), x: pos.x, y: pos.y, faction: faction.getFactionType()});
+        Main.LOGGER.logLevelAction(5, 
+            {
+                x: pos.x, 
+                y: pos.y, 
+                faction: faction.getFactionType()
+            });
 	}
     
 	// Returns where along its path the ship should be right now if it weren't for flocking behavior
@@ -443,7 +448,12 @@ class Ship extends FlxSprite {
     
     override public function destroy():Void {
 		// Log ship destroyed
-        Main.LOGGER.logLevelAction(6, {time: Date.now(), x: pos.x, y: pos.y, faction: faction.getFactionType()});
+        Main.LOGGER.logLevelAction(6, 
+            {
+                x: pos.x, 
+                y: pos.y, 
+                faction: faction.getFactionType()
+            });
 		
         //trace("ship destroyed: " + this.toString());
         if (this.node != null) {
