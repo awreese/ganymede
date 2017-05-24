@@ -100,7 +100,7 @@ class GameMap extends FlxSprite {
         this.setGraph();
 		
         // Log level start and time
-        Main.LOGGER.logLevelStart(level, {time: Date.now()});
+        Main.LOGGER.logLevelStart(level);
 		
 		parseLevel(playState);
         

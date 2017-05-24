@@ -60,7 +60,7 @@ class FinishGameState extends FlxState
 		Main.LEVEL = 1;
 		
 		// Log level end and time
-        Main.LOGGER.logLevelEnd({time: Date.now(), victory: true});
+        Main.LOGGER.logLevelEnd({victory: true});
 
 		super.create();
 		applauseSnd.play();
