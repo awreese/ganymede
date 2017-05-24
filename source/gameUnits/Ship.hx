@@ -62,29 +62,40 @@ typedef ShipGroup = FlxTypedGroup<Ship>;
  * This defines ship types by specifying the HullType and statistics.
  *
  * @author Drew Reese
+ * @author Rory Soiffer
  */
 class BluePrint {
 	
 	// Stores default BluePrints that can be referenced in level files. This allows for easier
 	// creation and editing of game levels, and allows us to change the stats of all ships of
     // a type at once.
-	private static var shipTemplateMap = new Map<String, BluePrint>();
+	private static var _ship_template:Map<String, BluePrint>();
 	
 	// Whether or not the templates have been initialized yet
-	private static var hasInitialized = false;
+	//private static var hasInitialized = false;
 	
 	// Guarantees that the values in the template map have been initialized
-	private static function checkInitTemplates(): Void {
-		if (!hasInitialized) {
-			hasInitialized = true;
-			shipTemplateMap.set("frigate", new BluePrint(null, 60.0, 0.5, 100.0, 2.0, 10.0, 5.0));
-		}
+	//private static function checkInitTemplates(): Void {
+		//if (!hasInitialized) {
+			//hasInitialized = true;
+			//shipTemplateMap.set("frigate", new BluePrint(null, 60.0, 0.5, 100.0, 2.0, 10.0, 5.0));
+		//}
+	//}
+	
+	static function __init__() {
+		_ship_template = new Map<String, BluePrint>();
+		_ship_template.set("frigate", new BluePrint(FRIGATE, 60.0, 0.5, 100.0, 2.0, 10.0, 5.0));
+		_ship_template.set("frigate_player", new BluePrint(FRIGATE, 60.0, 0.5, 100.0, 2.0, 10.0, 5.0));
+		_ship_template.set("frigate_enemy", new BluePrint(FRIGATE, 60.0, 0.5, 100.0, 2.0, 10.0, 5.0));
+		_ship_template.set("destroyer", new BluePrint(DESTROYER, 50.0, 0.5, 150.0, 1.75, 20.0, 7.5));
+		// etc...
 	}
 	
 	// Returns the ship template with the given name, using clone() to guarantee safety
-	public static function getBluePrint(name: String): BluePrint {
-		checkInitTemplates();
-		return shipTemplateMap.get(name).clone();
+	public static function getBluePrint(name:String): BluePrint {
+		//checkInitTemplates();
+		//return shipTemplateMap.get(name).clone();
+		return _ship_template.get(name).clone()l
 	}
 	
 	
