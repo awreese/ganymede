@@ -26,6 +26,7 @@ import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.util.FlxAxes;
 import flixel.util.FlxColor;
+import tutorial.CombatTutorial;
 import tutorial.SelectShipTutorial;
 
 /**

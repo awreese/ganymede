@@ -327,7 +327,6 @@ class GameMap extends FlxSprite {
 	private function parseLevel(playState:PlayState):Void {
 		var file = Assets.getText("assets/data/level" + Main.LEVEL + ".json"); // get string of json
 		var data = Json.parse(file); // parse json
-
 		enemyAi = data.ai; // get ai time
 		var nodes = data.nodes; // get nodes
 		var neighbors = data.neighbors; // get neighbors

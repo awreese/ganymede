@@ -260,6 +260,8 @@ class Ship extends FlxSprite {
 	public var progress:Float; // How far along the path this ship has traveled
 
 	public var isSelected:Bool; // Whether the player has currently selected this ship (should ideally be moved to a Player class in the future)
+	
+	private var laser_snd:FlxSound; // play a sound when laser fires
 
 	//private var hpBar :FlxText;
 	
@@ -269,6 +271,14 @@ class Ship extends FlxSprite {
 	public function new(destination:MapNode, faction:Faction, blueprint:BluePrint) {
 		super();
 		
+		// initialize laser sound
+		#if flash
+			laser_snd = FlxG.sound.load(AssetPaths.laser__mp3);
+		#else
+			laser_snd = FlxG.sound.load(AssetPaths.laser__wav);
+		#end
+		laser_snd.looped = false;
+		
 		// set sprite graphic (to set proper width & height for hitbox)
 		switch (faction.getFactionType()) {
 			case PLAYER:
@@ -277,15 +287,6 @@ class Ship extends FlxSprite {
 				loadGraphic(AssetPaths.ship_1_neutral__png, false);
 			default:
 				loadGraphic(AssetPaths.ship_1_enemy1__png, false);
-		}
-        
-        // initialize laser sound
- 		#if flash
- 			laser_snd = FlxG.sound.load(AssetPaths.laser__mp3);
- 		#else
- 			laser_snd = FlxG.sound.load(AssetPaths.laser__wav);
- 		#end
- 		laser_snd.looped = false;
         
         // Faction info
         this.faction = faction;
