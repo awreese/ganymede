@@ -114,20 +114,10 @@ class PlayState extends FlxState {
 		
 		// Logging mouse clicks
 		if (FlxG.mouse.justPressed) {
-			details = new Dynamic();
-			details.time = Date.now();
-			details.x = FlxG.mouse.x;
-			details.y = FlxG.mouse.y;
-			details.button = 1;
-			Main.LOGGER.logLevelAction(1, details);
+			Main.LOGGER.logLevelAction(1, {time: Date.now(), x: FlxG.mouse.x, y: FlxG.mouse.y, button: 1});
 		}
 		if (FlxG.mouse.justPressedRight) {
-			details = new Dynamic();
-			details.time = Date.now();
-			details.x = FlxG.mouse.x;
-			details.y = FlxG.mouse.y;
-			details.button = 2;
-			Main.LOGGER.logLevelAction(1, details);
+			Main.LOGGER.logLevelAction(1, {time: Date.now(), x: FlxG.mouse.x, y: FlxG.mouse.y, button: 2});
 		}
 
 		// Selecting ships
@@ -172,11 +162,7 @@ class PlayState extends FlxState {
                 }
                 
 				// Log selecting a planet
-				details = new Dynamic();
-				details.time = Date.now();
-				details.x = n.x;
-				details.y = n.y;
-				Main.LOGGER.logLevelAction(2, details);
+				Main.LOGGER.logLevelAction(2, {time: Date.now(), x: n.x, y: n.y});
 			}
 		}
 
@@ -205,12 +191,7 @@ class PlayState extends FlxState {
                 }
                 
 				// Log ordering ships
-				details = new Dynamic();
-				details.time = Date.now();
-				details.x = n.x;
-				details.y = n.y;
-				details.num = shipCount;
-				Main.LOGGER.logLevelAction(2, details);
+				Main.LOGGER.logLevelAction(3, {time: Date.now(), x: n.x, y: n.y, num: shipCount});
 			}
 		}
 		

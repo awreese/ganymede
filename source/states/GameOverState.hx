@@ -33,10 +33,7 @@ class GameOverState extends FlxState
 		add(replayBtn);
 		
 		// Log level end and time
-		var details = new Dynamic();
-		details.time = Date.now();
-		details.victory = false;
-        Main.LOGGER.logLevelEnd(details);
+        Main.LOGGER.logLevelEnd({time: Date.now(), victory: false});
 		
 		super.create();
 	}
