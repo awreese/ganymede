@@ -1,5 +1,7 @@
 package gameUnits;
 
+import flixel.FlxG;
+import flixel.FlxSprite;
 import flixel.addons.weapon.FlxBullet;
 import flixel.math.FlxPoint;
 import flixel.math.FlxVector;
@@ -11,42 +13,49 @@ import flixel.util.FlxColor;
  * @author Rory Soiffer
  * @author Drew Reese
  */
-class ShipAttack extends FlxBullet
-{
+class ShipAttack extends FlxBullet {
 
+	public var source:Ship;
 	public var target: Ship;    // Which ship this attack is targeting
 	private var damage: Float;  // How much damage this attack deals
 	private var speed: Float;   // How fast this attack travels
-
+	
 	public function new(damage: Float, speed: Float) {
 		super();
 		this.damage = damage;
 		this.speed = speed;
-		//loadGraphic("assets/images/temp_laser.png", false, 16, 16);
-		this.makeGraphic(16, 16, FlxColor.TRANSPARENT);
+		loadGraphic("assets/images/temp_laser.png", false, 16, 16);
 	}
 
 	override public function update(elapsed: Float) {
 				
 		super.update(elapsed);
 		
-		var width = Math.abs(target.x - this.x);
-		var height = Math.abs(target.y - this.y);
+		var dist = source.getPosition().distanceTo(target.getPosition());
+		trace("Source: " + source.getPosition() + ", Target: " + target.getPosition() + ", dist=" + dist);
 		
-		this.width = width;
-		this.height = height;
+		this.setGraphicSize(Math.round(dist), Math.round(this.height));
+		this.updateHitbox();
 		
-		
-		
-		var lineStyle:LineStyle = {color: FlxColor.RED, thickness: 1.0};
-		var drawStyle:DrawStyle = {smoothing:true};
-		FlxSpriteUtil.drawLine(this, this.x, this.y, target.x, target.y, lineStyle, drawStyle);
+		if (!(source.exists && target.exists)) {
+			trace("no source or target, killing laser beam");
+			this.kill();
+			return;
+		}
 		
 		// Make sure that the target hasn't been destroyed already
 		if (target.exists) {
 		
+			// set current position to match source ship
+			this.setPosition(source.getPosition().x, source.getPosition().y);
+			trace("current beam start: " + this.getPosition());
+			
+			// set angle to match location of target ship
+			//trace("source angle: " + source.angle + ", angle between target: " + source.getMidpoint().angleBetween(target.getMidpoint()));
+			//this.angle = source.angle - source.getMidpoint().angleBetween(target.getMidpoint()) - 90.0;
+			
 			// Move in the direction of the target
-			velocity = target.getPos().subtractNew(pointToVector(this.getPosition())).normalize().scaleNew(speed);
+			velocity = target.getPos().subtractNew(pointToVector(source.getPosition())).normalize().scaleNew(speed);
 			//Rotate the bullet to match its velocity
 			angle = pointToVector(this.velocity).degrees;
 			
@@ -54,14 +63,14 @@ class ShipAttack extends FlxBullet
 			if (this.overlaps(target)) {
 				
 				// Damage the target
-                target.hurt(damage);
+                target.hurt(damage / 10.0);
 				
 				// Destroy the bullet
-				this.kill();
+				//this.kill();
 			}
 		} else {
 			//Rotate the bullet to match its velocity
-			angle = pointToVector(this.velocity).degrees;
+			//angle = pointToVector(this.velocity).degrees;
 		}
 	}
 	
