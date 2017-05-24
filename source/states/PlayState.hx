@@ -16,7 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package;
+package states;
 
 import Main;
 import faction.Faction;
@@ -33,7 +33,9 @@ import gameUnits.capturable.Planet;
 import map.GameMap;
 import map.MapNode;
 import npc.Enemy;
-import tutorial.FinishGameState;
+import states.FinishGameState;
+import states.GameOverState;
+import states.NextLevelState;
 
 class PlayState extends FlxState {
 	private var grpMap: FlxTypedGroup<GameMap>;
@@ -260,14 +262,14 @@ class PlayState extends FlxState {
 				});
 			}
 			FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
-			FlxG.switchState(new NextLevelState());
+			FlxG.switchState(new states.NextLevelState());
 			});
 		}
 		
 		// if player lose all planets, gameover
 		if (gameMap.getNumPlayerPlanets() == 0 && noPlayerShips) {
 			FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
-			FlxG.switchState(new GameOverState());
+			FlxG.switchState(new states.GameOverState());
 			});
 		}
 

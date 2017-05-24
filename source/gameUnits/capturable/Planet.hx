@@ -35,6 +35,7 @@ import gameUnits.capturable.Planet.PlanetStat;
 import js.html.svg.AnimatedBoolean;
 import map.MapNode;
 import faction.Faction;
+import states.PlayState;
 
 /**
  * Planet statistic type
@@ -151,7 +152,7 @@ class Planet extends Capturable {
 	 *
 	 */
 
-	public var playState: PlayState;
+	public var playState: states.PlayState;
 
 	// internal fields
 	private var pStats: PlanetStat;
@@ -162,7 +163,7 @@ class Planet extends Capturable {
     // Ship Factory
     private var shipFactory:ShipFactory;
 
-	public function new(playState: PlayState, location: MapNode, faction: Faction, pstats: PlanetStat) {
+	public function new(playState: states.PlayState, location: MapNode, faction: Faction, pstats: PlanetStat) {
 		// set position of the planet
 		//super(location.pos.x - (MapNode.NODE_SIZE / 2), location.pos.y - (MapNode.NODE_SIZE / 2));
 		super(location, faction);

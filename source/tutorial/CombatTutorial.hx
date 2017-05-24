@@ -12,6 +12,7 @@ import flixel.ui.FlxBar;
 import flixel.ui.FlxButton;
 import flixel.util.FlxColor;
 import gameUnits.Ship;
+import states.NextLevelState;
 
 /**
  * ...
@@ -262,7 +263,7 @@ class CombatTutorial extends FlxState
 			}
 			if (!isRed && captureBar.value >= 100.0) {
 				FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
-					FlxG.switchState(new NextLevelState());
+					FlxG.switchState(new states.NextLevelState());
 				});
 			}
 		}

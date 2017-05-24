@@ -31,6 +31,7 @@ import gameUnits.capturable.Planet;
 import haxe.Json;
 import map.MapNode.NodeGroup;
 import openfl.Assets;
+import states.PlayState;
 
 using flixel.util.FlxSpriteUtil;
 
@@ -71,7 +72,7 @@ class GameMap extends FlxSprite {
 	private var minY: Float;
 	private var maxY: Float;
 
-	public function new(playState:PlayState, level: Int) {
+	public function new(playState:states.PlayState, level: Int) {
 		minX = Math.POSITIVE_INFINITY; // smallest x
 		maxX = Math.NEGATIVE_INFINITY; // biggest x
 		minY = Math.POSITIVE_INFINITY; // smallest y
@@ -325,7 +326,7 @@ class GameMap extends FlxSprite {
 		}
 	}
 	
-	private function parseLevel(playState:PlayState):Void {
+	private function parseLevel(playState:states.PlayState):Void {
 		var file = Assets.getText("assets/data/level" + Main.LEVEL + ".json"); // get string of json
 		var data = Json.parse(file); // parse json
 		enemyAi = data.ai; // get ai time

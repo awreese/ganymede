@@ -3,7 +3,7 @@ package;
 import flixel.FlxGame;
 import CapstoneLogger;
 import openfl.display.Sprite;
-import tutorial.FinishGameState;
+import states.FinishGameState;
 
 class Main extends Sprite
 {
@@ -45,6 +45,6 @@ class Main extends Sprite
 	
 	private function onSessionReady(sessionRecieved:Bool):Void
 	{
-		addChild(new FlxGame(1280, 720, MenuState, 1, 60, 60));
+		addChild(new FlxGame(1280, 720, states.MenuState, 1, 60, 60));
 	}
 }
