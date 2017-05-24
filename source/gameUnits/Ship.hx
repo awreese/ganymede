@@ -70,7 +70,7 @@ class BluePrint {
 	// Stores default BluePrints that can be referenced in level files. This allows for easier
 	// creation and editing of game levels, and allows us to change the stats of all ships of
     // a type at once.
-	private static var _ship_template:Map<String, BluePrint>();
+	private static var _ship_template:Map<String, BluePrint>;
 	
 	// Whether or not the templates have been initialized yet
 	//private static var hasInitialized = false;
@@ -96,7 +96,7 @@ class BluePrint {
 	public static function getBluePrint(name:String): BluePrint {
 		//checkInitTemplates();
 		//return shipTemplateMap.get(name).clone();
-		return _ship_template.get(name).clone()l
+		return _ship_template.get(name).clone();
 	}
 	
 	

@@ -50,7 +50,7 @@ class PlanetStat {
 	// Stores default PlanetStats that can be referenced in level files. This allows for easier
 	// creation and editing of game levels, and allows us to change the stats of all planets of
     // a type at once.
-	private static var _planet_template:Map<String, PlanetStat>();
+	private static var _planet_template:Map<String, PlanetStat>;
 	
 	// Whether or not the templates have been initialized yet
 	//private static var hasInitialized = false;
@@ -73,8 +73,8 @@ class PlanetStat {
 	
 	// Returns the planet template with the given name, using clone() to guarantee safety
 	public static function getPlanetStat(name: String): PlanetStat {
-		checkInitTemplates();
-		return planetTemplateMap.get(name).clone();
+		//checkInitTemplates();
+		return _planet_template.get(name).clone();
 	}
 	
 	
