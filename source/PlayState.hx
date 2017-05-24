@@ -120,6 +120,14 @@ class PlayState extends FlxState {
 
 		// Selecting ships
 		if (FlxG.mouse.justPressed) {
+            
+            Main.LOGGER.logLevelAction(1, 
+                {
+                    x: FlxG.mouse.x, 
+                    y: FlxG.mouse.y, 
+                    button: 1
+                });
+ 
 			var n = gameMap.findNode(new FlxVector(FlxG.mouse.x, FlxG.mouse.y));
 			//var n = gameMap.findNode(FlxG.mouse.getPosition());
 			if (n == null) {
@@ -159,11 +167,26 @@ class PlayState extends FlxState {
                     }
                 }
                 
+                // Log selecting a planet
+                Main.LOGGER.logLevelAction(2, 
+                    {
+                        x: n.x, 
+                        y: n.y
+                    });
+                
 			}
 		}
 
 		// Ordering ships to move
 		if (FlxG.mouse.justPressedRight) {
+            
+            Main.LOGGER.logLevelAction(1, 
+                {
+                    x: FlxG.mouse.x, 
+                    y: FlxG.mouse.y, 
+                    button: 2
+                });
+ 
 			var n = gameMap.findNode(new FlxVector(FlxG.mouse.x, FlxG.mouse.y));
 			if (n != null) {
 				// old loop
@@ -176,13 +199,23 @@ class PlayState extends FlxState {
                 
                 // new loop
                 //for (ship in shipgroupByFaction.get(PLAYER)) {
+                var shipCount:Int = 0;
                 for (ship in shipGroup) {
                     //if (ship.isSelected) {
                     if (ship.getFactionType() == PLAYER && ship.isSelected) {
 						ship.isSelected = false;
 						ship.pathTo(n);
+                        shipCount++;
 					}
                 }
+                
+                // Log ordering ships
+  				Main.LOGGER.logLevelAction(3, 
+                    {
+                        x: n.x, 
+                        y: n.y, 
+                        num: shipCount
+                    });
                 
 			}
 		}

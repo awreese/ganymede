@@ -7,9 +7,10 @@ import tutorial.FinishGameState;
 
 class Main extends Sprite
 {
-	public static var LOGGER: CapstoneLogger;
-	public static var LEVEL: Int;
-	public static inline var FINAL_LEVEL: Int = 5;
+	public static var LOGGER:CapstoneLogger;
+	public static var LEVEL:Int;
+	public static inline var FINAL_LEVEL:Int = 8;
+    public static var RESTART:Bool = false;
 
 	public function new() {
 		LEVEL = 1;

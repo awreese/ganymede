@@ -50,7 +50,7 @@ class NextLevelState extends FlxState
 		add(congratulationsTxt);
 		
         // Log level end and time
-        Main.LOGGER.logLevelEnd(Date.now());
+        Main.LOGGER.logLevelEnd({victory: true});
         
 		super.create();
 		applauseSnd.play();
@@ -69,6 +69,12 @@ class NextLevelState extends FlxState
 	
 	// action for clicking replay button
 	private function click():Void {
+        //if (Main.LEVEL == 2 && !Main.RESTART) {
+  			//FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
+                //FlxG.switchState(new CombatTutorial());
+            //});
+        //}
+        
 		FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
 			FlxG.switchState(new PlayState());
 		});
