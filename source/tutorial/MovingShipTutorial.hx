@@ -9,7 +9,6 @@ import flixel.text.FlxText;
 import flixel.ui.FlxBar;
 import flixel.ui.FlxButton;
 import flixel.util.FlxColor;
-import states.NextLevelState;
 
 /**
  * ...
@@ -170,7 +169,7 @@ class MovingShipTutorial extends FlxState {
 		
 		if (captureBar.value >= 100.0 && waitTimer >= 0.75) {
 			FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
-			FlxG.switchState(new states.NextLevelState());
+			FlxG.switchState(new NextLevelState());
 		});
 		}
 	}

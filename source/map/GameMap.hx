@@ -31,7 +31,6 @@ import gameUnits.capturable.Planet;
 import haxe.Json;
 import map.MapNode.NodeGroup;
 import openfl.Assets;
-import states.PlayState;
 
 using flixel.util.FlxSpriteUtil;
 
@@ -72,7 +71,7 @@ class GameMap extends FlxSprite {
 	private var minY: Float;
 	private var maxY: Float;
 
-	public function new(playState:states.PlayState, level: Int) {
+	public function new(playState:PlayState, level: Int) {
 		minX = Math.POSITIVE_INFINITY; // smallest x
 		maxX = Math.NEGATIVE_INFINITY; // biggest x
 		minY = Math.POSITIVE_INFINITY; // smallest y
@@ -100,7 +99,7 @@ class GameMap extends FlxSprite {
         this.setGraph();
 		
         // Log level start and time
-        Main.LOGGER.logLevelStart(level);
+        Main.LOGGER.logLevelStart(level, Date.now());
 		
 		parseLevel(playState);
         
@@ -122,7 +121,7 @@ class GameMap extends FlxSprite {
 		var z = FlxG.stage.width  / (maxX - minX);
 		z = z > FlxG.stage.height / (maxY - minY) ? FlxG.stage.height / (maxY - minY) : z; // set to smallest zoom
 
-		FlxG.camera.zoom = z > 1.25 ? z : 1; // zoom into map
+		FlxG.camera.zoom = z > 1.25 ? z : 1; // zoom into map*/
 	}
 
 	public function findNode(v: FlxVector):MapNode {
@@ -324,9 +323,10 @@ class GameMap extends FlxSprite {
 		}
 	}
 	
-	private function parseLevel(playState:states.PlayState):Void {
+	private function parseLevel(playState:PlayState):Void {
 		var file = Assets.getText("assets/data/level" + Main.LEVEL + ".json"); // get string of json
 		var data = Json.parse(file); // parse json
+
 		enemyAi = data.ai; // get ai time
 		var nodes = data.nodes; // get nodes
 		var neighbors = data.neighbors; // get neighbors

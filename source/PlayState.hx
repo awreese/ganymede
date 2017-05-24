@@ -16,7 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package states;
+package;
 
 import Main;
 import faction.Faction;
@@ -33,9 +33,7 @@ import gameUnits.capturable.Planet;
 import map.GameMap;
 import map.MapNode;
 import npc.Enemy;
-import states.FinishGameState;
-import states.GameOverState;
-import states.NextLevelState;
+import tutorial.FinishGameState;
 
 class PlayState extends FlxState {
 	private var grpMap: FlxTypedGroup<GameMap>;
@@ -50,10 +48,18 @@ class PlayState extends FlxState {
 	private var rand:FlxRandom;
 	private var numPlayerFaction:Int;
 	private var enemies: Array<Enemy>;
+	private var laser_snd: FlxSound;
 
 	override public function create():Void {
 		rand = new FlxRandom();
 		enemies = new Array<Enemy>();
+
+		#if flash
+			laser_snd = FlxG.sound.load(AssetPaths.laser__mp3);
+		#else
+			laser_snd = FlxG.sound.load(AssetPaths.laser__wav);
+		#end
+		laser_snd.looped = false;
 
 		// Initialize the map
 		grpMap = new FlxTypedGroup<GameMap>();        ///
@@ -111,26 +117,10 @@ class PlayState extends FlxState {
 		/*
 		 * Handle any mouse/keyboard events
 		 */
-		
-		// Logging mouse clicks
-		//if (FlxG.mouse.justPressed) {
-			//Main.LOGGER.logLevelAction(1, {time: Date.now(), x: FlxG.mouse.x, y: FlxG.mouse.y, button: 1});
-		//}
-		//if (FlxG.mouse.justPressedRight) {
-			//Main.LOGGER.logLevelAction(1, {time: Date.now(), x: FlxG.mouse.x, y: FlxG.mouse.y, button: 2});
-		//}
 
 		// Selecting ships
 		if (FlxG.mouse.justPressed) {
-			
-            Main.LOGGER.logLevelAction(1, 
-                {
-                    x: FlxG.mouse.x, 
-                    y: FlxG.mouse.y, 
-                    button: 1
-                });
-            
-            var n = gameMap.findNode(new FlxVector(FlxG.mouse.x, FlxG.mouse.y));
+			var n = gameMap.findNode(new FlxVector(FlxG.mouse.x, FlxG.mouse.y));
 			//var n = gameMap.findNode(FlxG.mouse.getPosition());
 			if (n == null) {
                 // old loop
@@ -169,27 +159,12 @@ class PlayState extends FlxState {
                     }
                 }
                 
-				// Log selecting a planet
-                Main.LOGGER.logLevelAction(2, 
-                    {
-                        x: n.x, 
-                        y: n.y
-                    });
-                
 			}
 		}
 
 		// Ordering ships to move
 		if (FlxG.mouse.justPressedRight) {
-			
-            Main.LOGGER.logLevelAction(1, 
-                {
-                    x: FlxG.mouse.x, 
-                    y: FlxG.mouse.y, 
-                    button: 2
-                });
-            
-            var n = gameMap.findNode(new FlxVector(FlxG.mouse.x, FlxG.mouse.y));
+			var n = gameMap.findNode(new FlxVector(FlxG.mouse.x, FlxG.mouse.y));
 			if (n != null) {
 				// old loop
                 //for (s in grpShips) {
@@ -199,7 +174,6 @@ class PlayState extends FlxState {
 					//}
 				//}
                 
-				var shipCount = 0;
                 // new loop
                 //for (ship in shipgroupByFaction.get(PLAYER)) {
                 for (ship in shipGroup) {
@@ -207,17 +181,8 @@ class PlayState extends FlxState {
                     if (ship.getFactionType() == PLAYER && ship.isSelected) {
 						ship.isSelected = false;
 						ship.pathTo(n);
-						shipCount++;
 					}
                 }
-                
-				// Log ordering ships
-				Main.LOGGER.logLevelAction(3, 
-                    {
-                        x: n.x, 
-                        y: n.y, 
-                        num: shipCount
-                    });
                 
 			}
 		}
@@ -270,14 +235,14 @@ class PlayState extends FlxState {
 				});
 			}
 			FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
-			FlxG.switchState(new states.NextLevelState());
+			FlxG.switchState(new NextLevelState());
 			});
 		}
 		
 		// if player lose all planets, gameover
 		if (gameMap.getNumPlayerPlanets() == 0 && noPlayerShips) {
 			FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
-			FlxG.switchState(new states.GameOverState());
+			FlxG.switchState(new GameOverState());
 			});
 		}
 

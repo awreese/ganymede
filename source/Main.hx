@@ -3,17 +3,15 @@ package;
 import flixel.FlxGame;
 import CapstoneLogger;
 import openfl.display.Sprite;
-import states.FinishGameState;
+import tutorial.FinishGameState;
 
 class Main extends Sprite
 {
 	public static var LOGGER: CapstoneLogger;
 	public static var LEVEL: Int;
-	public static inline var FINAL_LEVEL: Int = 8;
-	public static var RESTART:Bool = false;
-	
-	public function new()
-	{
+	public static inline var FINAL_LEVEL: Int = 5;
+
+	public function new() {
 		LEVEL = 1;
 		// This code prevents right-click from opening a menu
 		#if js
@@ -45,6 +43,6 @@ class Main extends Sprite
 	
 	private function onSessionReady(sessionRecieved:Bool):Void
 	{
-		addChild(new FlxGame(1280, 720, states.MenuState, 1, 60, 60));
+		addChild(new FlxGame(1280, 720, MenuState, 1, 60, 60));
 	}
 }

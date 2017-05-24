@@ -1,4 +1,4 @@
-package states;
+package;
 
 import flash.display.Sprite;
 import flixel.FlxG;
@@ -33,7 +33,7 @@ class GameOverState extends FlxState
 		add(replayBtn);
 		
 		// Log level end and time
-        Main.LOGGER.logLevelEnd({victory: false});
+        Main.LOGGER.logLevelEnd(Date.now());
 		
 		super.create();
 	}
@@ -46,7 +46,7 @@ class GameOverState extends FlxState
 	// action for clicking replay button
 	private function clickReplay():Void {
 		FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
-			FlxG.switchState(new states.PlayState());
+			FlxG.switchState(new PlayState());
 		});
 	}
 }
