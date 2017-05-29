@@ -281,6 +281,8 @@ class Ship extends FlxSprite {
 		switch (faction.getFactionType()) {
 			case PLAYER:
 				loadGraphic(AssetPaths.ship_1_player__png, false);
+			case ENEMY_2:
+				loadGraphic(AssetPaths.ship_1_enemy2__png, false);
 			case NEUTRAL:
 				loadGraphic(AssetPaths.ship_1_neutral__png, false);
 			default:

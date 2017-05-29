@@ -215,7 +215,7 @@ class PlayState extends FlxState {
 		// enemy turn
 		for (enemy in enemies) {
 			var nodes = gameMap.getControlledNodes(enemy.getFaction());
-			if (nodes.length > 0) {
+			if (nodes.members.length > 0) {
 				// make a move if there are controlling factions
 				enemy.makeMove(nodes);
 			}
