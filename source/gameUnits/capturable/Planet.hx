@@ -291,6 +291,8 @@ class Planet extends Capturable {
 				loadGraphic(AssetPaths.planet_1_player__png, false);
 			case ENEMY_1:
 				loadGraphic(AssetPaths.planet_1_enemy1__png, false);
+			case ENEMY_2:
+				loadGraphic(AssetPaths.planet_1_enemy2__png, false);
 			case NEUTRAL:
 				loadGraphic(AssetPaths.planet_1_neutral__png, false);
 			case NOP:
