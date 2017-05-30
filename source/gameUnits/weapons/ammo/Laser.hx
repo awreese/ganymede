@@ -47,7 +47,7 @@ class Pulse extends Laser {
 	
 	public function new(damage:Float) {
 		super(damage);
-        loadGraphic("assets/images/temp_laser2.png", false);
+        loadGraphic("assets/images/pulse_laser.png", false);
 		this.lifespan = 0.5;
 	}
 	
