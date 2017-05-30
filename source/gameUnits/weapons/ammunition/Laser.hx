@@ -1,21 +1,23 @@
-package gameUnits.weapons.ammo;
+package gameUnits.weapons.ammunition;
 
 import flixel.addons.weapon.FlxBullet;
 import gameUnits.Ship;
 
 /**
- * Represents a laser projectile ammo type.
+ * Represents laser projectile ammo type.
  * @author Drew Reese
  */
-class Laser extends FlxBullet  {
+//class Laser extends FlxBullet  {
+class Laser extends Ammunition  {
 	
-	public var target:Ship;
-	private var damage:Float;
+	//public var target:Ship;
+	//private var damage:Float;
 
 	private function new(damage:Float)  {
-		super();
+		//super();
+		super(damage);
 		//loadGraphic("assets/images/temp_laser.png", false, 16, 16);
-		this.damage = damage;
+		//this.damage = damage;
 		this.maxVelocity.set(500.0, 500.0);
         this.accelerates = false;
 	}

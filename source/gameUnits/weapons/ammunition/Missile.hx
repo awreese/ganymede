@@ -1,4 +1,4 @@
-package gameUnits.weapons.ammo;
+package gameUnits.weapons.ammunition;
 
 import flixel.addons.weapon.FlxBullet;
 import flixel.addons.weapon.FlxWeapon.FlxTypedWeapon;
@@ -10,17 +10,17 @@ import gameUnits.Ship;
  * ...
  * @author Drew Reese
  */
-class Missile extends FlxBullet  {
+class Missile extends Ammunition  {
 	
-	private var target:Ship;
-	private var damage:Float;
+	//private var target:Ship;
+	//private var damage:Float;
 	
 
 	private function new(damage:Float)  {
-		super();
+		super(damage);
 		this.accelerates = true;
 		
-		this.damage = damage;
+		//this.damage = damage;
 	}
 	
 	override public function update(elapsed:Float):Void {
