@@ -9,6 +9,7 @@ import flixel.ui.FlxButton;
 import flixel.util.FlxAxes;
 import flixel.util.FlxColor;
 import tutorial.CombatTutorial;
+import tutorial.SelectShipTutorial;
 
 /**
  * ...
@@ -53,15 +54,16 @@ class NextLevelState extends FlxState
 		// create and add replay button
 		replayBtn = new FlxButton(0, 0, "", clickReplay);
 		replayBtn.loadGraphic(AssetPaths.replay_btn__png, false, 176, 78);
-		replayBtn.x = (FlxG.width / 2) - replayBtn.width - 10;
+		replayBtn.x = (FlxG.width / 2) - replayBtn.width * 1.5;
 		replayBtn.y = (FlxG.height) - 2 * replayBtn.height;
 		add(replayBtn);
 		
 		// create and add next level button
 		nextLevelBtn = new FlxButton(0, 0, "", clickNextLevel);
 		nextLevelBtn.loadGraphic(AssetPaths.nextlevel_btn__png, false, 176, 78);
-		nextLevelBtn.x = (FlxG.width / 2) + nextLevelBtn.width + 10;
+		nextLevelBtn.x = (FlxG.width / 2) + nextLevelBtn.width / 2;
 		nextLevelBtn.y = (FlxG.height) - 2 * nextLevelBtn.height;
+		add(nextLevelBtn);
 		
         // Log level end and time
         Main.LOGGER.logLevelEnd({victory: true});
@@ -75,28 +77,16 @@ class NextLevelState extends FlxState
 		if (foreground.y < 0.0) {
 			foreground.y += 400 * elapsed;
 		}
-		if (FlxG.mouse.justPressed) {
-			click();
-		}
 		super.update(elapsed);
-	}
-	
-	// action for clicking replay button
-	private function click():Void {
-		if (Main.LEVEL == 2 && !Main.RESTART) {
-			FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
-			FlxG.switchState(new CombatTutorial());
-		});
-		}
-		FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
-			FlxG.switchState(new PlayState());
-		});
 	}
 	
 	// action for clicking replay button
 	private function clickReplay():Void {
 		if (Main.LEVEL == 2) {
-			Main.LEVEL = 1;
+			Main.LEVEL = 1; // decrement level back to one if tutorial
+			FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
+			FlxG.switchState(new SelectShipTutorial());
+			});
 		}
 		FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
 			FlxG.switchState(new PlayState());
