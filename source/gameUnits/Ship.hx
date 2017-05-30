@@ -22,7 +22,8 @@ import faction.Faction;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
-import flixel.addons.weapon.FlxWeapon.FlxTypedWeapon;
+import gameUnits.weapons.turrets.Turret.Energy;
+import gameUnits.weapons.turrets.Turret.GatlingPulseLaser;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxRect;
 import flixel.math.FlxVector;
@@ -262,7 +263,7 @@ class Ship extends FlxSprite {
 
 	//private var hpBar :FlxText;
 	
-	public var weapon:FlxTypedWeapon<ShipAttack>; // This weapon is used to create ShipAttacks
+	public var weapon:Energy; // This weapon is used to create ShipAttacks
 
 	public function new(destination:MapNode, faction:Faction, blueprint:BluePrint) {
 		super();
@@ -308,18 +309,19 @@ class Ship extends FlxSprite {
 		
         // TODO: Move weapon definition into a Weapons Class, just instantiate here
 		// Creates the weapon that creates bullets
-		this.weapon = new FlxTypedWeapon<ShipAttack>("Laser mk. I", 
-            function(w) { return new ShipAttack(this.attackDamage, 0.0); }, 
-            FlxWeaponFireFrom.PARENT(this, new FlxBounds(this.origin, this.origin)),
-			FlxWeaponSpeedMode.SPEED(new FlxBounds(0.0, 0.0))
-        );
-        this.weapon.bulletLifeSpan = new FlxBounds(2.5, 2.5);
-        //this.weapon.bulletLifeSpan = new FlxBounds(2.0, 2.0);
-		this.weapon.bounds = new FlxRect(0, 0, FlxG.width, FlxG.height);
-		// firerate = (attacks/second)^-1 * (1000 ms/second) = (second/attack) * 1000 (ms/second) = 1000/attackspeed
+        
+        this.weapon = new GatlingPulseLaser(this);
+        
+		//this.weapon = new FlxTypedWeapon<ShipAttack>("Laser mk. I", 
+            //function(w) { return new ShipAttack(this.attackDamage, 500.0); }, 
+            //FlxWeaponFireFrom.PARENT(this, new FlxBounds(this.origin, this.origin)),
+			//FlxWeaponSpeedMode.SPEED(new FlxBounds(450.0, 550.0))
+        //);
+        //this.weapon.bulletLifeSpan = new FlxBounds(0.5, 0.5);
+		//this.weapon.bounds = new FlxRect(0, 0, FlxG.width, FlxG.height);
+		//// firerate = (attacks/second)^-1 * (1000 ms/second) = (second/attack) * 1000 (ms/second) = 1000/attackspeed
 		//this.weapon.fireRate = Math.round(1000 / this.attackSpeed);
-		this.weapon.fireRate = 5000;
-        FlxG.state.add(this.weapon.group); // Add weapon group here, all bullets part of this group
+        //FlxG.state.add(this.weapon.group); // Add weapon group here, all bullets part of this group
 		
 		//hpBar = new FlxText(this.x, this.y - this.height, 0, "" + stats.hitPoints, 16);
 		//FlxG.state.add(hpBar);
@@ -401,7 +403,7 @@ class Ship extends FlxSprite {
         // combat
         var targetShip = this.radar.selectTarget();
         if (targetShip != null && this.weapon.fireAtTarget(targetShip)) {
-			this.weapon.currentBullet.source = this;
+			//this.weapon.currentBullet.source = this;
             this.weapon.currentBullet.target = targetShip;
         }
         
