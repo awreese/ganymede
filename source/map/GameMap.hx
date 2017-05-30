@@ -24,6 +24,7 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.math.FlxPoint;
 import flixel.math.FlxVector;
+import gameUnits.Ship;
 import gameUnits.Ship.BluePrint;
 import gameUnits.Ship.HullType;
 import gameUnits.capturable.Capturable;
@@ -99,7 +100,7 @@ class GameMap extends FlxSprite {
         this.setGraph();
 		
         // Log level start and time
-        Main.LOGGER.logLevelStart(level, Date.now());
+        Main.LOGGER.logLevelStart(level);
 		
 		parseLevel(playState);
         
@@ -121,7 +122,7 @@ class GameMap extends FlxSprite {
 		var z = FlxG.stage.width  / (maxX - minX);
 		z = z > FlxG.stage.height / (maxY - minY) ? FlxG.stage.height / (maxY - minY) : z; // set to smallest zoom
 
-		FlxG.camera.zoom = z > 1.25 ? z : 1; // zoom into map*/
+		FlxG.camera.zoom = z > 1.25 ? z : 1; // zoom into map
 	}
 
 	public function findNode(v: FlxVector):MapNode {
@@ -326,7 +327,6 @@ class GameMap extends FlxSprite {
 	private function parseLevel(playState:PlayState):Void {
 		var file = Assets.getText("assets/data/level" + Main.LEVEL + ".json"); // get string of json
 		var data = Json.parse(file); // parse json
-
 		enemyAi = data.ai; // get ai time
 		var nodes = data.nodes; // get nodes
 		var neighbors = data.neighbors; // get neighbors

@@ -1,0 +1,161 @@
+{
+	"ai": 3,
+	"nodes": [
+		{
+			"id": "node1",
+			"x": 640.0,
+			"y": 220.0,
+			"faction": "enemy1",
+			"planet": {
+				"planet_template": "level1",
+				"ship_template": "frigate"
+			}
+		},
+		{
+			"id": "node2",
+			"x": 540.0,
+			"y": 300.0,
+			"faction": "enemy1",
+			"planet": {
+				"planet_template": "level1",
+				"ship_template": "frigate"
+			}
+		},
+		{
+			"id": "node3",
+			"x": 560.0,
+			"y": 420.0,
+			"faction": "nop",
+			"planet": {
+				"planet_template": "level1",
+				"ship_template": "frigate"
+			}
+		},
+		{
+			"id": "node4",
+			"x": 720.0,
+			"y": 420.0,
+			"faction": "player",
+			"planet": {
+				"planet_template": "level1",
+				"ship_template": "frigate"
+			}
+		},
+		{
+			"id": "node5",
+			"x": 740.0,
+			"y": 300.0,
+			"faction": "nop",
+			"planet": {
+				"planet_template": "level1",
+				"ship_template": "frigate"
+			}
+		},
+		{
+			"id": "node6",
+			"x": 840.0,
+			"y": 300.0,
+			"faction": "nop",
+			"planet": {
+				"planet_template": "level1",
+				"ship_template": "frigate"
+			}
+		},
+		{
+			"id": "node7",
+			"x": 740.0,
+			"y": 120.0,
+			"faction": "enemy1",
+			"planet": {
+				"planet_template": "level1",
+				"ship_template": "frigate"
+			}
+		},
+		{
+			"id": "node8",
+			"x": 540.0,
+			"y": 120.0,
+			"faction": "nop",
+			"planet": {
+				"planet_template": "level1",
+				"ship_template": "frigate"
+			}
+		},
+		{
+			"id": "node9",
+			"x": 440.0,
+			"y": 300.0,
+			"faction": "nop",
+			"planet": {
+				"planet_template": "level1",
+				"ship_template": "frigate"
+			}
+		},
+		{
+			"id": "node10",
+			"x": 540.0,
+			"y": 520.0,
+			"faction": "nop",
+			"planet": {
+				"planet_template": "level1",
+				"ship_template": "frigate"
+			}
+		},
+		{
+			"id": "node11",
+			"x": 740.0,
+			"y": 520.0,
+			"faction": "player",
+			"planet": {
+				"planet_template": "level1",
+				"ship_template": "frigate"
+			}
+		}
+	],
+	"neighbors":[ 
+		{
+			"id": "node1",
+			"neighbor": ["node4", "node3", "node2", "node5"]
+		},
+		{
+			"id": "node2",
+			"neighbor": ["node4", "node5", "node1", "node3"]
+		},
+		{
+			"id": "node3",
+			"neighbor": ["node1", "node5", "node2", "node4"]
+		},
+		{
+			"id": "node4",
+			"neighbor": ["node1", "node2", "node3", "node5"]
+		},
+		{
+			"id": "node5",
+			"neighbor": ["node2", "node3", "node1", "node4"]
+		},
+		{
+			"id": "node6",
+			"neighbor": ["node5", "node7", "node11"]
+		},
+		{
+			"id": "node7",
+			"neighbor": ["node6", "node8"]
+		},
+		{
+			"id": "node8",
+			"neighbor": ["node7", "node9"]
+		},
+		{
+			"id": "node9",
+			"neighbor": ["node2", "node8", "node10"]
+		},
+		{
+			"id": "node10",
+			"neighbor": ["node9", "node11"]
+		},
+		{
+			"id": "node11",
+			"neighbor": ["node10", "node6"]
+		}
+	]
+}
