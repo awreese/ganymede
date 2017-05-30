@@ -12,10 +12,12 @@ import gameUnits.weapons.ammunition.Ammunition;
 import gameUnits.weapons.ammunition.Laser;
 
 /**
- * ...
+ * This class represents the in-game turrets.
+ * Basic turret classes are (high damage low range/low damage high range): 
+ * Energy (Pulse/Beam Laser), Projectile (Autocannon/Artillery), and Hybrid 
+ * (Blasters/Railguns)
  * @author Drew Reese
  */
-//class Turret extends FlxTypedWeapon<FlxBullet> {
 class Turret extends FlxTypedWeapon<Ammunition> {
 
     private function new(name:String, bulletFactory:FlxTypedWeapon<Ammunition>->Ammunition, fireFrom:FlxWeaponFireFrom, speedMode:FlxWeaponSpeedMode) {
@@ -27,8 +29,9 @@ class Turret extends FlxTypedWeapon<Ammunition> {
     
 }
 
-//class Energy extends Turret {
-//class Energy extends FlxTypedWeapon<Laser> {
+/**
+ * Energy Turrets - Pulse & Beam Lasers
+ */
 class Energy extends Turret {
 	
 	private function new(name:String, ammoFactory:FlxTypedWeapon<Ammunition>->Ammunition, fireFrom:FlxWeaponFireFrom, speedMode:FlxWeaponSpeedMode) {

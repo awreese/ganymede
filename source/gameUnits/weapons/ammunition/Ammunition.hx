@@ -17,4 +17,17 @@ class Ammunition extends FlxBullet {
 		this.damage = damage;
     }
     
+    override public function update(elapsed:Float):Void {
+        super.update(elapsed);
+        
+        // check if target exists & test collision
+		if (target.exists && this.overlaps(target)) {
+            
+            // Do damage to target & destroy missile
+            target.hurt(damage);
+            // maybe show explosion animation?
+            this.kill();
+		}
+    }
+    
 }

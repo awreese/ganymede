@@ -23,8 +23,6 @@ import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import gameUnits.weapons.turrets.Turret;
-import gameUnits.weapons.turrets.Turret.Energy;
-import gameUnits.weapons.turrets.Turret.GatlingPulseLaser;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxRect;
 import flixel.math.FlxVector;
@@ -264,7 +262,7 @@ class Ship extends FlxSprite {
 
 	//private var hpBar :FlxText;
 	
-	public var weapon:Turret; // This weapon is used to create ShipAttacks
+	private var weapon:Turret; // This weapon is used to create ShipAttacks
 
 	public function new(destination:MapNode, faction:Faction, blueprint:BluePrint) {
 		super();

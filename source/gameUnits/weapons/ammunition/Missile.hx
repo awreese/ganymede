@@ -12,15 +12,10 @@ import gameUnits.Ship;
  */
 class Missile extends Ammunition  {
 	
-	//private var target:Ship;
-	//private var damage:Float;
-	
-
 	private function new(damage:Float)  {
 		super(damage);
 		this.accelerates = true;
-		
-		//this.damage = damage;
+        
 	}
 	
 	override public function update(elapsed:Float):Void {
