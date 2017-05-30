@@ -169,7 +169,7 @@ class MovingShipTutorial extends FlxState {
 		
 		if (captureBar.value >= 100.0 && waitTimer >= 0.75) {
 			FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
-			FlxG.switchState(new NextLevelState());
+			FlxG.switchState(new NextTutorialState());
 		});
 		}
 	}

@@ -20,11 +20,11 @@ class NextLevelState extends FlxState
 	private var congratulationsTxt:FlxText;
 	private var background:FlxSprite;
 	private var applauseSnd:FlxSound;
+	private var replayBtn:FlxButton;
+	private var nextLevelBtn:FlxButton;
 	
 	override public function create():Void
-	{
-		Main.LEVEL++;
-		
+	{		
 		// load sound effect
 		#if flash
 			applauseSnd = FlxG.sound.load(AssetPaths.applause__mp3);
@@ -49,6 +49,19 @@ class NextLevelState extends FlxState
 		congratulationsTxt.alignment = CENTER;
 		congratulationsTxt.screenCenter(FlxAxes.XY);
 		add(congratulationsTxt);
+		
+		// create and add replay button
+		replayBtn = new FlxButton(0, 0, "", clickReplay);
+		replayBtn.loadGraphic(AssetPaths.replay_btn__png, false, 176, 78);
+		replayBtn.x = (FlxG.width / 2) - replayBtn.width - 10;
+		replayBtn.y = (FlxG.height) - 2 * replayBtn.height;
+		add(replayBtn);
+		
+		// create and add next level button
+		nextLevelBtn = new FlxButton(0, 0, "", clickNextLevel);
+		nextLevelBtn.loadGraphic(AssetPaths.nextlevel_btn__png, false, 176, 78);
+		nextLevelBtn.x = (FlxG.width / 2) + nextLevelBtn.width + 10;
+		nextLevelBtn.y = (FlxG.height) - 2 * nextLevelBtn.height;
 		
         // Log level end and time
         Main.LOGGER.logLevelEnd({victory: true});
@@ -75,6 +88,24 @@ class NextLevelState extends FlxState
 			FlxG.switchState(new CombatTutorial());
 		});
 		}
+		FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
+			FlxG.switchState(new PlayState());
+		});
+	}
+	
+	// action for clicking replay button
+	private function clickReplay():Void {
+		if (Main.LEVEL == 2) {
+			Main.LEVEL = 1;
+		}
+		FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
+			FlxG.switchState(new PlayState());
+		});
+	}
+	
+	// action for clicking next level button
+	private function clickNextLevel():Void {
+		Main.LEVEL++;
 		FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
 			FlxG.switchState(new PlayState());
 		});
