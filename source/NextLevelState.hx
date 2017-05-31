@@ -82,7 +82,7 @@ class NextLevelState extends FlxState
 	
 	// action for clicking replay button
 	private function clickReplay():Void {
-		if (Main.LEVEL == 2) {
+		if (Main.LEVEL == 2 && !Main.RESTART) {
 			Main.LEVEL = 1; // decrement level back to one if tutorial
 			FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
 			FlxG.switchState(new SelectShipTutorial());
