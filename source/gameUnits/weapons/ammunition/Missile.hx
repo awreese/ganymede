@@ -7,7 +7,7 @@ import flixel.addons.weapon.FlxWeapon.FlxWeaponSpeedMode;
 import gameUnits.Ship;
 
 /**
- * ...
+ * Missiles are used for launchers.
  * @author Drew Reese
  */
 class Missile extends Ammunition  {

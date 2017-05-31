@@ -9,6 +9,7 @@ import flixel.addons.weapon.FlxWeapon.FlxWeaponFireFrom;
 import flixel.addons.weapon.FlxWeapon.FlxWeaponSpeedMode;
 import flixel.util.helpers.FlxBounds;
 import gameUnits.weapons.ammunition.Ammunition;
+import gameUnits.weapons.ammunition.Ammunition.Charge;
 import gameUnits.weapons.ammunition.Laser;
 
 /**
@@ -18,13 +19,20 @@ import gameUnits.weapons.ammunition.Laser;
  * (Blasters/Railguns)
  * @author Drew Reese
  */
-class Turret extends FlxTypedWeapon<Ammunition> {
+//class Turret extends FlxTypedWeapon<Ammunition> {
+class Turret extends FlxTypedWeapon<Charge> {
+    
+    private var turretSize:WeaponSize;
 
-    private function new(name:String, bulletFactory:FlxTypedWeapon<Ammunition>->Ammunition, fireFrom:FlxWeaponFireFrom, speedMode:FlxWeaponSpeedMode) {
+    private function new(name:String, bulletFactory:FlxTypedWeapon<Charge>->Charge, fireFrom:FlxWeaponFireFrom, speedMode:FlxWeaponSpeedMode) {
         super(name, bulletFactory, fireFrom, speedMode);
 		
         this.rotateBulletTowardsTarget = true;
         this.bounds.set(0, 0, FlxG.width, FlxG.height);
+    }
+    
+    public function getSize():WeaponSize {
+        return this.turretSize;
     }
     
 }
@@ -34,11 +42,8 @@ class Turret extends FlxTypedWeapon<Ammunition> {
  */
 class Energy extends Turret {
 	
-	private function new(name:String, ammoFactory:FlxTypedWeapon<Ammunition>->Ammunition, fireFrom:FlxWeaponFireFrom, speedMode:FlxWeaponSpeedMode) {
+	private function new(name:String, ammoFactory:FlxTypedWeapon<Charge>->Charge, fireFrom:FlxWeaponFireFrom, speedMode:FlxWeaponSpeedMode) {
 		super(name, ammoFactory, fireFrom, speedMode);
-		
-        this.rotateBulletTowardsTarget = true;
-        this.bounds.set(0, 0, FlxG.width, FlxG.height);
 	}
 }
 
@@ -58,6 +63,7 @@ class GatlingPulseLaser extends Energy {
         );
         this.bulletLifeSpan = new FlxBounds(0.05, 0.05);
 		this.fireRate = 1000;
+        this.turretSize = WeaponSize.SMALL;
         
         FlxG.state.add(this.group);
     }

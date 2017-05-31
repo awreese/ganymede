@@ -2,18 +2,17 @@ package gameUnits.weapons.ammunition;
 
 import flixel.addons.weapon.FlxBullet;
 import gameUnits.Ship;
+import gameUnits.weapons.ammunition.Ammunition.Charge;
 
 /**
  * Represents laser projectile ammo type.
  * @author Drew Reese
  */
-//class Laser extends FlxBullet  {
-class Laser extends Ammunition  {
+class Laser extends Charge {
 	
 	private function new(damage:Float)  {
 		super(damage);
 		this.maxVelocity.set(500.0, 500.0);
-        this.accelerates = false;
 	}
 	
 }

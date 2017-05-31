@@ -31,3 +31,13 @@ class Ammunition extends FlxBullet {
     }
     
 }
+
+/**
+ * Charges are used for turrets.
+ */
+class Charge extends Ammunition {
+    private function new(damage:Float) {
+        super(damage);
+        this.accelerates = false;
+    }
+}

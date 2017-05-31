@@ -11,9 +11,15 @@ import gameUnits.weapons.ammunition.Missile;
  */
 class Launcher extends FlxTypedWeapon<Missile> {
 
+    private var launcherSize:WeaponSize;
+    
     public function new(name:String, bulletFactory:FlxTypedWeapon<Missile> -> Missile, fireFrom:FlxWeaponFireFrom, speedMode:FlxWeaponSpeedMode) {
         super(name, bulletFactory, fireFrom, speedMode);
 		
+    }
+    
+    public function getSize():WeaponSize {
+        return this.launcherSize;
     }
     
 }
