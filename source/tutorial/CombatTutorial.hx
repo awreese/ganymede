@@ -39,6 +39,7 @@ class CombatTutorial extends FlxState
 	private var hitPlayer:Bool;
 	private var laserSnd:FlxSound;
 	private var isRed:Bool;
+	private var playerPlanetBtn:FlxButton;
 	
 	override public function create():Void
 	{
@@ -63,6 +64,14 @@ class CombatTutorial extends FlxState
 		enemyPlanet.x -= enemyPlanet.origin.x;
 		enemyPlanet.y -= enemyPlanet.origin.y;
 		add(enemyPlanet);
+		
+		// create player planet button
+		playerPlanetBtn = new FlxButton(472 + 16, 344 + 16, "", clickShip);
+		playerPlanetBtn.loadGraphic(AssetPaths.planet_1_player__png, false, 32, 32);
+		playerPlanetBtn.x -= playerPlanetBtn.origin.x;
+		playerPlanetBtn.y -= playerPlanetBtn.origin.y;
+		playerPlanetBtn.scrollFactor.set(1, 1);
+		add(playerPlanetBtn);
 		
 		// create ship button
 		playerShip = new FlxButton(472+16, 344+16, "", clickShip);

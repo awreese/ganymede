@@ -24,6 +24,7 @@ class SelectShipTutorial extends FlxState
 	private var cursorInPlace:Bool;
 	private var nop:FlxSprite;
 	private var waitTimer:Float;
+	private var playerPlanetBtn:FlxButton;
 	
 	override public function create():Void
 	{
@@ -34,6 +35,14 @@ class SelectShipTutorial extends FlxState
 		
 		timer = 0.0;
 		waitTimer = 0.0;
+		
+		// create player planet button
+		playerPlanetBtn = new FlxButton(472 + 16, 344 + 16, "", clickShip);
+		playerPlanetBtn.loadGraphic(AssetPaths.planet_1_player__png, false, 32, 32);
+		playerPlanetBtn.x -= playerPlanetBtn.origin.x;
+		playerPlanetBtn.y -= playerPlanetBtn.origin.y;
+		playerPlanetBtn.scrollFactor.set(1, 1);
+		add(playerPlanetBtn);
 		
 		// create ship button
 		shipBtn = new FlxButton(472+16, 344+16, "", clickShip);
