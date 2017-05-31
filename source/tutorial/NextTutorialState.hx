@@ -1,4 +1,4 @@
-package;
+package tutorial;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -24,7 +24,7 @@ class NextTutorialState extends FlxState
 	
 	override public function create():Void
 	{
-		Main.LEVEL++;
+		Main.LEVEL = 2;
 		waitTime = 0.0;
 		
 		// load sound effect
@@ -67,10 +67,19 @@ class NextTutorialState extends FlxState
 		if (foreground.y >= 0.0) {
 			waitTime += elapsed;
 		}
-		if (waitTime >= 3.0) {
-			FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
-			FlxG.switchState(new CombatTutorial());
+		if (waitTime >= 1.5) {
+			nextState(); // afte 1.5 sec after animation, move to next tutorial
+		}
+		if (FlxG.mouse.justPressed) {
+			nextState(); // if clicked w/ mouse, move to next tutorial
 		}
 		super.update(elapsed);
+	}
+	
+	// go to next state
+	private function nextState():Void {
+		FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
+			FlxG.switchState(new CombatTutorial());
+			});
 	}
 }
