@@ -19,7 +19,8 @@ import js.html.Storage;
 class CapstoneLogger 
 {
 	static var devUrl:String = "http://dev.ws.centerforgamescience.com/cgs/apps/games/v2/index.php/";
-	static var prdUrl:String = "http://prd.ws.centerforgamescience.com/cgs/apps/games/v2/index.php/";
+	//static var prdUrl:String = "http://prd.ws.centerforgamescience.com/cgs/apps/games/v2/index.php/";
+	static var prdUrl:String = "https://integration.centerforgamescience.org/cgs/apps/games/v2/index.php/";
 	
 	/*
 	 * Properties specific to each game
