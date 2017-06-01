@@ -133,7 +133,7 @@ class CombatTutorial extends FlxState
 		FlxG.camera.zoom = FlxG.height / 330;
 		
 		// Log level start and time
-        //Main.LOGGER.logLevelStart(Main.LEVEL, Date.now());
+        Main.LOGGER.logLevelStart(Main.LEVEL, Date.now());
 		
 		super.create();
 	}
