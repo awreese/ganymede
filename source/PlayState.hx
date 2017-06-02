@@ -48,18 +48,10 @@ class PlayState extends FlxState {
 	private var rand:FlxRandom;
 	private var numPlayerFaction:Int;
 	private var enemies: Array<Enemy>;
-	private var laser_snd: FlxSound;
 
 	override public function create():Void {
 		rand = new FlxRandom();
 		enemies = new Array<Enemy>();
-
-		#if flash
-			laser_snd = FlxG.sound.load(AssetPaths.laser__mp3);
-		#else
-			laser_snd = FlxG.sound.load(AssetPaths.laser__wav);
-		#end
-		laser_snd.looped = false;
 
 		// Initialize the map
 		grpMap = new FlxTypedGroup<GameMap>();        ///
@@ -120,6 +112,14 @@ class PlayState extends FlxState {
 
 		// Selecting ships
 		if (FlxG.mouse.justPressed) {
+            
+            Main.LOGGER.logLevelAction(1, 
+                {
+                    x: FlxG.mouse.x, 
+                    y: FlxG.mouse.y, 
+                    button: 1
+                });
+ 
 			var n = gameMap.findNode(new FlxVector(FlxG.mouse.x, FlxG.mouse.y));
 			//var n = gameMap.findNode(FlxG.mouse.getPosition());
 			if (n == null) {
@@ -159,11 +159,26 @@ class PlayState extends FlxState {
                     }
                 }
                 
+                // Log selecting a planet
+                Main.LOGGER.logLevelAction(2, 
+                    {
+                        x: n.x, 
+                        y: n.y
+                    });
+                
 			}
 		}
 
 		// Ordering ships to move
 		if (FlxG.mouse.justPressedRight) {
+            
+            Main.LOGGER.logLevelAction(1, 
+                {
+                    x: FlxG.mouse.x, 
+                    y: FlxG.mouse.y, 
+                    button: 2
+                });
+ 
 			var n = gameMap.findNode(new FlxVector(FlxG.mouse.x, FlxG.mouse.y));
 			if (n != null) {
 				// old loop
@@ -176,13 +191,23 @@ class PlayState extends FlxState {
                 
                 // new loop
                 //for (ship in shipgroupByFaction.get(PLAYER)) {
+                var shipCount:Int = 0;
                 for (ship in shipGroup) {
                     //if (ship.isSelected) {
                     if (ship.getFactionType() == PLAYER && ship.isSelected) {
 						ship.isSelected = false;
 						ship.pathTo(n);
+                        shipCount++;
 					}
                 }
+                
+                // Log ordering ships
+  				Main.LOGGER.logLevelAction(3, 
+                    {
+                        x: n.x, 
+                        y: n.y, 
+                        num: shipCount
+                    });
                 
 			}
 		}
@@ -190,7 +215,7 @@ class PlayState extends FlxState {
 		// enemy turn
 		for (enemy in enemies) {
 			var nodes = gameMap.getControlledNodes(enemy.getFaction());
-			if (nodes.length > 0) {
+			if (nodes.members.length > 0) {
 				// make a move if there are controlling factions
 				enemy.makeMove(nodes);
 			}
