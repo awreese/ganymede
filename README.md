@@ -14,4 +14,7 @@ Gather your forces and test your fortitude against a rising threat.  Command you
 * Rory Soiffer
 
 # Play Online (* demo)
-[newgrounds.com](http://www.newgrounds.com/portal/view/693430 "AstroRush") *
+* [newgrounds.com](http://www.newgrounds.com/portal/view/693430 "AstroRush") *
+* [gamejolt.com](http://gamejolt.com/games/astrorush/258084 "AstroRush") *
+* [itch.io](https://dazeforever.itch.io/astrorush "AstroRush") *
+* [kongregate.com](http://www.kongregate.com/games/manydazelater/astrorush "AstroRush") *

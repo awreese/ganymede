@@ -10,7 +10,7 @@
 				"object": "planet",
 				"blueprint": {
 					"hull": "frigate",
-					"maxVel": 30.0,
+					"maxVel": 60.0,
 					"sh": 0.5,
 					"hp": 100.0,
 					"as": 2.0,
@@ -36,7 +36,7 @@
 				"object": "planet",
 				"blueprint": {
 					"hull": "frigate",
-					"maxVel": 30.0,
+					"maxVel": 60.0,
 					"sh": 0.5,
 					"hp": 100.0,
 					"as": 2.0,
