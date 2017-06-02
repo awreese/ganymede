@@ -262,7 +262,7 @@ class Ship extends FlxSprite {
 
 	//private var hpBar :FlxText;
 	
-	private var weapon:Turret; // This weapon is used to create ShipAttacks
+	private var weapon:Turret;
 
 	public function new(destination:MapNode, faction:Faction, blueprint:BluePrint) {
 		super();
@@ -311,17 +311,6 @@ class Ship extends FlxSprite {
         
         this.weapon = new GatlingPulseLaser(this);
         
-		//this.weapon = new FlxTypedWeapon<ShipAttack>("Laser mk. I", 
-            //function(w) { return new ShipAttack(this.attackDamage, 500.0); }, 
-            //FlxWeaponFireFrom.PARENT(this, new FlxBounds(this.origin, this.origin)),
-			//FlxWeaponSpeedMode.SPEED(new FlxBounds(450.0, 550.0))
-        //);
-        //this.weapon.bulletLifeSpan = new FlxBounds(0.5, 0.5);
-		//this.weapon.bounds = new FlxRect(0, 0, FlxG.width, FlxG.height);
-		//// firerate = (attacks/second)^-1 * (1000 ms/second) = (second/attack) * 1000 (ms/second) = 1000/attackspeed
-		//this.weapon.fireRate = Math.round(1000 / this.attackSpeed);
-        //FlxG.state.add(this.weapon.group); // Add weapon group here, all bullets part of this group
-		
 		//hpBar = new FlxText(this.x, this.y - this.height, 0, "" + stats.hitPoints, 16);
 		//FlxG.state.add(hpBar);
 	}
