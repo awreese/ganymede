@@ -39,9 +39,6 @@ class PlayState extends FlxState {
 	private var grpMap: FlxTypedGroup<GameMap>;
 	private var gameMap: GameMap;
 	
-    //public var grpShips: ShipGroup;
-    // TODO: turn above into below
-	//private var shipgroupByFaction:Map<FactionType, ShipGroup>;
     private var shipGroup:ShipGroup;
     
     private var grpPlanets: FlxTypedGroup<gameUnits.capturable.Planet>;
