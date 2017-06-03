@@ -57,7 +57,7 @@ class Capturable extends FlxSprite {
         this.node = node;
         this.faction = faction;
         this.captureEngine = new CaptureEngine(this.faction.getFactionType(), 100.0); // TODO: Move CP to constructor
-		
+        
 		// create capturebar and add it to the graphics
 		captureBar = new FlxBar(0, 0, LEFT_TO_RIGHT, 50, 10, null, "", 0, captureEngine.getMaxControllingPoint(), true);
 		captureBar.x = node.x - 25;
