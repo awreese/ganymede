@@ -548,14 +548,12 @@ class ShipFactory {
 	 */
 	public function produceShip(elapsed:Float):Bool {
 		this._timeSinceLast += elapsed;
-		if (initial() || canProduce()) {
+		if (notNOP() && (initial() || canProduce())) {
 			this._timeSinceLast = 0.0;
-			//this._planet.playState.add(new Ship(_planet.getNode(), _planet.getFaction(), _producedShip.clone()));
 			var ship:Ship =  new Ship(_planet.getNode(), _planet.getFaction(), _producedShip.clone());
             
-            // TODO: add ship to state's shipgroupByFaction map to be rendered
-            // TODO: add ship to node for tracking
-            //FlxG.state.
+            cast(FlxG.state, PlayState).addShip(ship);
+            this._planet.getNode().addShip(ship);
 		}
 		return null;
 	}
@@ -578,7 +576,8 @@ class ShipFactory {
 	 * @return true iff a ship is producable
 	 */
 	private function canProduce(): Bool {
-		return this._timeSinceLast >= productionTime();
+		//return this._timeSinceLast >= productionTime();
+        return underCapacity() && this._timeSinceLast >= productionTime();
 	}
 
 	/**
@@ -589,5 +588,13 @@ class ShipFactory {
 		// TODO: Incorporate global capacity into this factory's production line
 		return this._planet.getStats().prod;
 	}
+    
+    private function underCapacity():Bool {
+        return this._planet.getNode().getShipGroup(this._planet.getFaction().getFactionType()).members.length < this._planet.getStats().cap;
+    }
+    
+    private function notNOP():Bool {
+        return this._planet.getFaction().getFactionType() != NOP;
+    }
 
 }
