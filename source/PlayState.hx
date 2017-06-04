@@ -21,11 +21,15 @@ package;
 import Main;
 import faction.Faction;
 import flixel.FlxG;
+import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxRandom;
 import flixel.math.FlxVector;
 import flixel.system.FlxSound;
+import flixel.text.FlxText;
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import gameUnits.Ship;
 import gameUnits.Ship.ShipGroup;
@@ -45,11 +49,14 @@ class PlayState extends FlxState {
 	private var rand:FlxRandom;
 	private var numPlayerFaction:Int;
 	private var enemies: Array<Enemy>;
+    
+    private var tutor:Tutorial;
+    //private var mouse:FlxSprite;
 
 	override public function create():Void {
 		rand = new FlxRandom();
 		enemies = new Array<Enemy>();
-
+        
 		// Initialize the map
 		grpMap = new FlxTypedGroup<GameMap>();        ///
 		add(grpMap);                                    //____ WTF is this?
@@ -70,6 +77,16 @@ class PlayState extends FlxState {
 				enemies.push(new Enemy(faction, gameMap.getAiTime()));
 			}
 		}
+        
+        //mouse = new FlxSprite();
+        //mouse.loadGraphic(AssetPaths.mouse_left__png, false, 92, 141);
+        ////mouse.animation.add("left_click", [0, 1], 6, true);
+        ////mouse.animation.add("right_click", [0, 2], 6, true);
+        //mouse.x = 100;
+        //mouse.y = 300;
+        //mouse.visible = true;
+        //add(mouse);
+        this.tutor = new Tutorial(this);
 		
 		super.create();
 	}
@@ -82,7 +99,8 @@ class PlayState extends FlxState {
 		/*
 		 * Check and update any game state
 		 */
-        
+        //Tutorial.checkTutorial(this, elapsed);
+        tutor.checkTutorial(elapsed);
         
         for (ship in shipGroup) {
             if (ship.exists) {
@@ -276,6 +294,9 @@ class PlayState extends FlxState {
         this.shipGroup.add(ship);
     }
 	
+    public function getShipGroup():Array<Ship> {
+        return this.shipGroup.members.copy();
+    }
 	
 	/*
 	 * This function handles all the flocking behavior of the ships. It does so by iterating
@@ -356,4 +377,121 @@ class PlayState extends FlxState {
 			//}
 		//}
 	//}
+}
+
+class Tutorial {
+    
+    private var ps:PlayState;
+    private var checkpoint:Int;
+    private var triggered:Bool;
+    private var time:Float;
+    
+    private static var NEED_HELP:String = "Looks like you're having some trouble.";
+    private var mouse:FlxSprite;
+    private var cursor:FlxSprite;
+    private var textBox:FlxText;
+    
+    public function new(state:PlayState) {
+        this.ps = state;
+        checkpoint = 0;
+        triggered = false;
+        //resetTime();
+        
+        // initialize cursor
+        cursor = new FlxSprite(FlxG.width/2, FlxG.height/2, AssetPaths.cursor__png);
+        ps.add(cursor);
+        
+        // initialize mouse
+        mouse = new FlxSprite();
+        mouse.loadGraphic(AssetPaths.mouse_a__png, true, 92, 141);
+        mouse.animation.add("left_click", [0, 1], 1, true);
+        mouse.animation.add("right_click", [0, 2], 1, true);
+        mouse.screenCenter();
+        ps.add(mouse);
+        
+        textBox = new FlxText(100, 50, 0, NEED_HELP);
+        textBox.setFormat("Consola", 25);
+        //textBox.wordWrap = true;
+        ps.add(textBox);
+        
+        reset();
+        
+    }
+    
+    private function reset():Void {
+        time = 0.0;
+        
+        //cursor.screenCenter();
+        cursor.visible = false;
+        
+        //mouse.screenCenter();
+        mouse.animation.stop();
+        mouse.visible = false;
+        
+        textBox.text = NEED_HELP;
+        textBox.visible = false;
+        
+        triggered = false;
+    }
+    
+    private function displayHelp(text:String):Void {
+        textBox.text = text;
+        textBox.visible = true;
+    }
+    
+    private function displayMouse(animation:String):Void {
+        mouse.visible = true;
+        mouse.animation.play(animation);
+    }
+    
+    public function checkTutorial(elapsed:Float):Void {
+        //ps = state;
+        time += elapsed;
+        
+        switch(Main.LEVEL) {
+            case 1:
+                tutorial_one(elapsed);
+            default:
+        }
+    }
+    
+    private function tutorial_one(elapsed:Float):Void {
+        //trace("Tutorial 1 - current checkpoint: " + checkpoint);
+        switch(checkpoint) {
+            case 0:
+                selectUnits();
+            case 1:
+                
+            default:
+        }
+    }
+    
+    private function selectUnits():Void {
+        //var unitSelected:Bool = false;
+        
+        for (ship in ps.getShipGroup()) {
+            if (ship.isSelected) {
+                checkpoint++;
+                reset();
+                //FlxTween.tween(textBox,
+                return;
+            }
+        }
+        
+        if (time >= 10 && !triggered) {
+            // show animation
+            triggered = true;
+            //trace("10 seconds expired, show select unit animation");
+            //trace(mouse);
+            
+            displayHelp(NEED_HELP + " Try left-clicking a planet to select a unit.");
+            displayMouse("left_click");
+            
+            cursor.visible = true;
+            cursor.setPosition(FlxG.mouse.x, FlxG.mouse.y);
+            FlxTween.tween(cursor, {x: 100, y: 275}, 1.25, {type: FlxTween.LOOPING, loopDelay: 2, ease: FlxEase.quadInOut});
+        }
+        
+        //return false;
+    }
 }

@@ -83,8 +83,6 @@ class MapNode extends FlxObject {
         
         this.capturable = null;
         
-        trace("node hitbox: " + this.getHitbox().toString());
-        
         // create empty faction ship groups
         factionShips = new Map<FactionType, ShipGroup>();
         for (faction in Faction.getEnums()) {

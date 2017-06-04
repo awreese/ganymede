@@ -3,8 +3,8 @@
 	"nodes": [
 		{
 			"id": "node1",
-			"x": 472.0,
-			"y": 344.0,
+			"x": 100.0,
+			"y": 275.0,
 			"faction": "player",
 			"captureable": {
 				"object": "planet",
@@ -17,7 +17,7 @@
 					"ad": 10.0,
 					"cps": 5.0
 				},
-				"cap": 10,
+				"cap": 1,
 				"prod": 3.0,
 				"prod_thresh": 0.5,
 				"cap_lvl": 0,
@@ -29,40 +29,38 @@
 		},
 		{
 			"id": "node2",
-			"x": 697.0,
-			"y": 344.0,
+			"x": 200.0,
+			"y": 200.0
+		},
+        {
+			"id": "node3",
+			"x": 200.0,
+			"y": 350.0
+		},
+        {
+			"id": "node4",
+			"x": 200.0,
+			"y": 500.0
+		},
+        {
+			"id": "node5",
+			"x": 300.0,
+			"y": 500.0,
 			"faction": "nop",
-			"captureable": {
-				"object": "planet",
-				"blueprint": {
-					"hull": "frigate",
-					"maxVel": 60.0,
-					"sh": 0.5,
-					"hp": 100.0,
-					"as": 2.0,
-					"ad": 10.0,
-					"cps": 5.0
-				},
-				"cap": 10,
-				"prod": 5.0,
-				"prod_thresh": 0.5,
-				"cap_lvl": 0,
-				"tech_lvl": 0,
-				"base_cost": 10,
-				"cap_per_lvl": 5,
-				"tech_per_lvl": 2.0
+			"planet": {
+				"planet_template": "level1",
+				"ship_template": "frigate"
 			}
-
 		}
 	],
 	"neighbors":[ 
 		{
 			"id": "node1",
-			"neighbor": ["node2"]
+			"neighbor": ["node2", "node3", "node4"]
 		},
 		{
-			"id": "node2",
-			"neighbor": ["node1"]
+			"id": "node5",
+			"neighbor": ["node2", "node3", "node4"]
 		}
 	]
 }
