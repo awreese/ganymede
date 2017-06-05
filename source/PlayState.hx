@@ -387,7 +387,7 @@ class Tutorial {
     
     private static var NEED_HELP:String = "Looks like you're having some trouble.";
     private static var AFFIRMATION:Array<String> = ["Great!", "Good job!", "Awesome!"];
-    private static var TRIGGER_DELAY:Int = 15; // seconds
+    private static var TRIGGER_DELAY:Int = 20; // seconds
     
     private var mouse:FlxSprite;
     private var cursor:FlxSprite;
@@ -401,7 +401,6 @@ class Tutorial {
         shown = false;
         triggered = false;
         rand = new FlxRandom();
-        //resetTime();
         
         // initialize cursor
         cursor = new FlxSprite(FlxG.width/2, FlxG.height/2, AssetPaths.cursor__png);
@@ -415,6 +414,7 @@ class Tutorial {
         mouse.screenCenter();
         ps.add(mouse);
         
+        // initialize top text box
         textBox = new FlxText(390, 50, 500, "");
         textBox.setFormat("Consola", 25, FlxColor.WHITE);
         textBox.autoSize = false;
@@ -422,6 +422,7 @@ class Tutorial {
         textBox.alignment = "center";
         ps.add(textBox);
         
+        // initialize bottom text box
         affirmBox = new FlxText(390, 630, 500, "");
         affirmBox.setFormat("Consola", 25, FlxColor.WHITE);
         affirmBox.autoSize = false;
@@ -577,7 +578,9 @@ class Tutorial {
     }
     
     private function capturing():Void {
-        var targetNode = new FlxPoint(550, 425); // capturable node #5
+        var target1 = new FlxPoint(550, 425); // capturable node #5
+        var target2 = new FlxPoint(650, 145); // capturable node #7
+        var target3 = new FlxPoint(650, 575); // capturable node #8
         
         if (!shown) {
             displayText("Try capturing a planet now!", true);
@@ -586,8 +589,9 @@ class Tutorial {
         
         // Check if checkpoint reached
         if (FlxG.mouse.justPressedRight) {
-            var node:MapNode = ps.nodeClicked(FlxG.mouse.getPosition());
-            if (shipIsSelected() && node.getPosition().equals(targetNode)) {
+            //var node:MapNode = ps.nodeClicked(FlxG.mouse.getPosition());
+            //if (shipIsSelected() && node.getPosition().equals(target1)) {
+            if (shipIsSelected() && clickedOneOfThree(target1, target2, target3)) {
                 checkpoint = 3;
                 reset();
                 displayAffirmation("You're capturing a planet now!");
@@ -595,15 +599,34 @@ class Tutorial {
             }
         }
         
+        if (capturedOne(target1, target2, target3)) {
+            checkpoint = 4;
+            reset();
+            displayAffirmation("You captured your first planet!");
+            return;
+        }
+        
         // Wait and help player
-        if (time >= TRIGGER_DELAY && !triggered) {
+        if (time >= TRIGGER_DELAY && !triggered && !capturedOne(target1, target2, target3)) {
             triggered = true;
             
             // show animation
             displayText(NEED_HELP + "\nTry right-clicking a node to send ship(s) to capture.  Make sure they are still selected!");
             displayMouse("right_click");
-            displayCursor(FlxG.mouse.getPosition(), targetNode);
+            displayCursor(FlxG.mouse.getPosition(), target1);
         }
+    }
+    
+    private function capturedOne(p1:FlxPoint, p2:FlxPoint, p3:FlxPoint):Bool {
+        var f1 = ps.nodeClicked(p1).getFaction();
+        var f2 = ps.nodeClicked(p2).getFaction();
+        var f3 = ps.nodeClicked(p3).getFaction();
+        return f1 == PLAYER || f2 == PLAYER || f3 == PLAYER;
+    }
+    
+    private function clickedOneOfThree(p1:FlxPoint, p2:FlxPoint, p3:FlxPoint):Bool {
+        var node:MapNode = ps.nodeClicked(FlxG.mouse.getPosition());
+        return node.getPosition().equals(p1) || node.getPosition().equals(p2) || node.getPosition().equals(p3);
     }
     
     private function capturedPlanet():Void {
