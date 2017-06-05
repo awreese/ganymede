@@ -24,6 +24,7 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.group.FlxGroup.FlxTypedGroup;
+import flixel.math.FlxPoint;
 import flixel.math.FlxRandom;
 import flixel.math.FlxVector;
 import flixel.system.FlxSound;
@@ -51,7 +52,6 @@ class PlayState extends FlxState {
 	private var enemies: Array<Enemy>;
     
     private var tutor:Tutorial;
-    //private var mouse:FlxSprite;
 
 	override public function create():Void {
 		rand = new FlxRandom();
@@ -78,14 +78,6 @@ class PlayState extends FlxState {
 			}
 		}
         
-        //mouse = new FlxSprite();
-        //mouse.loadGraphic(AssetPaths.mouse_left__png, false, 92, 141);
-        ////mouse.animation.add("left_click", [0, 1], 6, true);
-        ////mouse.animation.add("right_click", [0, 2], 6, true);
-        //mouse.x = 100;
-        //mouse.y = 300;
-        //mouse.visible = true;
-        //add(mouse);
         this.tutor = new Tutorial(this);
 		
 		super.create();
@@ -297,6 +289,11 @@ class PlayState extends FlxState {
     public function getShipGroup():Array<Ship> {
         return this.shipGroup.members.copy();
     }
+    
+    public function nodeClicked(point:FlxPoint):MapNode {
+        var node = gameMap.findNode(new FlxVector(point.x, point.y));
+        return node;
+    }
 	
 	/*
 	 * This function handles all the flocking behavior of the ships. It does so by iterating
@@ -383,18 +380,27 @@ class Tutorial {
     
     private var ps:PlayState;
     private var checkpoint:Int;
+    private var shown:Bool;
     private var triggered:Bool;
     private var time:Float;
+    private var rand:FlxRandom;
     
     private static var NEED_HELP:String = "Looks like you're having some trouble.";
+    private static var AFFIRMATION:Array<String> = ["Great!", "Good job!", "Awesome!"];
+    private static var TRIGGER_DELAY:Int = 15; // seconds
+    
     private var mouse:FlxSprite;
     private var cursor:FlxSprite;
+    private var cursorTween:FlxTween;
     private var textBox:FlxText;
+    private var affirmBox:FlxText;
     
     public function new(state:PlayState) {
         this.ps = state;
         checkpoint = 0;
+        shown = false;
         triggered = false;
+        rand = new FlxRandom();
         //resetTime();
         
         // initialize cursor
@@ -409,10 +415,19 @@ class Tutorial {
         mouse.screenCenter();
         ps.add(mouse);
         
-        textBox = new FlxText(100, 50, 0, NEED_HELP);
-        textBox.setFormat("Consola", 25);
-        //textBox.wordWrap = true;
+        textBox = new FlxText(390, 50, 500, "");
+        textBox.setFormat("Consola", 25, FlxColor.WHITE);
+        textBox.autoSize = false;
+        textBox.wordWrap = true;
+        textBox.alignment = "center";
         ps.add(textBox);
+        
+        affirmBox = new FlxText(390, 630, 500, "");
+        affirmBox.setFormat("Consola", 25, FlxColor.WHITE);
+        affirmBox.autoSize = false;
+        affirmBox.wordWrap = true;
+        affirmBox.alignment = "center";
+        ps.add(affirmBox);
         
         reset();
         
@@ -421,22 +436,33 @@ class Tutorial {
     private function reset():Void {
         time = 0.0;
         
-        //cursor.screenCenter();
+        cursor.screenCenter();
         cursor.visible = false;
+        cursorTween.cancel;
+        if (cursorTween != null && cursorTween.manager.exists) {
+            cursorTween.manager.clear();
+        }
+        cursorTween = null;
         
-        //mouse.screenCenter();
         mouse.animation.stop();
         mouse.visible = false;
         
         textBox.text = NEED_HELP;
         textBox.visible = false;
         
+        shown = false;
         triggered = false;
     }
     
-    private function displayHelp(text:String):Void {
+    private function displayText(text:String, ?fade:Bool = false):Void {
         textBox.text = text;
         textBox.visible = true;
+        
+        if (fade) {
+            FlxTween.color(textBox, 3, FlxColor.WHITE, FlxColor.TRANSPARENT, { startDelay: 10, type: FlxTween.ONESHOT });
+        } else {
+            FlxTween.color(textBox, 1, FlxColor.WHITE, FlxColor.WHITE, { type: FlxTween.ONESHOT });
+        }
     }
     
     private function displayMouse(animation:String):Void {
@@ -444,9 +470,20 @@ class Tutorial {
         mouse.animation.play(animation);
     }
     
+    private function displayCursor(from:FlxPoint, to:FlxPoint):Void {
+        cursor.setPosition(from.x, from.y);
+        cursor.visible = true;
+        cursorTween = FlxTween.tween(cursor, {x: to.x, y: to.y}, 1.25, {type: FlxTween.LOOPING, loopDelay: 2, ease: FlxEase.quadInOut});
+    }
+    
+    private function displayAffirmation(?text:String = null):Void {
+        var affirm = rand.getObject(AFFIRMATION);
+        affirmBox.text = (text == null) ? affirm : affirm + "\n" + text;
+        affirmBox.visible = true;
+        FlxTween.color(affirmBox, 3, FlxColor.WHITE, FlxColor.TRANSPARENT, { startDelay: 5, type: FlxTween.ONESHOT });
+    }
+    
     public function checkTutorial(elapsed:Float):Void {
-        //ps = state;
-        time += elapsed;
         
         switch(Main.LEVEL) {
             case 1:
@@ -456,42 +493,192 @@ class Tutorial {
     }
     
     private function tutorial_one(elapsed:Float):Void {
-        //trace("Tutorial 1 - current checkpoint: " + checkpoint);
+        time += elapsed;
         switch(checkpoint) {
             case 0:
                 selectUnits();
             case 1:
-                
+                moveUnits();
+            case 2:
+                capturing();
+            case 3:
+                capturedPlanet();
+            case 4:
+                combatPrepare();
+            case 5:
+                combat();
             default:
         }
     }
     
     private function selectUnits():Void {
-        //var unitSelected:Bool = false;
+        var targetNode = new FlxPoint(100, 275); // node #1
         
+        if (!shown) {
+            displayText("Select ship.", true);
+            shown = true;
+        }
+        
+        // Check if checkpoint reached
+        if (shipIsSelected()) {
+            checkpoint = 1;
+            reset();
+            displayAffirmation();
+            return;
+        }
+
+        // Wait and help player
+        if (time >= TRIGGER_DELAY && !triggered) {
+            triggered = true;
+            
+            // show animation
+            displayText(NEED_HELP + "\nTry left-clicking a planet to select ship(s).");
+            displayMouse("left_click");
+            displayCursor(FlxG.mouse.getPosition(), targetNode);
+        }
+    }
+    
+    private function shipIsSelected():Bool {
         for (ship in ps.getShipGroup()) {
             if (ship.isSelected) {
-                checkpoint++;
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    private function moveUnits():Void {
+        var targetNode = new FlxPoint(325, 350); // node #3
+        
+        if (!shown) {
+            displayText("Send ship to another node.", true);
+            shown = true;
+        }
+        
+        // Check if checkpoint reached
+        if (FlxG.mouse.justPressedRight) {
+            if (shipIsSelected() && ps.nodeClicked(FlxG.mouse.getPosition()) != null) {
+                checkpoint = 2;
                 reset();
-                //FlxTween.tween(textBox,
+                displayAffirmation();
                 return;
             }
         }
         
-        if (time >= 10 && !triggered) {
-            // show animation
+        // Wait and help player
+        if (time >= TRIGGER_DELAY && !triggered) {
             triggered = true;
-            //trace("10 seconds expired, show select unit animation");
-            //trace(mouse);
             
-            displayHelp(NEED_HELP + " Try left-clicking a planet to select a unit.");
-            displayMouse("left_click");
-            
-            cursor.visible = true;
-            cursor.setPosition(FlxG.mouse.x, FlxG.mouse.y);
-            FlxTween.tween(cursor, {x: 100, y: 275}, 1.25, {type: FlxTween.LOOPING, loopDelay: 2, ease: FlxEase.quadInOut});
+            // show animation
+            displayText(NEED_HELP + "\nTry right-clicking a node to send ship(s).  Make sure they are still selected!");
+            displayMouse("right_click");
+            displayCursor(FlxG.mouse.getPosition(), targetNode);
+        }
+    }
+    
+    private function capturing():Void {
+        var targetNode = new FlxPoint(550, 425); // capturable node #5
+        
+        if (!shown) {
+            displayText("Try capturing a planet now!", true);
+            shown = true;
         }
         
-        //return false;
+        // Check if checkpoint reached
+        if (FlxG.mouse.justPressedRight) {
+            var node:MapNode = ps.nodeClicked(FlxG.mouse.getPosition());
+            if (shipIsSelected() && node.getPosition().equals(targetNode)) {
+                checkpoint = 3;
+                reset();
+                displayAffirmation("You're capturing a planet now!");
+                return;
+            }
+        }
+        
+        // Wait and help player
+        if (time >= TRIGGER_DELAY && !triggered) {
+            triggered = true;
+            
+            // show animation
+            displayText(NEED_HELP + "\nTry right-clicking a node to send ship(s) to capture.  Make sure they are still selected!");
+            displayMouse("right_click");
+            displayCursor(FlxG.mouse.getPosition(), targetNode);
+        }
+    }
+    
+    private function capturedPlanet():Void {
+        var targetNode = new FlxPoint(550, 425); // capturable node #5
+        var node:MapNode = ps.nodeClicked(targetNode);
+        
+        if (node.getFaction() == PLAYER) {
+            checkpoint = 4;
+            reset();
+            displayAffirmation("You captured your first planet!");
+        }
+    }
+    
+    private function combatPrepare():Void {
+        var target1 = new FlxPoint(550, 425); // capturable node #5
+        var target2 = new FlxPoint(650, 145); // capturable node #7
+        var target3 = new FlxPoint(650, 575); // capturable node #8
+        
+        if (!shown) {
+            displayText("Prepare to combat the enemy by capturing the other two planets.", true);
+            shown = true;
+        }
+        
+        // Check if checkpoint reached
+        if (capturedThree(target1, target2, target3)) {
+            checkpoint = 5;
+            reset();
+            displayAffirmation("You are now ready for your first skirmish!");
+            return;
+        }
+        
+        // Wait and help player
+        if (time >= TRIGGER_DELAY && !triggered) {
+            triggered = true;
+            
+            // show animation
+            displayText(NEED_HELP + "\nTry right-clicking a node to send ship(s) to capture.  Make sure they are still selected!", true);
+        }
+    }
+    
+    private function capturedThree(p1:FlxPoint, p2:FlxPoint, p3:FlxPoint):Bool {
+        var f1 = ps.nodeClicked(p1).getFaction();
+        var f2 = ps.nodeClicked(p2).getFaction();
+        var f3 = ps.nodeClicked(p3).getFaction();
+        return f1 == PLAYER && f1 == f2 && f2 == f3;
+    }
+    
+    private function combat():Void {
+        var targetNode = new FlxPoint(1125, 340); // capturable node #12
+        var node:MapNode = ps.nodeClicked(targetNode);
+        
+        if (!shown) {
+            displayText("You are ready!  No go take out the little red bugger.", true);
+            shown = true;
+        }
+        
+        // Check if checkpoint reached
+        if (FlxG.mouse.justPressedRight) {
+            var node:MapNode = ps.nodeClicked(FlxG.mouse.getPosition());
+            if (shipIsSelected() && node.getPosition().equals(targetNode)) {
+                checkpoint = 6;
+                reset();
+                displayAffirmation();
+                return;
+            }
+        }
+        
+        // Wait and help player
+        if (time >= TRIGGER_DELAY && !triggered) {
+            triggered = true;
+            
+            // show animation
+            displayText(NEED_HELP + "\nTry right-clicking a node to send ships to combat.  Make sure they are still selected!");
+            displayMouse("right_click");
+            displayCursor(FlxG.mouse.getPosition(), targetNode);
+        }
     }
 }

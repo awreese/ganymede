@@ -21,7 +21,6 @@ package;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
-import flixel.math.FlxRandom;
 import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
@@ -72,32 +71,30 @@ class MenuState extends FlxState
 	
 	private function clickPlay():Void {
         
-        var rand:FlxRandom = new FlxRandom();
-        
-        //if (rand.bool()) {
-        if (true) {
-            // A - new tutorial
-            trace("version A");
-            //Main.LEVEL = 0;
-            //Main.LOGGER.logActionWithNoLevel(11, {"A"});
-            FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
-                FlxG.switchState(new PlayState());
-            });
-            
-        } else {
-            // B - old tutorial
-            trace("version B");
-            //Main.LEVEL = 1;
-            //Main.LOGGER.logActionWithNoLevel(10, {"B"});
-            if (Main.LEVEL == 1) {
-                FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
-                    FlxG.switchState(new SelectShipTutorial());
-                });
-            } else {
+        switch(Main.AB_VERSION) {
+            case "A":
+                // A - new tutorial
+                trace("version A");
+                //Main.LEVEL = 0;
+                Main.LOGGER.logActionWithNoLevel(10, {ab_version: "A"});
                 FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
                     FlxG.switchState(new PlayState());
                 });
-            }
+            case "B":
+                // B - old tutorial
+                trace("version B");
+                //Main.LEVEL = 1;
+                Main.LOGGER.logActionWithNoLevel(10, {ab_version: "B"});
+                if (Main.LEVEL == 1) {
+                    FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
+                        FlxG.switchState(new SelectShipTutorial());
+                    });
+                } else {
+                    FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
+                        FlxG.switchState(new PlayState());
+                    });
+                }
+            default:
         }
         
 		//if (Main.LEVEL == 1) {
