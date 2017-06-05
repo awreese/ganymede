@@ -58,6 +58,7 @@ class PlanetStat {
 	private static function checkInitTemplates(): Void {
 		if (!hasInitialized) {
 			hasInitialized = true;
+            planetTemplateMap.set("tutorial", new PlanetStat(null, 1, Math.POSITIVE_INFINITY, 0.5, 0, 0, 10, 5, 2.0));
 			planetTemplateMap.set("level1", new PlanetStat(null, 10, 5.0, 0.5, 0, 0, 10, 5, 2.0));
 			planetTemplateMap.set("level2", new PlanetStat(null, 15, 3.0, 0.5, 0, 0, 10, 5, 2.0));
 		}
@@ -164,7 +165,6 @@ class Planet extends Capturable {
 
 	public function new(playState:PlayState, location:MapNode, faction:Faction, pstats:PlanetStat) {
 		// set position of the planet
-		//super(location.pos.x - (MapNode.NODE_SIZE / 2), location.pos.y - (MapNode.NODE_SIZE / 2));
 		super(location, faction);
         
 		this.playState = playState;
@@ -176,7 +176,7 @@ class Planet extends Capturable {
         
         this.shipFactory = new ShipFactory(this);
         this.shipFactory.setProduction(this.pStats.ship);
-
+        
 		// set number of ships
 		numShips = new Map<FactionType, Int>();
 		for (f in Faction.getEnums()) {
@@ -190,6 +190,9 @@ class Planet extends Capturable {
 	override public function update(elapsed:Float):Void {
 		// increment timer
 		shipTimer += elapsed;
+        
+        this.shipFactory.produceShip(elapsed);
+        
 		super.update(elapsed);
 		setSprite();
 	}
@@ -211,15 +214,15 @@ class Planet extends Capturable {
 	}
 
 	// function that'll control the spousing of ships
-	private function canProduceShips():Bool {
-		// return true if is not an open planet, not a neutral planet, not have reach capacity and if enough time has pass
-		//return faction.getFactionType() != FactionType.NOP && faction.getFactionType() != FactionType.NEUTRAL
-		//&& numShips.get(faction.getFactionType()) < this.pStats.cap && shipTimer >= pStats.prod;
-        
-        return faction.getFactionType() != FactionType.NOP && 
-            this.node.getShipGroup(this.faction.getFactionType()).members.length < this.pStats.cap && 
-            shipTimer >= pStats.prod;
-	}
+	//private function canProduceShips():Bool {
+		//// return true if is not an open planet, not a neutral planet, not have reach capacity and if enough time has pass
+		////return faction.getFactionType() != FactionType.NOP && faction.getFactionType() != FactionType.NEUTRAL
+		////&& numShips.get(faction.getFactionType()) < this.pStats.cap && shipTimer >= pStats.prod;
+        //
+        //return faction.getFactionType() != FactionType.NOP && 
+            //this.node.getShipGroup(this.faction.getFactionType()).members.length < this.pStats.cap && 
+            //shipTimer >= pStats.prod;
+	//}
 
 	// updates the capacity level and changes teh capacity accordingly
 	public function updateCapacity():Void {
@@ -261,19 +264,19 @@ class Planet extends Capturable {
 	}
 
 	// produce a ship
-	public function produceShip(node: MapNode):Ship {
-		// if can produce a ship, produce a ship
-		if (canProduceShips())
-		{
-			shipTimer = 0.0;
-			numShips.set(faction.getFactionType(), numShips.get(faction.getFactionType()) + 1);
-			//var stat = new BluePrint(pStats.ship.hull, pStats.ship.maxVelocity, pStats.ship.shield, pStats.ship.hitPoints, pStats.ship.attackSpeed, pStats.ship.attackDamage, pStats.ship.cps);
-			//return new Ship(playState, node, faction, stat);
-			return new Ship(this.node, faction, pStats.ship.clone());
-		}
-		// if can't produce ship, return null
-		return null;
-	}
+	//public function produceShip(node: MapNode):Ship {
+		//// if can produce a ship, produce a ship
+		//if (canProduceShips())
+		//{
+			//shipTimer = 0.0;
+			//numShips.set(faction.getFactionType(), numShips.get(faction.getFactionType()) + 1);
+			////var stat = new BluePrint(pStats.ship.hull, pStats.ship.maxVelocity, pStats.ship.shield, pStats.ship.hitPoints, pStats.ship.attackSpeed, pStats.ship.attackDamage, pStats.ship.cps);
+			////return new Ship(playState, node, faction, stat);
+			//return new Ship(this.node, faction, pStats.ship.clone());
+		//}
+		//// if can't produce ship, return null
+		//return null;
+	//}
 
 	// sets the number of ships of the faction to ships
 	public function setNumShips(shipFaction:FactionType, ships:Int):Void {
