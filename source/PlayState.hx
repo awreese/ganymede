@@ -21,11 +21,16 @@ package;
 import Main;
 import faction.Faction;
 import flixel.FlxG;
+import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.group.FlxGroup.FlxTypedGroup;
+import flixel.math.FlxPoint;
 import flixel.math.FlxRandom;
 import flixel.math.FlxVector;
 import flixel.system.FlxSound;
+import flixel.text.FlxText;
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import gameUnits.Ship;
 import gameUnits.Ship.ShipGroup;
@@ -39,20 +44,19 @@ class PlayState extends FlxState {
 	private var grpMap: FlxTypedGroup<GameMap>;
 	private var gameMap: GameMap;
 	
-    //public var grpShips: ShipGroup;
-    // TODO: turn above into below
-	//private var shipgroupByFaction:Map<FactionType, ShipGroup>;
     private var shipGroup:ShipGroup;
     
     private var grpPlanets: FlxTypedGroup<gameUnits.capturable.Planet>;
 	private var rand:FlxRandom;
 	private var numPlayerFaction:Int;
 	private var enemies: Array<Enemy>;
+    
+    private var tutor:Tutorial;
 
 	override public function create():Void {
 		rand = new FlxRandom();
 		enemies = new Array<Enemy>();
-
+        
 		// Initialize the map
 		grpMap = new FlxTypedGroup<GameMap>();        ///
 		add(grpMap);                                    //____ WTF is this?
@@ -73,6 +77,8 @@ class PlayState extends FlxState {
 				enemies.push(new Enemy(faction, gameMap.getAiTime()));
 			}
 		}
+        
+        this.tutor = new Tutorial(this);
 		
 		super.create();
 	}
@@ -85,7 +91,8 @@ class PlayState extends FlxState {
 		/*
 		 * Check and update any game state
 		 */
-        
+        //Tutorial.checkTutorial(this, elapsed);
+        tutor.checkTutorial(elapsed);
         
         for (ship in shipGroup) {
             if (ship.exists) {
@@ -232,7 +239,7 @@ class PlayState extends FlxState {
 		//nodeUpdate(elapsed);
 		
 		// produce ships
-		produceShips(elapsed);
+		//produceShips(elapsed);
 		
 		// check if there are other ships of other factions
 		var noOtherFaction: Bool = true;
@@ -279,6 +286,14 @@ class PlayState extends FlxState {
         this.shipGroup.add(ship);
     }
 	
+    public function getShipGroup():Array<Ship> {
+        return this.shipGroup.members.copy();
+    }
+    
+    public function nodeClicked(point:FlxPoint):MapNode {
+        var node = gameMap.findNode(new FlxVector(point.x, point.y));
+        return node;
+    }
 	
 	/*
 	 * This function handles all the flocking behavior of the ships. It does so by iterating
@@ -330,181 +345,363 @@ class PlayState extends FlxState {
 	}
 	
 	
-	/*
-	 * This function handles combat between different ships. It iterates through all the ships,
-	 * checks if any ship has enemies nearby that it should attack, and orders ships to fire at
-	 * enemies if needed.
-	 * 
-	 * This function does not handle damaging or destroying ships. That will be handled by the
-	 * ShipAttack class, which represents a single attack by one ship against one ship.
-	 */
-	//private function shipCombat(elapsed: Float): Void {
-	//
-        //// outer loop groups by faction
-        //for (shipGroup in shipgroupByFaction) {
-            //
-            //// Iterate through each of the ships
-            ////for (s1 in grpShips) {
-            //for (s1 in shipGroup) {
-                //
-                //// If the ship is dead, remove it from the group
-                //if (!s1.exists) {
-                    //trace("Ship dead");
-                    //grpShips.remove(s1, true); // need to splice out ship!!  Maybe destroy it too?
-                //}
-                //
-                //// Iterate through each of the potential targets
-                //// TODO: Iterate through the potential targets in a random order
-                ////for (s2 in grpShips) {
-                //for (s2 in shipGroup) {
-                    ////if (s1.getFaction() != s2.getFaction()) {
-                        //if (s1.getPos().distanceTo(s2.getPos()) < 50) { // TODO: Add this range to ShipBlueprint, weapon, or combo of both
-                            //if (s1.weapon.fireAtTarget(s2)) {
-                                //s1.weapon.currentBullet.target = s2;
-                                //add(s1.weapon.currentBullet);
-                            //}
-                        //}
-                    ////}
-                //}
-            //}
-            //
-        //}
-	//}
 	
-    // TODO: Most (if not all) of this should be moved to GameMap and Ship
-	//private function nodeUpdate(elapsed : Float):Void {
-		////for (n in gameMap.nodes)
-		//for (n in gameMap.getNodeList())
-		//{
-			//var p : Planet = n.isPlanet() ? cast(n.getCaptureable(), Planet) : null;
-			//var numShips:Map<FactionType, Int> = new Map<FactionType, Int>();
-			//for (f in Faction.getEnums()) {
-				//numShips.set(f, 0);
-			//}
-//
-			//var shipsAtNode = new Array<Ship>();
-			//
-			//var nPos:FlxVector = new FlxVector(n.x, n.y);
-//
-			//// determine which ships are within the range of the node
-			//for (s in grpShips)
-			//{
-				//var sPos:FlxVector = s.getPos();
-				//var distance:Float = nPos.dist(sPos);
-				//if (distance < 30 && s.exists)
-				//{
-					//numShips.set(s.getFaction(), numShips.get(s.getFaction()) + 1);
-					//shipsAtNode[shipsAtNode.length] = s;
-				//}
-			//}
-            //
-            ///*
-             //* Current status - 5/14/2017 11:29 PM
-             //* Converting grpShips use to shipgroupByFaction use
-             //* 
-             //* I'm not entirely sure all this code in nodeUpdate is needed, but I'm super tired
-             //* right now and can't concentrate well enough.  Will revisist tomorrow after rest.
-             //*/
-            //
-            //for (shipGroup in shipgroupByFaction) {
-                //for (ship in shipGroup) {
-                    //var sPos:FlxVector = ship.getPos();
-                    //var distance:Float = nPos.dist(sPos);
-                    //if (distance < 30 && s.exists) {
-                        //numShips.set(s.getFaction(), numShips.get(s.getFaction()) + 1);
-                        //shipsAtNode[shipsAtNode.length] = s;
-                    //}
-                //}
-            //}
-            //
-//
-			//var numFactions:Int = 0;
-			//// checks for number of factions
-			//for (f in numShips.keys())
-			//{
-				//if (numShips.get(f) > 0)
-				//{
-					//numFactions++;
-				//}
-			//}
-//
-			//// TODO: Replace this combat code with updated combat code in the shipCombat() function
-			///*// if there are more than 1 factions in a node
-			//if (numFactions > 1)
-			//{
-				//for (s in shipsAtNode)
-				//{
-					//if (s.exists)
-					//{
-						//// if the ship is not killed
-//
-						//// select target
-						//var target : Ship = shipsAtNode[rand.int(0, shipsAtNode.length - 1)];
-						//while (target.getFaction() == s.getFaction() || !target.exists)
-						//{
-							//// if target is the same faction or target does not exist
-							//target = shipsAtNode[rand.int(0, shipsAtNode.length - 1)];
-						//}
-//
-						//// random chance of hitting
-						//var hit : Bool = rand.int() % 2 == 0;
-						//if (hit)
-						//{
-							//// if hit, decrease hp
-							//target.stats.hitPoints -= s.stats.attackSpeed * s.stats.attackDamage * elapsed * target.stats.shield;
-							//if (target.stats.hitPoints < 0.0)
-							//{
-								//// if run out of hp, kill target
-								//target.kill();
-								//target.visible = false;
-								//// decrease num ships at the planet
-								//numShips.set(target.getFaction(), numShips.get(target.getFaction()) - 1);
-								//numFactions = numShips.get(target.getFaction()) > 0 ? numFactions : numFactions - 1;
-							//}
-						//}
-						//// if there is less than 2 factions, break out of loop
-						//if (numFactions < 2) {
-							//break;
-						//}
-					//}
-				//}
-			//}*/
-						//// if there's a planet here
-			//if (p != null) 
-			//{
-				//// update number of ships of each faction in
-				//for (f in numShips.keys())
-				//{
-					//p.setNumShips(f, numShips.get(f));
-				//}
-				//p.setShips(shipsAtNode);
-			//}
-		//}
-	//}
+	
+    
 	
     // TODO: Swap ownership of production to real ship factory and test
 	// produce ships for each planet (if they can)
-	private function produceShips(elapsed: Float):Void {
-		//for (n in gameMap.nodes) {
-		for (n in gameMap.getNodeList()) {
-			// checks if there's a planet at n
-			if (!n.isPlanet()) {
-				continue;
-			}
-			// get the planet
-			var p = cast(n.getCaptureable(), Planet);
-			var pPos = p.getPos();
-			// find the MapNode for the planet
-			var node = gameMap.findNode(new FlxVector(pPos.x + (MapNode.NODE_RADIUS / 2), pPos.y + (MapNode.NODE_RADIUS / 2)));
-			var ship:Ship = p.produceShip(node);
-			if (ship != null) {
-				//grpShips.add(ship);
-				//node.addShip(ship);
-                
-                //shipgroupByFaction.get(ship.getFactionType()).add(ship);
-                this.shipGroup.add(ship);
-                node.addShip(ship);
-			}
-		}
-	}
+	//private function produceShips(elapsed: Float):Void {
+		////for (n in gameMap.nodes) {
+		//for (n in gameMap.getNodeList()) {
+			//// checks if there's a planet at n
+			//if (!n.isPlanet()) {
+				//continue;
+			//}
+			//// get the planet
+			//var p = cast(n.getCaptureable(), Planet);
+			//var pPos = p.getPos();
+			//// find the MapNode for the planet
+			//var node = gameMap.findNode(new FlxVector(pPos.x + (MapNode.NODE_RADIUS / 2), pPos.y + (MapNode.NODE_RADIUS / 2)));
+			//var ship:Ship = p.produceShip(node);
+			//if (ship != null) {
+				////grpShips.add(ship);
+				////node.addShip(ship);
+                //
+                ////shipgroupByFaction.get(ship.getFactionType()).add(ship);
+                //this.shipGroup.add(ship);
+                //node.addShip(ship);
+			//}
+		//}
+	//}
+}
+
+class Tutorial {
+    
+    private var ps:PlayState;
+    private var checkpoint:Int;
+    private var shown:Bool;
+    private var triggered:Bool;
+    private var time:Float;
+    private var rand:FlxRandom;
+    
+    private static var NEED_HELP:String = "Looks like you're having some trouble.";
+    private static var AFFIRMATION:Array<String> = ["Great!", "Good job!", "Awesome!"];
+    private static var TRIGGER_DELAY:Int = 20; // seconds
+    
+    private var mouse:FlxSprite;
+    private var cursor:FlxSprite;
+    private var cursorTween:FlxTween;
+    private var textBox:FlxText;
+    private var affirmBox:FlxText;
+    
+    public function new(state:PlayState) {
+        this.ps = state;
+        checkpoint = 0;
+        shown = false;
+        triggered = false;
+        rand = new FlxRandom();
+        
+        // initialize cursor
+        cursor = new FlxSprite(FlxG.width/2, FlxG.height/2, AssetPaths.cursor__png);
+        ps.add(cursor);
+        
+        // initialize mouse
+        mouse = new FlxSprite();
+        mouse.loadGraphic(AssetPaths.mouse_a__png, true, 92, 141);
+        mouse.animation.add("left_click", [0, 1], 1, true);
+        mouse.animation.add("right_click", [0, 2], 1, true);
+        mouse.screenCenter();
+        ps.add(mouse);
+        
+        // initialize top text box
+        textBox = new FlxText(390, 50, 500, "");
+        textBox.setFormat("Consola", 25, FlxColor.WHITE);
+        textBox.autoSize = false;
+        textBox.wordWrap = true;
+        textBox.alignment = "center";
+        ps.add(textBox);
+        
+        // initialize bottom text box
+        affirmBox = new FlxText(390, 630, 500, "");
+        affirmBox.setFormat("Consola", 25, FlxColor.WHITE);
+        affirmBox.autoSize = false;
+        affirmBox.wordWrap = true;
+        affirmBox.alignment = "center";
+        ps.add(affirmBox);
+        
+        reset();
+        
+    }
+    
+    private function reset():Void {
+        time = 0.0;
+        
+        cursor.screenCenter();
+        cursor.visible = false;
+        cursorTween.cancel;
+        if (cursorTween != null && cursorTween.manager.exists) {
+            cursorTween.manager.clear();
+        }
+        cursorTween = null;
+        
+        mouse.animation.stop();
+        mouse.visible = false;
+        
+        textBox.text = NEED_HELP;
+        textBox.visible = false;
+        
+        shown = false;
+        triggered = false;
+    }
+    
+    private function displayText(text:String, ?fade:Bool = false):Void {
+        textBox.text = text;
+        textBox.visible = true;
+        
+        if (fade) {
+            FlxTween.color(textBox, 3, FlxColor.WHITE, FlxColor.TRANSPARENT, { startDelay: 10, type: FlxTween.ONESHOT });
+        } else {
+            FlxTween.color(textBox, 1, FlxColor.WHITE, FlxColor.WHITE, { type: FlxTween.ONESHOT });
+        }
+    }
+    
+    private function displayMouse(animation:String):Void {
+        mouse.visible = true;
+        mouse.animation.play(animation);
+    }
+    
+    private function displayCursor(from:FlxPoint, to:FlxPoint):Void {
+        cursor.setPosition(from.x, from.y);
+        cursor.visible = true;
+        cursorTween = FlxTween.tween(cursor, {x: to.x, y: to.y}, 1.25, {type: FlxTween.LOOPING, loopDelay: 2, ease: FlxEase.quadInOut});
+    }
+    
+    private function displayAffirmation(?text:String = null):Void {
+        var affirm = rand.getObject(AFFIRMATION);
+        affirmBox.text = (text == null) ? affirm : affirm + "\n" + text;
+        affirmBox.visible = true;
+        FlxTween.color(affirmBox, 3, FlxColor.WHITE, FlxColor.TRANSPARENT, { startDelay: 5, type: FlxTween.ONESHOT });
+    }
+    
+    public function checkTutorial(elapsed:Float):Void {
+        
+        switch(Main.LEVEL) {
+            case 1:
+                tutorial_one(elapsed);
+            default:
+        }
+    }
+    
+    private function tutorial_one(elapsed:Float):Void {
+        time += elapsed;
+        switch(checkpoint) {
+            case 0:
+                selectUnits();
+            case 1:
+                moveUnits();
+            case 2:
+                capturing();
+            case 3:
+                capturedPlanet();
+            case 4:
+                combatPrepare();
+            case 5:
+                combat();
+            default:
+        }
+    }
+    
+    private function selectUnits():Void {
+        var targetNode = new FlxPoint(100, 275); // node #1
+        
+        if (!shown) {
+            displayText("Select ship.", true);
+            shown = true;
+        }
+        
+        // Check if checkpoint reached
+        if (shipIsSelected()) {
+            checkpoint = 1;
+            reset();
+            displayAffirmation();
+            return;
+        }
+
+        // Wait and help player
+        if (time >= TRIGGER_DELAY && !triggered) {
+            triggered = true;
+            
+            // show animation
+            displayText(NEED_HELP + "\nTry left-clicking a planet to select ship(s).");
+            displayMouse("left_click");
+            displayCursor(FlxG.mouse.getPosition(), targetNode);
+        }
+    }
+    
+    private function shipIsSelected():Bool {
+        for (ship in ps.getShipGroup()) {
+            if (ship.isSelected) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    private function moveUnits():Void {
+        var targetNode = new FlxPoint(325, 350); // node #3
+        
+        if (!shown) {
+            displayText("Send ship to another node.", true);
+            shown = true;
+        }
+        
+        // Check if checkpoint reached
+        if (FlxG.mouse.justPressedRight) {
+            if (shipIsSelected() && ps.nodeClicked(FlxG.mouse.getPosition()) != null) {
+                checkpoint = 2;
+                reset();
+                displayAffirmation();
+                return;
+            }
+        }
+        
+        // Wait and help player
+        if (time >= TRIGGER_DELAY && !triggered) {
+            triggered = true;
+            
+            // show animation
+            displayText(NEED_HELP + "\nTry right-clicking a node to send ship(s).  Make sure they are still selected!");
+            displayMouse("right_click");
+            displayCursor(FlxG.mouse.getPosition(), targetNode);
+        }
+    }
+    
+    private function capturing():Void {
+        var target1 = new FlxPoint(550, 425); // capturable node #5
+        var target2 = new FlxPoint(650, 145); // capturable node #7
+        var target3 = new FlxPoint(650, 575); // capturable node #8
+        
+        if (!shown) {
+            displayText("Try capturing a planet now!", true);
+            shown = true;
+        }
+        
+        // Check if checkpoint reached
+        if (FlxG.mouse.justPressedRight) {
+            //var node:MapNode = ps.nodeClicked(FlxG.mouse.getPosition());
+            //if (shipIsSelected() && node.getPosition().equals(target1)) {
+            if (shipIsSelected() && clickedOneOfThree(target1, target2, target3)) {
+                checkpoint = 3;
+                reset();
+                displayAffirmation("You're capturing a planet now!");
+                return;
+            }
+        }
+        
+        if (capturedOne(target1, target2, target3)) {
+            checkpoint = 4;
+            reset();
+            displayAffirmation("You captured your first planet!");
+            return;
+        }
+        
+        // Wait and help player
+        if (time >= TRIGGER_DELAY && !triggered && !capturedOne(target1, target2, target3)) {
+            triggered = true;
+            
+            // show animation
+            displayText(NEED_HELP + "\nTry right-clicking a node to send ship(s) to capture.  Make sure they are still selected!");
+            displayMouse("right_click");
+            displayCursor(FlxG.mouse.getPosition(), target1);
+        }
+    }
+    
+    private function capturedOne(p1:FlxPoint, p2:FlxPoint, p3:FlxPoint):Bool {
+        var f1 = ps.nodeClicked(p1).getFaction();
+        var f2 = ps.nodeClicked(p2).getFaction();
+        var f3 = ps.nodeClicked(p3).getFaction();
+        return f1 == PLAYER || f2 == PLAYER || f3 == PLAYER;
+    }
+    
+    private function clickedOneOfThree(p1:FlxPoint, p2:FlxPoint, p3:FlxPoint):Bool {
+        var node:MapNode = ps.nodeClicked(FlxG.mouse.getPosition());
+        return node.getPosition().equals(p1) || node.getPosition().equals(p2) || node.getPosition().equals(p3);
+    }
+    
+    private function capturedPlanet():Void {
+        var targetNode = new FlxPoint(550, 425); // capturable node #5
+        var node:MapNode = ps.nodeClicked(targetNode);
+        
+        if (node.getFaction() == PLAYER) {
+            checkpoint = 4;
+            reset();
+            displayAffirmation("You captured your first planet!");
+        }
+    }
+    
+    private function combatPrepare():Void {
+        var target1 = new FlxPoint(550, 425); // capturable node #5
+        var target2 = new FlxPoint(650, 145); // capturable node #7
+        var target3 = new FlxPoint(650, 575); // capturable node #8
+        
+        if (!shown) {
+            displayText("Prepare to combat the enemy by capturing the other two planets.", true);
+            shown = true;
+        }
+        
+        // Check if checkpoint reached
+        if (capturedThree(target1, target2, target3)) {
+            checkpoint = 5;
+            reset();
+            displayAffirmation("You are now ready for your first skirmish!");
+            return;
+        }
+        
+        // Wait and help player
+        if (time >= TRIGGER_DELAY && !triggered) {
+            triggered = true;
+            
+            // show animation
+            displayText(NEED_HELP + "\nTry right-clicking a node to send ship(s) to capture.  Make sure they are still selected!", true);
+        }
+    }
+    
+    private function capturedThree(p1:FlxPoint, p2:FlxPoint, p3:FlxPoint):Bool {
+        var f1 = ps.nodeClicked(p1).getFaction();
+        var f2 = ps.nodeClicked(p2).getFaction();
+        var f3 = ps.nodeClicked(p3).getFaction();
+        return f1 == PLAYER && f1 == f2 && f2 == f3;
+    }
+    
+    private function combat():Void {
+        var targetNode = new FlxPoint(1125, 340); // capturable node #12
+        var node:MapNode = ps.nodeClicked(targetNode);
+        
+        if (!shown) {
+            displayText("You are ready!  No go take out the little red bugger.", true);
+            shown = true;
+        }
+        
+        // Check if checkpoint reached
+        if (FlxG.mouse.justPressedRight) {
+            var node:MapNode = ps.nodeClicked(FlxG.mouse.getPosition());
+            if (shipIsSelected() && node.getPosition().equals(targetNode)) {
+                checkpoint = 6;
+                reset();
+                displayAffirmation();
+                return;
+            }
+        }
+        
+        // Wait and help player
+        if (time >= TRIGGER_DELAY && !triggered) {
+            triggered = true;
+            
+            // show animation
+            displayText(NEED_HELP + "\nTry right-clicking a node to send ships to combat.  Make sure they are still selected!");
+            displayMouse("right_click");
+            displayCursor(FlxG.mouse.getPosition(), targetNode);
+        }
+    }
 }
