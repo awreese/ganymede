@@ -78,6 +78,8 @@ class BluePrint {
 	private static function checkInitTemplates(): Void {
 		if (!hasInitialized) {
 			hasInitialized = true;
+            shipTemplateMap.set("tutorial_frig_player", new BluePrint(FRIGATE, 100.0, 0.5, 100.0, 2.0, 10.0, 20.0));
+            shipTemplateMap.set("tutorial_frig_enemy", new BluePrint(FRIGATE, 50.0, 0.5, 50.0, 2.0, 1.0, 0.0));
 			shipTemplateMap.set("frigate", new BluePrint(FRIGATE, 60.0, 0.5, 100.0, 2.0, 10.0, 5.0));
 		}
 	}

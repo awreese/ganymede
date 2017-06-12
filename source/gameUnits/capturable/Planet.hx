@@ -58,6 +58,7 @@ class PlanetStat {
 	private static function checkInitTemplates(): Void {
 		if (!hasInitialized) {
 			hasInitialized = true;
+            planetTemplateMap.set("tutorial", new PlanetStat(null, 1, Math.POSITIVE_INFINITY, 0.5, 0, 0, 10, 5, 2.0));
 			planetTemplateMap.set("level1", new PlanetStat(null, 10, 5.0, 0.5, 0, 0, 10, 5, 2.0));
 			planetTemplateMap.set("level2", new PlanetStat(null, 15, 3.0, 0.5, 0, 0, 10, 5, 2.0));
 		}

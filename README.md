@@ -9,9 +9,9 @@ Codename: Project Ganymede
 Gather your forces and test your fortitude against a rising threat.  Command your fleets from planet to planet, capturing enemy strongholds, protecting home worlds, and avoiding perilous dangers in the open expanse of inter-planetary space.
 
 # Team Members (Contributers)
-* Andrew Reese
-* Daisy Xu
-* Rory Soiffer
+* [Drew Reese](https://github.com/awreese)
+* [Daisy Xu](https://github.com/xdaisy)
+* [Rory Soiffer](https://github.com/Weirdbob95)
 
 # Play Online (* demo)
 * [newgrounds.com](http://www.newgrounds.com/portal/view/693430 "AstroRush") *

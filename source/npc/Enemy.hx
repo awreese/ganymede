@@ -27,7 +27,9 @@ class Enemy extends NPC
 		// timer for checking when enemy make a move
 		timer = new FlxTimer();
 		// set to move every x second where x is time
-		timer.start(time);
+		if (this.time >= 0) {
+            timer.start(time);
+        }
 		super(faction);
 	}
 	
