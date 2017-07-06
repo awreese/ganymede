@@ -18,34 +18,44 @@
 
 package gameUnits.weapons.ammunition;
 
+import flixel.FlxSprite;
 import flixel.addons.weapon.FlxBullet;
+import gameUnits.weapons.WeaponSize;
 
 /**
  * Generic ammunition class.  All munitions used in-game
  * extend this class.
  * @author Drew Reese
  */
-class Ammunition extends FlxBullet {
+class Ammunition extends FlxBullet implements I_Ammunition {
 
-    public var target:Ship;
-	private var damage:Float;
+    public var target:FlxSprite;
+	
+    private var _ammoSize(get, null):WeaponSize;
+    private var _damage:Float;
     
-    private function new(damage:Float) {
+    private function new(ammoSize:WeaponSize, damage:Float) {
         super();
-		this.damage = damage;
+        this._ammoSize = ammoSize;
+		this._damage = damage;
     }
     
     override public function update(elapsed:Float):Void {
-        super.update(elapsed);
         
         // check if target exists & test collision
 		if (target.exists && this.overlaps(target)) {
             
             // Do damage to target & destroy missile
-            target.hurt(damage);
+            target.hurt(_damage);
             // maybe show explosion animation?
             this.kill();
 		}
+        
+        super.update(elapsed);
+    }
+    
+    public function get__ammoSize():WeaponSize {
+        return this._ammoSize;
     }
     
 }
@@ -54,8 +64,8 @@ class Ammunition extends FlxBullet {
  * Charges are used for turrets.
  */
 class Charge extends Ammunition {
-    private function new(damage:Float) {
-        super(damage);
+    private function new(ammoSize:WeaponSize, damage:Float) {
+        super(ammoSize, damage);
         this.accelerates = false;
     }
 }

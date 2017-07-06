@@ -18,26 +18,86 @@
 
 package gameUnits.weapons.launchers;
 
+import flixel.FlxG;
+import flixel.FlxSprite;
 import flixel.addons.weapon.FlxWeapon.FlxTypedWeapon;
 import flixel.addons.weapon.FlxWeapon.FlxWeaponFireFrom;
 import flixel.addons.weapon.FlxWeapon.FlxWeaponSpeedMode;
+import flixel.system.FlxSound;
+import flixel.util.helpers.FlxBounds;
+import gameUnits.combat.I_Combatant;
 import gameUnits.weapons.ammunition.Missile;
 
 /**
- * ...
+ * This class represents the in-game missile launchers.
  * @author Drew Reese
  */
-class Launcher extends FlxTypedWeapon<Missile> {
+class Launcher extends FlxTypedWeapon<Missile> implements I_Weapon {
 
-    private var launcherSize:WeaponSize;
+    private var source:I_Combatant;
+    private var size(get, null):WeaponSize;
     
-    public function new(name:String, bulletFactory:FlxTypedWeapon<Missile> -> Missile, fireFrom:FlxWeaponFireFrom, speedMode:FlxWeaponSpeedMode) {
+    public function new(source:FlxSprite, name:String, bulletFactory:FlxTypedWeapon<Missile> -> Missile, fireFrom:FlxWeaponFireFrom, speedMode:FlxWeaponSpeedMode) {
         super(name, bulletFactory, fireFrom, speedMode);
-		
+        
+        // load missile loading and firing sounds
+        var load_snd:FlxSound;
+        var launch_snd:FlxSound;
+        #if flash
+            load_snd = FlxG.sound.load(AssetPaths.missile_load__mp3);
+            launch_snd = FlxG.sound.load(AssetPaths.missile_fire__mp3);
+        #else
+            load_snd = FlxG.sound.load(AssetPaths.missile_load__ogg);
+            launch_snd = FlxG.sound.load(AssetPaths.missile_fire__ogg);
+        #end
+        load_snd.looped = false;
+        this.onPreFireSound = load_snd;
+        launch_snd.looped = false;
+        this.onPostFireSound = launch_snd;
+        
+        // finish settings
+        this.rotateBulletTowardsTarget = false;
+        this.source = cast(source, I_Combatant);
+        FlxG.state.add(this.group);
     }
     
-    public function getSize():WeaponSize {
-        return this.launcherSize;
+    /**
+     * Returns the size of this weapon.
+     * @return size of this weapon
+     */
+    public function get_size():WeaponSize {
+        return this.size;
     }
     
+    /**
+     * Fires missile at selected target.
+     */
+    public function fire():Void {
+        var target = source.selectTarget();
+        if (target != null && fireFromParentAngle(new FlxBounds(-10.0, 10.0))) {
+            currentBullet.target = cast(target, FlxSprite);
+            currentBullet.start(false, 0.025);
+            //currentBullet.start(false, 0.05);
+        }
+    }
+    
+}
+
+class Launcher_Rocket extends Launcher {
+    
+    public function new(source:FlxSprite) {
+        super(source, "Rocket Launcher",
+            function(d) {
+                var rocket = new Missile_Small(50.0);
+                return rocket;
+            },
+            FlxWeaponFireFrom.PARENT(source, new FlxBounds(source.origin), true),
+            //FlxWeaponSpeedMode.SPEED(new FlxBounds(65.0))
+            FlxWeaponSpeedMode.SPEED(Missile_Small.LAUNCH_SPEED)
+        );
+        //this.bulletLifeSpan = new FlxBounds(3.0);
+        this.bulletLifeSpan = Missile_Small.FLIGHT_TIME;
+        this.fireRate = 3000;
+        this.size = WeaponSize.SMALL;
+    }
 }
