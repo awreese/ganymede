@@ -76,7 +76,8 @@ class Launcher extends FlxTypedWeapon<Missile> implements I_Weapon {
         var target = source.selectTarget();
         if (target != null && fireFromParentAngle(new FlxBounds(-10.0, 10.0))) {
             currentBullet.target = cast(target, FlxSprite);
-            currentBullet.start(false, 0.025);
+            //currentBullet.start(false, 0.025);
+            currentBullet.start();
             //currentBullet.start(false, 0.05);
         }
     }

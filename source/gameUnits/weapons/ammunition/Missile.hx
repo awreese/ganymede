@@ -18,28 +18,26 @@
 
 package gameUnits.weapons.ammunition;
 
-import flixel.addons.weapon.FlxBullet;
-import flixel.addons.weapon.FlxWeapon.FlxTypedWeapon;
-import flixel.addons.weapon.FlxWeapon.FlxWeaponFireFrom;
-import flixel.addons.weapon.FlxWeapon.FlxWeaponSpeedMode;
-import flixel.math.FlxAngle;
+import flixel.FlxG;
+import flixel.effects.particles.FlxEmitter;
 import flixel.math.FlxPoint;
 import flixel.math.FlxVector;
 import flixel.math.FlxVelocity;
+import flixel.util.FlxColor;
 import flixel.util.helpers.FlxBounds;
-import gameUnits.Ship;
 import gameUnits.weapons.WeaponSize;
 
 /**
  * Missiles are used for launchers.
  * @author Drew Reese
  */
-class Missile extends Ammunition  {
+class Missile extends Ammunition implements I_Missile {
     
     public static var LAUNCH_SPEED:FlxBounds<Float> = new FlxBounds(30.0);
     
     private var _velocity:Float;
     private var _acceleration:Float;
+    private var _exhaust:FlxEmitter;
 	
 	private function new(missileSize:WeaponSize, damage:Float, velocity:Float, acceleration:Float)  {
 		super(missileSize, damage);
@@ -74,8 +72,17 @@ class Missile extends Ammunition  {
 		
 	}
     
-    public function start(a:Bool, b:Float):Void {
+    override public function kill():Void {
+        super.kill();
+        explode();
+    }
+    
+    public function start():Void {
         
+    }
+    
+    public function explode():Void {
+        new MissileExplosion(this);
     }
     
     private function adjustTrajectory():Void {
@@ -104,12 +111,33 @@ class Missile extends Ammunition  {
 }
 
 class Missile_Small extends Missile {
-    public static var FLIGHT_TIME:FlxBounds<Float> = new FlxBounds(3.0);
+    public static var FLIGHT_TIME:FlxBounds<Float> = new FlxBounds(2.0);
     public static var LAUNCH_SPEED:FlxBounds<Float> = new FlxBounds(30.0);
     
     public function new(?damage:Float = 5.0, ?velocity:Float = 120.0, ?acceleration:Float = 100.0) {
         super(SMALL, damage, velocity, acceleration);
         this.setGraphicSize(16, 0);
         this.updateHitbox();
+    }
+}
+
+class MissileExplosion extends FlxEmitter {
+    private static var MAX_PARTICLES:Int = 15;
+    
+    public function new(missile:Missile) {
+        super(missile.x, missile.y, MAX_PARTICLES);
+        makeParticles(2, 2, FlxColor.WHITE, MAX_PARTICLES);
+        
+        launchMode = FlxEmitterMode.CIRCLE;
+        launchAngle.set( -180.0, 180.0);
+        lifespan.set(0.3);
+        alpha.set(1.0, 1.0, 0.0, 0.0);
+        color.set(FlxColor.YELLOW, FlxColor.YELLOW, FlxColor.WHITE, FlxColor.BLACK);
+        velocity.set(0.5, 0.5, 1.0, 1.0);
+        angle.set( -90.0, 90.0);
+        
+        FlxG.state.add(this);
+        
+        start(true);
     }
 }

@@ -17,16 +17,17 @@
  */
 
 package gameUnits.weapons.ammunition;
-
-import flixel.FlxSprite;
+import flixel.effects.particles.FlxEmitter;
 
 /**
- * Interface for in-game ammunition.
+ * Missile Interface.
  * @author Drew Reese
  */
-interface I_Ammunition {
-    public var target:FlxSprite;
+interface I_Missile {
+    private var _velocity:Float;
+    private var _acceleration:Float;
+    private var _exhaust:FlxEmitter;
     
-    private var _ammoSize(get, null):WeaponSize;
-    private var _damage:Float;
+    public function start():Void;
+    public function explode():Void;
 }
