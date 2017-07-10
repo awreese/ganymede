@@ -23,6 +23,17 @@ import flixel.addons.weapon.FlxBullet;
 import gameUnits.weapons.WeaponSize;
 
 /**
+ * Interface for in-game ammunition.
+ * @author Drew Reese
+ */
+interface I_Ammunition {
+    public var target:FlxSprite;
+    
+    private var _ammoSize(get, null):WeaponSize;
+    private var _damage:Float;
+}
+
+/**
  * Generic ammunition class.  All munitions used in-game
  * extend this class.
  * @author Drew Reese
