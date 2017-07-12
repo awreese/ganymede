@@ -18,17 +18,19 @@
 
 package gameUnits.weapons.ammunition;
 
-import flixel.addons.weapon.FlxBullet;
+import flixel.util.helpers.FlxBounds;
+import gameUnits.weapons.WeaponSize;
 
 /**
  * Represents projectile ammo type (think actual bullets).
  * @author Drew Reese
  */
 class Projectile extends Charge {
+	
+	public static var PROJECTILE_SPEED:FlxBounds<Float> = new FlxBounds(250.0, 350.0);
 
-    private function new(damage:Float) {
-        super(damage);
-        this.maxVelocity.set(350.0, 450.0);
+    private function new(chargeSize:WeaponSize, damage:Float) {
+        super(chargeSize, damage);
     }
     
 }

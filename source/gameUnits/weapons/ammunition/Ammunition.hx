@@ -58,7 +58,6 @@ class Ammunition extends FlxBullet implements I_Ammunition {
             
             // Do damage to target & destroy missile
             target.hurt(_damage);
-            // maybe show explosion animation?
             this.kill();
 		}
         

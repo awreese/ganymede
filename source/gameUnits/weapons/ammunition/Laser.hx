@@ -39,8 +39,8 @@ import gameUnits.weapons.ammunition.Laser.Pulse;
  */
 class Laser extends Charge {
 	
-    public static var PULSE_SPEED:FlxBounds<Float> = new FlxBounds(500.0);
-    public static var BEAM_SPEED:FlxBounds<Float> = new FlxBounds(0.0);
+    //public static var PULSE_SPEED:FlxBounds<Float> = new FlxBounds(500.0);
+    //public static var BEAM_SPEED:FlxBounds<Float> = new FlxBounds(0.0);
     
     public static var RED:FlxColor = 0xff0000;      // red laser ~650nm
     public static var YELLOW:FlxColor = 0xffd500;   // yellow laser ~593nm
@@ -49,7 +49,6 @@ class Laser extends Charge {
     
 	private function new(chargeSize:WeaponSize, damage:Float)  {
 		super(chargeSize, damage);
-		//this.maxVelocity.set(PULSE_SPEED, PULSE_SPEED);
 	}
 	
 }
@@ -59,7 +58,8 @@ class Laser extends Charge {
  * Faster tracking, shorter range, higher rate of fire, less damage per shot
  */
 class Pulse extends Laser {
-    
+    public static var SPEED:FlxBounds<Float> = new FlxBounds(500.0);
+	
 	private function new(chargeSize:WeaponSize, damage:Float, ?dual:Bool = false) {
 		super(chargeSize, damage);
         if (dual) {
@@ -82,9 +82,7 @@ class Pulse_Small extends Pulse {
             this.setGraphicSize(16, 1);
         }
         this.updateHitbox();
-        //this.color = 0xff0000; // red laser ~650nm
         this.color = Laser.RED;
-        //this.lifespan = 0.3;
     }
 }
 
@@ -99,9 +97,7 @@ class Pulse_Medium extends Pulse {
             this.setGraphicSize(24, 3);
         }
         this.updateHitbox();
-        //this.color = 0x65ff00; // green laser ~532nm
         this.color = Laser.YELLOW;
-        //this.lifespan = 0.4;
     }
 }
 
@@ -116,9 +112,7 @@ class Pulse_Large extends Pulse {
             this.setGraphicSize(32, 4);
         }
         this.updateHitbox();
-        //this.color = 0x0028ff; // blue laser ~445nm
         this.color = Laser.GREEN;
-        //this.lifespan = 0.5;
     }
 }
 
@@ -133,9 +127,7 @@ class Pulse_Capital extends Pulse {
             this.setGraphicSize(40, 5);
         }
         this.updateHitbox();
-        //this.color = 0xffd500; // yellow laser ~593nm
         this.color = Laser.BLUE;
-        //this.lifespan = 0.6;
     }
 }
 
@@ -145,9 +137,10 @@ class Pulse_Capital extends Pulse {
  */
 class Beam extends Laser {
 	
-	private var source:I_Combatant;
-    private var dual:Bool;
+	public static var SPEED:FlxBounds<Float> = new FlxBounds(0.0);
 	
+	private var source:I_Combatant;
+    
 	private function new(chargeSize:WeaponSize, damage:Float, source:I_Combatant, ?dual:Bool = false) {
 		super(chargeSize, damage);
         if (dual) {
@@ -155,10 +148,8 @@ class Beam extends Laser {
         } else {
             loadGraphic(AssetPaths.pulse_laser__png, false);
         }
-        //this.alpha = 0.75;
-		this.lifespan = 1.0;
+        this.lifespan = 1.0;
         this.source = source;
-        this.dual = dual;
 	}
 }
 
@@ -167,6 +158,8 @@ class Beam extends Laser {
  * unable to get them to "look right".  I think beam lasers are 
  * a dead end at this point.  Perhaps they will work better as
  * large beacon/planetary weapons since they don't move.
+ * 
+ * 7/11/2017 10:08 PM Ok, just realized I should try calculating the beam's starting position in the same manner as I calculated a missile's exhaust particle position
  */
 
 class Beam_small extends Beam {

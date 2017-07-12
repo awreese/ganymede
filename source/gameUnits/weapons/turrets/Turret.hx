@@ -111,7 +111,7 @@ class GatlingPulseLaser extends Energy {
                 return pulse;
             }, 
             FlxWeaponFireFrom.PARENT(source, new FlxBounds(source.origin), false), 
-            FlxWeaponSpeedMode.SPEED(Laser.PULSE_SPEED)
+            FlxWeaponSpeedMode.SPEED(Pulse.SPEED)
         );
         this.bulletLifeSpan = Pulse_Small.LIFESPAN;
 		this.fireRate = 500;
@@ -128,7 +128,7 @@ class SmallFocusedBeamLaser extends Energy {
                 return beam;
             },
             FlxWeaponFireFrom.PARENT(source, new FlxBounds(source.origin), false),
-            FlxWeaponSpeedMode.SPEED(Laser.BEAM_SPEED)
+            FlxWeaponSpeedMode.SPEED(Beam.SPEED)
         );
         this.bulletLifeSpan = new FlxBounds(1.0);
         this.fireRate = 5000;
