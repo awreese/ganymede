@@ -136,17 +136,25 @@ class SmallFocusedBeamLaser extends Energy {
     }
 }
 
+class Projectile extends Turret {
+	
+	private function new(source:FlxSprite, name:String, ammoFactory:FlxTypedWeapon<Charge>->Charge, fireFrom:FlxWeaponFireFrom, speedMode:FlxWeaponSpeedMode) {
+		super(source, name, ammoFactory, fireFrom, speedMode);
+		
+		//var projectile_snd:FlxSound;
+		//#if flash
+			//projectile_snd = FlxG.sound.load(AssetPaths.laser__mp3);
+		//#else
+			//projectile_snd = FlxG.sound.load(AssetPaths.laser__ogg);
+		//#end
+		//projectile_snd.looped = false;
+		//this.onPreFireSound = projectile_snd;
+	}
+}
+
 //class Hybrid extends FlxTypedWeapon<HybridAmmo> {
 	//
 	//public function new(name:String, ammoFactory:FlxTypedWeapon<HybridAmmo>->HybridAmmo, fireFrom:FlxWeaponFireFrom, speedMode:FlxWeaponSpeedMode) {
-		//super(name, ammoFactory, fireFrom, speedMode);
-		//
-	//}
-//}
-
-//class Projectile extends FlxTypedWeapon<ProjectileAmmo> {
-	//
-	//public function new(name:String, ammoFactory:FlxTypedWeapon<ProjectileAmmo>->ProjectileAmmo, fireFrom:FlxWeaponFireFrom, speedMode:FlxWeaponSpeedMode) {
 		//super(name, ammoFactory, fireFrom, speedMode);
 		//
 	//}

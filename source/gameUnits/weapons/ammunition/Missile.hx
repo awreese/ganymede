@@ -30,13 +30,15 @@ import gameUnits.weapons.WeaponSize;
 import gameUnits.weapons.ammunition.Ammunition.I_Ammunition;
 
 /**
- * Missile.hx is an ammunition type for use in launchers.
+ * Missile is an ammunition type for use in launchers.  Missiles
+ * have the slowest velocity of all the ammunition types, but they
+ * accelerate after launch and track towards their assigned target.
+ * 
  * @author Drew Reese
  * 
  * This file contains:
  *  - Missile Interface
- *  - Missile Class
- *  - Sub-classes
+ *  + Missile Class
  *      - Small
  *      - Medium
  *      - Large
@@ -65,7 +67,7 @@ class Missile extends Ammunition implements I_Missile {
     
     public static var LAUNCH_SPEED:FlxBounds<Float> = new FlxBounds(30.0);
     
-    /* length in pixels for sizes */
+    /* length in pixels for missile sizes */
     private static var _SIZE_SML_:Int = 16;
     private static var _SIZE_MED_:Int = 32;
     private static var _SIZE_LRG_:Int = 48;
@@ -293,7 +295,9 @@ class MissileExplosion extends FlxEmitter {
             case CAPITAL:
                 num_particles = 20;
         }
-        super(missile.x, missile.y, num_particles);
+		var mp = missile.getMidpoint();
+        super(mp.x, mp.y, num_particles);
+		mp.put();
         makeParticles(2, 2, FlxColor.WHITE, num_particles);
         
         lifespan.set(0.3);

@@ -34,8 +34,28 @@ import gameUnits.weapons.ammunition.Ammunition.Charge;
 import gameUnits.weapons.ammunition.Laser.Pulse;
 
 /**
- * Represents laser projectile ammo type.
+ * Lasers represent an energy projectile ammo type used by 
+ * laser turrets.  Lasers strike (or miss) their target 
+ * nearly instantly.
+ * 
  * @author Drew Reese
+ * 
+ * This file contains:
+ * 	+ Laser Class
+ * 		+ Pulse Class
+ * 			- Small
+ * 			- Medium
+ * 			- Large
+ * 			- Capital
+ * 		+ Beam Class
+ * 			- Small
+ * 			- Medium
+ * 			- Large
+ * 			- Capital
+ */
+
+/**
+ * Lasers are used in Energy turrets.
  */
 class Laser extends Charge {
 	

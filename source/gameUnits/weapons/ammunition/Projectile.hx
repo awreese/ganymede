@@ -22,15 +22,78 @@ import flixel.util.helpers.FlxBounds;
 import gameUnits.weapons.WeaponSize;
 
 /**
- * Represents projectile ammo type (think actual bullets).
+ * Projectiles represent a projectile ammo type (think actual bullets) used
+ * by Projectile turrets. Projectiles have a medium velocity but do higher 
+ * damage.
+ * 
  * @author Drew Reese
+ * 
+ * This file contains:
+ * 	+ Projectile Class
+ * 		- Small
+ * 		- Medium
+ * 		- Large
+ * 		- Capital
+ */
+
+/**
+ * Projectiles are used in Projectile turrets.
  */
 class Projectile extends Charge {
 	
-	public static var PROJECTILE_SPEED:FlxBounds<Float> = new FlxBounds(250.0, 350.0);
+	public static var SPEED:FlxBounds<Float> = new FlxBounds(250.0, 350.0);
 
+	/* dianmeter in pixels for projectile sizes */
+    private static var _SIZE_SML_:Int = 3;
+    private static var _SIZE_MED_:Int = 5;
+    private static var _SIZE_LRG_:Int = 7;
+    private static var _SIZE_CAP_:Int = 9;
+    
+    public var _size(default, null):Int;
+	
     private function new(chargeSize:WeaponSize, damage:Float) {
         super(chargeSize, damage);
+		
+		// load graphic
+		/* load graphic here */
+		switch(chargeSize) {
+            case SMALL:
+                this._size = _SIZE_SML_;
+            case MEDIUM:
+                this._size = _SIZE_MED_;
+            case LARGE:
+                this._size = _SIZE_LRG_;
+            case CAPITAL:
+                this._size = _SIZE_CAP_;
+        }
+        this.setGraphicSize(0, _size);
+        this.updateHitbox();
+        
     }
     
+}
+
+class Projectile_Small extends Projectile {
+	
+	public function new(?damage:Float = 60.0) {
+		super(SMALL, damage);
+	}
+}
+class Projectile_Medium extends Projectile {
+	
+	public function new(?damage:Float = 60.0) {
+		super(MEDIUM, damage);
+	}
+}
+class Projectile_Large extends Projectile {
+	
+	public function new(?damage:Float = 60.0) {
+		super(LARGE, damage);
+	}
+}
+class Projectile_Capital extends Projectile {
+	
+	public function new(?damage:Float = 60.0) {
+		super(CAPITAL, damage);
+	}
 }
