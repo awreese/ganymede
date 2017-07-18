@@ -18,16 +18,8 @@
 
 package gameUnits.weapons.ammunition;
 
-import flixel.FlxG;
-import flixel.FlxSprite;
-import flixel.addons.weapon.FlxBullet;
-import flixel.math.FlxAngle;
-import flixel.math.FlxMath;
-import flixel.math.FlxVector;
-import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.helpers.FlxBounds;
-import gameUnits.Ship;
 import gameUnits.combat.I_Combatant;
 import gameUnits.weapons.WeaponSize;
 import gameUnits.weapons.ammunition.Ammunition.Charge;

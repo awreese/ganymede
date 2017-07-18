@@ -20,6 +20,7 @@ package gameUnits.weapons.ammunition;
 
 import flixel.util.helpers.FlxBounds;
 import gameUnits.weapons.WeaponSize;
+import gameUnits.weapons.ammunition.Ammunition.Charge;
 
 /**
  * Projectiles represent a projectile ammo type (think actual bullets) used
@@ -41,9 +42,10 @@ import gameUnits.weapons.WeaponSize;
  */
 class Projectile extends Charge {
 	
-	public static var SPEED:FlxBounds<Float> = new FlxBounds(250.0, 350.0);
+	public static var SPEED:FlxBounds<Float> = new FlxBounds(110.0, 130.0);
+	//public static var SPEED:FlxBounds<Float> = new FlxBounds(50.0, 150.0);
 
-	/* dianmeter in pixels for projectile sizes */
+	/* diameter in pixels for projectile sizes */
     private static var _SIZE_SML_:Int = 3;
     private static var _SIZE_MED_:Int = 5;
     private static var _SIZE_LRG_:Int = 7;
@@ -55,7 +57,7 @@ class Projectile extends Charge {
         super(chargeSize, damage);
 		
 		// load graphic
-		/* load graphic here */
+		loadGraphic(AssetPaths.projectile__png, false);
 		switch(chargeSize) {
             case SMALL:
                 this._size = _SIZE_SML_;

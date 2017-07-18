@@ -23,6 +23,7 @@ import flixel.FlxSprite;
 import flixel.addons.weapon.FlxWeapon.FlxTypedWeapon;
 import flixel.addons.weapon.FlxWeapon.FlxWeaponFireFrom;
 import flixel.addons.weapon.FlxWeapon.FlxWeaponSpeedMode;
+import flixel.math.FlxPoint;
 import flixel.system.FlxSound;
 import flixel.util.helpers.FlxBounds;
 import gameUnits.combat.I_Combatant;
@@ -30,6 +31,8 @@ import gameUnits.weapons.I_Weapon;
 import gameUnits.weapons.WeaponSize;
 import gameUnits.weapons.ammunition.Ammunition.Charge;
 import gameUnits.weapons.ammunition.Laser;
+import gameUnits.weapons.ammunition.Projectile;
+import gameUnits.weapons.ammunition.Projectile.Projectile_Small;
 
 /**
  * This class represents the in-game turrets.
@@ -136,19 +139,141 @@ class SmallFocusedBeamLaser extends Energy {
     }
 }
 
-class Projectile extends Turret {
+typedef Intercept = {
+	var x: Int;
+	var y: Int;
+}
+
+class ProjectileTurret extends Turret {
 	
 	private function new(source:FlxSprite, name:String, ammoFactory:FlxTypedWeapon<Charge>->Charge, fireFrom:FlxWeaponFireFrom, speedMode:FlxWeaponSpeedMode) {
 		super(source, name, ammoFactory, fireFrom, speedMode);
 		
-		//var projectile_snd:FlxSound;
-		//#if flash
-			//projectile_snd = FlxG.sound.load(AssetPaths.laser__mp3);
-		//#else
-			//projectile_snd = FlxG.sound.load(AssetPaths.laser__ogg);
-		//#end
-		//projectile_snd.looped = false;
-		//this.onPreFireSound = projectile_snd;
+		// TODO: swap laser sound for projectile sound
+		var projectile_snd:FlxSound;
+		#if flash
+			projectile_snd = FlxG.sound.load(AssetPaths.laser__mp3);
+		#else
+			projectile_snd = FlxG.sound.load(AssetPaths.laser__ogg);
+		#end
+		projectile_snd.looped = false;
+		this.onPreFireSound = projectile_snd;
+	}
+	
+	override public function fire():Void {
+		var target = source.selectTarget();
+		
+		if (target != null) {
+			var targetShip = cast(target, Ship);
+			
+			// calculate target intercept point
+			var speed = (Projectile.SPEED.max + Projectile.SPEED.min) * 0.5;
+			var intercept:Intercept = getIntercept(targetShip.getMidpoint(), targetShip.vel, this.parent.getMidpoint(), speed);
+			
+			
+			// fire at intercept point
+			if (intercept != null && fireAtPosition(intercept.x, intercept.y)) {
+				currentBullet.target = cast(target, FlxSprite);
+			}
+		}
+		
+	}
+	
+	
+	//private static function getIntercept(dst:FlxSprite, src:FlxSprite, v:Float): Intercept {
+	/**
+	 * Calculates the intercept point of a moving target a projectile
+	 * should be aimed at.  Based on code from: 
+	 * https://stackoverflow.com/questions/2248876/2d-game-fire-at-a-moving-target-by-predicting-intersection-of-projectile-and-u
+	 * 
+	 * @param	dst position of target
+	 * @param	dstVel velocity of target
+	 * @param	src position of projectile
+	 * @param	projSpeed projectile speed
+	 * @return	intercept point
+	 */
+	private static function getIntercept(dst:FlxPoint, dstVel:FlxPoint, src:FlxPoint, projSpeed:Float): Intercept {
+		
+		//if (!dst.exists) { return null; }
+		//var dstMP = dst.getMidpoint();
+		//var srcMP = src.getMidpoint();
+		//
+		//var tx = dstMP.x - srcMP.x;
+		//var ty = dstMP.y - srcMP.y;
+		var tx = dst.x - src.x;
+		var ty = dst.y - src.y;
+		//
+		//if (!dst.exists) { return null; }
+		//var dstVel = dst.velocity;
+		//
+		//var tvx = dstVel.x;
+		//var tvy = dstVel.y;
+		var tvx = dstVel.x;
+		var tvy = dstVel.y;
+		
+		// set quadratic parameters and solve
+		var a = tvx * tvx + tvy * tvy - projSpeed * projSpeed;
+		var b = 2 * (tx * tvx + ty * tvy);
+		var c = tx * tx + ty * ty;
+		var solution = solveQuadratic(a, b, c);
+		
+		var intercept:Intercept = null;
+		if (solution != null) {
+			var t = getSmallestPositiveTvalue(solution[0], solution[1]);
+			if (t != null) {
+				intercept = {
+					x: Std.int(dst.x + t * tvx),
+					y: Std.int(dst.y + t * tvy)
+				}
+			}
+		}
+		
+		return intercept;
+	}
+	
+	private static function solveQuadratic(a:Float, b:Float, c:Float):Array<Float> {
+		var result = null;
+		
+		var radicand:Float = b * b - 4 * a * c;
+		
+		if (radicand < 0.0) {
+			// no solution
+			
+		} else {
+			// single solution (i.e. t1 == t2)
+			// or 
+			// dual solution
+			result = [( -b + Math.sqrt(radicand)) / (2 * a), ( -b - Math.sqrt(radicand)) / (2 * a)];
+		}
+		
+		return result;
+	}
+	
+	private static function getSmallestPositiveTvalue(t0:Float, t1:Float):Float {
+		var t = Math.min(t0, t1);
+		if (t < 0.0) {
+			t = Math.max(t0, t1);    
+		}
+		if (t >= 0.0) {
+		  return t;
+		}
+		return null;
+	}
+}
+
+class SmallAutoCannon extends ProjectileTurret {
+	public function new (source:FlxSprite) {
+		super(source, "Small Auto Cannon I.",
+			function(d) {
+				var projectile = new Projectile_Small();
+				return projectile;
+			}, 
+			FlxWeaponFireFrom.PARENT(source, new FlxBounds(source.origin), false),
+			FlxWeaponSpeedMode.SPEED(Projectile.SPEED)
+		);
+		//this.bulletLifeSpan = new FlxBounds(1.0);
+        this.fireRate = 5000;
+        this.size = WeaponSize.SMALL;
 	}
 }
 
