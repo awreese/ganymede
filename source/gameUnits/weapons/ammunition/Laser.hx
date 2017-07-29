@@ -18,6 +18,9 @@
 
 package gameUnits.weapons.ammunition;
 
+import flixel.FlxG;
+import flixel.FlxSprite;
+import flixel.math.FlxAngle;
 import flixel.util.FlxColor;
 import flixel.util.helpers.FlxBounds;
 import gameUnits.combat.I_Combatant;
@@ -149,20 +152,65 @@ class Pulse_Capital extends Pulse {
  */
 class Beam extends Laser {
 	
-	public static var SPEED:FlxBounds<Float> = new FlxBounds(0.0);
+	public static var SPEED:FlxBounds<Float> = new FlxBounds(10.0);
+	public static var LIFESPAN:FlxBounds<Float> = new FlxBounds(1.0);
 	
-	private var source:I_Combatant;
+	//private var _source:I_Combatant;
+	//private var _source:FlxSprite;
     
-	private function new(chargeSize:WeaponSize, damage:Float, source:I_Combatant, ?dual:Bool = false) {
+	private function new(chargeSize:WeaponSize, damage:Float, ?dual:Bool = false) {
 		super(chargeSize, damage);
-        if (dual) {
+		
+		if (dual) {
             loadGraphic(AssetPaths.pulse_laser_dual__png, false);
         } else {
             loadGraphic(AssetPaths.pulse_laser__png, false);
         }
-        this.lifespan = 1.0;
-        this.source = source;
+		
+        //this._source = source;
+		
+        //this._source = cast(source, FlxSprite);
 	}
+	
+	//override public function update(elapsed:Float):Void {
+        //
+        //if (target != null && target.exists && this.overlaps(target)) {
+            //target.hurt(_damage);
+        //}
+        //
+		//adjustBeam();
+		//
+        ////var srcSprt = cast(source, FlxSprite);
+        ////
+        ////if (srcSprt == null || !srcSprt.exists || this.lifespan <= 0.0) {
+            ////this.kill();
+        ////}
+        //
+        //super.update(elapsed);
+    //}
+	
+	//private function adjustBeam():Void {
+		//var p1 = cast(this._source, FlxSprite).getMidpoint();
+		//var p2 = this.target.getMidpoint();
+		////var p2 = FlxG.mouse.getPosition();
+		//
+		//
+		//var dx = p2.x - p1.x;
+        //var dy = p2.y - p1.y;
+         //
+        //var newAngle = FlxAngle.asDegrees(Math.atan2(dy, dx));
+		//trace("source: " + p1 + ", target: " + p2 + ", angle: " + newAngle);
+		//
+		////this.angle = FlxAngle.asDegrees(newAngle) - 180;
+		//this.angle = FlxAngle.asDegrees(newAngle);
+		//
+		//dx = 50 * Math.cos(newAngle);
+		//dy = 50 * Math.sin(newAngle);
+		//this.setPosition(p1.x, p1.y);
+		//
+        //p1.put();
+        //p2.put();
+	//}
 }
 
 /*
@@ -172,38 +220,34 @@ class Beam extends Laser {
  * large beacon/planetary weapons since they don't move.
  * 
  * 7/11/2017 10:08 PM Ok, just realized I should try calculating the beam's starting position in the same manner as I calculated a missile's exhaust particle position
+ * 
+ * 7/19/2017 10:43 PM Hmmm, still not working right.  IDK, this sucks.
+ * 
+ * 7/28/2017 6:02 PM Still haven't got them quite right.  I think my intuition is correct in that beam lasers may only work for stationary objects like planets and beacons.  Will pick this back up then.
  */
 
 class Beam_small extends Beam {
     
-    public function new(?damage:Float = 50.0, source:I_Combatant, ?dual:Bool = false) {
-        super(SMALL, damage, source, dual);
-        var range:Int = Math.round(source.getSensorRange());
-        if (dual) {
-            this.setGraphicSize(range, 3);
+    public function new(?damage:Float = 50.0, ?dual:Bool = false, distance:Int) {
+        super(SMALL, damage, dual);
+		
+        //var range:Int = Math.round(source.getSensorRange());
+		//var range:Int = Math.round(cast(source, FlxSprite).getMidpoint().distanceTo(target.getMidpoint()));
+        
+		trace("new beam: length=" + distance);
+		
+		if (dual) {
+            this.setGraphicSize(distance, 3);
         } else {
-            this.setGraphicSize(range, 1);
+            this.setGraphicSize(distance, 1);
         }
         this.updateHitbox();
-        this.color = 0xff0000; // red laser ~650nm
+        this.color = Laser.RED; // red laser ~650nm
         //this.lifespan = 0.3;
         //this.angle += 180;
         //FlxTween.color(this, 2.0, 0xff0000, FlxColor.TRANSPARENT, {type: FlxTween.ONESHOT, startDelay: 1.0, onComplete: function(_) {kill();} });
         
     }
     
-    override public function update(elapsed:Float):Void {
-        
-        if (target != null && target.exists && this.overlaps(target)) {
-            target.hurt(_damage);
-        }
-        
-        //var srcSprt = cast(source, FlxSprite);
-        //
-        //if (srcSprt == null || !srcSprt.exists || this.lifespan <= 0.0) {
-            //this.kill();
-        //}
-        
-        super.update(elapsed);
-    }
+    
 }

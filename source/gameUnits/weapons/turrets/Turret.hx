@@ -122,18 +122,52 @@ class GatlingPulseLaser extends Energy {
     }
 }
 
+class BeamLaser extends Energy {
+	
+	private var distance:Int;
+	
+	private function new(source:FlxSprite, name:String, ammoFactory:FlxTypedWeapon<Charge>->Charge, fireFrom:FlxWeaponFireFrom, speedMode:FlxWeaponSpeedMode) {
+		super(source, name, ammoFactory, fireFrom, speedMode);
+	}
+	
+	//override public function fire():Void {
+		////super.fire();
+		//var target = source.selectTarget();
+		//this.distance = 0;
+        //if (target != null) {
+			//this.distance = this.getDistance(cast(source, FlxSprite), cast(target, FlxSprite));
+			//
+			//if (fireAtTarget(cast(target, FlxSprite))) {
+				//currentBullet.target = cast(target, FlxSprite);
+			//}
+        //}
+	//}
+	
+	private function getDistance(source:FlxSprite, target:FlxSprite):Int {
+		
+		var p1 = source.getMidpoint();
+		var p2 = target.getMidpoint();
+		var distance = Math.round(p1.distanceTo(p2));
+		p1.put();
+        p2.put();
+		return distance;
+	}
+}
+
 class SmallFocusedBeamLaser extends Energy {
     
     public function new(source:FlxSprite) {
         super(source, "Small Focused Beam Laser I",
             function(d) {
-                var beam = new Beam_small(cast (source, I_Combatant), false);
+                //var beam = new Beam_small(false, distance);
+                var beam = new Beam_small(false, 100);
                 return beam;
             },
             FlxWeaponFireFrom.PARENT(source, new FlxBounds(source.origin), false),
             FlxWeaponSpeedMode.SPEED(Beam.SPEED)
         );
-        this.bulletLifeSpan = new FlxBounds(1.0);
+        //this.bulletLifeSpan = new FlxBounds(1.0);
+        this.bulletLifeSpan = Beam.LIFESPAN;
         this.fireRate = 5000;
         this.size = WeaponSize.SMALL;
     }
