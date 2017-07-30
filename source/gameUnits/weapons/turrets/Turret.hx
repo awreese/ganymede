@@ -96,9 +96,9 @@ class Energy extends Turret {
 		
 		var laser_snd:FlxSound;
 		#if flash
-			laser_snd = FlxG.sound.load(AssetPaths.laser__mp3);
+			laser_snd = FlxG.sound.load(AssetPaths.laser_fire__mp3);
 		#else
-			laser_snd = FlxG.sound.load(AssetPaths.laser__ogg);
+			laser_snd = FlxG.sound.load(AssetPaths.laser_fire__ogg);
 		#end
 		laser_snd.looped = false;
 		this.onPreFireSound = laser_snd;
@@ -130,18 +130,17 @@ class BeamLaser extends Energy {
 		super(source, name, ammoFactory, fireFrom, speedMode);
 	}
 	
-	//override public function fire():Void {
-		////super.fire();
-		//var target = source.selectTarget();
-		//this.distance = 0;
-        //if (target != null) {
-			//this.distance = this.getDistance(cast(source, FlxSprite), cast(target, FlxSprite));
-			//
-			//if (fireAtTarget(cast(target, FlxSprite))) {
-				//currentBullet.target = cast(target, FlxSprite);
-			//}
-        //}
-	//}
+	override public function fire():Void {
+		var target = source.selectTarget();
+		this.distance = 0;
+        if (target != null) {
+			this.distance = this.getDistance(cast(source, FlxSprite), cast(target, FlxSprite));
+			
+			if (fireAtTarget(cast(target, FlxSprite))) {
+				currentBullet.target = cast(target, FlxSprite);
+			}
+        }
+	}
 	
 	private function getDistance(source:FlxSprite, target:FlxSprite):Int {
 		
@@ -183,12 +182,11 @@ class ProjectileTurret extends Turret {
 	private function new(source:FlxSprite, name:String, ammoFactory:FlxTypedWeapon<Charge>->Charge, fireFrom:FlxWeaponFireFrom, speedMode:FlxWeaponSpeedMode) {
 		super(source, name, ammoFactory, fireFrom, speedMode);
 		
-		// TODO: swap laser sound for projectile sound
 		var projectile_snd:FlxSound;
 		#if flash
-			projectile_snd = FlxG.sound.load(AssetPaths.laser__mp3);
+			projectile_snd = FlxG.sound.load(AssetPaths.projectile_fire__mp3);
 		#else
-			projectile_snd = FlxG.sound.load(AssetPaths.laser__ogg);
+			projectile_snd = FlxG.sound.load(AssetPaths.projectile_fire__ogg);
 		#end
 		projectile_snd.looped = false;
 		this.onPreFireSound = projectile_snd;
