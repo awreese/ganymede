@@ -165,13 +165,16 @@ class SmallFocusedBeamLaser extends Energy {
             FlxWeaponFireFrom.PARENT(source, new FlxBounds(source.origin), false),
             FlxWeaponSpeedMode.SPEED(Beam.SPEED)
         );
-        //this.bulletLifeSpan = new FlxBounds(1.0);
         this.bulletLifeSpan = Beam.LIFESPAN;
         this.fireRate = 5000;
         this.size = WeaponSize.SMALL;
     }
 }
 
+/**
+ * Represents a point of interception.  Could easily have used a regular FlxPoint but this ensures
+ * x/y coordinates are integers.
+ */
 typedef Intercept = {
 	var x: Int;
 	var y: Int;
@@ -211,8 +214,6 @@ class ProjectileTurret extends Turret {
 		
 	}
 	
-	
-	//private static function getIntercept(dst:FlxSprite, src:FlxSprite, v:Float): Intercept {
 	/**
 	 * Calculates the intercept point of a moving target a projectile
 	 * should be aimed at.  Based on code from: 
@@ -226,20 +227,9 @@ class ProjectileTurret extends Turret {
 	 */
 	private static function getIntercept(dst:FlxPoint, dstVel:FlxPoint, src:FlxPoint, projSpeed:Float): Intercept {
 		
-		//if (!dst.exists) { return null; }
-		//var dstMP = dst.getMidpoint();
-		//var srcMP = src.getMidpoint();
-		//
-		//var tx = dstMP.x - srcMP.x;
-		//var ty = dstMP.y - srcMP.y;
 		var tx = dst.x - src.x;
 		var ty = dst.y - src.y;
-		//
-		//if (!dst.exists) { return null; }
-		//var dstVel = dst.velocity;
-		//
-		//var tvx = dstVel.x;
-		//var tvy = dstVel.y;
+		
 		var tvx = dstVel.x;
 		var tvy = dstVel.y;
 		
@@ -303,16 +293,7 @@ class SmallAutoCannon extends ProjectileTurret {
 			FlxWeaponFireFrom.PARENT(source, new FlxBounds(source.origin), false),
 			FlxWeaponSpeedMode.SPEED(Projectile.SPEED)
 		);
-		//this.bulletLifeSpan = new FlxBounds(1.0);
         this.fireRate = 5000;
         this.size = WeaponSize.SMALL;
 	}
 }
-
-//class Hybrid extends FlxTypedWeapon<HybridAmmo> {
-	//
-	//public function new(name:String, ammoFactory:FlxTypedWeapon<HybridAmmo>->HybridAmmo, fireFrom:FlxWeaponFireFrom, speedMode:FlxWeaponSpeedMode) {
-		//super(name, ammoFactory, fireFrom, speedMode);
-		//
-	//}
-//}
