@@ -56,8 +56,8 @@ class PlayState extends FlxState {
 	override public function create():Void {
 		rand = new FlxRandom();
 		enemies = new Array<Enemy>();
-        
-		// Initialize the map
+
+    // Initialize the map
 		grpMap = new FlxTypedGroup<GameMap>();        ///
 		add(grpMap);                                    //____ WTF is this?
 		gameMap = new GameMap(this, Main.LEVEL);        //     no other game map is ever added to the group

@@ -19,21 +19,20 @@
 package gameUnits;
 
 import faction.Faction;
-import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
-import flixel.addons.weapon.FlxWeapon.FlxTypedWeapon;
 import flixel.group.FlxGroup.FlxTypedGroup;
-import flixel.math.FlxRect;
 import flixel.math.FlxVector;
-import flixel.system.FlxSound;
-import flixel.text.FlxText;
 import flixel.util.helpers.FlxBounds;
 import gameUnits.Ship.BluePrint;
 import gameUnits.capturable.Planet;
+import gameUnits.combat.I_Combatant;
+import gameUnits.combat.Radar;
+import gameUnits.weapons.I_Weapon;
+import gameUnits.weapons.launchers.Launcher;
+import gameUnits.weapons.turrets.Turret;
 import map.MapEdge;
 import map.MapNode;
-import flixel.math.FlxRandom;
 
 /**
  * Various ship hull types that exist in-game.
@@ -156,79 +155,15 @@ class BluePrint {
 }
 
 /**
- * Radar
- * Represents the ships that can be interacted with.
- * Friends are ships that can be flocked with.
- * Foes are ships that can be targeted through combat.
- * 
- * @author Drew Reese
- */
-private class Radar {
-    
-    private var faction:FactionType;
-    private var friend:Array<Ship>;
-    private var foe:Array<Ship>;
-    
-    private var rand:FlxRandom = new FlxRandom();
-    
-    /**
-     * Creates new RADAR object for specified faction object.
-     * @param faction   faction of the owner of this shiney new radar
-     */
-    public function new(faction:FactionType) {
-        this.faction = faction;
-        this.friend = new Array<Ship>();
-        this.foe = new Array<Ship>();
-    }
-    
-    public function setRadar(ships:Array<Ship>):Void {
-        this.friend.splice(0, friend.length);
-        this.foe.splice(0, foe.length);
-        
-        for (ship in ships) {
-            if (this.faction.equals(ship.getFactionType())) {
-                this.friend.push(ship);
-            } else {
-                this.foe.push(ship);
-            }
-        }
-    }
-    
-    /**
-     * Returns friendly group of ships.
-     * @return  friendlies
-     */
-    public function getFriends():Array<Ship> {
-        return this.friend.copy();
-    }
-    
-    /**
-     * Returns enemy group of ships.
-     * @return  foes
-     */
-    public function getFoes():Array<Ship> {
-        return this.foe.copy();
-    }
-    
-    /**
-     * Selects target ship at random.
-     * @return  randomly chosen enemy ship
-     */
-    public function selectTarget():Ship {
-        return rand.getObject(this.foe, 0);
-    }
-}
-
-/**
  *
  * @author Daisy
  * @author Rory Soiffer
  * @author Drew Reese
  */
-class Ship extends FlxSprite {
+class Ship extends FlxSprite implements I_Combatant {
 
 	// Parent/Faction Info
-	private var homePlanet:Planet; // probably not needed
+	//private var homePlanet:Planet; // probably not needed
 	private var faction:Faction;
     
     // Ship specs
@@ -242,12 +177,11 @@ class Ship extends FlxSprite {
     private var attackSpeed:Float;
     private var attackDamage:Float;
     
-    private var sensorRange:Float;
-    
     private var capturePerSecond:Float;
     
     // Radar (list of ships this ship can "interact with")
     private var radar:Radar;
+    private var sensorRange:Float;
 
     // TODO: convert these to the inherited object fields
 	public var pos:FlxVector;
@@ -265,19 +199,12 @@ class Ship extends FlxSprite {
 	
 	//private var hpBar :FlxText;
 	
-	public var weapon:FlxTypedWeapon<ShipAttack>; // This weapon is used to create ShipAttacks
-    private var laser_snd:FlxSound; // play a sound when laser fires
+	//private var weapon:Turret;
+	private var weapon:I_Weapon;
+	//private var weapon1:Launcher;
 
 	public function new(destination:MapNode, faction:Faction, blueprint:BluePrint) {
 		super();
-		
-		// initialize laser sound
-		#if flash
-			laser_snd = FlxG.sound.load(AssetPaths.laser__mp3);
-		#else
-			laser_snd = FlxG.sound.load(AssetPaths.laser__wav);
-		#end
-		laser_snd.looped = false;
 		
 		// set sprite graphic (to set proper width & height for hitbox)
 		switch (faction.getFactionType()) {
@@ -322,17 +249,12 @@ class Ship extends FlxSprite {
 		
         // TODO: Move weapon definition into a Weapons Class, just instantiate here
 		// Creates the weapon that creates bullets
-		this.weapon = new FlxTypedWeapon<ShipAttack>("Laser mk. I", 
-            function(w) { return new ShipAttack(this.attackDamage, 500.0); }, 
-            FlxWeaponFireFrom.PARENT(this, new FlxBounds(this.origin, this.origin)),
-			FlxWeaponSpeedMode.SPEED(new FlxBounds(450.0, 550.0))
-        );
-        this.weapon.bulletLifeSpan = new FlxBounds(0.5, 0.5);
-		this.weapon.bounds = new FlxRect(0, 0, FlxG.width, FlxG.height);
-		// firerate = (attacks/second)^-1 * (1000 ms/second) = (second/attack) * 1000 (ms/second) = 1000/attackspeed
-		this.weapon.fireRate = Math.round(1000 / this.attackSpeed);
-        FlxG.state.add(this.weapon.group); // Add weapon group here, all bullets part of this group
-		
+        
+        //this.weapon = new GatlingPulseLaser(this);
+        //this.weapon = new SmallFocusedBeamLaser(this);
+        //this.weapon = new Launcher_Rocket(this);
+        this.weapon = new SmallAutoCannon(this);
+        
 		//hpBar = new FlxText(this.x, this.y - this.height, 0, "" + stats.hitPoints, 16);
 		//FlxG.state.add(hpBar);
         
@@ -419,11 +341,18 @@ class Ship extends FlxSprite {
         
         //*******************
         // combat
-        var targetShip = this.radar.selectTarget();
-        if (targetShip != null && this.weapon.fireAtTarget(targetShip)) {
-            this.weapon.currentBullet.target = targetShip;
-            laser_snd.play();
-        }
+        //var targetShip = this.radar.selectTarget();
+        //if (targetShip != null && this.weapon.fireAtTarget(targetShip)) {
+			////this.weapon.currentBullet.source = this;
+            //this.weapon.currentBullet.target = targetShip;
+        //}
+        //if (targetShip != null && this.weapon1.fireAtTarget(targetShip)) {
+        //if (targetShip != null && this.weapon1.fireFromParentAngle(new FlxBounds(0.0))) {
+			////this.weapon.currentBullet.source = this;
+            //this.weapon1.currentBullet.target = targetShip;
+        //}
+        
+        this.weapon.fire();
         
         //*******************
 
@@ -477,6 +406,10 @@ class Ship extends FlxSprite {
     
     // RADAR Functions
     
+    public function getSensorRange():Float {
+        return this.sensorRange;
+    }
+    
     public function inSensorRange(object:FlxObject):Bool {
         //if (this == ship) {
         if (object == null || this == object) {
@@ -489,9 +422,10 @@ class Ship extends FlxSprite {
         this.radar.setRadar(ships);
     }
     
-    public function getRandomTarget():Ship {
+    public function selectTarget():Ship {
         return this.radar.selectTarget();
     }
+    
     
     
     
