@@ -24,6 +24,7 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.math.FlxPoint;
 import flixel.math.FlxVector;
+import gameUnits.Ship;
 import gameUnits.Ship.BluePrint;
 import gameUnits.Ship.HullType;
 import gameUnits.capturable.Capturable;
@@ -99,8 +100,8 @@ class GameMap extends FlxSprite {
         this.setGraph();
 		
         // Log level start and time
-        Main.LOGGER.logLevelStart(level, Date.now());
-		
+        Main.LOGGER.logLevelStart(level);
+		trace("Constructing level: " + level);
 		parseLevel(playState);
         
 		drawNodes();
@@ -112,16 +113,18 @@ class GameMap extends FlxSprite {
 			}
 		}
 		// TODO: figure out how to not get any gray area when zooming in to the corner of the map
-		minX = minX - MapNode.NODE_RADIUS * 2 - 10 < 0.0 ? 0.0 : minX - MapNode.NODE_RADIUS * 2 - 10; // get offset for node
-		minY = minY - MapNode.NODE_RADIUS * 2 - 10 < 0.0 ? 0.0 : minY - MapNode.NODE_RADIUS * 2 - 10; // get offset for node
-		maxY = maxY + MapNode.NODE_RADIUS * 2 + 10 < 0.0 ? FlxG.width : maxY + MapNode.NODE_RADIUS * 2 + 10; // get offset for node
-		maxX = maxX + MapNode.NODE_RADIUS * 2 + 10 < 0.0 ? FlxG.width : maxX + MapNode.NODE_RADIUS * 2 + 10; // get offset for node
-		var p = new FlxPoint((maxX + minX) / 2, (maxY + minY) / 2);
-		FlxG.camera.focusOn(new FlxPoint((maxX + minX) / 2, (maxY + minY) / 2));
-		var z = FlxG.stage.width  / (maxX - minX);
-		z = z > FlxG.stage.height / (maxY - minY) ? FlxG.stage.height / (maxY - minY) : z; // set to smallest zoom
-
-		FlxG.camera.zoom = z > 1.25 ? z : 1; // zoom into map*/
+        if (Main.AB_VERSION != Main.AB_TEST[0] || Main.LEVEL != 1) {
+            minX = minX - MapNode.NODE_RADIUS * 2 - 10 < 0.0 ? 0.0 : minX - MapNode.NODE_RADIUS * 2 - 10; // get offset for node
+            minY = minY - MapNode.NODE_RADIUS * 2 - 10 < 0.0 ? 0.0 : minY - MapNode.NODE_RADIUS * 2 - 10; // get offset for node
+            maxY = maxY + MapNode.NODE_RADIUS * 2 + 10 < 0.0 ? FlxG.width : maxY + MapNode.NODE_RADIUS * 2 + 10; // get offset for node
+            maxX = maxX + MapNode.NODE_RADIUS * 2 + 10 < 0.0 ? FlxG.width : maxX + MapNode.NODE_RADIUS * 2 + 10; // get offset for node
+            var p = new FlxPoint((maxX + minX) / 2, (maxY + minY) / 2);
+            FlxG.camera.focusOn(new FlxPoint((maxX + minX) / 2, (maxY + minY) / 2));
+            var z = FlxG.stage.width  / (maxX - minX);
+            z = z > FlxG.stage.height / (maxY - minY) ? FlxG.stage.height / (maxY - minY) : z; // set to smallest zoom
+    
+            FlxG.camera.zoom = z > 1.25 ? z : 1; // zoom into map
+        }
 	}
 
 	public function findNode(v: FlxVector):MapNode {
@@ -155,7 +158,6 @@ class GameMap extends FlxSprite {
      */
     
     private function setGraph():Void {
-        trace("clearing graph");
         
         this.id_to_node = new Id_to_Node();
         this.clearGraph(); // clean up any old entires

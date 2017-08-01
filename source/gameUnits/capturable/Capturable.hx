@@ -57,7 +57,7 @@ class Capturable extends FlxSprite {
         this.node = node;
         this.faction = faction;
         this.captureEngine = new CaptureEngine(this.faction.getFactionType(), 100.0); // TODO: Move CP to constructor
-		
+        
 		// create capturebar and add it to the graphics
 		captureBar = new FlxBar(0, 0, LEFT_TO_RIGHT, 50, 10, null, "", 0, captureEngine.getMaxControllingPoint(), true);
 		captureBar.x = node.x - 25;
@@ -108,8 +108,18 @@ class Capturable extends FlxSprite {
 				currFaction = f;
 			}
 			// if captured, change faction and set bar color
+            var oldFaction = faction;
 			faction = new Faction(currFaction);
 			captureBar.color = faction.getColor();
+            
+            // Log capturing planets
+            Main.LOGGER.logLevelAction(4, 
+                {
+                    x: x, 
+                    y: y,
+                    oldFaction: oldFaction.getFactionType(), 
+                    newFaction: faction.getFactionType()
+                });
 		}
 		
 		// get current cp
