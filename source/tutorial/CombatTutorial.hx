@@ -47,7 +47,7 @@ class CombatTutorial extends FlxState
 		#if flash
 			laserSnd = FlxG.sound.load(AssetPaths.laser__mp3);
 		#else
-			laserSnd = FlxG.sound.load(AssetPaths.laser__wav);
+			laserSnd = FlxG.sound.load(AssetPaths.laser_fire__wav);
 		#end
 		
 		// create and add the background image
