@@ -32,8 +32,8 @@ import gameUnits.combat.Radar;
 import gameUnits.weapons.I_Weapon;
 import gameUnits.weapons.launchers.Launcher;
 import gameUnits.weapons.turrets.Turret;
-import map.MapEdge;
-import map.MapNode;
+import map.Edge;
+import map.Node;
 
 /**
  * Various ship hull types that exist in-game.
@@ -189,11 +189,11 @@ class Ship extends FlxSprite implements I_Combatant {
 	public var vel:FlxVector = new FlxVector(0, 0);  // current velocity
     
     // current base node in game map
-    private var node:MapNode;
+    private var node:Node;
 
     // TODO: Convert below to use inherited path field
-	public var destination:MapNode; // The node this ship is moving towards
-	public var nodePath:Array<MapEdge> = []; // The path this ship is moving along (if any)
+	public var destination:Node; // The node this ship is moving towards
+	public var nodePath:Array<Edge> = []; // The path this ship is moving along (if any)
 	public var progress:Float; // How far along the path this ship has traveled
 
 	public var isSelected:Bool; // Whether the player has currently selected this ship (should ideally be moved to a Player class in the future)
@@ -204,7 +204,7 @@ class Ship extends FlxSprite implements I_Combatant {
 	private var weapon:I_Weapon;
 	//private var weapon1:Launcher;
 
-	public function new(destination:MapNode, faction:Faction, blueprint:BluePrint) {
+	public function new(destination:Node, faction:Faction, blueprint:BluePrint) {
 		super();
 		
 		// set sprite graphic (to set proper width & height for hitbox)
@@ -287,7 +287,7 @@ class Ship extends FlxSprite implements I_Combatant {
 	}
 
 	// Orders the ship to follow the shortest possible path to a given node
-	public function pathTo(n: MapNode): Void {
+	public function pathTo(n: Node): Void {
 		if (isMoving()) {
 			var e = nodePath[0];
 			nodePath = nodePath[0].pathTo(n, progress);

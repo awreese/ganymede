@@ -21,26 +21,52 @@ package map;
 import Std;
 import faction.Faction;
 import faction.Faction.FactionType;
+import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
+import flixel.input.mouse.FlxMouse;
 import flixel.math.FlxPoint;
 import flixel.math.FlxVector;
 import flixel.util.FlxColor;
+import flixel.util.FlxSpriteUtil;
+import flixel.group.FlxSpriteGroup;
 import gameUnits.Ship;
 import gameUnits.capturable.Capturable;
 import gameUnits.capturable.Planet;
+import map.Node.NodeRing;
 
-using flixel.util.FlxSpriteUtil;
+//using flixel.util.FlxSpriteUtil;
 
 /**
  * NodeGroup is a group of MapNodes
  */
-typedef NodeGroup = FlxTypedGroup<MapNode>;
+typedef NodeGroup = FlxTypedGroup<Node>;
 
 //typedef EdgeMap = Map<map.MapNode, EdgeGroup>;
 
-typedef NeighborMap = Map<MapNode, Float>;
+typedef NeighborMap = Map<Node, Float>;
+
+class NodeRing extends FlxSprite {
+	
+	private var radius:Int;
+	
+	function new (x:Float, y:Float, ?radius:Int = 30, ?visible:Bool = true, ?fill:FlxColor = FlxColor.TRANSPARENT, ?lineStyle:LineStyle, ?drawStyle:DrawStyle) {
+		super(x, y);
+		
+		this.radius = radius;
+		var diameter:Int = 2 * this.radius + 1;
+		
+        this.width = diameter;
+        this.height = diameter;
+		
+		this.makeGraphic(diameter, diameter, FlxColor.TRANSPARENT, true);
+		FlxSpriteUtil.drawCircle(this, -1, -1, this.radius, fill, lineStyle, drawStyle);
+		this.setPosition(x - radius, y - radius);
+		this.visible = visible;
+		FlxG.state.add(this);
+	}
+}
 
 /**
  * MapNode
@@ -53,14 +79,21 @@ typedef NeighborMap = Map<MapNode, Float>;
  * @author Rory Soiffer
  * @author Drew Reese
  */
-class MapNode extends FlxObject {
+class Node extends FlxObject {
 	public static var NODE_RADIUS:Int = 30;
-
+	
 	public var gameMap:GameMap;
-    
     public var neighbors:NeighborMap;
     
     //private var edgesOut:EdgeMap; // ???
+	
+	// Fields
+	private var radius:Int;
+	private var ring_node:NodeRing;
+	private var ring_selected:NodeRing;
+	private var ring_highlight:NodeRing;
+	
+	private var isSelected:Bool = false;
 	
 	// Game objects at this node
 	private var capturable:Capturable;
@@ -70,13 +103,21 @@ class MapNode extends FlxObject {
      * TODO: reduce internal exposure, not everything needs to be public
      */
     
-	public function new(gameMap:GameMap, x:Float, y:Float) {
-		//super(x, y, NODE_SIZE, NODE_SIZE);
+	public function new(gameMap:GameMap, x:Float, y:Float, ?radius:Int = 30) {
         super(x, y);
         
-        this.width = 2 * NODE_RADIUS + 1;
-        this.height = 2 * NODE_RADIUS + 1;
-        
+		this.radius = radius;
+		var diameter:Int = 2 * this.radius + 1;
+		
+        this.width = diameter;
+        this.height = diameter;
+		
+		this.ring_node = new NodeRing(x, y, radius, true, FlxColor.TRANSPARENT, {color: FlxColor.WHITE});
+		this.ring_selected = new NodeRing(x, y, radius, false, FlxColor.fromRGBFloat(0.9, 0.3, 0.4, 0.5), {color: FlxColor.YELLOW});
+		
+		var fillColor:FlxColor = FlxColor.fromRGBFloat(0.5, 0.5, 0.5, 0.3);
+		this.ring_highlight = new NodeRing(x, y, radius * 2, false, fillColor); // , {color: FlxColor.WHITE}
+		
 		this.gameMap = gameMap;
         
         this.neighbors = new NeighborMap();
@@ -91,6 +132,27 @@ class MapNode extends FlxObject {
 	}
     
     override public function update(elapsed:Float):Void {
+		
+		ring_highlight.visible = ring_highlight.getHitbox().containsPoint(FlxG.mouse.getPosition());
+		
+		var mouse:FlxMouse = FlxG.mouse;
+		
+		if (mouse.justPressed) {
+			ring_selected.visible = ring_selected.getHitbox().containsPoint(mouse.getPosition());
+			//ring_node.visible = !ring_selected.getHitbox().containsPoint(mouse.getPosition());
+		}
+		
+		var p = FlxG.mouse.getPosition();
+		//trace("mouse: x=" + p.x + " y=" + p.y);
+		//if (ring_node.getHitbox().containsPoint(FlxG.mouse.getPosition())) {
+			////ring_highlight.visible = true;
+			////selectRing.revive();
+			//FlxG.state.r
+		//} else {
+			//ring_highlight.visible = false;
+			////selectRing.kill();
+		//}
+		
         super.update(elapsed);
 		/*if (this.isPlanet()) {
 			var p:Planet = cast(capturable, Planet); // turn to planet
@@ -104,8 +166,21 @@ class MapNode extends FlxObject {
     /*
      * Node functions
      */
+	
+	public function equals(other:Dynamic):Bool {
+		if (this == other) {
+			return true;
+		}
+		
+		if (Std.is(other, Node)) {
+			other = cast(other, Node);
+			return (this.getPosition().equals(other.getPosition()) && this.radius == other.radius);
+		}
+		
+		return false;
+	}
     
-    public function connect(node:MapNode):Bool {
+    public function connect(node:Node):Bool {
         // already connected?
         if (this.isConnected(node)) {
             return false;
@@ -118,7 +193,7 @@ class MapNode extends FlxObject {
         return this.isConnected(node);
     }
     
-    public function isConnected(node:MapNode):Bool {
+    public function isConnected(node:Node):Bool {
         return this.neighbors.exists(node) && node.neighbors.exists(this);
     }
     
@@ -135,7 +210,7 @@ class MapNode extends FlxObject {
 		return this.getPosition().distanceTo(v) < NODE_RADIUS + 15;
 	}
 
-	public function distanceTo(n: MapNode): Float {
+	public function distanceTo(n: Node): Float {
 		//return pos.dist(n.pos);
 		//return this.getPosition().distanceTo(n.getPosition());
         var distance:Float = this.neighbors.get(n);
@@ -146,22 +221,22 @@ class MapNode extends FlxObject {
         FlxSpriteUtil.drawCircle(sprite, this.x, this.y, NODE_RADIUS, FlxColor.TRANSPARENT, {color: FlxColor.WHITE});
 		
         for (n in neighbors.keys()) {
-            var e = new MapEdge(this, n);
+            var e = new Edge(this, n);
 			FlxSpriteUtil.drawLine(sprite, e.interpDist(NODE_RADIUS).x, e.interpDist(NODE_RADIUS).y, e.interpDist(e.length() - NODE_RADIUS).x,
 			e.interpDist(e.length() - NODE_RADIUS).y, {color: FlxColor.WHITE});
 		}
 	}
 
-	public function pathTo(n: MapNode): Array<MapEdge> {
+	public function pathTo(n: Node): Array<Edge> {
         // Dijkstra's algorithm
-		var dists: Map<MapNode, Float> = [this => 0];
-		var parents: Map<MapNode, MapNode> = [this => this];
+		var dists: Map<Node, Float> = [this => 0];
+		var parents: Map<Node, Node> = [this => this];
 		//var toCheck: Array<MapNode> = gameMap.nodes.copy();
 		//var toCheck: Array<MapNode> = gameMap.nodes.members.copy();
-		var toCheck: Array<MapNode> = gameMap.getNodeList();
+		var toCheck: Array<Node> = gameMap.getNodeList();
 
 		while (toCheck.length > 0) {
-			var minEl: MapNode = toCheck[0];
+			var minEl: Node = toCheck[0];
 
 			for (e in toCheck) {
 				if (!dists.exists(minEl) || (dists.exists(e) && dists.get(e) < dists.get(minEl))) {
@@ -182,10 +257,10 @@ class MapNode extends FlxObject {
 		}
 
         // TODO: convert this to real path object
-		var path: Array<MapEdge> = new Array();
-		var e: MapNode = n;
+		var path: Array<Edge> = new Array();
+		var e: Node = n;
 		while (e != this) {
-			path.unshift(new MapEdge(parents.get(e), e));
+			path.unshift(new Edge(parents.get(e), e));
 			e = parents.get(e);
 		}
 		return path;
@@ -240,7 +315,7 @@ class MapNode extends FlxObject {
      * @param ship  ship to move to specified node
      * @param toNode    new node for ship
      */
-    public function moveShip(ship:Ship, node:MapNode):Void {
+    public function moveShip(ship:Ship, node:Node):Void {
         node.addShip(ship);   // increments count
         this.removeShip(ship);  // decrements count
     }

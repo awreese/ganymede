@@ -23,7 +23,7 @@ import faction.Faction;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.ui.FlxBar;
-import map.MapNode;
+import map.Node;
 
 /**
  * Capturable
@@ -39,7 +39,7 @@ import map.MapNode;
 class Capturable extends FlxSprite {
 
     // parent node and faction control fields
-	private var node: MapNode;
+	private var node: Node;
 	private var faction:Faction;
 	
 	private var captureBar:FlxBar;
@@ -52,7 +52,7 @@ class Capturable extends FlxSprite {
      * @param node  node capturable resides on
      * @param faction   faction of capturable node
      */
-    private function new(node: MapNode, faction: Faction) {
+    private function new(node: Node, faction: Faction) {
         super(node.x, node.y);
         this.node = node;
         this.faction = faction;

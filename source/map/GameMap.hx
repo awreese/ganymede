@@ -22,6 +22,7 @@ import faction.Faction;
 import faction.Faction.FactionType;
 import flixel.FlxG;
 import flixel.FlxSprite;
+import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxPoint;
 import flixel.math.FlxVector;
 import gameUnits.Ship;
@@ -30,14 +31,14 @@ import gameUnits.Ship.HullType;
 import gameUnits.capturable.Capturable;
 import gameUnits.capturable.Planet;
 import haxe.Json;
-import map.MapNode.NodeGroup;
+import map.Node.NodeGroup;
 import openfl.Assets;
 
 using flixel.util.FlxSpriteUtil;
 
-typedef Id_to_Node = Map<String, MapNode>;
+typedef Id_to_Node = Map<String, Node>;
 
-typedef Node_to_Neighbors = Map<MapNode, NodeGroup>;
+typedef Node_to_Neighbors = Map<Node, NodeGroup>;
 
 /**
  * Game Map
@@ -51,7 +52,7 @@ typedef Node_to_Neighbors = Map<MapNode, NodeGroup>;
  * @author Rory Soiffer
  * @author Drew Reese
  */
-class GameMap extends FlxSprite {
+class GameMap extends FlxSpriteGroup {
 
 	// list of nodes in current game map
 	//public var nodes:MapNodeList = [];
@@ -60,7 +61,7 @@ class GameMap extends FlxSprite {
     private var id_to_node:Id_to_Node;
     private var node_to_neighbors:Node_to_Neighbors;
     
-    private var selected:MapNode = null;
+    private var selected:Node = null;
 	
     private var factionShipCount:Map<FactionType, Int>; // Global ship count
 	private var factionControlledNodes:Map<FactionType, NodeGroup>;
@@ -79,7 +80,10 @@ class GameMap extends FlxSprite {
 		maxY = Math.NEGATIVE_INFINITY; // biggest y
 		super();
         
-        loadGraphic("assets/images/mapbg.png", false, 1920, 1047);
+        //loadGraphic("assets/images/mapbg.png", false, 1920, 1047);
+		
+		var bg = new FlxSprite(AssetPaths.mapbg__png);
+		this.add(bg);
         
 		//this.nodes = new NodeGroup();
         //
@@ -105,6 +109,7 @@ class GameMap extends FlxSprite {
 		parseLevel(playState);
         
 		drawNodes();
+		
 		//for (n in nodes) {
 		for (n in node_to_neighbors.keys()) {
 			var captureable = n.getCaptureable();
@@ -114,10 +119,10 @@ class GameMap extends FlxSprite {
 		}
 		// TODO: figure out how to not get any gray area when zooming in to the corner of the map
         if (Main.AB_VERSION != Main.AB_TEST[0] || Main.LEVEL != 1) {
-            minX = minX - MapNode.NODE_RADIUS * 2 - 10 < 0.0 ? 0.0 : minX - MapNode.NODE_RADIUS * 2 - 10; // get offset for node
-            minY = minY - MapNode.NODE_RADIUS * 2 - 10 < 0.0 ? 0.0 : minY - MapNode.NODE_RADIUS * 2 - 10; // get offset for node
-            maxY = maxY + MapNode.NODE_RADIUS * 2 + 10 < 0.0 ? FlxG.width : maxY + MapNode.NODE_RADIUS * 2 + 10; // get offset for node
-            maxX = maxX + MapNode.NODE_RADIUS * 2 + 10 < 0.0 ? FlxG.width : maxX + MapNode.NODE_RADIUS * 2 + 10; // get offset for node
+            minX = minX - Node.NODE_RADIUS * 2 - 10 < 0.0 ? 0.0 : minX - Node.NODE_RADIUS * 2 - 10; // get offset for node
+            minY = minY - Node.NODE_RADIUS * 2 - 10 < 0.0 ? 0.0 : minY - Node.NODE_RADIUS * 2 - 10; // get offset for node
+            maxY = maxY + Node.NODE_RADIUS * 2 + 10 < 0.0 ? FlxG.width : maxY + Node.NODE_RADIUS * 2 + 10; // get offset for node
+            maxX = maxX + Node.NODE_RADIUS * 2 + 10 < 0.0 ? FlxG.width : maxX + Node.NODE_RADIUS * 2 + 10; // get offset for node
             var p = new FlxPoint((maxX + minX) / 2, (maxY + minY) / 2);
             FlxG.camera.focusOn(new FlxPoint((maxX + minX) / 2, (maxY + minY) / 2));
             var z = FlxG.stage.width  / (maxX - minX);
@@ -127,7 +132,7 @@ class GameMap extends FlxSprite {
         }
 	}
 
-	public function findNode(v: FlxVector):MapNode {
+	public function findNode(v: FlxVector):Node {
 		//return nodes.filter(function(n) return n.contains(v))[0];
 		//for (node in nodes) {
 		for (node in node_to_neighbors.keys()) {
@@ -191,9 +196,9 @@ class GameMap extends FlxSprite {
       * @param node new node to add
       * @return true iff graph was modified, false otherwise
       */
-    private function addNode(id:String, x:Float, y:Float):MapNode {
+    private function addNode(id:String, x:Float, y:Float):Node {
         if (!id_to_node.exists(id)) {
-            var node = new MapNode(this, x, y);
+            var node = new Node(this, x, y);
             id_to_node.set(id, node);
             node_to_neighbors.set(node, new NodeGroup());
             return node;
@@ -214,7 +219,7 @@ class GameMap extends FlxSprite {
      * @param node2 the other vertex of edge
      * @return true iff graph was modified, false otherwise
      */
-    private function connect(node1:MapNode, node2:MapNode):Bool {
+    private function connect(node1:Node, node2:Node):Bool {
         return node1.connect(node2);
     }
     
@@ -231,7 +236,7 @@ class GameMap extends FlxSprite {
      * @param capturable    capturable to add
      * @return true iff node was modified, false otherwise
      */
-    private function addCapturable(node:MapNode, capturable:Capturable):Bool {
+    private function addCapturable(node:Node, capturable:Capturable):Bool {
         return node.setCapturable(capturable);
     }
      
@@ -242,8 +247,8 @@ class GameMap extends FlxSprite {
      * other general queries made via MapNode game object reside on.
      */
     
-    public function getNodeList():Array<MapNode> {
-        var result:Array<MapNode> = new Array();
+    public function getNodeList():Array<Node> {
+        var result:Array<Node> = new Array();
         for (node in node_to_neighbors.keys()) {
             result.push(node);
         }
@@ -304,7 +309,7 @@ class GameMap extends FlxSprite {
 		return this.factionControlledNodes.get(faction);
 	}
 	
-	public function updateControllingFaction(node:MapNode, faction:FactionType):Void {
+	public function updateControllingFaction(node:Node, faction:FactionType):Void {
 		var captureable = node.getCaptureable();
 		if (captureable != null) {
 			var oldFaction = captureable.getFaction().getFactionType();
@@ -321,7 +326,9 @@ class GameMap extends FlxSprite {
 		//for (n in nodes)
 		for (n in node_to_neighbors.keys())
 		{
-			n.drawTo(this);
+			//n.drawTo(this);
+			//this.add(n);
+			FlxG.state.add(n);
 		}
 	}
 	

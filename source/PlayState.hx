@@ -36,7 +36,7 @@ import gameUnits.Ship;
 import gameUnits.Ship.ShipGroup;
 import gameUnits.capturable.Planet;
 import map.GameMap;
-import map.MapNode;
+import map.Node;
 import npc.Enemy;
 import tutorial.FinishGameState;
 
@@ -274,7 +274,7 @@ class PlayState extends FlxState {
 		// if player lose all planets, gameover
 		if (gameMap.getNumPlayerPlanets() == 0 && noPlayerShips) {
 			FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
-			FlxG.switchState(new GameOverState());
+				FlxG.switchState(new GameOverState());
 			});
 		}
 
@@ -290,7 +290,7 @@ class PlayState extends FlxState {
         return this.shipGroup.members.copy();
     }
     
-    public function nodeClicked(point:FlxPoint):MapNode {
+    public function nodeClicked(point:FlxPoint):Node {
         var node = gameMap.findNode(new FlxVector(point.x, point.y));
         return node;
     }
@@ -626,13 +626,13 @@ class Tutorial {
     }
     
     private function clickedOneOfThree(p1:FlxPoint, p2:FlxPoint, p3:FlxPoint):Bool {
-        var node:MapNode = ps.nodeClicked(FlxG.mouse.getPosition());
+        var node:Node = ps.nodeClicked(FlxG.mouse.getPosition());
         return node.getPosition().equals(p1) || node.getPosition().equals(p2) || node.getPosition().equals(p3);
     }
     
     private function capturedPlanet():Void {
         var targetNode = new FlxPoint(550, 425); // capturable node #5
-        var node:MapNode = ps.nodeClicked(targetNode);
+        var node:Node = ps.nodeClicked(targetNode);
         
         if (node.getFaction() == PLAYER) {
             checkpoint = 4;
@@ -677,7 +677,7 @@ class Tutorial {
     
     private function combat():Void {
         var targetNode = new FlxPoint(1125, 340); // capturable node #12
-        var node:MapNode = ps.nodeClicked(targetNode);
+        var node:Node = ps.nodeClicked(targetNode);
         
         if (!shown) {
             displayText("You are ready!  No go take out the little red bugger.", true);
@@ -686,7 +686,7 @@ class Tutorial {
         
         // Check if checkpoint reached
         if (FlxG.mouse.justPressedRight) {
-            var node:MapNode = ps.nodeClicked(FlxG.mouse.getPosition());
+            var node:Node = ps.nodeClicked(FlxG.mouse.getPosition());
             if (shipIsSelected() && node.getPosition().equals(targetNode)) {
                 checkpoint = 6;
                 reset();

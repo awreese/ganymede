@@ -33,7 +33,7 @@ import gameUnits.Ship.BluePrint;
 import gameUnits.Ship.HullType;
 import gameUnits.capturable.Planet.PlanetStat;
 import js.html.svg.AnimatedBoolean;
-import map.MapNode;
+import map.Node;
 import faction.Faction;
 
 /**
@@ -163,7 +163,7 @@ class Planet extends Capturable {
     // Ship Factory
     private var shipFactory:ShipFactory;
 
-	public function new(playState:PlayState, location:MapNode, faction:Faction, pstats:PlanetStat) {
+	public function new(playState:PlayState, location:Node, faction:Faction, pstats:PlanetStat) {
 		// set position of the planet
 		super(location, faction);
         
@@ -201,7 +201,7 @@ class Planet extends Capturable {
 	 * Returns the underlying graphnode of this Planet
 	 * @return  MapNode under this planet
 	 */
-	public function getNode():MapNode {
+	public function getNode():Node {
 		return this.node;
 	}
 

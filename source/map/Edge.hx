@@ -35,13 +35,13 @@ import flixel.math.FlxVector;
  * @author Drew Reese
  */
 //class MapEdge extends FlxBasic {
-class MapEdge {
+class Edge {
 
-	public var n1:MapNode;
-	public var n2:MapNode;
+	public var n1:Node;
+	public var n2:Node;
     private var distance:Float;
 
-	public function new(n1:MapNode, n2:MapNode) {
+	public function new(n1:Node, n2:Node) {
 		//if (n1.pos.equals(n2.pos)) {
 		if (n1.getPosition().equals(n2.getPosition())) {
 			return;
@@ -71,7 +71,7 @@ class MapEdge {
 		return n1.distanceTo(n2);
 	}
 
-	public function pathTo(n:MapNode, d:Float):Array<MapEdge> {
+	public function pathTo(n:Node, d:Float):Array<Edge> {
 		var path1 = n1.pathTo(n);
 		var d1: Float = d;
 		for (e in path1) {
@@ -88,7 +88,7 @@ class MapEdge {
 			path2.unshift(this);
 			return path2;
 		} else {
-			path1.unshift(new MapEdge(n2, n1));
+			path1.unshift(new Edge(n2, n1));
 			return path1;
 		}
 	}
