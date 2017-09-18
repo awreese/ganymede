@@ -57,8 +57,8 @@ class NodeRing extends FlxSprite {
 		this.radius = radius;
 		var diameter:Int = 2 * this.radius + 1;
 		
-        this.width = diameter;
-        this.height = diameter;
+        //this.width = diameter;
+        //this.height = diameter;
 		
 		this.makeGraphic(diameter, diameter, FlxColor.TRANSPARENT, true);
 		FlxSpriteUtil.drawCircle(this, -1, -1, this.radius, fill, lineStyle, drawStyle);
@@ -104,15 +104,12 @@ class Node extends FlxObject {
      */
     
 	public function new(gameMap:GameMap, x:Float, y:Float, ?radius:Int = 30) {
-        super(x, y);
         
 		this.radius = radius;
 		var diameter:Int = 2 * this.radius + 1;
+        super(x, y, diameter, diameter);
 		
-        this.width = diameter;
-        this.height = diameter;
-		
-		this.ring_node = new NodeRing(x, y, radius, true, FlxColor.TRANSPARENT, {color: FlxColor.WHITE});
+		this.ring_node = new NodeRing(x, y, cast(radius / 2), true, FlxColor.fromRGBFloat(0.5, 0.5, 0.5, 0.6));
 		this.ring_selected = new NodeRing(x, y, radius, false, FlxColor.fromRGBFloat(0.9, 0.3, 0.4, 0.5), {color: FlxColor.YELLOW});
 		
 		var fillColor:FlxColor = FlxColor.fromRGBFloat(0.5, 0.5, 0.5, 0.3);
@@ -139,7 +136,6 @@ class Node extends FlxObject {
 		
 		if (mouse.justPressed) {
 			ring_selected.visible = ring_selected.getHitbox().containsPoint(mouse.getPosition());
-			//ring_node.visible = !ring_selected.getHitbox().containsPoint(mouse.getPosition());
 		}
 		
 		var p = FlxG.mouse.getPosition();

@@ -306,7 +306,7 @@ class Planet extends Capturable {
 		
 		this.setGraphicSize(32, 32); // This scales down the planets from their default size of 48x48
 
-		x = node.x - origin.x;
-		y = node.y - origin.y;
+		x = node.x - origin.x + 1;
+		y = node.y - origin.y + 1;
 	}
 }

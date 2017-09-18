@@ -30,6 +30,7 @@ import gameUnits.Ship.BluePrint;
 import gameUnits.Ship.HullType;
 import gameUnits.capturable.Capturable;
 import gameUnits.capturable.Planet;
+import graph.Graph;
 import haxe.Json;
 import map.Node.NodeGroup;
 import openfl.Assets;
@@ -60,6 +61,7 @@ class GameMap extends FlxSpriteGroup {
     
     private var id_to_node:Id_to_Node;
     private var node_to_neighbors:Node_to_Neighbors;
+	private var _mapGraph:Graph<Int,Int>;
     
     private var selected:Node = null;
 	
@@ -100,6 +102,15 @@ class GameMap extends FlxSpriteGroup {
             //this.factionShipCount.set(faction, 0);
 			//this.factionControlledNodes.set(faction, new NodeGroup());
         //}
+		
+		this._mapGraph = new Graph<Int,Int>();
+		
+		
+		_mapGraph.findPath(1, 2, 
+			function(e1:Int, e2:Int):Int{
+				return e1 - e2;
+			}
+		);
         
         this.setGraph();
 		
