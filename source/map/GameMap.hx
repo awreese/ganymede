@@ -61,7 +61,7 @@ class GameMap extends FlxSpriteGroup {
     
     private var id_to_node:Id_to_Node;
     private var node_to_neighbors:Node_to_Neighbors;
-	private var _mapGraph:Graph<Int,Int>;
+	private var _mapGraph:Graph<Int,Float>;
     
     private var selected:Node = null;
 	
@@ -103,14 +103,17 @@ class GameMap extends FlxSpriteGroup {
 			//this.factionControlledNodes.set(faction, new NodeGroup());
         //}
 		
-		this._mapGraph = new Graph<Int,Int>();
+		this._mapGraph = new Graph<Int,Float>();
 		
+		//var compareFn = function(e1:Float, e2:Float):Int {
+			////return e1 - e2;
+			//if (e1 < e2) return -1;
+			//if (e1 > e2) return 1;
+			//return 0;
+		//}
 		
-		_mapGraph.findPath(1, 2, 
-			function(e1:Int, e2:Int):Int{
-				return e1 - e2;
-			}
-		);
+		//_mapGraph.findPath(1, 2, compareFn);
+		_mapGraph.findPath(1, 2);
         
         this.setGraph();
 		

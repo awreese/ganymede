@@ -17,8 +17,12 @@
 
 package graph;
 
-//typedef VertexMap<V,E> = Map<V,E>;
-//typedef AdjancencyList<V,VertexMap> = Map<V, VertexMap>;
+typedef Edge<E> = {
+	var weight: Float;
+	var data: E;
+};
+private typedef EdgeMap<V,E> = Map<V, Edge<E>>;
+typedef AdjancencyList<V,E> = Map<V, EdgeMap<V,E>>;
 
 /**
  * Generic Graph
@@ -28,64 +32,62 @@ package graph;
 @:remove
 class Graph<V,E> {
 	
-	//private var _graph:AdjancencyList<V,VertexMap<V,E>>;
-	private var _graph:Map<V,Map<V,E>>;
+	private var _graph:AdjancencyList<V,E>;
 	private var _directed:Bool;
 	private var _acyclic:Bool;
 
 	public function new() {
-		this._graph = new Map<V,Map<V,E>>();
+		this._graph = new AdjancencyList<V,E>();
 	}
 	
 	public function add(vertex:V):Bool {
 		if (contains(vertex)) return false;
 		
-		_graph.set(vertex, new Map<V,E>());
+		_graph.set(vertex, new EdgeMap<V,E>());
 		return true;
 	}
 	
 	public function remove(vertex:V):Bool {
 		if (!contains(vertex)) return false;
 		
-		var vi:Iterator<V> = getVertices(vertex);
-		
-		while (vi.hasNext()) {
-			unconnect(vertex, vi.next());
+		for (v in getVertices(vertex)) {
+			unconnect(vertex, v);
 		}
 		
 		return _graph.remove(vertex);
 	}
 	
-	public function connect(v1:V, v2:V, ?edgeData:E = null):Bool {
+	public function connect(v1:V, v2:V, ?data:E = null, ?weight:Float = 1):Bool {
 		if (v1 == v2 || isConnected(v1, v2)) return false;
 		
-		//_graph.get(v1).set(v2, edgeData);
-		//_graph.get(v2).set(v1, edgeData);
+		var edge:Edge<E> = {data: data, weight: weight};
+		//edge.data = data;
+		//edge.weight = weight;
 		
-		var vm1:Map<V,E> = _graph.get(v1);
-		vm1.set(v2, edgeData);
+		var vm1:EdgeMap<V,E> = _graph.get(v1);
+		vm1.set(v2, edge);
 		_graph.set(v1, vm1);
 		
-		var vm2:Map<V,E> = _graph.get(v2);
-		vm2.set(v1, edgeData);
+		var vm2:EdgeMap<V,E> = _graph.get(v2);
+		vm2.set(v1, edge);
 		_graph.set(v2, vm2);
 		
 		return true;
 	}
 	
-	public function unconnect(v1:V, v2:V):E {
+	public function unconnect(v1:V, v2:V):Edge<E> {
 		if (!isConnected(v1, v2)) return null;
 		
-		var vm1:Map<V,E> = _graph.get(v1);
-		var edgeData = vm1.get(v1);
+		var vm1:EdgeMap<V,E> = _graph.get(v1);
+		var edge:Edge<E> = vm1.get(v1);
 		vm1.remove(v2);
 		_graph.set(v1, vm1);
 		
-		var vm2:Map<V,E> = _graph.get(v2);
+		var vm2:EdgeMap<V,E> = _graph.get(v2);
 		vm2.remove(v1);
 		_graph.set(v2, vm2);
 		
-		return edgeData;
+		return edge;
 	}
 	
 	public function contains(v:V):Bool {
@@ -93,12 +95,20 @@ class Graph<V,E> {
 	}
 	
 	public function isConnected(v1:V, v2:V):Bool {
-		if (!(contains(v1) && contains(v2))) return false;
-		return _graph.get(v1).exists(v2);
+		return contains(v1) && contains(v2) && _graph.get(v1).exists(v2);
 	}
 	
 	public function getVertices(?vertex:V = null):Iterator<V> {
-		return vertex == null ? _graph.keys() : _graph.get(vertex).keys();
+		return contains(vertex) ? _graph.get(vertex).keys() : _graph.keys();
+	}
+	
+	public function getEdges(vertex:V):Iterator<Edge<E>> {
+		return contains(vertex) ? _graph.get(vertex).iterator() : null;
+	}
+	
+	public function getEdge(v1:V, v2:V):Edge<E> {
+		//return isConnected(v1,v2) ? _graph.get(v1).get(v2) : null;
+		return isConnected(v1,v2) ? _graph[v1][v2] : null;
 	}
 	
 	// 9/13/2017 7:26 AM
@@ -108,9 +118,97 @@ class Graph<V,E> {
 	// take as a parameter an edge compare function else it should
 	// assume graph has edges of equal weight.
 	
-	public function findPath(v1:V, v2:V, ?compareFunction):Void {
-		var res:Int = compareFunction(1, 2);
-		trace('Compare result: ${res}');
+/*
+ 1	function Dijkstra(Graph, source):
+ 2
+ 3      create vertex set Q
+ 4
+ 5      for each vertex v in Graph:             // Initialization
+ 6          dist[v] ← INFINITY                  // Unknown distance from source to v
+ 7          prev[v] ← UNDEFINED                 // Previous node in optimal path from source
+ 8          add v to Q                          // All nodes initially in Q (unvisited nodes)
+ 9
+10      dist[source] ← 0                        // Distance from source to source
+11      
+12      while Q is not empty:
+13          u ← vertex in Q with min dist[u]    // Node with the least distance will be selected first
+14          remove u from Q 
+
+If we are only interested in a shortest path between 
+vertices source and target, we can terminate the 
+search after line 15 if u = target
+
+15          
+16          for each neighbor v of u:           // where v is still in Q.
+17              alt ← dist[u] + length(u, v)
+18              if alt < dist[v]:               // A shorter path to v has been found
+19                  dist[v] ← alt 
+20                  prev[v] ← u 
+21
+22      return dist[], prev[]
+
+Now we can read the shortest path from source to target by reverse iteration
+
+1  S ← empty sequence
+2  u ← target
+3  while prev[u] is defined:                  // Construct the shortest path with a stack S
+4      insert u at the beginning of S         // Push the vertex onto the stack
+5      u ← prev[u]                            // Traverse from target to source
+6  insert u at the beginning of S             // Push the source onto the stack
+
+*/
+	
+	//public function findPath(source:V, destination:V, ?compareFunction):Void {
+	public function findPath(source:V, destination:V):Void {
+		var dist:Map<V,Float> = new Map<V,Float>();
+		var prev:Map<V,V> = new Map<V,V>();
+		var toVisit:Array<V> = new Array<V>();
+		
+		for (v in this.getVertices()) {
+			dist[v] = Math.POSITIVE_INFINITY;
+			prev[v] = null;
+			toVisit.push(v);
+		}
+		dist[source] = 0.0;
+		
+		while (toVisit.length > 0) {
+			//var minVertex:V = minDist(dist, compareFunction);
+			var minVertex:V = minDist(dist);
+			toVisit.remove(minVertex);
+			
+			for (vertex in getVertices(minVertex)) {
+				var alt = dist[minVertex] + getEdge(minVertex, vertex).weight;
+				if (alt < dist[vertex]) {
+					dist[vertex] = alt;
+					prev[vertex] = minVertex;
+				}
+			}
+		}
+		
+		// TODO: return path object??
+	}
+	
+	//private function minDist(distMap:Map<V,Float>, compareFn:E->E->Int):V {
+	private function minDist(distMap:Map<V,Float>):V {
+		var minVertex:V = null;
+		var minDist:Float = null;
+		
+		for (vertex in distMap.keys()) {
+			var curDist:Float = distMap.get(vertex);
+			
+			if (minDist == null) {
+				minDist = curDist;
+				minVertex = vertex;
+			} else {
+				//if (compareFn(curDist, minDist) < 0) { // use compare here
+				if (curDist < minDist) {
+					minDist = curDist;
+					minVertex = vertex;
+				}
+			}
+		}
+		
+		return minVertex;
 	}
 	
 }
