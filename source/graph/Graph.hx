@@ -17,10 +17,11 @@
 
 package graph;
 
-typedef Edge<E> = {
-	var weight: Float;
-	var data: E;
-};
+import graph.I_Graph.Edge;
+//typedef Edge<E> = {
+	//var weight: Float;
+	//var data: E;
+//};
 private typedef EdgeMap<V,E> = Map<V, Edge<E>>;
 typedef AdjancencyList<V,E> = Map<V, EdgeMap<V,E>>;
 
@@ -30,9 +31,10 @@ typedef AdjancencyList<V,E> = Map<V, EdgeMap<V,E>>;
  */
 @:generic
 @:remove
-class Graph<V,E> {
+class Graph<V,E> implements I_Graph<V,E> {
 	
 	private var _graph:AdjancencyList<V,E>;
+	
 	private var _directed:Bool;
 	private var _acyclic:Bool;
 
@@ -57,7 +59,7 @@ class Graph<V,E> {
 		return _graph.remove(vertex);
 	}
 	
-	public function connect(v1:V, v2:V, ?data:E = null, ?weight:Float = 1):Bool {
+	public function connect(v1:V, v2:V, ?weight:Float = 1, ?data:E = null):Bool {
 		if (v1 == v2 || isConnected(v1, v2)) return false;
 		
 		var edge:Edge<E> = {data: data, weight: weight};
@@ -157,9 +159,13 @@ Now we can read the shortest path from source to target by reverse iteration
 6  insert u at the beginning of S             // Push the source onto the stack
 
 */
+
+	public function findPath(source:V, target:V):Void {
+		dijkstras(source, target);
+	}
 	
 	//public function findPath(source:V, destination:V, ?compareFunction):Void {
-	public function findPath(source:V, destination:V):Void {
+	public function dijkstras(source:V, ?destination:V = null):Map<V,V> {
 		var dist:Map<V,Float> = new Map<V,Float>();
 		var prev:Map<V,V> = new Map<V,V>();
 		var toVisit:Array<V> = new Array<V>();
@@ -176,7 +182,13 @@ Now we can read the shortest path from source to target by reverse iteration
 			var minVertex:V = minDist(dist);
 			toVisit.remove(minVertex);
 			
+			if (minVertex == destination) {
+				return prev;
+			} // found target, bail out
+			
 			for (vertex in getVertices(minVertex)) {
+				if (toVisit.indexOf(vertex) == -1) continue;
+				
 				var alt = dist[minVertex] + getEdge(minVertex, vertex).weight;
 				if (alt < dist[vertex]) {
 					dist[vertex] = alt;
@@ -186,6 +198,7 @@ Now we can read the shortest path from source to target by reverse iteration
 		}
 		
 		// TODO: return path object??
+		return prev;
 	}
 	
 	//private function minDist(distMap:Map<V,Float>, compareFn:E->E->Int):V {
@@ -209,6 +222,27 @@ Now we can read the shortest path from source to target by reverse iteration
 		}
 		
 		return minVertex;
+	}
+	
+	/*
+1  S ← empty sequence
+2  u ← target
+3  while prev[u] is defined:                  // Construct the shortest path with a stack S
+4      insert u at the beginning of S         // Push the vertex onto the stack
+5      u ← prev[u]                            // Traverse from target to source
+6  insert u at the beginning of S             // Push the source onto the stack
+	 */
+	private function getPath(prev:Map<V,V>, source:V, target:V):Array<V> {
+		var S:Array<V> = new Array<V>();
+		var u:V = source;
+		
+		while (prev[u] != null) {
+			S.unshift(u);
+			u = prev[u];
+		}
+		S.unshift(u);
+		
+		return S;
 	}
 	
 }
