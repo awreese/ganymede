@@ -24,8 +24,8 @@ Gather your forces and test your fortitude against a rising threat.  Command you
             - [ ] Possibly allow 'one-way' edges
             - [ ] Possibly allow for different types of edges
         - [ ] Game Levels
-            - [ ] Option 1: Stored as JSON files
-            - [ ] Option 2: Stored in Database table
+            - [ ] Option 1: Stored as JSON files (current way)
+            - [ ] Option 2: Stored in Database table (preferred way)
             - [ ] Game map level parser
     - [ ] Ships
         - [ ] Use database to store ship 'blueprints'
