@@ -61,7 +61,7 @@ class GameMap extends FlxSpriteGroup {
     
     private var id_to_node:Id_to_Node;
     private var node_to_neighbors:Node_to_Neighbors;
-	private var _mapGraph:Graph<Int,Float>;
+	private var _mapGraph:Graph<String,Float>;
     
     private var selected:Node = null;
 	
@@ -103,7 +103,37 @@ class GameMap extends FlxSpriteGroup {
 			//this.factionControlledNodes.set(faction, new NodeGroup());
         //}
 		
-		this._mapGraph = new Graph<Int,Float>();
+		this._mapGraph = new Graph<String,Float>();
+			//.allowCycles(true)
+			//.build();
+		
+		this._mapGraph.add('a');
+        this._mapGraph.add('b');
+        this._mapGraph.add('c');
+        this._mapGraph.add('d');
+        this._mapGraph.add('e');
+        this._mapGraph.add('f');
+        this._mapGraph.add('g');
+        this._mapGraph.add('h');
+        
+        _mapGraph.connect('a', 'b', 2);
+        _mapGraph.connect('a', 'f', 1);
+        _mapGraph.connect('a', 'h', 3);
+        _mapGraph.connect('b', 'c', 4);
+        _mapGraph.connect('b', 'e', 1);
+        _mapGraph.connect('e', 'f', 2);
+        _mapGraph.connect('e', 'd', 2);
+        _mapGraph.connect('f', 'h', 2);
+        _mapGraph.connect('f', 'g', 3);
+        _mapGraph.connect('f', 'd', 5);
+        _mapGraph.connect('h', 'g', 1);
+        _mapGraph.connect('d', 'g', 4);
+        _mapGraph.connect('d', 'c', 3);
+        
+        trace("f connected to d (true):  " + _mapGraph.isConnected('f', 'd'));
+        trace("d connected to f (true):  " + _mapGraph.isConnected('d', 'f'));
+        trace("a connected to e (false): " + _mapGraph.isConnected('a', 'e'));
+        trace(Json.stringify(_mapGraph));
 		
 		//var compareFn = function(e1:Float, e2:Float):Int {
 			////return e1 - e2;
@@ -113,7 +143,7 @@ class GameMap extends FlxSpriteGroup {
 		//}
 		
 		//_mapGraph.findPath(1, 2, compareFn);
-		_mapGraph.findPath(1, 2);
+		_mapGraph.findPath('a', 'b');
         
         this.setGraph();
 		

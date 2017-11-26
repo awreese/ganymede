@@ -18,6 +18,7 @@
 package graph;
 
 import graph.I_Graph.Edge;
+import haxe.Json;
 //typedef Edge<E> = {
 	//var weight: Float;
 	//var data: E;
@@ -35,9 +36,6 @@ class Graph<V,E> implements I_Graph<V,E> {
 	
 	private var _graph:AdjancencyList<V,E>;
 	
-	private var _directed:Bool;
-	private var _acyclic:Bool;
-
 	public function new() {
 		this._graph = new AdjancencyList<V,E>();
 	}
@@ -161,15 +159,21 @@ Now we can read the shortest path from source to target by reverse iteration
 */
 
 	public function findPath(source:V, target:V):Void {
+        trace('Finding path from ' + source + ' to ' + target);
 		dijkstras(source, target);
 	}
 	
 	//public function findPath(source:V, destination:V, ?compareFunction):Void {
 	public function dijkstras(source:V, ?destination:V = null):Map<V,V> {
-		var dist:Map<V,Float> = new Map<V,Float>();
+		
+        trace('Dijkstra\'s path from ' + source + ' to ' + destination);
+        
+        var dist:Map<V,Float> = new Map<V,Float>();
 		var prev:Map<V,V> = new Map<V,V>();
 		var toVisit:Array<V> = new Array<V>();
 		
+        trace('initializing arrays');
+        
 		for (v in this.getVertices()) {
 			dist[v] = Math.POSITIVE_INFINITY;
 			prev[v] = null;
@@ -177,50 +181,102 @@ Now we can read the shortest path from source to target by reverse iteration
 		}
 		dist[source] = 0.0;
 		
-		while (toVisit.length > 0) {
+        trace('starting search');
+        trace('Initial toVisit: ' + Json.stringify(toVisit));
+        trace('Initial dist: ' + Json.stringify(dist));
+        
+        var loopCount = 0;
+        
+		while (toVisit.length > 0 && loopCount++ < 20) {
+            
+            trace('LoopCount: ' + loopCount);
+            trace('toVisit: ' + Json.stringify(toVisit));
+            trace('tovisit length: ' + toVisit.length);
+            
 			//var minVertex:V = minDist(dist, compareFunction);
-			var minVertex:V = minDist(dist);
+			var minVertex:V = minDist(toVisit, dist);
+            trace('new minVertex: ' + minVertex);
 			toVisit.remove(minVertex);
 			
+            trace('minVertex (' + minVertex + ') == dest (' + destination + '): ' + (minVertex == destination));
 			if (minVertex == destination) {
-				return prev;
+                
+                trace('destination found: ' + minVertex);
+                trace('Complete, returning prev object: ' + Json.stringify(prev));
+				
+                return prev;
 			} // found target, bail out
 			
 			for (vertex in getVertices(minVertex)) {
-				if (toVisit.indexOf(vertex) == -1) continue;
+                
+                trace('Checking vertex: ' + vertex);
+                trace('index of vertex ' + vertex + ' : ' + toVisit.indexOf(vertex));
+                
+				if (toVisit.indexOf(vertex) == -1) {
+                    trace('vertex ' + vertex + ' not found, skipping');
+                    continue;
+                }
 				
-				var alt = dist[minVertex] + getEdge(minVertex, vertex).weight;
+                var edge:Edge<E> = getEdge(minVertex, vertex);
+                
+                trace('Edge: ' + Json.stringify(edge));
+                //if (edge == null) continue;
+                
+				//var alt = dist[minVertex] + getEdge(minVertex, vertex).weight;
+				var alt = dist[minVertex] + edge.weight;
 				if (alt < dist[vertex]) {
 					dist[vertex] = alt;
 					prev[vertex] = minVertex;
+                    
+                    trace('New min distance');
+                    trace('dist[]: ' + Json.stringify(dist));
 				}
 			}
 		}
 		
 		// TODO: return path object??
+        trace('Complete, returning prev object: ' + Json.stringify(prev));
 		return prev;
 	}
 	
 	//private function minDist(distMap:Map<V,Float>, compareFn:E->E->Int):V {
-	private function minDist(distMap:Map<V,Float>):V {
-		var minVertex:V = null;
+	private function minDist(toVisit:Array<V>, distMap:Map<V,Float>):V {
+		
+        trace('Calling minDist');
+        trace('\ttoVisit: ' + Json.stringify(toVisit));
+        trace('\tdistMap: ' + Json.stringify(distMap));
+        
+        var minVertex:V = null;
 		var minDist:Float = null;
 		
-		for (vertex in distMap.keys()) {
+		//for (vertex in distMap.keys()) {
+		for (vertex in toVisit) {
 			var curDist:Float = distMap.get(vertex);
+            if (curDist == null) curDist = Math.POSITIVE_INFINITY;
+            
+            trace('vertex: ' + vertex + '\tcurDist: ' + curDist);
 			
 			if (minDist == null) {
 				minDist = curDist;
 				minVertex = vertex;
+                
+                trace('first iteration, setting to first element');
+                trace('minDist: ' + minDist + '\tminVertex: ' + minVertex);
+                
 			} else {
 				//if (compareFn(curDist, minDist) < 0) { // use compare here
 				if (curDist < minDist) {
 					minDist = curDist;
 					minVertex = vertex;
+                    
+                    trace('new minimum element');
+                    trace('minDist: ' + minDist + '\tminVertex: ' + minVertex);
+                
 				}
 			}
 		}
 		
+        trace('Returning minVertex: ' + minVertex);
 		return minVertex;
 	}
 	

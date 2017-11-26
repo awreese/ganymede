@@ -26,13 +26,18 @@ typedef Edge<E> = {
  * @author Drew Reese
  */
 interface I_Graph<V,E> {
+	private var _directed:Bool;
+	private var _multiEdge:Bool;
+	private var _selfEdge:Bool;
+	private var _acyclic:Bool;
+	
 	public function add(vertex:V):Bool;
 	public function remove(vertex:V):Bool;
 	public function connect(v1:V, v2:V, ?weight:Float = 1, ?data:E = null):Bool;
-	public function unconnect(v1:V, v2:V):Edge<E>;
+	public function unconnect(v1:V, v2:V):List<Edge<E>>;
 	public function contains(vertex:V):Bool;
 	public function isConnected(v1:V, v2:V):Bool;
 	public function getVertices(?vertex:V = null):Iterator<V>;
 	public function getEdges(vertex:V):Iterator<Edge<E>>;
-	public function getEdge(v1:V, v2:V):Edge<E>;
+	public function getEdge(v1:V, v2:V):List<Edge<E>>;
 }
