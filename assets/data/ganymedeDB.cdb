@@ -1,0 +1,506 @@
+{
+	"sheets": [
+		{
+			"name": "levels",
+			"columns": [
+				{
+					"typeStr": "0",
+					"name": "id",
+					"display": null
+				},
+				{
+					"typeStr": "6:maps",
+					"name": "map",
+					"display": null
+				}
+			],
+			"lines": [
+				{
+					"id": "level_t_0",
+					"map": "map_0"
+				}
+			],
+			"separators": [],
+			"props": {}
+		},
+		{
+			"name": "maps",
+			"columns": [
+				{
+					"typeStr": "0",
+					"name": "id",
+					"display": null
+				},
+				{
+					"typeStr": "3",
+					"name": "width"
+				},
+				{
+					"typeStr": "3",
+					"name": "height"
+				},
+				{
+					"typeStr": "8",
+					"name": "nodes",
+					"display": null
+				}
+			],
+			"lines": [
+				{
+					"id": "map_0",
+					"nodes": [
+						{
+							"id": "node_0",
+							"x": 100,
+							"y": 275,
+							"edges": [
+								{
+									"edge": "node_1"
+								},
+								{
+									"edge": "node_2"
+								},
+								{
+									"edge": "node_3"
+								}
+							]
+						},
+						{
+							"id": "node_1",
+							"x": 425,
+							"y": 100,
+							"edges": [
+								{
+									"edge": "node_0"
+								},
+								{
+									"edge": "node_4"
+								}
+							]
+						},
+						{
+							"id": "node_2",
+							"x": 325,
+							"y": 350,
+							"edges": [
+								{
+									"edge": "node_0"
+								},
+								{
+									"edge": "node_4"
+								}
+							]
+						},
+						{
+							"id": "node_3",
+							"x": 200,
+							"y": 600,
+							"edges": [
+								{
+									"edge": "node_0"
+								},
+								{
+									"edge": "node_5"
+								}
+							]
+						},
+						{
+							"id": "node_4",
+							"x": 550,
+							"y": 425,
+							"edges": [
+								{
+									"edge": "node_1"
+								},
+								{
+									"edge": "node_2"
+								},
+								{
+									"edge": "node_5"
+								},
+								{
+									"edge": "node_6"
+								},
+								{
+									"edge": "node_7"
+								},
+								{
+									"edge": "node_8"
+								}
+							]
+						},
+						{
+							"id": "node_5",
+							"x": 435,
+							"y": 625,
+							"edges": [
+								{
+									"edge": "node_3"
+								},
+								{
+									"edge": "node_4"
+								}
+							]
+						},
+						{
+							"id": "node_6",
+							"x": 650,
+							"y": 145,
+							"edges": [
+								{
+									"edge": "node_4"
+								}
+							]
+						},
+						{
+							"id": "node_7",
+							"x": 650,
+							"y": 575,
+							"edges": [
+								{
+									"edge": "node_4"
+								}
+							]
+						},
+						{
+							"id": "node_8",
+							"x": 775,
+							"y": 360,
+							"edges": [
+								{
+									"edge": "node_4"
+								},
+								{
+									"edge": "node_9"
+								},
+								{
+									"edge": "node_10"
+								}
+							]
+						},
+						{
+							"id": "node_9",
+							"x": 925,
+							"y": 200,
+							"edges": [
+								{
+									"edge": "node_8"
+								},
+								{
+									"edge": "node_11"
+								}
+							]
+						},
+						{
+							"id": "node_10",
+							"x": 995,
+							"y": 615,
+							"edges": [
+								{
+									"edge": "node_8"
+								},
+								{
+									"edge": "node_11"
+								}
+							]
+						},
+						{
+							"id": "node_11",
+							"x": 1125,
+							"y": 340,
+							"edges": [
+								{
+									"edge": "node_9"
+								},
+								{
+									"edge": "node_10"
+								}
+							]
+						}
+					],
+					"width": 0,
+					"height": 0
+				}
+			],
+			"separators": [],
+			"props": {
+				"hasGroup": true
+			}
+		},
+		{
+			"name": "maps@nodes",
+			"props": {
+				"hide": true
+			},
+			"separators": [],
+			"lines": [],
+			"columns": [
+				{
+					"typeStr": "0",
+					"name": "id"
+				},
+				{
+					"typeStr": "3",
+					"name": "x"
+				},
+				{
+					"typeStr": "3",
+					"name": "y"
+				},
+				{
+					"typeStr": "8",
+					"name": "edges",
+					"display": null
+				}
+			]
+		},
+		{
+			"name": "maps@nodes@edges",
+			"props": {
+				"hide": true
+			},
+			"separators": [],
+			"lines": [],
+			"columns": [
+				{
+					"typeStr": "1",
+					"name": "edge"
+				}
+			]
+		},
+		{
+			"name": "planets",
+			"columns": [
+				{
+					"typeStr": "0",
+					"name": "id",
+					"display": null
+				},
+				{
+					"typeStr": "1",
+					"name": "description",
+					"display": null
+				},
+				{
+					"typeStr": "3",
+					"name": "level"
+				},
+				{
+					"typeStr": "3",
+					"name": "max_capacity_level"
+				},
+				{
+					"typeStr": "3",
+					"name": "max_tech_level"
+				},
+				{
+					"typeStr": "3",
+					"name": "ship_capacity"
+				},
+				{
+					"typeStr": "4",
+					"name": "production_rate"
+				},
+				{
+					"typeStr": "4",
+					"name": "production_threshold"
+				},
+				{
+					"typeStr": "3",
+					"name": "base_upgrade_cost"
+				},
+				{
+					"typeStr": "4",
+					"name": "capacity_per_level"
+				},
+				{
+					"typeStr": "4",
+					"name": "tech_per_level"
+				}
+			],
+			"lines": [
+				{
+					"id": "planet_0",
+					"description": "",
+					"level": 0,
+					"max_capacity_level": 0,
+					"max_tech_level": 0,
+					"ship_capacity": 10,
+					"production_rate": 10,
+					"production_threshold": 0.5,
+					"base_upgrade_cost": -1,
+					"capacity_per_level": 0,
+					"tech_per_level": 0
+				}
+			],
+			"separators": [],
+			"props": {}
+		},
+		{
+			"name": "ships",
+			"columns": [
+				{
+					"typeStr": "0",
+					"name": "id",
+					"display": null
+				},
+				{
+					"typeStr": "1",
+					"name": "description",
+					"opt": true
+				},
+				{
+					"typeStr": "6:shipClasses",
+					"name": "hull_class"
+				},
+				{
+					"typeStr": "4",
+					"name": "orbit_velocity",
+					"opt": true
+				},
+				{
+					"typeStr": "4",
+					"name": "warp_velocity"
+				},
+				{
+					"typeStr": "4",
+					"name": "angular_velocity"
+				},
+				{
+					"typeStr": "4",
+					"name": "hit_points"
+				},
+				{
+					"typeStr": "4",
+					"name": "shield_strength"
+				},
+				{
+					"typeStr": "4",
+					"name": "hp_regen"
+				},
+				{
+					"typeStr": "4",
+					"name": "capture_points_per_second"
+				},
+				{
+					"typeStr": "4",
+					"name": "sensor_range"
+				},
+				{
+					"typeStr": "3",
+					"name": "turret_hardpoints"
+				},
+				{
+					"typeStr": "3",
+					"name": "launcher_hardpoints"
+				}
+			],
+			"lines": [],
+			"separators": [],
+			"props": {}
+		},
+		{
+			"name": "factions",
+			"columns": [
+				{
+					"typeStr": "0",
+					"name": "faction",
+					"display": null
+				},
+				{
+					"typeStr": "11",
+					"name": "color",
+					"display": null
+				}
+			],
+			"lines": [
+				{
+					"faction": "NOP",
+					"color": 16777215
+				},
+				{
+					"faction": "PLAYER",
+					"color": 255
+				},
+				{
+					"faction": "NEUTRAL",
+					"color": 65280
+				},
+				{
+					"faction": "ENEMY_0",
+					"color": 16711680
+				},
+				{
+					"faction": "ENEMY_1",
+					"color": 16753920
+				},
+				{
+					"faction": "ENEMY_2",
+					"color": 16776960
+				},
+				{
+					"faction": "ENEMY_3",
+					"color": 16761035
+				},
+				{
+					"faction": "ENEMY_4",
+					"color": 16711935
+				},
+				{
+					"faction": "ENEMY_5",
+					"color": 65535
+				}
+			],
+			"separators": [],
+			"props": {}
+		},
+		{
+			"name": "shipClasses",
+			"columns": [
+				{
+					"typeStr": "0",
+					"name": "class"
+				}
+			],
+			"lines": [
+				{
+					"class": "FRIGATE"
+				},
+				{
+					"class": "DESTROYER"
+				},
+				{
+					"class": "CRUISER"
+				},
+				{
+					"class": "BATTLECRUISER"
+				},
+				{
+					"class": "BATTLESHIP"
+				},
+				{
+					"class": "CARRIER"
+				},
+				{
+					"class": "DREADNOUGHT"
+				},
+				{
+					"class": "SUPERCARRIER"
+				},
+				{
+					"class": "TITAN"
+				},
+				{
+					"class": "DRONE"
+				},
+				{
+					"class": "FIGHTER"
+				}
+			],
+			"separators": [],
+			"props": {}
+		}
+	],
+	"customTypes": [],
+	"compress": false
+}
