@@ -19,15 +19,14 @@
 package com.ganymede.gameUnits.capturable;
 
 import flixel.FlxSprite;
+
 /**
  * ...
  * @author 
  */
-class Beacon extends Capturable
-{
+class Beacon extends Capturable {
 
-	public function new(x:Float, y:Float) 
-	{
+	public function new(x:Float, y:Float) {
 		
 	}
 	

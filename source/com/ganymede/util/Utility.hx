@@ -1,6 +1,6 @@
 /**
  *  Astrorush: TBD (The Best Defense)
- *  Copyright (C) 2017  Andrew Reese, Daisy Xu, Rory Soiffer
+ *  Copyright (C) 2017  Andrew Reese
  *
  * This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,21 +16,16 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ganymede.gameUnits.combat;
-
-import flixel.FlxObject;
-import com.ganymede.gameUnits.Ship;
+package com.ganymede.util;
 
 /**
- * Interface for in-game combatants.
+ * Utility class holds utility functions used throughout Project Ganymede.
  * @author Drew Reese
  */
-interface I_Combatant {
-    private var radar:Radar;
-    private var sensorRange:Float;
-    
-    public function getSensorRange():Float;
-    public function inSensorRange(object:FlxObject):Bool;
-    public function setRadar(ships:Array<Ship>):Void;
-    public function selectTarget():I_Combatant;
+class Utility {
+
+  
+  
 }
+
+

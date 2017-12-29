@@ -18,15 +18,15 @@
 
 package com.ganymede.gameUnits.weapons;
 
-import com.ganymede.gameUnits.combat.I_Combatant;
+import com.ganymede.gameUnits.combat.ICombatant;
 
 /**
  * Interface for in-game weapons.
  * @author Drew Reese
  */
-interface I_Weapon {
-    private var source:I_Combatant;
-	private var size(get, null):WeaponSize;
-    
-    public function fire():Void;
+interface IWeapon {
+  private var source:ICombatant;
+  public var size(default, null):WeaponSize;
+
+  public function fire():Void;
 }

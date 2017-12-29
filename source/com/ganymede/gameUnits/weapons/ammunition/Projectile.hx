@@ -18,17 +18,20 @@
 
 package com.ganymede.gameUnits.weapons.ammunition;
 
+import com.ganymede.gameUnits.combat.ICombatant;
+import flixel.FlxG;
+import flixel.addons.effects.FlxTrail;
 import flixel.util.helpers.FlxBounds;
 import com.ganymede.gameUnits.weapons.WeaponSize;
 import com.ganymede.gameUnits.weapons.ammunition.Ammunition.Charge;
 
 /**
  * Projectiles represent a projectile ammo type (think actual bullets) used
- * by Projectile turrets. Projectiles have a medium velocity but do higher 
+ * by Projectile turrets. Projectiles have a medium velocity but do higher
  * damage.
- * 
+ *
  * @author Drew Reese
- * 
+ *
  * This file contains:
  * 	+ Projectile Class
  * 		- Small
@@ -41,61 +44,68 @@ import com.ganymede.gameUnits.weapons.ammunition.Ammunition.Charge;
  * Projectiles are used in Projectile turrets.
  */
 class Projectile extends Charge {
-	
-	public static var SPEED:FlxBounds<Float> = new FlxBounds(110.0, 130.0);
-	//public static var SPEED:FlxBounds<Float> = new FlxBounds(50.0, 150.0);
 
-	/* diameter in pixels for projectile sizes */
-    private static var _SIZE_SML_:Int = 3;
-    private static var _SIZE_MED_:Int = 5;
-    private static var _SIZE_LRG_:Int = 7;
-    private static var _SIZE_CAP_:Int = 9;
-    
-    public var _size(default, null):Int;
-	
-    private function new(chargeSize:WeaponSize, damage:Float) {
-        super(chargeSize, damage);
-		
-		// load graphic
-		loadGraphic(AssetPaths.projectile__png, false);
-		switch(chargeSize) {
-            case SMALL:
-                this._size = _SIZE_SML_;
-            case MEDIUM:
-                this._size = _SIZE_MED_;
-            case LARGE:
-                this._size = _SIZE_LRG_;
-            case CAPITAL:
-                this._size = _SIZE_CAP_;
-        }
-        this.setGraphicSize(0, _size);
-        this.updateHitbox();
-        
+  public static var SPEED:FlxBounds<Float> = new FlxBounds(110.0, 130.0);
+  //public static var SPEED:FlxBounds<Float> = new FlxBounds(50.0, 150.0);
+
+  /* diameter in pixels for projectile sizes */
+  private static var _SIZE_SML_:Int = 3;
+  private static var _SIZE_MED_:Int = 5;
+  private static var _SIZE_LRG_:Int = 7;
+  private static var _SIZE_CAP_:Int = 9;
+
+  //public var _size(default, null):Int;
+  public var _trail:FlxTrail;
+
+  private function new(chargeSize:WeaponSize, damage:Float) {
+    super(chargeSize, damage);
+
+    // load graphic
+    loadGraphic(AssetPaths.projectile__png, false);
+    switch (chargeSize) {
+      case SMALL:
+        this._size = _SIZE_SML_;
+      case MEDIUM:
+        this._size = _SIZE_MED_;
+      case LARGE:
+        this._size = _SIZE_LRG_;
+      case CAPITAL:
+        this._size = _SIZE_CAP_;
     }
-    
+    this.setGraphicSize(0, _size);
+    this.updateHitbox();
+
+    this._trail = new FlxTrail(this, null, 20, 3, 0.5, 0.05);
+    FlxG.state.add(this._trail);
+  }
+  
+  override public function target(target:ICombatant):Void {
+    super.target(target);
+  }
+
 }
 
 class Projectile_Small extends Projectile {
-	
-	public function new(?damage:Float = 60.0) {
-		super(SMALL, damage);
-	}
+
+  public function new(?damage:Float = 60.0) {
+    super(SMALL, damage);
+  }
 }
 class Projectile_Medium extends Projectile {
-	
-	public function new(?damage:Float = 60.0) {
-		super(MEDIUM, damage);
-	}
+
+  public function new(?damage:Float = 60.0) {
+    super(MEDIUM, damage);
+  }
 }
 class Projectile_Large extends Projectile {
-	
-	public function new(?damage:Float = 60.0) {
-		super(LARGE, damage);
-	}
+
+  public function new(?damage:Float = 60.0) {
+    super(LARGE, damage);
+  }
 }
 class Projectile_Capital extends Projectile {
-	
-	public function new(?damage:Float = 60.0) {
-		super(CAPITAL, damage);
-	}
+
+  public function new(?damage:Float = 60.0) {
+    super(CAPITAL, damage);
+  }
 }

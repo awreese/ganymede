@@ -1,6 +1,5 @@
 /**
- *  Astrorush: TBD (The Best Defense)
- *  Copyright (C) 2017  Andrew Reese, Daisy Xu, Rory Soiffer
+ *  Copyright (C) 2017  Andrew Reese
  * 
  * This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,18 +15,21 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ganymede.util;
+package com.ganymede.util.graph;
+
+import com.ganymede.util.graph.Graph.Edge;
 
 /**
- * ...
  * @author Drew Reese
  */
-class LevelParser {
-
-	public var _parser:LevelParser;
-	
-	private function new() {
-		
-	}
-	
+interface IGraph<V,E> {
+	public function add(vertex:V):Bool;
+	public function remove(vertex:V):Bool;
+	public function connect(v1:V, v2:V, ?weight:Float = 1, ?data:E = null):Bool;
+	public function unconnect(v1:V, v2:V):Edge<E>;
+	public function contains(vertex:V):Bool;
+	public function isConnected(v1:V, v2:V):Bool;
+	public function getVertices(?vertex:V = null):Iterator<V>;
+	public function getEdges(vertex:V):Iterator<Edge<E>>;
+	public function getEdge(v1:V, v2:V):Edge<E>;
 }

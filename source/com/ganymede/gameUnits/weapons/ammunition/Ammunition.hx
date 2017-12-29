@@ -18,6 +18,8 @@
 
 package com.ganymede.gameUnits.weapons.ammunition;
 
+import com.ganymede.gameUnits.combat.ICombatant;
+import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.addons.weapon.FlxBullet;
 import com.ganymede.gameUnits.weapons.WeaponSize;
@@ -27,10 +29,13 @@ import com.ganymede.gameUnits.weapons.WeaponSize;
  * @author Drew Reese
  */
 interface I_Ammunition {
-    public var target:FlxSprite;
-    
-    private var _ammoSize(get, null):WeaponSize;
-    private var _damage:Float;
+  private var _target:FlxSprite;
+  private var _damage:Float;
+
+  public var _size(default, null):Int;
+  public var _ammoSize(default, null):WeaponSize;
+  
+  public function target(target:ICombatant):Void;
 }
 
 /**
@@ -40,42 +45,48 @@ interface I_Ammunition {
  */
 class Ammunition extends FlxBullet implements I_Ammunition {
 
-    public var target:FlxSprite;
-	
-    private var _ammoSize(get, null):WeaponSize;
-    private var _damage:Float;
-    
-    private function new(ammoSize:WeaponSize, damage:Float) {
-        super();
-        this._ammoSize = ammoSize;
-		this._damage = damage;
+  private var _target:FlxSprite;
+
+  public var _ammoSize(default, null):WeaponSize;
+  public var _size(default, null):Int;
+  private var _damage:Float;
+
+  private function new(ammoSize:WeaponSize, damage:Float) {
+    super();
+    this._ammoSize = ammoSize;
+    this._damage = damage;
+  }
+
+  override public function update(elapsed:Float):Void {
+
+    // check if target exists & test collision
+    if (_target.exists && this.overlaps(_target)) {
+
+      // Do damage to target & destroy missile
+      _target.hurt(_damage);
+      this.kill();
     }
-    
-    override public function update(elapsed:Float):Void {
-        
-        // check if target exists & test collision
-		if (target.exists && this.overlaps(target)) {
-            
-            // Do damage to target & destroy missile
-            target.hurt(_damage);
-            this.kill();
-		}
-        
-        super.update(elapsed);
-    }
-    
-    public function get__ammoSize():WeaponSize {
-        return this._ammoSize;
-    }
-    
+
+    super.update(elapsed);
+  }
+  
+  public function target(target:ICombatant):Void {
+    //this._target = cast(target, FlxSprite);
+    this._target = cast target;
+  }
+  
+  public function get__ammoSize():WeaponSize {
+    return this._ammoSize;
+  }
+
 }
 
 /**
  * Charges are used for turrets.
  */
 class Charge extends Ammunition {
-    private function new(ammoSize:WeaponSize, damage:Float) {
-        super(ammoSize, damage);
-        this.accelerates = false;
-    }
+  private function new(ammoSize:WeaponSize, damage:Float) {
+    super(ammoSize, damage);
+    this.accelerates = false;
+  }
 }

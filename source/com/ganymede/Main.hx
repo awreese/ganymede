@@ -6,17 +6,19 @@ import openfl.display.Sprite;
 import com.ganymede.tutorial.FinishGameState;
 
 import com.ganymede.CapstoneLogger;
-import com.ganymede.db.Data;
+//import com.ganymede.db.Data;
+//import com.ganymede.db.Data.GanymedeDB;
+import com.ganymede.db.Ganymede;
 
 class Main extends Sprite {
 	
 	public static var LOGGER:CapstoneLogger;
 	public static var LEVEL:Int;
 	public static inline var FINAL_LEVEL:Int = 10;
-    public static var RESTART:Bool = false;
-    
-    public static var AB_TEST:Array<String> = ["A", "B"];
-    public static var AB_VERSION:String;
+  public static var RESTART:Bool = false;
+
+  public static var AB_TEST:Array<String> = ["A", "B"];
+  public static var AB_VERSION:String;
 
 	public function new() {
 		// This code prevents right-click from opening a menu
@@ -29,19 +31,26 @@ class Main extends Sprite {
 		
 		super();
 		
-        LEVEL = 1;
-        
-        AB_VERSION = new FlxRandom().getObject(AB_TEST);
-        
-        // connect to database
-        #if js
-		Data.load(haxe.Resource.getString(AssetPaths.ganymedeDB__cdb));
-		#else
-		Data.load(null));
-		#end
-		//trace("Lich", Data.myDB.get(Lich));
-        trace(Data.levels);
-        
+    LEVEL = 1;
+    
+    AB_VERSION = new FlxRandom().getObject(AB_TEST);
+    
+    // connect to database
+    //#if js
+		//Data.load(haxe.Resource.getString(AssetPaths.ganymedeDB__cdb));
+		//#else
+		//Data.load(null));
+		//#end
+		////trace("Lich", Data.myDB.get(Lich));
+    //trace("factions", Data.factions.get(PLAYER).color);
+    //trace("factions", Data.factions.resolve('PLAYER').faction);
+    //trace(Data.levels.all[0]);
+    //trace(Data.levels.all[0].planets);
+    
+    //GanymedeDB.connect();
+    //GanymedeDB.levelByIndex(0);
+    Ganymede.levelByIndex(0);
+    
 		// get the logger up
 		var gameId:Int = 1702;
 		var gameKey:String = "5e1bd5047e378b5fd4912760004f80f4";
