@@ -37,14 +37,13 @@ class EdgeLine extends FlxSprite {
   public function new (id:Int, p1:FlxPoint, p2:FlxPoint) {
     super();
     
-    trace('FlxG.width/height: ${FlxG.width}, ${FlxG.height}');
-    trace('FlxG.stage:        ${FlxG.stage.stageWidth}, ${FlxG.stage.stageHeight}');
+    //trace('FlxG.width/height: ${FlxG.width}, ${FlxG.height}');
 
     this.makeGraphic(FlxG.width, FlxG.height, FlxColor.TRANSPARENT, true);
     var fill = FlxColor.fromRGBFloat(0.5, 0.5, 0.5, 0.6);
     FlxSpriteUtil.drawLine(this, p1.x, p1.y, p2.x, p2.y, {color: fill, thickness: 5});
 
-    trace('Edge $p1 -> $p2');
+    //trace('Edge $p1 -> $p2');
     
     this.visible = true;
     FlxG.state.add(this);

@@ -140,8 +140,8 @@ class GameMap extends FlxSpriteGroup {
     //return 0;
     //}
 
-    //_mapGraph.findPath(1, 2, compareFn);
-    _mapGraph.findPath('a', 'b');
+    //var sss:Array<String> = _mapGraph.findPath('a', 'b');
+    //trace("path a->b", sss);
 
     this.setGraph();
 

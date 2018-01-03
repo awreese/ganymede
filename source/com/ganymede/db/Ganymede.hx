@@ -20,6 +20,7 @@ package com.ganymede.db;
 
 import com.ganymede.db.Data;
 import com.ganymede.util.graph.Graph;
+import flixel.math.FlxPoint;
 import haxe.Json;
 
 /**
@@ -41,7 +42,7 @@ class Ganymede {
     Data.load(null));
     #end
     
-    trace(Data.levelSize, Data.levelSize.all[0], Data.levelSize.get(SMALL));
+    //trace(Data.levelSize, Data.levelSize.all[0], Data.levelSize.get(SMALL));
 	}
   
   /**
@@ -66,24 +67,77 @@ class Ganymede {
     //trace("nodes", level.nodes[0].edges);
     
     
-    buildGraph(level.nodes);
+    var mapGraph:Graph<Int, Float> = buildGraph(level.nodes);
+    
+    trace('mapGraph: $mapGraph');
+    
+    var a:Int = 0, b:Int = 11;
+    var path:Array<Int> = mapGraph.findPath(a, b);
+    trace('path $a->$b: $path');
+    
+    var pathPoints:Array<FlxPoint> = new Array();
+    for (i in path) {
+      var node = level.nodes[i];
+      pathPoints.push(new FlxPoint(node.x, node.y));
+    }
+    trace('pathPoints $a->$b: $pathPoints');
+    
+    var pathMap:Map<Int, Int> = mapGraph.dijkstras(0);
+    trace('pathMap: $pathMap');
+    
+    getPaths(level.nodes, mapGraph);
   }
   
   private static function buildGraph(nodes:Dynamic):Graph<Int, Float> {
-    //trace(
-      //"nodes", 
-      //Type.typeof(nodes), 
-      //Type.typeof(nodes[0].edges[0].edge),
-      //nodes[0].edges.length
-    //);
     
-    var mapGraph:Graph<Int, Float> = new Graph();
+    var graph:Graph<Int, Float> = new Graph();
     
-    for (i in 0...nodes[0].edges.length) {
-      trace(nodes[0].edges[i].edge, Type.typeof(nodes[0].edges[i].edge));
+    // Add nodes
+    for (i in 0...nodes.length) {
+      graph.add(i);
     }
+    
+    // Add edges
+    for (fromNode in 0...nodes.length) {
+      var currentNode = nodes[fromNode];
+      for (e in 0...nodes[fromNode].edges.length) {
+        var toNode:Int = nodes[fromNode].edges[e].edge;
+        var destNode = nodes[toNode];
+        
+        var p1:FlxPoint = FlxPoint.weak(currentNode.x, currentNode.y);
+        var p2:FlxPoint = FlxPoint.weak(destNode.x, destNode.y);
+        var dist:Float = p1.distanceTo(p2);
+        
+        graph.connect(fromNode, toNode, dist);
+      }
+    }
+    
+    return graph;
+  }
+  
+  private static function getPaths(nodes:Dynamic, graph:Graph<Int, Float>):Void {
+  
+    var pathMap:Map<Int,Int>;
+    
+    function getPathTo(target:Int):Void {
+      
+      trace('test: ${graph.getPath(pathMap, 0, 11)}');
+      
+      return null;
+    }
+    
+    trace('getPaths graph nodes: ${graph.getVertices()}');
+    
+    for (vertex in graph.getVertices()) {
+      trace('vertex: $vertex');
+      pathMap = graph.dijkstras(vertex);
+      getPathTo(11);
+    }
+    
     
     return null;
   }
+  
+  
   
 }
