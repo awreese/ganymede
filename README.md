@@ -21,20 +21,20 @@ Gather your forces and test your fortitude against a rising threat.  Command you
         - [ ] Upgraded graph implementation
             - [x] Pre-calculated shortest paths
             - [ ] Ship movements based on stored paths
-            - [ ] Possibly allow 'one-way' edges
+            - [x] Possibly allow 'one-way' edges
             - [ ] Possibly allow for different types of edges
         - [ ] Game Levels
-            - [ ] Option 1: Stored as JSON files (current way)
-            - [ ] Option 2: Stored in Database table (preferred way)
+            - ~~[ ] Option 1: Stored as JSON files (current way)~~
+            - [x] Option 2: Stored in Database table (preferred way)
             - [ ] Game map level parser
     - [ ] Ships
-        - [ ] Use database to store ship 'blueprints'
+        - [x] Use database to store ship 'blueprints'
         - [ ] Change ship movements
             - [ ] 'Slowish' at object nodes
             - [ ] Align for 'warping' along edges
         - [ ] Better ship graphics
     - [ ] Node Objects
-        - [ ] Use database to store object 'blueprints'
+        - [x] Use database to store object 'blueprints'
         - [ ] Capturables
             - [ ] Planets
                 - [ ] Better planet graphics
