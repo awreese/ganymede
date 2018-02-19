@@ -27,7 +27,7 @@ class Main extends Sprite {
 		
 		super();
 		
-        LEVEL = 1;
+        LEVEL = 2;
         
         AB_VERSION = new FlxRandom().getObject(AB_TEST);
         

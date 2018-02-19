@@ -2,6 +2,7 @@ package;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.FlxSprite;
 import flixel.FlxG;
+import flixel.ui.FlxButton;
 import flixel.util.FlxColor;
 import gameUnits.capturable.Planet;
 import faction.Faction.FactionType;
@@ -20,6 +21,8 @@ class UpgradeHUD extends FlxTypedGroup<FlxSprite>
 	private var _bgSprite:FlxSprite; // background sprite
 	
 	private var _alpha:Float = 0; // use to fade in and out of hud
+	
+	private var closeButton: FlxButton; // button to click when want to close hub
 	
 	public function new() 
 	{
@@ -79,5 +82,12 @@ class UpgradeHUD extends FlxTypedGroup<FlxSprite>
 	 */
 	override public function update(elapsed:Float):Void {
 		super.update(elapsed);
+	}
+	
+	/**
+	 * Close the hub and set everything else back to active
+	 */
+	private function clickClose(): Void {
+		finishFadeOut();
 	}
 }

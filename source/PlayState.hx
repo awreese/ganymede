@@ -31,6 +31,7 @@ import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
+import flixel.ui.FlxButton;
 import flixel.util.FlxColor;
 import gameUnits.Ship;
 import gameUnits.Ship.ShipGroup;
@@ -50,6 +51,10 @@ class PlayState extends FlxState {
 	private var rand:FlxRandom;
 	private var numPlayerFaction:Int;
 	private var enemies: Array<Enemy>;
+	
+	private var upgradeHUB: UpgradeHUD; // hud that'll open up for upgrading
+	private var upgradeButton: FlxButton; // button that'll be pressed to open upgrade hub
+	private var upgradePlanet: Planet; // planet that the upgrade will be focusing on, passed to the upgrade hub
     
     private var tutor:Tutorial;
 
@@ -67,6 +72,12 @@ class PlayState extends FlxState {
 		// Create the ships
         shipGroup = new ShipGroup();
         add(shipGroup);
+		
+		// create upgrade variables
+		upgradeHUB = new UpgradeHUD();
+		upgradeButton = new FlxButton(0, 0, "Upgrade", openUpgradeHub);
+		upgradeButton.visible = false; // cannot see button if not focusing on a planet
+		upgradePlanet = null; // default planet is null bc not focusing on a planet
 
 		// add the enemies
 		for (faction in Faction.getEnums()) {
@@ -93,6 +104,13 @@ class PlayState extends FlxState {
 		 */
         //Tutorial.checkTutorial(this, elapsed);
         tutor.checkTutorial(elapsed);
+		
+		// check if out of upgrade hub
+		if (!upgradeHUB.visible) {
+			// if not in upgrade hub, set everything to active so can update
+			shipGroup.active = true;
+			grpPlanets.active = true;
+		}
         
         for (ship in shipGroup) {
             if (ship.exists) {
@@ -165,6 +183,10 @@ class PlayState extends FlxState {
                         ship.isSelected = true;
                     }
                 }
+				
+				// TODO: get planet and set upgrade button to visible
+				// need to figure out how to get the planet at the node
+				// need to code more in mapnode?
                 
                 // Log selecting a planet
                 Main.LOGGER.logLevelAction(2, 
@@ -342,6 +364,13 @@ class PlayState extends FlxState {
 			// Update the velocity
 			s1.vel = s1.vel.addNew(acceleration.scaleNew(elapsed));
 		}
+	}
+	
+	// function that'll open the upgrade hub when player click on the upgrade button
+	private function openUpgradeHub(): Void {
+		shipGroup.active = false;
+		grpPlanets.active = false;
+		upgradeHUB.initHUB(upgradePlanet);
 	}
 	
 	
