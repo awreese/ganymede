@@ -1,6 +1,6 @@
 /**
  *  Astrorush: TBD (The Best Defense)
- *  Copyright (C) 2017  Andrew Reese, Daisy Xu, Rory Soiffer
+ *  Copyright (C) 2017-2018 Andrew Reese, Daisy Xu, Rory Soiffer
  *
  * This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -68,7 +68,7 @@ class NodeRing extends FlxSprite {
     FlxSpriteUtil.drawCircle(this, -1, -1, this.radius, fill, lineStyle, drawStyle);
     this.setPosition(x - radius, y - radius);
     this.visible = visible;
-    FlxG.state.add(this);
+    //FlxG.state.add(this);
   }
 }
 

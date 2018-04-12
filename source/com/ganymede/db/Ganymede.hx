@@ -1,6 +1,6 @@
 /**
  *  Astrorush: TBD (The Best Defense)
- *  Copyright (C) 2017  Andrew Reese
+ *  Copyright (C) 2017-2018 Andrew Reese
  *
  * This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,12 +19,19 @@
 package com.ganymede.db;
 
 import com.ganymede.db.Data;
+import com.ganymede.map.LevelData;
 import com.ganymede.util.graph.Graph;
 import flixel.math.FlxPoint;
-import haxe.Json;
 
 private typedef PathNodeMap = Map<Int, Int>;
-private typedef PathMap<V> = Map<Int,Map<Int,Array<V>>>;
+//private typedef PathMap<V> = Map<Int,Map<Int,Array<V>>>;
+//
+//private typedef LevelData = {
+  //size:FlxPoint,
+  //nodes:Array<FlxPoint>,
+  //mapGraph:Graph<Int, Float>,
+  //pathPointMap:PathMap<FlxPoint>
+//};
 
 /**
  * ...
@@ -61,34 +68,79 @@ class Ganymede {
     }
   }
   
+  public static inline function getLevelData(levelIndex:Int):LevelData {
+    checkDBLoaded();
+    
+    var level = Data.levels.all[levelIndex];
+    
+    var size = new LevelSize(level.size);
+    var nodeArray:LevelNodeArray = new LevelNodeArray(level.nodes);
+    //trace('getLevelData', level);
+    trace('level nodes', nodeArray);
+    trace('level size', size);
+    
+    return {
+      size: size,
+      //nodes: null,
+      nodes: nodeArray,
+      //mapGraph: null,
+      //pathPointMap: null
+    };
+  }
   
-  public static inline function levelByIndex(levelIndex:Int):Void {
+  // TODO: DEPRECATED, move this functionality into Ganymede::getLevelData
+  public static inline function levelByIndex(levelIndex:Int):LevelData {
     checkDBLoaded();
     
     var level = Data.levels.all[levelIndex];
     //trace("parser", Json.stringify(level));
     //trace("nodes", level.nodes[0].edges);
     
+    var levelSize = new LevelSize(level.size);
+    
+    var nodeArray:Array<FlxPoint> = parseNodes(level.nodes);
+    trace('level', levelIndex, 'nodeArray', nodeArray);
     
     var mapGraph:Graph<Int, Float> = buildGraph(level.nodes);
     
     //trace('mapGraph: $mapGraph');
     
-    var pathNodeMap:PathMap<Int> = getPaths(mapGraph);
+    var pathNodeMap:PathVertexMap<Int> = getPaths(mapGraph);
     
-    //trace('pathNodeMap: $pathNodeMap');
-    //trace(' 0->11: ${pathNodeMap[0][11]}');
-    //trace('11->0 : ${pathNodeMap[11][0]}');
-    //trace(' 2->7 : ${pathNodeMap[2][7]}');
+    var pathPointMap:PathVertexMap<FlxPoint> = getPointPaths(level.nodes, pathNodeMap);
+    //trace(' 0->11: ${pathPointMap[0][11]}');
+    //trace('11->0 : ${pathPointMap[11][0]}');
+    //trace(' 2->7 : ${pathPointMap[2][7]}');
     
-    var pathPointMap:PathMap<FlxPoint> = getPointPaths(level.nodes, pathNodeMap);
-    //trace('pathPointMap: $pathPointMap');
-    trace(' 0->11: ${pathPointMap[0][11]}');
-    trace('11->0 : ${pathPointMap[11][0]}');
-    trace(' 2->7 : ${pathPointMap[2][7]}');
+    var levelData:LevelData = {
+      size: levelSize,
+      //nodes: nodeArray,
+      nodes: null,
+      //nodes2: null,
+      //mapGraph: mapGraph,
+      //pathPointMap: pathPointMap
+    };
     
+    return levelData;
   }
   
+  /* TODO: All graph/path building functions belong in the classes
+   *   that deal with graph/path building (i.e. Graph Layer) and
+   *   functionality should be moved there.  Ganymede functions 
+   *   should only deal with loading and producing data from the
+   *   database (i.e. getLevelData).
+   */
+  
+  /**
+   * @deprecated
+   */
+  private static function parseNodes(nodes:Dynamic):Array<FlxPoint> {
+    return [for (n in 0...nodes.length) FlxPoint.weak(nodes[n].x, nodes[n].y)];
+  }
+  
+  /**
+   * @deprecated
+   */
   private static function buildGraph(nodes:Dynamic):Graph<Int, Float> {
     
     var graph:Graph<Int, Float> = new Graph();
@@ -116,9 +168,12 @@ class Ganymede {
     return graph;
   }
   
-  private static function getPaths(graph:Graph<Int, Float>):PathMap<Int> {
+  /**
+   * @deprecated
+   */
+  private static function getPaths(graph:Graph<Int, Float>):PathVertexMap<Int> {
   
-    var pathNodeMap:PathMap<Int> = [for (v in graph.getVertices()) v => new Map()];
+    var pathNodeMap:PathVertexMap<Int> = [for (v in graph.getVertices()) v => new Map()];
     
     for (source in graph.getVertices()) {
       
@@ -134,9 +189,12 @@ class Ganymede {
     return pathNodeMap;
   }
   
-  private static function getPointPaths(nodes:Dynamic, pathNodeMap:PathMap<Int>):PathMap<FlxPoint> {
+  /**
+   * @deprecated
+   */
+  private static function getPointPaths(nodes:Dynamic, pathNodeMap:PathVertexMap<Int>):PathVertexMap<FlxPoint> {
     
-    var pathPointMap:PathMap<FlxPoint> = [for (v in pathNodeMap.keys()) v => new Map()];
+    var pathPointMap:PathVertexMap<FlxPoint> = [for (v in pathNodeMap.keys()) v => new Map()];
     
     for (source in pathNodeMap.keys()) {
       for (target in pathNodeMap[source].keys()) {

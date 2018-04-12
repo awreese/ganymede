@@ -1,6 +1,6 @@
 /**
  *  Astrorush: TBD (The Best Defense)
- *  Copyright (C) 2017  Andrew Reese, Daisy Xu, Rory Soiffer
+ *  Copyright (C) 2017-2018 Andrew Reese, Daisy Xu, Rory Soiffer
  *
  * This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,15 +18,18 @@
 
 package com.ganymede.map;
 
+import com.ganymede.db.Ganymede;
 import com.ganymede.faction.Faction;
 import com.ganymede.faction.Faction.FactionType;
 import com.ganymede.gameUnits.Ship.BluePrint;
 import com.ganymede.gameUnits.capturable.Capturable;
 import com.ganymede.gameUnits.capturable.Planet;
+import com.ganymede.map.layers.GraphLayer;
 import com.ganymede.util.graph.Graph;
 import com.ganymede.map.Node.NodeGroup;
 import flixel.FlxG;
 import flixel.FlxSprite;
+import flixel.group.FlxGroup;
 import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxPoint;
 import flixel.math.FlxVector;
@@ -52,6 +55,31 @@ typedef Node_to_Neighbors = Map<Node, NodeGroup>;
  * @author Drew Reese
  */
 class GameMap extends FlxSpriteGroup {
+  
+  /**
+   * Building level plan 1/29/2018 8:50 PM
+   * 
+   * Graphics Load Order
+   *  - Layer 0 (Background Group)
+   *    - background image
+   *  - Layer 1 (Map Graph Group)
+   *    - map node objects
+   *    - map edge objects
+   *    - path highlighting
+   *  - Layer 2 (Game Object Group)
+   *    - planets
+   *    - beacons
+   *    - hazards
+   *  - Layer 3 (HUD/UI Group)
+   *    - game HUD
+   *    - capture bars
+   *    - other various UI components
+   */
+  
+  public var backgroundGroup:FlxGroup;
+  public var graphGroup:FlxGroup;
+  public var objectGroup:FlxGroup;
+  public var interfaceGroup:FlxGroup;
 
   // list of nodes in current game map
   //public var nodes:MapNodeList = [];
@@ -59,7 +87,8 @@ class GameMap extends FlxSpriteGroup {
 
   private var id_to_node:Id_to_Node;
   private var node_to_neighbors:Node_to_Neighbors;
-  private var _mapGraph:Graph<String,Float>;
+  
+  private var _mapGraph:Graph<Int,Float>;
 
   private var selected:Node = null;
 
@@ -79,11 +108,24 @@ class GameMap extends FlxSpriteGroup {
     minY = Math.POSITIVE_INFINITY; // smallest y
     maxY = Math.NEGATIVE_INFINITY; // biggest y
     super();
-
+    
+    
     //loadGraphic("assets/images/mapbg.png", false, 1920, 1047);
+    
+    this.backgroundGroup = new FlxGroup();
+    this.graphGroup = new FlxGroup();
+    this.objectGroup = new FlxGroup();
+    this.interfaceGroup = new FlxGroup();
 
+    //FlxG.state.add(this.backgroundGroup);
+    //FlxG.state.add(this.graphGroup);
+    //FlxG.state.add(this.objectGroup);
+    //FlxG.state.add(this.interfaceGroup);
+    
+    
     var bg = new FlxSprite(AssetPaths.mapbg__png);
-    this.add(bg);
+    this.backgroundGroup.add(bg);
+    //this.add(bg);
 
     //this.nodes = new NodeGroup();
     //
@@ -101,48 +143,18 @@ class GameMap extends FlxSpriteGroup {
     //this.factionControlledNodes.set(faction, new NodeGroup());
     //}
 
-    this._mapGraph = new Graph<String,Float>();
-    //.allowCycles(true)
-    //.build();
-
-    this._mapGraph.add('a');
-    this._mapGraph.add('b');
-    this._mapGraph.add('c');
-    this._mapGraph.add('d');
-    this._mapGraph.add('e');
-    this._mapGraph.add('f');
-    this._mapGraph.add('g');
-    this._mapGraph.add('h');
-
-    _mapGraph.connect('a', 'b', 2);
-    _mapGraph.connect('a', 'f', 1);
-    _mapGraph.connect('a', 'h', 3);
-    _mapGraph.connect('b', 'c', 4);
-    _mapGraph.connect('b', 'e', 1);
-    _mapGraph.connect('e', 'f', 2);
-    _mapGraph.connect('e', 'd', 2);
-    _mapGraph.connect('f', 'h', 2);
-    _mapGraph.connect('f', 'g', 3);
-    _mapGraph.connect('f', 'd', 5);
-    _mapGraph.connect('h', 'g', 1);
-    _mapGraph.connect('d', 'g', 4);
-    _mapGraph.connect('d', 'c', 3);
-
-    trace("f connected to d (true):  " + _mapGraph.isConnected('f', 'd'));
-    trace("d connected to f (true):  " + _mapGraph.isConnected('d', 'f'));
-    trace("a connected to e (false): " + _mapGraph.isConnected('a', 'e'));
-    trace(Json.stringify(_mapGraph));
-
-    //var compareFn = function(e1:Float, e2:Float):Int {
-    ////return e1 - e2;
-    //if (e1 < e2) return -1;
-    //if (e1 > e2) return 1;
-    //return 0;
-    //}
-
-    //var sss:Array<String> = _mapGraph.findPath('a', 'b');
-    //trace("path a->b", sss);
-
+    var levelData:LevelData = Ganymede.getLevelData(0);
+    trace(levelData);
+    var graphLayer:GraphLayer = new GraphLayer(levelData);
+    
+    //var levelData:LevelData = Ganymede.levelByIndex(0);
+    //trace('levelData', levelData);
+    //trace('dimension', levelData.size);
+    //_mapGraph = levelData.mapGraph;
+    //trace('mapGraph', _mapGraph);
+    //trace('pathPointMap', levelData.pathPointMap);
+    //trace('pathPointMap 0->9', levelData.pathPointMap[0][9]);
+    
     this.setGraph();
 
     // Log level start and time
@@ -369,7 +381,8 @@ class GameMap extends FlxSpriteGroup {
     for (n in node_to_neighbors.keys()) {
       //n.drawTo(this);
       //this.add(n);
-      FlxG.state.add(n);
+      //FlxG.state.add(n);
+      this.graphGroup.add(n);
     }
   }
 
@@ -429,7 +442,8 @@ class GameMap extends FlxSpriteGroup {
         //var planet = new Planet(playState, this.id_to_node.get(node.id), new Faction(faction), planetstat);
         var planet = new Planet(this.id_to_node.get(node.id), new Faction(faction), planetstat);
         this.addCapturableByID(node.id, planet);
-        FlxG.state.add(planet);
+        //FlxG.state.add(planet);
+        this.objectGroup.add(planet);
       }
 
       // Defining planets and ships by custom stats
@@ -448,7 +462,8 @@ class GameMap extends FlxSpriteGroup {
               //var planet = new Planet(playState, this.id_to_node.get(node.id), new Faction(faction), ps); // create planet
               var planet = new Planet(this.id_to_node.get(node.id), new Faction(faction), ps); // create planet
               this.addCapturableByID(node.id, planet); // add planet
-              FlxG.state.add(planet);
+              //FlxG.state.add(planet);
+              this.objectGroup.add(planet);
           }
         }
       }

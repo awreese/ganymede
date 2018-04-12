@@ -1,6 +1,6 @@
 /**
  *  Astrorush: TBD (The Best Defense)
- *  Copyright (C) 2017  Andrew Reese, Daisy Xu, Rory Soiffer
+ *  Copyright (C) 2017-2018 Andrew Reese, Daisy Xu, Rory Soiffer
  *
  * This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -60,8 +60,16 @@ class PlayState extends FlxState {
     grpMap = new FlxTypedGroup<GameMap>();        ///
     add(grpMap);                                    //____ WTF is this?
     gameMap = new GameMap(this, Main.LEVEL);        //     no other game map is ever added to the group
-    grpMap.add(gameMap);                          ///
-    //add(gameMap);
+    //grpMap.add(gameMap);                          ///
+    
+    // TODO: Once game layers are fleshed out better, use below
+    add(gameMap.backgroundGroup);
+    add(gameMap.graphGroup);
+    add(gameMap.objectGroup);
+    add(gameMap.interfaceGroup);
+    
+    trace('gameMap', gameMap);
+    trace('grpMap', grpMap);
 
     // Create the ships
     shipGroup = new ShipGroup();
