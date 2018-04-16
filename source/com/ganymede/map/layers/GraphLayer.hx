@@ -26,6 +26,7 @@ import flixel.math.FlxPoint;
 
 typedef PathMapPoint = PathVertexMap<FlxPoint>;
 private typedef Vertex = LevelNode;
+private typedef VertexArray = Array<LevelNode>;
 private typedef VertexMap = Map<Int, Int>;
 
 /**
@@ -43,18 +44,23 @@ class GraphLayer extends FlxGroup {
   
   private var _size_:LevelSize;
   private var _graph_:Graph<Int, Float>;
-  private var _node_array_:LevelNodeArray;
+  private var _vertex_array_:Array<LevelNode>;
   //private var _path_map_:PathMapFlxPoint;
 
   public function new(levelData:LevelData) {
     super();
+    trace(levelData);
     this._size_ = levelData.size;
     //this._graph_ = levelData.mapGraph;
-    this._graph_ = buildGraph(levelData.nodes.nodes);
-    this._node_array_ = levelData.nodes;
+    this._graph_ = buildGraph(levelData.nodes);
+    this._vertex_array_ = levelData.nodes;
     //this._path_map_ = levelData.pathPointMap;
     trace('built graph', this._graph_);
-    trace(this._graph_.getVertices(0));
+    
+    var vertexMap:PathVertexMap<Int> = parsePaths(this._graph_);
+    var pointMap:PathVertexMap<FlxPoint> = getPathPoints(this._vertex_array_, vertexMap);
+    
+    trace(pointMap[0]);
   }
   
   private static function buildGraph(vertices:Array<LevelNode>):Graph<Int, Float> {
@@ -64,7 +70,6 @@ class GraphLayer extends FlxGroup {
       var dy = src.y - dst.y;
       return Math.sqrt(dx * dx + dy * dy);
     }
-    
     
     var graph:Graph<Int, Float> = new Graph();
     
@@ -79,17 +84,16 @@ class GraphLayer extends FlxGroup {
       var edges:Array<Int> = src.edges;
       
       for (e in 0...edges.length) {
-        var dst:Vertex = vertices[edges[e]];
-        var distance = distance(src, dst);
+        var dest:Vertex = vertices[edges[e]];
+        var distance = distance(src, dest);
         
-        graph.connect(src.id, dst.id, distance);
+        graph.connect(src.id, dest.id, distance);
       }
     }
-    
     return graph;
   }
   
-  private static function getPaths(graph:Graph<Int, Float>):PathVertexMap<Int> {
+  private static function parsePaths(graph:Graph<Int, Float>):PathVertexMap<Int> {
     var pathVertexMap:PathVertexMap<Int> = [for (v in graph.getVertices()) v => new Map()];
     
     for (src in graph.getVertices()) {
@@ -99,12 +103,19 @@ class GraphLayer extends FlxGroup {
         pathVertexMap[src][dst] = graph.getPath(vertexMap, src, dst);
       }
     }
-    
     return pathVertexMap;
   }
   
-  private static function getPathPoints() {
+  private static function getPathPoints(vertices:Array<LevelNode>, pathVertexMap:PathVertexMap<Int>):PathVertexMap<FlxPoint> {
+    var pathPointMap:PathVertexMap<FlxPoint> = [for (v in pathVertexMap.keys()) v => new Map()];
     
+    for (src in pathVertexMap.keys()) {
+      for (dest in pathVertexMap[src].keys()) {
+        var path:Array<Int> = pathVertexMap[src][dest];
+        pathPointMap[src][dest] = [for (v in path) FlxPoint.weak(vertices[v].x, vertices[v].y)];
+      }
+    }
+    return pathPointMap;
   }
   
   private function addNode(node:Int):Void {

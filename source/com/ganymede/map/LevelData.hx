@@ -74,8 +74,6 @@ typedef PathVertexMap<V> = Map<Int,Map<Int,Array<V>>>;
 
 typedef LevelData = {
   size:LevelSize,
-  //nodes:Array<FlxPoint>,
-  nodes:LevelNodeArray,
-  //mapGraph:Graph<Int, Float>,
-  //pathPointMap:PathMap<FlxPoint>
+  nodes:Array<LevelNode>,
 }
+
