@@ -63,7 +63,11 @@ class Ganymede {
     
     return {
       size: Parser.parse.size(data.size),
-      nodes: Parser.parse.nodes(data.nodes)
+      nodes: Parser.parse.nodes(data.nodes),
+      planets: Parser.parse.planets(data.planets),
+      beacons: Parser.parse.beacons(data.beacons),
+      hazzards: Parser.parse.hazzards(data.hazzards),
+      powerups: Parser.parse.powerups(data.powerups),
     };
   }
 }

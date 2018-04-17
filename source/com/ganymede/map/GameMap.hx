@@ -57,7 +57,7 @@ typedef Node_to_Neighbors = Map<Node, NodeGroup>;
 class GameMap extends FlxSpriteGroup {
   
   /**
-   * Building level plan 1/29/2018 8:50 PM
+   * Building level plan 4/16/2018 3:34 PM
    * 
    * Graphics Load Order
    *  - Layer 0 (Background Group)
@@ -68,11 +68,13 @@ class GameMap extends FlxSpriteGroup {
    *    - path highlighting
    *  - Layer 2 (Game Object Group)
    *    - planets
+   *      - upgrade UI
+   *      - capture bars
    *    - beacons
+   *      - capture bars
    *    - hazards
    *  - Layer 3 (HUD/UI Group)
    *    - game HUD
-   *    - capture bars
    *    - other various UI components
    */
   

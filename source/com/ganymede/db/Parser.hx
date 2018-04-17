@@ -34,6 +34,22 @@ class Parser {
   }
   
   public function nodes(data:Dynamic):Array<LevelNode> {
-    return new LevelNodeArray(data).nodes;
+    return LevelNode.createArray(data);
+  }
+  
+  public function planets(data:Dynamic):Array<LevelPlanet> {
+    return LevelPlanet.createArray(data);
+  }
+  
+  public function beacons(data:Dynamic):Array<LevelBeacon> {
+    return LevelBeacon.createArray(data);
+  }
+  
+  public function hazzards(data:Dynamic):Array<LevelHazzard> {
+    return LevelHazzard.createArray(data);
+  }
+  
+  public function powerups(data:Dynamic):Array<LevelPowerup> {
+    return LevelPowerup.createArray(data);
   }
 }

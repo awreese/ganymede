@@ -18,6 +18,7 @@
 
 package com.ganymede.map;
 
+import com.ganymede.faction.Faction;
 import com.ganymede.util.graph.Graph;
 import flixel.math.FlxPoint;
 
@@ -48,32 +49,93 @@ class LevelSize {
   }
 }
 
-class LevelNodeArray {
-  public var nodes(default, null):Array<LevelNode>;
-  
-  public function new(nodes:Dynamic) {
-    this.nodes = [for (i in 0...nodes.length) new LevelNode(i, nodes[i])];
-  }
-}
-
 class LevelNode {
   public var id(default, null):Int;
-  public var x(default, null):Int;
-  public var y(default, null):Int;
+  public var position(default, null):FlxPoint;
   public var edges(default, null):Array<Int>;
   
   public function new(id:Int, node:Dynamic) {
     this.id = id;
-    this.x = node.x;
-    this.y = node.y;
+    this.position = FlxPoint.weak(node.x, node.y);
     this.edges = [for (i in 0...node.edges.length) node.edges[i].edge];
+  }
+  
+  public static function createArray(nodes:Dynamic):Array<LevelNode> {
+    return [for (i in 0...nodes.length) new LevelNode(i, nodes[i])];
   }
 }
 
-typedef PathVertexMap<V> = Map<Int,Map<Int,Array<V>>>;
+typedef VertexPathMap<V> = Map<Int,Map<Int,Array<V>>>;
+
+class LevelPlanet {
+  public var nodeId(default, null):Int;
+  public var planetId(default, null):String;
+  public var faction(default, null):Faction;
+  public var capturable(default, null):Bool;
+  public var shipFactory(default, null):String;
+  
+  public function new(planet:Dynamic) {
+    this.nodeId = planet.node;
+    this.planetId = planet.planet;
+    this.faction = planet.faction;
+    this.capturable = planet.capturable;
+    this.shipFactory = planet.shipFactory;
+  }
+  
+  public static function createArray(planets:Dynamic):Array<LevelPlanet> {
+    return [for (i in 0...planets.length) new LevelPlanet(planets[i])];
+  }
+}
+
+class LevelBeacon {
+  public var nodeId(default, null):Int;
+  public var beaconId(default, null):String;
+  public var faction(default, null):Faction;
+  public var capturable(default, null):Bool;
+  
+  public function new(beacon:Dynamic) {
+    this.nodeId = beacon.node;
+    this.beaconId = beacon.beacon;
+    this.faction = beacon.faction;
+    this.capturable = beacon.capturable;
+  }
+  
+  public static function createArray(beacons:Dynamic):Array<LevelBeacon> {
+    return [for (i in 0...beacons.length) new LevelBeacon(beacons[i])];
+  }
+}
+
+class LevelHazzard {
+  public var nodeId(default, null):Int;
+  public var hazzardId(default, null):String;
+  
+  public function new(hazzard:Dynamic) {
+    this.nodeId = hazzard.node;
+    this.hazzardId = hazzard.hazzard;
+  }
+  
+  public static function createArray(hazzards:Dynamic):Array<LevelHazzard> {
+    return [for (i in 0...hazzards.length) new LevelHazzard(hazzards[i])];
+  }
+}
+
+class LevelPowerup {
+  public var powerupId(default, null):String;
+  
+  public function new(powerup:Dynamic) {
+    this.powerupId = powerup.powerup;
+  }
+  
+  public static function createArray(powerups:Dynamic):Array<LevelPowerup> {
+    return [for (i in 0...powerups.length) new LevelPowerup(powerups[i])];
+  }
+}
 
 typedef LevelData = {
   size:LevelSize,
   nodes:Array<LevelNode>,
+  planets:Array<LevelPlanet>,
+  beacons:Array<LevelBeacon>,
+  hazzards:Array<LevelHazzard>,
+  powerups:Array<LevelPowerup>,
 }
-
