@@ -25,6 +25,7 @@ import com.ganymede.gameUnits.Ship.BluePrint;
 import com.ganymede.gameUnits.capturable.Capturable;
 import com.ganymede.gameUnits.capturable.Planet;
 import com.ganymede.map.layers.GraphLayer;
+import com.ganymede.map.layers.Layers;
 import com.ganymede.util.graph.Graph;
 import com.ganymede.map.Node.NodeGroup;
 import flixel.FlxG;
@@ -54,7 +55,7 @@ typedef Node_to_Neighbors = Map<Node, NodeGroup>;
  * @author Rory Soiffer
  * @author Drew Reese
  */
-class GameMap extends FlxSpriteGroup {
+class GameMap extends FlxGroup {
   
   /**
    * Building level plan 4/16/2018 3:34 PM
@@ -78,10 +79,11 @@ class GameMap extends FlxSpriteGroup {
    *    - other various UI components
    */
   
-  public var backgroundGroup:FlxGroup;
-  public var graphGroup:FlxGroup;
-  public var objectGroup:FlxGroup;
-  public var interfaceGroup:FlxGroup;
+  //public var backgroundGroup:FlxGroup;
+  //public var graphGroup:FlxGroup;
+  //public var objectGroup:FlxGroup;
+  //public var interfaceGroup:FlxGroup;
+  public var mapLayers:Layers;
 
   // list of nodes in current game map
   //public var nodes:MapNodeList = [];
@@ -114,10 +116,12 @@ class GameMap extends FlxSpriteGroup {
     
     //loadGraphic("assets/images/mapbg.png", false, 1920, 1047);
     
-    this.backgroundGroup = new FlxGroup();
-    this.graphGroup = new FlxGroup();
-    this.objectGroup = new FlxGroup();
-    this.interfaceGroup = new FlxGroup();
+    //this.backgroundGroup = new FlxGroup();
+    //this.graphGroup = new FlxGroup();
+    //this.objectGroup = new FlxGroup();
+    //this.interfaceGroup = new FlxGroup();
+    this.mapLayers = new Layers();
+    this.add(this.mapLayers);
 
     //FlxG.state.add(this.backgroundGroup);
     //FlxG.state.add(this.graphGroup);
@@ -126,13 +130,17 @@ class GameMap extends FlxSpriteGroup {
     
     
     var bg = new FlxSprite(AssetPaths.mapbg__png);
-    this.backgroundGroup.add(bg);
+    var bg2 = new FlxSprite(69, 69, AssetPaths.mapbg__png);
+    //this.backgroundGroup.add(bg);
+    this.mapLayers.background.add(bg);
+    this.mapLayers.background.add(bg2);
+    this.mapLayers.background.add(bg);
     //this.add(bg);
 
     //this.nodes = new NodeGroup();
     //
     //this.id_to_node = new Id_to_Node();
-    //this.node_to_neighbors = new Node_to_Neighbors();
+    this.node_to_neighbors = new Node_to_Neighbors();
     //
     //this.numPlanets = 0;
     //
@@ -147,7 +155,8 @@ class GameMap extends FlxSpriteGroup {
 
     var levelData:LevelData = Ganymede.getLevelData(0);
     trace(levelData);
-    var graphLayer:GraphLayer = new GraphLayer(levelData);
+    var graphLayer:GraphLayer = new GraphLayer();
+    graphLayer.set(levelData);
     
     //var levelData:LevelData = Ganymede.levelByIndex(0);
     //trace('levelData', levelData);
@@ -165,6 +174,13 @@ class GameMap extends FlxSpriteGroup {
     parseLevel(playState);
 
     drawNodes();
+    
+    
+    var nodeItr:Iterator<Node> = this.node_to_neighbors.keys();
+    while (nodeItr.hasNext()) {
+      //this.graphGroup.add(nodeItr.next());
+      this.mapLayers.graph.add(nodeItr.next());
+    }
 
     //for (n in nodes) {
     for (n in node_to_neighbors.keys()) {
@@ -384,7 +400,8 @@ class GameMap extends FlxSpriteGroup {
       //n.drawTo(this);
       //this.add(n);
       //FlxG.state.add(n);
-      this.graphGroup.add(n);
+      //this.graphGroup.add(n);
+      this.mapLayers.graph.add(n);
     }
   }
 
@@ -400,6 +417,9 @@ class GameMap extends FlxSpriteGroup {
     for (s in Reflect.fields(nodes)) {
       var node = data.nodes[Std.parseInt(s)];
       var n = this.addNode(node.id, node.x, node.y); // Add the node to the game
+      
+      //this.objectGroup.add(n);
+      this.mapLayers.objects.add(n);
 
       // Update the level bounds
       minX = node.x < minX ? node.x : minX; // set smallest x
@@ -445,7 +465,8 @@ class GameMap extends FlxSpriteGroup {
         var planet = new Planet(this.id_to_node.get(node.id), new Faction(faction), planetstat);
         this.addCapturableByID(node.id, planet);
         //FlxG.state.add(planet);
-        this.objectGroup.add(planet);
+        //this.objectGroup.add(planet);
+        this.mapLayers.objects.add(planet);
       }
 
       // Defining planets and ships by custom stats
@@ -465,7 +486,8 @@ class GameMap extends FlxSpriteGroup {
               var planet = new Planet(this.id_to_node.get(node.id), new Faction(faction), ps); // create planet
               this.addCapturableByID(node.id, planet); // add planet
               //FlxG.state.add(planet);
-              this.objectGroup.add(planet);
+              //this.objectGroup.add(planet);
+              this.mapLayers.objects.add(planet);
           }
         }
       }

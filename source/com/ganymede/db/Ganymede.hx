@@ -70,4 +70,5 @@ class Ganymede {
       powerups: Parser.parse.powerups(data.powerups),
     };
   }
+  
 }

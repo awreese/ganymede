@@ -19,7 +19,6 @@
 package com.ganymede.map;
 
 import com.ganymede.faction.Faction;
-import com.ganymede.util.graph.Graph;
 import flixel.math.FlxPoint;
 
 /**
@@ -36,6 +35,8 @@ import flixel.math.FlxPoint;
  * 
  * @author Drew Reese
  */
+
+typedef VertexPathMap<V> = Map<Int,Map<Int,Array<V>>>;
 
 class LevelSize {
   public var id(default, null):String;
@@ -64,8 +65,6 @@ class LevelNode {
     return [for (i in 0...nodes.length) new LevelNode(i, nodes[i])];
   }
 }
-
-typedef VertexPathMap<V> = Map<Int,Map<Int,Array<V>>>;
 
 class LevelPlanet {
   public var nodeId(default, null):Int;

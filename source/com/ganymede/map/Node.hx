@@ -68,7 +68,7 @@ class NodeRing extends FlxSprite {
     FlxSpriteUtil.drawCircle(this, -1, -1, this.radius, fill, lineStyle, drawStyle);
     this.setPosition(x - radius, y - radius);
     this.visible = visible;
-    //FlxG.state.add(this);
+    // FlxG.state.add(this);
   }
 }
 
@@ -114,11 +114,19 @@ class Node extends FlxObject {
     super(x, y, diameter, diameter);
 
     this.ring_node = new NodeRing(x, y, cast(radius / 2), true, FlxColor.fromRGBFloat(0.5, 0.5, 0.5, 0.6));
+    
     this.ring_selected = new NodeRing(x, y, radius, false, FlxColor.fromRGBFloat(0.9, 0.3, 0.4, 0.5), {color: FlxColor.YELLOW});
-
+ 
     var fillColor:FlxColor = FlxColor.fromRGBFloat(0.5, 0.5, 0.5, 0.3);
     this.ring_highlight = new NodeRing(x, y, radius * 2, false, fillColor); // , {color: FlxColor.WHITE}
 
+    gameMap.mapLayers.objects.add(this.ring_node);
+    gameMap.mapLayers.objects.add(this.ring_selected);
+    gameMap.mapLayers.objects.add(this.ring_highlight);
+    //FlxG.state.add(this.ring_node);
+    //FlxG.state.add(this.ring_selected);
+    //FlxG.state.add(this.ring_highlight);
+    
     this.gameMap = gameMap;
 
     this.neighbors = new NeighborMap();
@@ -139,7 +147,6 @@ class Node extends FlxObject {
     
     //ring_highlight.visible = ring_highlight.getHitbox().containsPoint(FlxG.mouse.getPosition());
     ring_highlight.visible = mouseOver(ring_highlight, p);
-
 
     if (mouse.justPressed) {
       //ring_selected.visible = ring_selected.getHitbox().containsPoint(mouse.getPosition());

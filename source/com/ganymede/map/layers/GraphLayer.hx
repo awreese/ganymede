@@ -46,9 +46,10 @@ class GraphLayer extends FlxGroup {
   
   private var _graph_:Graph<Int, Float>;
 
-  public function new(levelData:LevelData) {
+  public function new () {
     super();
-    
+  }
+  public function set(levelData:LevelData) {
     this._level_data_ = levelData;
     
     this._graph_ = buildGraph(this._level_data_.nodes);
@@ -58,6 +59,7 @@ class GraphLayer extends FlxGroup {
     var pointMap:VertexPathMap<FlxPoint> = getPathPoints(this._level_data_.nodes, vertexMap);
     
     trace(pointMap[0]);
+    
   }
   
   private static function buildGraph(vertices:Array<LevelNode>):Graph<Int, Float> {
