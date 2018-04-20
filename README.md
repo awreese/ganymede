@@ -26,7 +26,7 @@ Gather your forces and test your fortitude against a rising threat.  Command you
         - [ ] Game Levels
             - ~~[ ] Option 1: Stored as JSON files (current way)~~
             - [x] Option 2: Stored in Database table (preferred way)
-            - [ ] Game map level parser
+            - [ ] Game map level parser **In Progress**
     - [ ] Ships
         - [x] Use database to store ship 'blueprints'
         - [ ] Change ship movements
