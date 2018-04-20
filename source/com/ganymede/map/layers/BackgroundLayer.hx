@@ -39,9 +39,12 @@ class BackgroundLayer extends FlxGroup {
   }
   
   /**
-   * Overridden to allow only adding a single background image
+   * Overridden to allow only adding a single background image.
+   * 
+   * Adding new object replaces existing object in group.
+   * 
    * @param Object
-   * @return
+   * @return Added Object
    */
   override public function add(Object:FlxBasic):FlxBasic {
     this.remove(this.background, true);

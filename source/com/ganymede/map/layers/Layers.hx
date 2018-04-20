@@ -18,7 +18,9 @@
 
 package com.ganymede.map.layers;
 
+import flixel.FlxBasic;
 import flixel.group.FlxGroup;
+import js.Browser;
 
 /**
  * Game map layers container.
@@ -51,22 +53,27 @@ import flixel.group.FlxGroup;
  * @author Drew Reese
  */
 class Layers extends FlxGroup {
-  public var background:FlxGroup;
-  public var graph:GraphLayer;
-  public var objects:FlxGroup;
-  public var interfaces:FlxGroup;
+  public var background(default, null):BackgroundLayer;
+  public var graph(default, null):GraphLayer;
+  public var objects(default, null):ObjectLayer;
+  public var interfaces(default, null):FlxGroup;
 
   public function new() {
     super();
     this.background = new BackgroundLayer();
     this.graph = new GraphLayer();
-    this.objects = new FlxGroup();
+    this.objects = new ObjectLayer();
     this.interfaces = new FlxGroup();
     
-    this.add(this.background);
-    this.add(this.graph);
-    this.add(this.objects);
-    this.add(this.interfaces);
+    super.add(this.background);
+    super.add(this.graph);
+    super.add(this.objects);
+    super.add(this.interfaces);
+  }
+  
+  override public function add(Object:FlxBasic):FlxBasic {
+    Browser.console.error("Tried adding object to base layers group, this is a non-op. Don't do it again!");
+    return null;
   }
   
 }

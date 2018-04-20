@@ -1,5 +1,5 @@
 /**
- *  Copyright (C) 2017  Andrew Reese
+ *  Copyright (C) 2017 Andrew Reese
  *
  * This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

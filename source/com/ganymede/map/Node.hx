@@ -120,9 +120,9 @@ class Node extends FlxObject {
     var fillColor:FlxColor = FlxColor.fromRGBFloat(0.5, 0.5, 0.5, 0.3);
     this.ring_highlight = new NodeRing(x, y, radius * 2, false, fillColor); // , {color: FlxColor.WHITE}
 
-    gameMap.mapLayers.objects.add(this.ring_node);
-    gameMap.mapLayers.objects.add(this.ring_selected);
-    gameMap.mapLayers.objects.add(this.ring_highlight);
+    gameMap.mapLayers.graph.add(this.ring_node);
+    gameMap.mapLayers.graph.add(this.ring_selected);
+    gameMap.mapLayers.graph.add(this.ring_highlight);
     //FlxG.state.add(this.ring_node);
     //FlxG.state.add(this.ring_selected);
     //FlxG.state.add(this.ring_highlight);

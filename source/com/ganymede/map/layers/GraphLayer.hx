@@ -64,12 +64,6 @@ class GraphLayer extends FlxGroup {
   
   private static function buildGraph(vertices:Array<LevelNode>):Graph<Int, Float> {
     
-    //function distance(src:LevelNode, dst:LevelNode):Float {
-      //var dx = src.x - dst.x;
-      //var dy = src.y - dst.y;
-      //return Math.sqrt(dx * dx + dy * dy);
-    //}
-    
     var graph:Graph<Int, Float> = new Graph();
     
     // Add nodes by index
@@ -81,10 +75,9 @@ class GraphLayer extends FlxGroup {
     for (n in 0...vertices.length) {
       var src:Vertex = vertices[n];
       var edges:Array<Int> = src.edges;
-      
-      for (e in 0...edges.length) {
-        var dest:Vertex = vertices[edges[e]];
-        //var distance = distance(src, dest);
+
+      for (e in edges) {
+        var dest:Vertex = vertices[e];
         var distance = src.position.distanceTo(dest.position);
         
         graph.connect(src.id, dest.id, distance);
