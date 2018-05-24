@@ -2,7 +2,7 @@
 <project>
 	<!-- _________________________ Application Settings _________________________ -->
 	
-	<app title="Project Ganymede" file="ProjectGanymede" main="Main" version="0.0.1" company="DDR" />
+	<app title="Project Ganymede" file="ProjectGanymede" main="com.ganymede.Main" version="0.0.1" company="DDR" />
 	
 	<!--The flixel preloader is not accurate in Chrome. You can use it regularly if you embed the swf into a html file
 		or you can set the actual size of your file manually at "FlxPreloaderBase-onUpdate-bytesTotal"-->
@@ -41,10 +41,13 @@
 	<haxelib name="flixel-addons" />
 	
 	<!--In case you want to use the ui package-->
-	<!--<haxelib name="flixel-ui"/>-->
+	<haxelib name="flixel-ui"/>
 	
 	<!--In case you want to use nape with flixel-->
 	<!--<haxelib name="nape" />-->
+
+	<haxelib name="castle"/>
+  <haxeflag name="-resource" value="assets/data/ganymedeDB.cdb" />
 	
 	<!-- ______________________________ Haxedefines _____________________________ -->
 	

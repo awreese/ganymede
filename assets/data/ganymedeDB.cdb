@@ -1,0 +1,863 @@
+{
+	"sheets": [
+		{
+			"name": "levels",
+			"columns": [
+				{
+					"typeStr": "0",
+					"name": "id",
+					"display": null
+				},
+				{
+					"typeStr": "6:levelSize",
+					"name": "size",
+					"display": null
+				},
+				{
+					"typeStr": "8",
+					"name": "nodes",
+					"display": null
+				},
+				{
+					"typeStr": "8",
+					"name": "planets"
+				},
+				{
+					"typeStr": "8",
+					"name": "beacons",
+					"display": null
+				},
+				{
+					"typeStr": "8",
+					"name": "hazzards",
+					"display": null
+				},
+				{
+					"typeStr": "8",
+					"name": "powerups",
+					"display": null
+				}
+			],
+			"lines": [
+				{
+					"id": "level_0_0",
+					"nodes": [
+						{
+							"x": 100,
+							"y": 275,
+							"edges": [
+								{
+									"edge": 1
+								},
+								{
+									"edge": 2
+								},
+								{
+									"edge": 3
+								}
+							]
+						},
+						{
+							"x": 425,
+							"y": 100,
+							"edges": [
+								{
+									"edge": 0
+								},
+								{
+									"edge": 4
+								}
+							]
+						},
+						{
+							"x": 325,
+							"y": 350,
+							"edges": [
+								{
+									"edge": 0
+								},
+								{
+									"edge": 4
+								}
+							]
+						},
+						{
+							"x": 200,
+							"y": 600,
+							"edges": [
+								{
+									"edge": 0
+								},
+								{
+									"edge": 5
+								}
+							]
+						},
+						{
+							"x": 550,
+							"y": 425,
+							"edges": [
+								{
+									"edge": 1
+								},
+								{
+									"edge": 2
+								},
+								{
+									"edge": 5
+								},
+								{
+									"edge": 6
+								},
+								{
+									"edge": 7
+								},
+								{
+									"edge": 8
+								}
+							]
+						},
+						{
+							"x": 435,
+							"y": 625,
+							"edges": [
+								{
+									"edge": 3
+								},
+								{
+									"edge": 4
+								}
+							]
+						},
+						{
+							"x": 650,
+							"y": 145,
+							"edges": [
+								{
+									"edge": 4
+								}
+							]
+						},
+						{
+							"x": 650,
+							"y": 575,
+							"edges": [
+								{
+									"edge": 4
+								}
+							]
+						},
+						{
+							"x": 775,
+							"y": 360,
+							"edges": [
+								{
+									"edge": 4
+								},
+								{
+									"edge": 9
+								},
+								{
+									"edge": 10
+								}
+							]
+						},
+						{
+							"x": 925,
+							"y": 200,
+							"edges": [
+								{
+									"edge": 8
+								},
+								{
+									"edge": 11
+								}
+							]
+						},
+						{
+							"x": 995,
+							"y": 615,
+							"edges": [
+								{
+									"edge": 8
+								},
+								{
+									"edge": 11
+								}
+							]
+						},
+						{
+							"x": 1125,
+							"y": 340,
+							"edges": [
+								{
+									"edge": 9
+								},
+								{
+									"edge": 10
+								}
+							]
+						}
+					],
+					"beacons": [],
+					"hazzards": [],
+					"powerups": [],
+					"planets": [
+						{
+							"node": 0,
+							"planet": "tutorial",
+							"faction": "PLAYER",
+							"capturable": true,
+							"shipFactory": "rookie_player"
+						},
+						{
+							"node": 4,
+							"planet": "tutorial",
+							"faction": "NOP",
+							"capturable": true,
+							"shipFactory": "rookie_player"
+						},
+						{
+							"node": 6,
+							"planet": "tutorial",
+							"faction": "NOP",
+							"capturable": true,
+							"shipFactory": "rookie_player"
+						},
+						{
+							"node": 7,
+							"planet": "tutorial",
+							"faction": "NOP",
+							"capturable": true,
+							"shipFactory": "rookie_player"
+						},
+						{
+							"node": 11,
+							"planet": "tutorial",
+							"faction": "ENEMY_0",
+							"capturable": true,
+							"shipFactory": "rookie_enemy"
+						}
+					],
+					"size": "LARGE"
+				},
+				{
+					"id": "level_0_1",
+					"nodes": [
+						{
+							"x": 150,
+							"y": 150,
+							"edges": [
+								{
+									"edge": 1
+								}
+							]
+						},
+						{
+							"x": 300,
+							"y": 150,
+							"edges": [
+								{
+									"edge": 0
+								},
+								{
+									"edge": 2
+								}
+							]
+						},
+						{
+							"x": 450,
+							"y": 150,
+							"edges": [
+								{
+									"edge": 1
+								}
+							]
+						}
+					],
+					"beacons": [],
+					"hazzards": [],
+					"powerups": [],
+					"planets": [],
+					"size": "SMALL"
+				}
+			],
+			"separators": [],
+			"props": {}
+		},
+		{
+			"name": "levels@nodes",
+			"props": {
+				"hide": true
+			},
+			"separators": [],
+			"lines": [],
+			"columns": [
+				{
+					"typeStr": "3",
+					"name": "x"
+				},
+				{
+					"typeStr": "3",
+					"name": "y"
+				},
+				{
+					"typeStr": "8",
+					"name": "edges"
+				}
+			]
+		},
+		{
+			"name": "levels@nodes@edges",
+			"props": {
+				"hide": true
+			},
+			"separators": [],
+			"lines": [],
+			"columns": [
+				{
+					"typeStr": "3",
+					"name": "edge"
+				}
+			]
+		},
+		{
+			"name": "ships",
+			"columns": [
+				{
+					"typeStr": "0",
+					"name": "id",
+					"display": null
+				},
+				{
+					"typeStr": "1",
+					"name": "description",
+					"opt": true
+				},
+				{
+					"typeStr": "6:shipClasses",
+					"name": "hull_class"
+				},
+				{
+					"typeStr": "4",
+					"name": "orbit_velocity"
+				},
+				{
+					"typeStr": "4",
+					"name": "warp_velocity"
+				},
+				{
+					"typeStr": "4",
+					"name": "angular_velocity"
+				},
+				{
+					"typeStr": "4",
+					"name": "hit_points"
+				},
+				{
+					"typeStr": "4",
+					"name": "shield_strength"
+				},
+				{
+					"typeStr": "4",
+					"name": "hp_regen"
+				},
+				{
+					"typeStr": "4",
+					"name": "capture_points_per_second"
+				},
+				{
+					"typeStr": "4",
+					"name": "sensor_range"
+				},
+				{
+					"typeStr": "3",
+					"name": "turret_hardpoints"
+				},
+				{
+					"typeStr": "3",
+					"name": "launcher_hardpoints"
+				},
+				{
+					"typeStr": "8",
+					"name": "turrets",
+					"display": null
+				},
+				{
+					"typeStr": "8",
+					"name": "launchers",
+					"display": null
+				}
+			],
+			"lines": [
+				{
+					"id": "rookie_player",
+					"hull_class": "FRIGATE",
+					"warp_velocity": 200,
+					"angular_velocity": 50,
+					"hit_points": 100,
+					"shield_strength": 0.5,
+					"hp_regen": 0,
+					"capture_points_per_second": 20,
+					"sensor_range": 30,
+					"turret_hardpoints": 1,
+					"launcher_hardpoints": 0,
+					"description": "Player rookie ship",
+					"orbit_velocity": 50,
+					"turrets": [
+						{
+							"weapon": "projectile_gun_t0"
+						}
+					],
+					"launchers": []
+				},
+				{
+					"id": "rookie_enemy",
+					"hull_class": "FRIGATE",
+					"warp_velocity": 200,
+					"angular_velocity": 50,
+					"hit_points": 50,
+					"shield_strength": 0.5,
+					"hp_regen": 0,
+					"capture_points_per_second": 0,
+					"sensor_range": 0,
+					"turret_hardpoints": 1,
+					"launcher_hardpoints": 0,
+					"description": "Enemy rookie ship",
+					"orbit_velocity": 25,
+					"turrets": [],
+					"launchers": []
+				}
+			],
+			"separators": [],
+			"props": {}
+		},
+		{
+			"name": "planets",
+			"columns": [
+				{
+					"typeStr": "0",
+					"name": "id",
+					"display": null
+				},
+				{
+					"typeStr": "1",
+					"name": "description",
+					"display": null
+				},
+				{
+					"typeStr": "3",
+					"name": "level"
+				},
+				{
+					"typeStr": "3",
+					"name": "max_capacity_level"
+				},
+				{
+					"typeStr": "3",
+					"name": "max_tech_level"
+				},
+				{
+					"typeStr": "3",
+					"name": "ship_capacity"
+				},
+				{
+					"typeStr": "4",
+					"name": "production_rate"
+				},
+				{
+					"typeStr": "4",
+					"name": "production_threshold"
+				},
+				{
+					"typeStr": "3",
+					"name": "base_upgrade_cost"
+				},
+				{
+					"typeStr": "4",
+					"name": "capacity_per_level"
+				},
+				{
+					"typeStr": "4",
+					"name": "tech_per_level"
+				}
+			],
+			"lines": [
+				{
+					"id": "tutorial",
+					"description": "Tutorial Planet, produces only a single ship",
+					"level": 0,
+					"max_capacity_level": 0,
+					"max_tech_level": 0,
+					"ship_capacity": 1,
+					"production_rate": 1,
+					"production_threshold": 0.5,
+					"base_upgrade_cost": -1,
+					"capacity_per_level": 0,
+					"tech_per_level": 0
+				},
+				{
+					"id": "planet_0",
+					"description": "",
+					"level": 0,
+					"max_capacity_level": 0,
+					"max_tech_level": 0,
+					"ship_capacity": 10,
+					"production_rate": 10,
+					"production_threshold": 0.5,
+					"base_upgrade_cost": -1,
+					"capacity_per_level": 0,
+					"tech_per_level": 0
+				}
+			],
+			"separators": [],
+			"props": {}
+		},
+		{
+			"name": "factions",
+			"columns": [
+				{
+					"typeStr": "0",
+					"name": "faction",
+					"display": null
+				},
+				{
+					"typeStr": "11",
+					"name": "color",
+					"display": null
+				}
+			],
+			"lines": [
+				{
+					"faction": "NOP",
+					"color": 16777215
+				},
+				{
+					"faction": "PLAYER",
+					"color": 255
+				},
+				{
+					"faction": "NEUTRAL",
+					"color": 65280
+				},
+				{
+					"faction": "ENEMY_0",
+					"color": 16711680
+				},
+				{
+					"faction": "ENEMY_1",
+					"color": 16753920
+				},
+				{
+					"faction": "ENEMY_2",
+					"color": 16776960
+				},
+				{
+					"faction": "ENEMY_3",
+					"color": 16761035
+				},
+				{
+					"faction": "ENEMY_4",
+					"color": 16711935
+				},
+				{
+					"faction": "ENEMY_5",
+					"color": 65535
+				}
+			],
+			"separators": [],
+			"props": {}
+		},
+		{
+			"name": "shipClasses",
+			"columns": [
+				{
+					"typeStr": "0",
+					"name": "class"
+				}
+			],
+			"lines": [
+				{
+					"class": "FRIGATE"
+				},
+				{
+					"class": "DESTROYER"
+				},
+				{
+					"class": "CRUISER"
+				},
+				{
+					"class": "BATTLECRUISER"
+				},
+				{
+					"class": "BATTLESHIP"
+				},
+				{
+					"class": "CARRIER"
+				},
+				{
+					"class": "DREADNOUGHT"
+				},
+				{
+					"class": "SUPERCARRIER"
+				},
+				{
+					"class": "TITAN"
+				},
+				{
+					"class": "DRONE"
+				},
+				{
+					"class": "FIGHTER"
+				}
+			],
+			"separators": [],
+			"props": {}
+		},
+		{
+			"name": "levels@planets",
+			"props": {
+				"hide": true
+			},
+			"separators": [],
+			"lines": [],
+			"columns": [
+				{
+					"typeStr": "3",
+					"name": "node"
+				},
+				{
+					"typeStr": "6:planets",
+					"name": "planet",
+					"display": null
+				},
+				{
+					"typeStr": "6:ships",
+					"name": "shipFactory",
+					"display": null
+				},
+				{
+					"typeStr": "6:factions",
+					"name": "faction",
+					"display": null
+				},
+				{
+					"typeStr": "2",
+					"name": "capturable",
+					"display": null
+				}
+			]
+		},
+		{
+			"name": "levels@beacons",
+			"props": {
+				"hide": true
+			},
+			"separators": [],
+			"lines": [],
+			"columns": [
+				{
+					"typeStr": "3",
+					"name": "node"
+				},
+				{
+					"typeStr": "6:beacons",
+					"name": "beacon",
+					"display": null
+				},
+				{
+					"typeStr": "6:factions",
+					"name": "faction"
+				},
+				{
+					"typeStr": "2",
+					"name": "capturable",
+					"display": null
+				}
+			]
+		},
+		{
+			"name": "levels@hazzards",
+			"props": {
+				"hide": true
+			},
+			"separators": [],
+			"lines": [],
+			"columns": [
+				{
+					"typeStr": "3",
+					"name": "node"
+				},
+				{
+					"typeStr": "6:hazards",
+					"name": "hazard",
+					"display": null
+				}
+			]
+		},
+		{
+			"name": "levels@powerups",
+			"props": {
+				"hide": true
+			},
+			"separators": [],
+			"lines": [],
+			"columns": [
+				{
+					"typeStr": "6:powerups",
+					"name": "powerup",
+					"display": null
+				}
+			]
+		},
+		{
+			"name": "ships@turrets",
+			"props": {
+				"hide": true
+			},
+			"separators": [],
+			"lines": [],
+			"columns": [
+				{
+					"typeStr": "6:weapons",
+					"name": "weapon"
+				}
+			]
+		},
+		{
+			"name": "ships@launchers",
+			"props": {
+				"hide": true
+			},
+			"separators": [],
+			"lines": [],
+			"columns": []
+		},
+		{
+			"name": "beacons",
+			"columns": [
+				{
+					"typeStr": "0",
+					"name": "id",
+					"display": null
+				},
+				{
+					"typeStr": "1",
+					"name": "description",
+					"display": null
+				}
+			],
+			"lines": [],
+			"separators": [],
+			"props": {}
+		},
+		{
+			"name": "hazards",
+			"columns": [
+				{
+					"typeStr": "0",
+					"name": "id",
+					"display": null
+				},
+				{
+					"typeStr": "1",
+					"name": "description",
+					"display": null
+				}
+			],
+			"lines": [],
+			"separators": [],
+			"props": {}
+		},
+		{
+			"name": "powerups",
+			"columns": [
+				{
+					"typeStr": "0",
+					"name": "id",
+					"display": null
+				},
+				{
+					"typeStr": "1",
+					"name": "description",
+					"display": null
+				}
+			],
+			"lines": [],
+			"separators": [],
+			"props": {}
+		},
+		{
+			"name": "weapons",
+			"columns": [
+				{
+					"typeStr": "0",
+					"name": "id",
+					"display": null
+				},
+				{
+					"typeStr": "5:TURRET,LAUNCHER",
+					"name": "type",
+					"display": null
+				},
+				{
+					"typeStr": "1",
+					"name": "description",
+					"display": null
+				}
+			],
+			"lines": [
+				{
+					"id": "projectile_gun_t0",
+					"type": 0,
+					"description": "Rookie gun"
+				}
+			],
+			"separators": [],
+			"props": {}
+		},
+		{
+			"name": "levelSize",
+			"columns": [
+				{
+					"typeStr": "0",
+					"name": "id"
+				},
+				{
+					"typeStr": "3",
+					"name": "width"
+				},
+				{
+					"typeStr": "3",
+					"name": "height"
+				}
+			],
+			"lines": [
+				{
+					"id": "SMALL",
+					"width": 640,
+					"height": 360
+				},
+				{
+					"id": "MEDIUM",
+					"width": 1024,
+					"height": 576
+				},
+				{
+					"id": "LARGE",
+					"width": 1280,
+					"height": 720
+				},
+				{
+					"id": "EXTRA_LARGE",
+					"width": 1920,
+					"height": 1080
+				}
+			],
+			"separators": [],
+			"props": {}
+		}
+	],
+	"customTypes": [],
+	"compress": false
+}
