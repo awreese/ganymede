@@ -28,7 +28,6 @@ import flixel.group.FlxGroup;
  * 
  * - Layer 0 (Background Group)
  *    - background image
- * 
  */
 class BackgroundLayer extends FlxGroup {
 

@@ -20,7 +20,7 @@ package com.ganymede.db;
 
 import com.ganymede.db.Data;
 import com.ganymede.db.Parser;
-import com.ganymede.map.LevelData;
+import com.ganymede.db.LevelData;
 
 /**
  * Ganymede.DB in-memory database.
@@ -51,7 +51,6 @@ class Ganymede {
    */
   private static function checkDBLoaded():Void {
     if (!_dbLoaded) {
-      //throw "not connected to GanymedeDB";
       loadDB();
     }
   }
@@ -70,5 +69,4 @@ class Ganymede {
       powerups: Parser.parse.powerups(data.powerups),
     };
   }
-  
 }

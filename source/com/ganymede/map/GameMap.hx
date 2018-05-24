@@ -19,6 +19,7 @@
 package com.ganymede.map;
 
 import com.ganymede.db.Ganymede;
+import com.ganymede.db.LevelData;
 import com.ganymede.faction.Faction;
 import com.ganymede.faction.Faction.FactionType;
 import com.ganymede.gameUnits.Ship.BluePrint;
@@ -57,28 +58,6 @@ typedef Node_to_Neighbors = Map<Node, NodeGroup>;
  */
 class GameMap extends FlxGroup {
   
-  /**
-   * Building level plan 4/16/2018 3:34 PM
-   * 
-   * Graphics Load Order
-   *  - Layer 0 (Background Group)
-   *    - background image
-   *  - Layer 1 (Map Graph Group)
-   *    - map node objects
-   *    - map edge objects
-   *    - path highlighting
-   *  - Layer 2 (Game Object Group)
-   *    - planets
-   *      - upgrade UI
-   *      - capture bars
-   *    - beacons
-   *      - capture bars
-   *    - hazards
-   *  - Layer 3 (HUD/UI Group)
-   *    - game HUD
-   *    - other various UI components
-   */
-  
   public var mapLayers:Layers;
 
   // list of nodes in current game map
@@ -109,25 +88,25 @@ class GameMap extends FlxGroup {
     maxY = Math.NEGATIVE_INFINITY; // biggest y
     super();
     
-    
-    //loadGraphic("assets/images/mapbg.png", false, 1920, 1047);
-    
-    //this.backgroundGroup = new FlxGroup();
-    //this.graphGroup = new FlxGroup();
-    //this.objectGroup = new FlxGroup();
-    //this.interfaceGroup = new FlxGroup();
+    // Instantiate map layers
     this.mapLayers = new Layers();
     this.add(this.mapLayers);
 
-    //FlxG.state.add(this.backgroundGroup);
-    //FlxG.state.add(this.graphGroup);
-    //FlxG.state.add(this.objectGroup);
-    //FlxG.state.add(this.interfaceGroup);
-    
-    
+    // Set background
     var bg = new FlxSprite(AssetPaths.mapbg__png);
     this.mapLayers.background.add(bg);
 
+    // Set & build map graph
+    var levelData:LevelData = Ganymede.getLevelData(0); // Use current level here
+    this.mapLayers.graph.set(levelData);
+    
+    
+    
+    /**
+     * The following is the old existing map/graph stuff which will be
+     * replaced by the code above.
+     */
+    
     //this.nodes = new NodeGroup();
     //
     //this.id_to_node = new Id_to_Node();
@@ -143,10 +122,6 @@ class GameMap extends FlxGroup {
     //this.factionShipCount.set(faction, 0);
     //this.factionControlledNodes.set(faction, new NodeGroup());
     //}
-
-    var levelData:LevelData = Ganymede.getLevelData(0);
-    //trace(levelData);
-    this.mapLayers.graph.set(levelData);
     
     //var levelData:LevelData = Ganymede.levelByIndex(0);
     //trace('levelData', levelData);
@@ -161,17 +136,12 @@ class GameMap extends FlxGroup {
     // Log level start and time
     Main.LOGGER.logLevelStart(level);
     trace("Constructing level: " + level);
+    
     parseLevel(playState);
 
     //drawNodes();
     
     
-    var nodeItr:Iterator<Node> = this.node_to_neighbors.keys();
-    while (nodeItr.hasNext()) {
-      //this.graphGroup.add(nodeItr.next());
-      this.mapLayers.graph.add(nodeItr.next());
-    }
-
     //for (n in nodes) {
     for (n in node_to_neighbors.keys()) {
       var captureable = n.getCaptureable();
@@ -380,20 +350,20 @@ class GameMap extends FlxGroup {
     }
   }
 
-  private function drawNodes():Void {
-    // Loads an empty sprite for the map background
-    //loadGraphic("assets/images/mapbg.png", false, 400, 320);
-
-    // Draw the nodes to the background
-    //for (n in nodes)
-    for (n in node_to_neighbors.keys()) {
-      //n.drawTo(this);
-      //this.add(n);
-      //FlxG.state.add(n);
-      //this.graphGroup.add(n);
-      this.mapLayers.graph.add(n);
-    }
-  }
+  //private function drawNodes():Void {
+    //// Loads an empty sprite for the map background
+    ////loadGraphic("assets/images/mapbg.png", false, 400, 320);
+//
+    //// Draw the nodes to the background
+    ////for (n in nodes)
+    //for (n in node_to_neighbors.keys()) {
+      ////n.drawTo(this);
+      ////this.add(n);
+      ////FlxG.state.add(n);
+      ////this.graphGroup.add(n);
+      //this.mapLayers.graph.add(n);
+    //}
+  //}
 
   private function parseLevel(playState:PlayState):Void {
     var file = Assets.getText("assets/data/level" + Main.LEVEL + ".json"); // get string of json
@@ -408,10 +378,6 @@ class GameMap extends FlxGroup {
       var node = data.nodes[Std.parseInt(s)];
       var n = this.addNode(node.id, node.x, node.y); // Add the node to the game
       
-      //this.objectGroup.add(n);
-      //this.mapLayers.objects.add(n);
-      this.mapLayers.graph.add(n);
-
       // Update the level bounds
       minX = node.x < minX ? node.x : minX; // set smallest x
       maxX = node.x > maxX ? node.x : maxX; // set biggest x

@@ -18,7 +18,7 @@
 
 package com.ganymede.db;
 
-import com.ganymede.map.LevelData;
+import com.ganymede.db.LevelData;
 
 /**
  * Parses Ganymede.DB dynamic objects into typed game objects.
@@ -29,27 +29,27 @@ class Parser {
   public static var parse(default, null):Parser = new Parser();
   private function new() {}
   
-  public function size(data:Dynamic):LevelSize {
-    return new LevelSize(data);
+  public function size(data:Dynamic):DB_LevelSize {
+    return new DB_LevelSize(data);
   }
   
-  public function nodes(data:Dynamic):Array<LevelNode> {
-    return LevelNode.createArray(data);
+  public function nodes(data:Dynamic):Array<DB_LevelNode> {
+    return DB_LevelNode.createArray(data);
   }
   
-  public function planets(data:Dynamic):Array<LevelPlanet> {
-    return LevelPlanet.createArray(data);
+  public function planets(data:Dynamic):Array<DB_LevelPlanet> {
+    return DB_LevelPlanet.createArray(data);
   }
   
-  public function beacons(data:Dynamic):Array<LevelBeacon> {
-    return LevelBeacon.createArray(data);
+  public function beacons(data:Dynamic):Array<DB_LevelBeacon> {
+    return DB_LevelBeacon.createArray(data);
   }
   
-  public function hazzards(data:Dynamic):Array<LevelHazzard> {
-    return LevelHazzard.createArray(data);
+  public function hazzards(data:Dynamic):Array<DB_LevelHazzard> {
+    return DB_LevelHazzard.createArray(data);
   }
   
-  public function powerups(data:Dynamic):Array<LevelPowerup> {
-    return LevelPowerup.createArray(data);
+  public function powerups(data:Dynamic):Array<DB_LevelPowerup> {
+    return DB_LevelPowerup.createArray(data);
   }
 }

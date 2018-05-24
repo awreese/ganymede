@@ -19,6 +19,20 @@
 package com.ganymede.map;
 
 import flixel.FlxObject;
+import flixel.util.FlxSpriteUtil;
+
+private class Consts {
+  public static inline var EDGE_WIDTH:Float = 3;
+}
+
+private class Colors {
+  public static var EDGE_LINE = FlxColor.fromRGBFloat(0.5, 0.5, 0.5, 0.6);
+  public static var EDGE_HIGHLIGHT = FlxColor.fromRGBFloat(0.7, 0.1, 0.1, 0.3);
+}
+
+private class Styles {
+  public static var EDGE_HIGHLIGHT = {color: Colors.EDGE_HIGHLIGHT};
+}
 
 /**
  * ...
@@ -52,13 +66,20 @@ class MapEdge extends FlxObject {
 
 class EdgeLine extends FlxSprite {
 
-  public function new (p1:FlxPoint, p2:FlxPoint) {
+  public function new (
+    p1:FlxPoint, 
+    p2:FlxPoint,
+    ?visible:Bool = true,
+    ?lineStyle:LineStyle,
+    ?drawStyle:DrawStyle
+  ) {
     super();
     
     trace('FlxG.width/height: $FlxG.width, $FlxG.height');
 
     this.makeGraphic(FlxG.width, FlxG.height, FlxColor.TRANSPARENT, true);
     FlxSpriteUtil.drawLine(this, p1.x, p1.y, p2.x, p2.y, {color: FlxColor.MAGENTA});
+    FlxSpriteUtil.drawLine(this, p1.x, p1.y, p2.x, p2.y, lineStyle, drawStyle);
 
     trace('Edge $p1 -> $p2');
     

@@ -250,8 +250,8 @@ class Ship extends FlxSprite implements ICombatant {
 
     //this.weapon = new GatlingPulseLaser(this);
     //this.weapon = new SmallFocusedBeamLaser(this);
-    //this.weapon = new Launcher_Rocket(this);
-    this.weapon = new SmallAutoCannon(this);
+    this.weapon = new Launcher_Rocket(this);
+    //this.weapon = new SmallAutoCannon(this);
 
     //hpBar = new FlxText(this.x, this.y - this.height, 0, "" + stats.hitPoints, 16);
     //FlxG.state.add(hpBar);

@@ -1,6 +1,7 @@
 package com.ganymede.map.layers;
 
 import flixel.FlxBasic;
+import flixel.FlxG;
 import flixel.group.FlxGroup;
 import js.Browser;
 
@@ -37,8 +38,12 @@ class ObjectLayer extends FlxGroup {
     super.add(this.ships);
   }
   
+  /**
+   * Overridden to prevent adding objects to object layer group.
+   */
   override public function add(Object:FlxBasic):FlxBasic {
-    Browser.console.error("Tried adding object to base objects group, this is a non-op. Don't do it again!");
+    //Browser.console.error("Tried adding object to base objects group, this is a non-op. Don't do it again!");
+    FlxG.log.error("Tried adding object to base objects group, this is a non-op. Don't do it again!");
     return null;
   }
   
