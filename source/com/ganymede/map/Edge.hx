@@ -46,7 +46,7 @@ class EdgeLine extends FlxSprite {
     //trace('Edge $p1 -> $p2');
     
     this.visible = true;
-    FlxG.state.add(this);
+    //FlxG.state.add(this);
   }
 }
 
