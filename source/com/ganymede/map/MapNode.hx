@@ -19,12 +19,14 @@
 package com.ganymede.map;
 
 import com.ganymede.gameUnits.capturable.Capturable;
+import com.ganymede.util.Colors;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup;
 import flixel.group.FlxSpriteGroup;
 import flixel.input.mouse.FlxMouse;
+import flixel.math.FlxMath;
 import flixel.math.FlxPoint;
 import flixel.util.FlxColor;
 import flixel.util.FlxSpriteUtil;
@@ -33,15 +35,15 @@ private class Consts {
   public static inline var NODE_RADIUS:Int = 15;
 }
 
-private class Colors {
-  //public static var NODE_DISK = FlxColor.fromRGBFloat(0.5, 0.5, 0.5, 0.6);
-  public static var NODE_DISK = FlxColor.MAGENTA;
-  public static var NODE_SELECTED = FlxColor.fromRGBFloat(0.9, 0.4, 0.5, 0.5);
-  public static var NODE_HIGHLIGHT = FlxColor.fromRGBFloat(0.5, 0.5, 0.5, 0.3);
-}
+//private class Colors {
+  ////public static var NODE_DISK = FlxColor.fromRGBFloat(0.5, 0.5, 0.5, 0.6);
+  //public static var NODE_DISK = FlxColor.MAGENTA;
+  //public static var NODE_SELECTED = FlxColor.fromRGBFloat(0.9, 0.4, 0.5, 0.5);
+  //public static var NODE_HIGHLIGHT = FlxColor.fromRGBFloat(0.5, 0.5, 0.5, 0.3);
+//}
 
 private class Styles {
-  public static var NODE_SELECTED: flixel.util.LineStyle = {color: FlxColor.YELLOW, thickness: 3};
+  public static var NODE_SELECTED: flixel.util.LineStyle = {color: Colors.DEEPSKYBLUE, thickness: 1};
 }
 
 /**
@@ -76,7 +78,7 @@ class MapNode extends FlxGroup {
 
     this.node_disk = new MapNodeRing(x, y, radius, true, Colors.NODE_DISK);
     this.node_selected = new MapNodeRing(x, y, radius + 1, false, Colors.NODE_SELECTED, Styles.NODE_SELECTED);
-    this.node_highlight = new MapNodeRing(x, y, radius * 2, false, Colors.NODE_HIGHLIGHT);
+    this.node_highlight = new MapNodeRing(x, y, radius * 2, false, Colors.GREY, 0.5);
 
     this.capturable = null;
     
@@ -164,16 +166,21 @@ class MapNodeRing extends FlxSprite {
     ?radius:Int = Consts.NODE_RADIUS,
     ?visible:Bool = true,
     ?fill:FlxColor = FlxColor.TRANSPARENT,
+    ?opacity:Float = 1.0,
     ?lineStyle:LineStyle,
     ?drawStyle:DrawStyle
   ) {
     super(x, y);
+    
+    opacity = FlxMath.bound(opacity, 0.0, 1.0);
 
-    var diameter:Int = 2 * radius;
-
+    var diameter:Int = 2 * radius + 1;
     this.makeGraphic(diameter, diameter, FlxColor.TRANSPARENT, true);
+    
+    fill.alphaFloat = opacity;
+
     FlxSpriteUtil.drawCircle(this, -1, -1, radius, fill, lineStyle, drawStyle);
-    this.setPosition(x - (diameter / 2.0), y - (diameter / 2.0));
+    this.setPosition(x - (diameter * 0.5), y - (diameter * 0.5));
     this.visible = visible;
   }
 }

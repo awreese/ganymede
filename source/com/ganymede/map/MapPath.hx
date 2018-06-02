@@ -18,7 +18,9 @@
 
 package com.ganymede.map;
 
+import com.ganymede.util.Colors;
 import flash.display.BlendMode;
+import flash.display.CapsStyle;
 import flash.display.JointStyle;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -28,20 +30,21 @@ import flixel.util.FlxColor;
 import flixel.util.FlxSpriteUtil;
 
 private class Consts {
-  public static inline var PATH_THICKNESS:Float = 3;
+  public static inline var PATH_THICKNESS:Float = 30;
 }
 
-private class Colors {
-  //public static var PATH_LINE = FlxColor.fromRGBFloat(0.5, 0.5, 0.5, 0.6);
-  //public static var PATH_HIGHLIGHT = FlxColor.fromRGBFloat(0.7, 0.1, 0.1, 0.3);
-  public static var PATH_LINE = FlxColor.LIME;
-}
+//private class Colors {
+  ////public static var PATH_LINE = FlxColor.fromRGBFloat(0.5, 0.5, 0.5, 0.6);
+  ////public static var PATH_HIGHLIGHT = FlxColor.fromRGBFloat(0.7, 0.1, 0.1, 0.3);
+  //public static var PATH_LINE = FlxColor.LIME;
+//}
 
 private class LineStyles {
   public static var NORMAL:flixel.util.LineStyle = {
     color: Colors.PATH_LINE,
     thickness: Consts.PATH_THICKNESS,
-    //jointStyle: JointStyle.ROUND
+    capsStyle: CapsStyle.ROUND,
+    jointStyle: JointStyle.ROUND
   }
   //public static var HIGHLIGHT:flixel.util.LineStyle = {
     //color: Colors.PATH_HIGHLIGHT,
@@ -83,13 +86,13 @@ class MapPath extends FlxSprite {
     ?lineStyle:LineStyle,
     ?drawStyle:DrawStyle
   ) {
-    var start:FlxPoint = points.shift();
-    FlxSpriteUtil.drawCircle(this, start.x, start.y, 15, lineStyle.color, lineStyle, drawStyle);
-    points.unshift(start);
+    //var start:FlxPoint = points.shift();
+    //FlxSpriteUtil.drawCircle(this, start.x, start.y, 15, lineStyle.color, lineStyle, drawStyle);
+    //points.unshift(start);
     FlxSpriteUtil.drawPolygon(this, points, FlxColor.TRANSPARENT, lineStyle, drawStyle);
-    var end:FlxPoint = points.pop();
-    FlxSpriteUtil.drawCircle(this, end.x, end.y, 15, lineStyle.color, lineStyle, drawStyle);
-    points.push(end);
+    //var end:FlxPoint = points.pop();
+    //FlxSpriteUtil.drawCircle(this, end.x, end.y, 15, lineStyle.color, lineStyle, drawStyle);
+    //points.push(end);
   }
   
 }

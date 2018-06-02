@@ -22,6 +22,7 @@ import com.ganymede.db.LevelData;
 import com.ganymede.map.MapNode;
 import com.ganymede.map.MapPath;
 import com.ganymede.util.graph.Graph;
+import com.ganymede.util.Colors;
 import flixel.FlxBasic;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -135,7 +136,8 @@ class GraphLayer extends FlxGroup {
           this._path_layer_, 
           src.position.x, src.position.y,
           dest.position.x, dest.position.y, 
-          {color: FlxColor.MAGENTA, thickness: 3}
+          //{color: FlxColor.MAGENTA, thickness: 3}
+          {color: Colors.EDGE_LINE, thickness: 3}
         );
       }
     }
@@ -182,7 +184,6 @@ class GraphLayer extends FlxGroup {
     for (src in pathVertexMap.keys()) {
       for (dest in pathVertexMap[src].keys()) {
         var path:Array<Int> = pathVertexMap[src][dest];
-        //pathPointMap[src][dest] = [for (v in path) FlxPoint.weak(vertices[v].x, vertices[v].y)];
         pathPointMap[src][dest] = [for (v in path) vertices[v].position];
       }
     }
@@ -228,7 +229,6 @@ class GraphLayer extends FlxGroup {
       if (src.isSelected) {
         if (src.id != this.selectedNodeId) {
           if (this.selectedNodeId != null && this.hoveredNodeId != null) {
-            //this._path_map_._path_map_[this.selectedNodeId][this.hoveredNodeId].graphic.visible = false;
             this.hidePath(this.selectedNodeId, this.hoveredNodeId);
           }
           this.selectedNodeId = src.id;
@@ -261,8 +261,6 @@ class GraphLayer extends FlxGroup {
         return;
       }
       if (this.selectedNodeId != null) {
-        //this._path_map_._path_map_[this.selectedNodeId][src.id].graphic.visible = false;
-        //this._path_map_._path_map_[this.selectedNodeId][src.id].hidePath();
         this.hidePath(this.selectedNodeId, src.id);
       }
     }
