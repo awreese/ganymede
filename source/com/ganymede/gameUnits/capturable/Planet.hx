@@ -161,6 +161,10 @@ class Planet extends Capturable {
 
     // set sprite
     setSprite();
+    this.setGraphicSize(32, 32); // This scales down the planets from their default size of 48x48
+
+    x -= origin.x;
+    y -= origin.y;
 
     this.pStats = pstats;
 
@@ -291,10 +295,5 @@ class Planet extends Capturable {
       default:
         loadGraphic(AssetPaths.planet_1_enemy1__png, false);
     }
-
-    this.setGraphicSize(32, 32); // This scales down the planets from their default size of 48x48
-
-    x = node.x - origin.x + 1;
-    y = node.y - origin.y + 1;
   }
 }
