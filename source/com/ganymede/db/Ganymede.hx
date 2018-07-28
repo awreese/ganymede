@@ -20,7 +20,8 @@ package com.ganymede.db;
 
 import com.ganymede.db.Data;
 import com.ganymede.db.Parser;
-import com.ganymede.db.LevelData;
+import com.ganymede.db.DB_Data;
+//import com.ganymede.db.GameData;
 
 /**
  * Ganymede.DB in-memory database.
@@ -68,5 +69,23 @@ class Ganymede {
       hazzards: Parser.parse.hazzards(data.hazzards),
       powerups: Parser.parse.powerups(data.powerups),
     };
+  }
+  
+  public static inline function getFactionData():FactionData {
+    checkDBLoaded();
+    
+    var data = Data.factions.all;
+    
+    return {
+      factions: Parser.parse.factions(data),
+    }
+  }
+  
+  public static inline function getShipClassData():ShipClassData {
+    checkDBLoaded();
+    
+    return {
+      classes: Parser.parse.shipClasses(Data.shipClasses.all),
+    }
   }
 }

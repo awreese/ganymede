@@ -18,7 +18,7 @@
 
 package com.ganymede.db;
 
-import com.ganymede.db.LevelData;
+import com.ganymede.db.DB_Data;
 
 /**
  * Parses Ganymede.DB dynamic objects into typed game objects.
@@ -28,6 +28,10 @@ import com.ganymede.db.LevelData;
 class Parser {
   public static var parse(default, null):Parser = new Parser();
   private function new() {}
+  
+  /**
+   * L E V E L   D A T A
+   */
   
   public function size(data:Dynamic):DB_LevelSize {
     return new DB_LevelSize(data);
@@ -51,5 +55,21 @@ class Parser {
   
   public function powerups(data:Dynamic):Array<DB_LevelPowerup> {
     return DB_LevelPowerup.createArray(data);
+  }
+  
+  /**
+   * F A C T I O N   D A T A
+   */
+  
+  public function factions(data:Dynamic):Array<DB_Faction> {
+    return DB_Faction.createArray(data);
+  }
+  
+  /**
+   * S H I P   C L A S S   D A T A
+   */
+  
+  public function shipClasses(data:Dynamic):Array<DB_ShipClass> {
+    return DB_ShipClass.createArray(data);
   }
 }
