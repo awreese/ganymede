@@ -573,42 +573,42 @@
 			"columns": [
 				{
 					"typeStr": "0",
-					"name": "class"
+					"name": "className"
 				}
 			],
 			"lines": [
 				{
-					"class": "FRIGATE"
+					"className": "FRIGATE"
 				},
 				{
-					"class": "DESTROYER"
+					"className": "DESTROYER"
 				},
 				{
-					"class": "CRUISER"
+					"className": "CRUISER"
 				},
 				{
-					"class": "BATTLECRUISER"
+					"className": "BATTLECRUISER"
 				},
 				{
-					"class": "BATTLESHIP"
+					"className": "BATTLESHIP"
 				},
 				{
-					"class": "CARRIER"
+					"className": "CARRIER"
 				},
 				{
-					"class": "DREADNOUGHT"
+					"className": "DREADNOUGHT"
 				},
 				{
-					"class": "SUPERCARRIER"
+					"className": "SUPERCARRIER"
 				},
 				{
-					"class": "TITAN"
+					"className": "TITAN"
 				},
 				{
-					"class": "DRONE"
+					"className": "DRONE"
 				},
 				{
-					"class": "FIGHTER"
+					"className": "FIGHTER"
 				}
 			],
 			"separators": [],
