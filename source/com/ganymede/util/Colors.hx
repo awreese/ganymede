@@ -21,28 +21,15 @@ package com.ganymede.util;
 import flixel.util.FlxColor;
 
 /**
- * Custom colors
+ * Custom colors.  140ish base HTML named colors.
  * @author Drew Reese
  */
 class Colors {
-
-  //public static inline var NODE_DISK:FlxColor = FlxColor.MAGENTA;
-  public static inline var NODE_DISK:FlxColor = FlxColor.GRAY;
-
-  //public static inline var NODE_SELECTED = FlxColor.fromRGBFloat(0.9, 0.4, 0.5, 0.5);
-  public static inline var NODE_SELECTED:FlxColor = 0xffff6677;
-
-  //public static inline var NODE_HIGHLIGHT = FlxColor.fromRGBFloat(0.5, 0.5, 0.5, 0.3);
-  public static inline var NODE_HIGHLIGHT:FlxColor = 0x60808080;
-  //
-  //public static inline var EDGE_LINE = FlxColor.fromRGBFloat(0.5, 0.5, 0.5, 0.6);
-  public static inline var EDGE_LINE:FlxColor = 0xa0808080;
-
-  //public static inline var EDGE_HIGHLIGHT = FlxColor.fromRGBFloat(0.7, 0.1, 0.1, 0.3);
-  public static inline var EDGE_HIGHLIGHT:FlxColor = 0x60ff0000;
-
-  //public static inline var PATH_LINE = FlxColor.LIME;
-  public static inline var PATH_LINE:FlxColor = 0x30ffff00;
+  
+  public static inline function withAlpha(c:FlxColor = Colors.WHITE, alpha:Float = 1.0):FlxColor {
+    c.alphaFloat = alpha;
+    return c;
+  }
 
   public static inline var BLACK:FlxColor = 0xff000000;
   public static inline var NAVY:FlxColor = 0xff000080;
@@ -192,5 +179,4 @@ class Colors {
   public static inline var LIGHTYELLOW:FlxColor = 0xffffffe0;
   public static inline var IVORY:FlxColor = 0xfffffff0;
   public static inline var WHITE:FlxColor = 0xffffffff;
-
 }
