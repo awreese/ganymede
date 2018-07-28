@@ -18,7 +18,7 @@
 
 package com.ganymede.gameUnits.weapons.ammunition;
 
-import com.ganymede.gameUnits.combat.ICombatant;
+import com.ganymede.gameUnits.combat.I_Combatant;
 import flixel.FlxG;
 import flixel.addons.effects.FlxTrail;
 import flixel.util.helpers.FlxBounds;
@@ -79,7 +79,7 @@ class Projectile extends Charge {
     FlxG.state.add(this._trail);
   }
   
-  override public function target(target:ICombatant):Void {
+  override public function target(target:I_Combatant):Void {
     super.target(target);
   }
 

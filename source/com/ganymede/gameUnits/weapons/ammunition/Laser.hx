@@ -23,7 +23,7 @@ import flixel.FlxSprite;
 import flixel.math.FlxAngle;
 import flixel.util.FlxColor;
 import flixel.util.helpers.FlxBounds;
-import com.ganymede.gameUnits.combat.ICombatant;
+import com.ganymede.gameUnits.combat.I_Combatant;
 import com.ganymede.gameUnits.weapons.WeaponSize;
 import com.ganymede.gameUnits.weapons.ammunition.Ammunition.Charge;
 import com.ganymede.gameUnits.weapons.ammunition.Laser.Pulse;

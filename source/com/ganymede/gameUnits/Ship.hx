@@ -27,9 +27,9 @@ import flixel.math.FlxVector;
 import flixel.util.helpers.FlxBounds;
 import com.ganymede.gameUnits.Ship.BluePrint;
 import com.ganymede.gameUnits.capturable.Planet;
-import com.ganymede.gameUnits.combat.ICombatant;
+import com.ganymede.gameUnits.combat.I_Combatant;
 import com.ganymede.gameUnits.combat.Radar;
-import com.ganymede.gameUnits.weapons.IWeapon;
+import com.ganymede.gameUnits.weapons.I_Weapon;
 import com.ganymede.gameUnits.weapons.launchers.Launcher;
 import com.ganymede.gameUnits.weapons.turrets.Turret;
 import com.ganymede.map.Edge;
@@ -159,7 +159,7 @@ class BluePrint {
  * @author Rory Soiffer
  * @author Drew Reese
  */
-class Ship extends FlxSprite implements ICombatant {
+class Ship extends FlxSprite implements I_Combatant {
 
   // Parent/Faction Info
   //private var homePlanet:Planet; // probably not needed
@@ -199,7 +199,7 @@ class Ship extends FlxSprite implements ICombatant {
   //private var hpBar :FlxText;
 
   //private var weapon:Turret;
-  private var weapon:IWeapon;
+  private var weapon:I_Weapon;
   //private var weapon1:Launcher;
 
   public function new(destination:Node, faction:Faction, blueprint:BluePrint) {

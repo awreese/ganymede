@@ -26,12 +26,12 @@ import flixel.FlxSprite.IFlxSprite;
  * Interface for in-game combatants.
  * @author Drew Reese
  */
-interface ICombatant extends IFlxSprite{
+interface I_Combatant extends IFlxSprite{
   private var radar:Radar;
   private var sensorRange:Float;
 
   public function getSensorRange():Float;
   public function inSensorRange(object:FlxObject):Bool;
   public function setRadar(ships:Array<Ship>):Void;
-  public function selectTarget():ICombatant;
+  public function selectTarget():I_Combatant;
 }

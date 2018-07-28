@@ -18,7 +18,7 @@
 
 package com.ganymede.gameUnits.weapons.ammunition;
 
-import com.ganymede.gameUnits.combat.ICombatant;
+import com.ganymede.gameUnits.combat.I_Combatant;
 import com.ganymede.gameUnits.weapons.WeaponSize;
 import com.ganymede.gameUnits.weapons.ammunition.Ammunition.I_Ammunition;
 import flixel.FlxG;
@@ -140,7 +140,7 @@ class Missile extends Ammunition implements I_Missile {
    * Sets the target and starts up the missile.  
    * This implementation starts the exhaust only.
    */
-  override public function target(target:ICombatant):Void {
+  override public function target(target:I_Combatant):Void {
     super.target(target);
     _exhaust.start(false, 0.025);
   }

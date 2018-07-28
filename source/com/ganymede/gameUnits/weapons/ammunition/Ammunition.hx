@@ -18,7 +18,7 @@
 
 package com.ganymede.gameUnits.weapons.ammunition;
 
-import com.ganymede.gameUnits.combat.ICombatant;
+import com.ganymede.gameUnits.combat.I_Combatant;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.addons.weapon.FlxBullet;
@@ -35,7 +35,7 @@ interface I_Ammunition {
   public var _size(default, null):Int;
   public var _ammoSize(default, null):WeaponSize;
   
-  public function target(target:ICombatant):Void;
+  public function target(target:I_Combatant):Void;
 }
 
 /**
@@ -70,7 +70,7 @@ class Ammunition extends FlxBullet implements I_Ammunition {
     super.update(elapsed);
   }
   
-  public function target(target:ICombatant):Void {
+  public function target(target:I_Combatant):Void {
     //this._target = cast(target, FlxSprite);
     this._target = cast target;
   }
