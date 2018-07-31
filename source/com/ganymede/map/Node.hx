@@ -230,15 +230,15 @@ class Node extends FlxObject {
     return distance;
   }
 
-  public function drawTo(sprite: FlxSprite): Void {
-    FlxSpriteUtil.drawCircle(sprite, this.x, this.y, Consts.NODE_RADIUS, FlxColor.TRANSPARENT, {color: FlxColor.WHITE});
-
-    for (n in neighbors.keys()) {
-      var e = new Edge(this, n);
-      FlxSpriteUtil.drawLine(sprite, e.interpDist(Consts.NODE_RADIUS).x, e.interpDist(Consts.NODE_RADIUS).y, e.interpDist(e.length() - Consts.NODE_RADIUS).x,
-      e.interpDist(e.length() - Consts.NODE_RADIUS).y, {color: FlxColor.WHITE});
-    }
-  }
+  //public function drawTo(sprite: FlxSprite): Void {
+    //FlxSpriteUtil.drawCircle(sprite, this.x, this.y, Consts.NODE_RADIUS, FlxColor.TRANSPARENT, {color: FlxColor.WHITE});
+//
+    //for (n in neighbors.keys()) {
+      //var e = new Edge(this, n);
+      //FlxSpriteUtil.drawLine(sprite, e.interpDist(Consts.NODE_RADIUS).x, e.interpDist(Consts.NODE_RADIUS).y, e.interpDist(e.length() - Consts.NODE_RADIUS).x,
+      //e.interpDist(e.length() - Consts.NODE_RADIUS).y, {color: FlxColor.WHITE});
+    //}
+  //}
 
   public function pathTo(n: Node): Array<Edge> {
     // Dijkstra's algorithm
