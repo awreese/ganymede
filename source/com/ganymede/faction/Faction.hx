@@ -113,5 +113,17 @@ class Faction {
   public function getColor(): FlxColor {
     return faction_color.get(this._faction);
   }
-
+  
+  public function equals(other:Dynamic):Bool {
+    if (this == other) {
+      return true;
+    }
+    
+    if (Std.is(other, Faction)) {
+      other = cast(other, Faction);
+      return this._faction == other._faction;
+    }
+    
+    return false;
+  }
 }

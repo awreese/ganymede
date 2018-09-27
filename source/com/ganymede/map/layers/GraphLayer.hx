@@ -18,9 +18,9 @@
 
 package com.ganymede.map.layers;
 
-import com.ganymede.db.LevelData;
+import com.ganymede.db.DB_Data;
 import com.ganymede.map.MapNode;
-import com.ganymede.map.MapPath;
+import com.ganymede.map.PathGraphic;
 import com.ganymede.util.graph.Graph;
 import com.ganymede.util.Colors;
 import flixel.FlxBasic;
@@ -30,7 +30,6 @@ import flixel.group.FlxGroup;
 import flixel.math.FlxPoint;
 import flixel.util.FlxColor;
 import flixel.util.FlxSpriteUtil;
-import js.Browser;
 
 private typedef Vertex = DB_LevelNode;
 private typedef VertexArray = Array<DB_LevelNode>;
@@ -49,10 +48,10 @@ private typedef VertexMap = Map<Int, Int>;
  */
 class GraphLayer extends FlxGroup {
   
-  private var _level_data_:LevelData; // TODO: Probably not needed longterm
-  private var _path_layer_:FlxSprite;
-  private var _mapNodes_:FlxTypedGroup<MapNode>;
-  private var _paths_:FlxGroup;
+  private var _path_layer_:FlxSprite;             // Base map layer
+  private var _paths_:FlxGroup;                   // Individual paths
+  private var _mapNodes_:FlxTypedGroup<MapNode>;  // Nodes on the map
+  
   private var _graph_:Graph<Int, Float>;
   private var _path_map_:PathMap;
   
@@ -66,52 +65,40 @@ class GraphLayer extends FlxGroup {
     
     super.add(this._path_layer_);
     
-    this._mapNodes_ = new FlxTypedGroup();
     this._paths_ = new FlxGroup();
-    
-    super.add(this._mapNodes_);
     super.add(this._paths_);
+    
+    this._mapNodes_ = new FlxTypedGroup();
+    super.add(this._mapNodes_);
   }
   
   /**
    * Overridden to prevent adding objects to graph layer group.
    */
   override public function add(Object:FlxBasic):FlxBasic {
-    //Browser.console.error("Tried adding object to graph layer group, this is a non-op.  Don't do it again!");
     FlxG.log.error("Tried adding object to graph layer group, this is a non-op.  Don't do it again!");
     return null;
   }
   
-  public function set(levelData:LevelData) {
-    this._level_data_ = levelData;
-    //trace(this._level_data_.nodes);
-    
+  public function set_level_data(levelData:LevelData) {
     this.addNodes(levelData.nodes);
-    //trace(this._mapNodes_.members);
     
     this._graph_ = buildGraph(levelData.nodes);
-    //trace('built graph', this._graph_);
-    
     this._path_map_ = buildPathMap(this._graph_, this._mapNodes_.members);
-    trace('Built PathMap', this._path_map_);
     
     for (v1 in 0...this._mapNodes_.length) {
       for (v2 in 0...this._mapNodes_.length) {
-        trace('$v1 -> $v2', this._path_map_._path_map_[v1][v2]);
-        this._paths_.add(this._path_map_._path_map_[v1][v2].graphic);
+        this._paths_.add(this._path_map_._entries_[v1][v2].graphic);
       }
     }
-    
-    
-    //trace(pointMap[0]);
-    
-    
-    var node0 = this._mapNodes_.members.filter(function(node) return node.id <= 4);
-    this._mapNodes_.forEach(function(n) { trace(n.id);});
-    trace('node 0 $node0');
     this.selectedNodeId = null;
     this.hoveredNodeId = null;
   }
+  
+  //public function clear():Void {
+    //this._path_layer_ = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.TRANSPARENT, true, 'pathLayer');
+    //
+  //}
   
   private function buildGraph(vertices:Array<DB_LevelNode>):Graph<Int, Float> {
     var graph:Graph<Int, Float> = new Graph();
@@ -136,8 +123,7 @@ class GraphLayer extends FlxGroup {
           this._path_layer_, 
           src.position.x, src.position.y,
           dest.position.x, dest.position.y, 
-          //{color: FlxColor.MAGENTA, thickness: 3}
-          {color: Colors.EDGE_LINE, thickness: 3}
+          {color: Colors.withAlpha(Colors.WHITE, 0.025), thickness: 20}
         );
       }
     }
@@ -159,10 +145,6 @@ class GraphLayer extends FlxGroup {
     }
     
     return pathMap;
-  }
-  
-  private static function buildPathGraphic(pathPoints:Array<FlxPoint>):FlxSprite {
-    return null;
   }
   
   private static function parsePaths(graph:Graph<Int, Float>):VertexPathMap<Int> {
@@ -192,7 +174,6 @@ class GraphLayer extends FlxGroup {
   
   private function addNodes(nodes:Array<DB_LevelNode>):Void {
     for (node in nodes) {
-      //this.mapNodes.add(new MapNode(node.id, node.x, node.y));
       this._mapNodes_.add(new MapNode(node.id, node.position.x, node.position.y));
     }
   }
@@ -211,37 +192,26 @@ class GraphLayer extends FlxGroup {
     this.checkSelected();
     this.checkHovered();
     
-    //if (this.selectedNodeId != null && this.hoveredNodeId != null) {
-      //this.highlightPath(this.selectedNodeId, this.hoveredNodeId);
-    //} else {
-      //// clear highlighted paths
-      //
-    //}
-    
   }
   
   /**
    * Checks if any nodes are currently selected and sets
    * this.selectedNode accordingly.
+   * 
+   * Hides any old highlighted paths if new node is selected and sets
+   * new selected node.
    */
   private function checkSelected():Void {
     for (src in this._mapNodes_) {
       if (src.isSelected) {
         if (src.id != this.selectedNodeId) {
-          if (this.selectedNodeId != null && this.hoveredNodeId != null) {
-            this.hidePath(this.selectedNodeId, this.hoveredNodeId);
-          }
+          this.hidePath(this.selectedNodeId, this.hoveredNodeId);
           this.selectedNodeId = src.id;
-          trace('new node ${selectedNodeId} is selected');
         }
         return;
       }
     }
-    
-    if (this.selectedNodeId != null) {
-      trace('setting selected node to null');
-      this.selectedNodeId = null;
-    }
+    this.selectedNodeId = null;
   }
   
   /**
@@ -253,34 +223,37 @@ class GraphLayer extends FlxGroup {
       if (src.isMouseover) {
         if (src.id != this.hoveredNodeId) {
           this.hoveredNodeId = src.id;
-          trace('new node ${this.hoveredNodeId} is hovered');
-          if (this.selectedNodeId != null) {
-            this.highlightPath(this.selectedNodeId, this.hoveredNodeId);
-          }
+          this.highlightPath(this.selectedNodeId, this.hoveredNodeId);
         }
         return;
       }
-      if (this.selectedNodeId != null) {
-        this.hidePath(this.selectedNodeId, src.id);
-      }
+      this.hidePath(this.selectedNodeId, src.id);
     }
-    
-    if (this.hoveredNodeId != null) {
-      trace('setting hovered node to null');
-      this.hoveredNodeId = null;
-    }
+    this.hoveredNodeId = null;
   }
   
-  public function highlightPath(n1:Int, n2:Int):Void {
-    var pathEntry:PathMapEntry = this._path_map_._path_map_[n1][n2];
-    trace(pathEntry);
-    //FlxG.log.notice(pathEntry);
-    pathEntry.showPath();
+  private function getMapEntry(n1:Int, n2:Int):PathMapEntry {
+    if (n1 == null || n2 == null) return null;
+    return this._path_map_._entries_[n1][n2];
   }
   
-  public function hidePath(n1:Int, n2:Int):Void {
-    var pathEntry:PathMapEntry = this._path_map_._path_map_[n1][n2];
-    pathEntry.hidePath();
+  private function highlightPath(n1:Int, n2:Int):Void {
+    var pathEntry:PathMapEntry = this.getMapEntry(n1, n2);
+    if (pathEntry != null) pathEntry.showPath();
+  }
+  
+  private function hidePath(n1:Int, n2:Int):Void {
+    var pathEntry:PathMapEntry = this.getMapEntry(n1, n2);
+    if (pathEntry != null) pathEntry.hidePath();
+  }
+  
+  private function getPath(n1:Int, n2:Int):Array<FlxPoint> {
+    var pathEntry:PathMapEntry = this.getMapEntry(n1, n2);
+    return (pathEntry != null) ? pathEntry.points : [];
+  }
+  
+  public function getHighlightedPath():Array<FlxPoint> {
+    return this.getPath(this.selectedNodeId, this.hoveredNodeId);
   }
   
 }
@@ -291,10 +264,10 @@ class GraphLayer extends FlxGroup {
  * Holds mapping entries from source to destination vertices.
  */
 private class PathMap {
-  public var _path_map_:Map<Int, Map<Int, PathMapEntry>>;
+  public var _entries_:Map<Int, Map<Int, PathMapEntry>>;
   
   public function new() {
-    this._path_map_ = new Map<Int, Map<Int, PathMapEntry>>();
+    this._entries_ = new Map<Int, Map<Int, PathMapEntry>>();
   }
   
   public function addEntry(
@@ -303,17 +276,16 @@ private class PathMap {
     vertices:Array<Int>, 
     points:Array<FlxPoint>
   ) {
-    if (!this._path_map_.exists(v1)) {
-      this._path_map_.set(v1, new Map<Int, PathMapEntry>());
+    if (!this._entries_.exists(v1)) {
+      this._entries_.set(v1, new Map<Int, PathMapEntry>());
     }
-    if (!this._path_map_.exists(v2)) {
-      this._path_map_.set(v2, new Map<Int, PathMapEntry>());
+    if (!this._entries_.exists(v2)) {
+      this._entries_.set(v2, new Map<Int, PathMapEntry>());
     }
     
-    // TODO: Create new path graphic to add to entry
-    var pathGraphic:MapPath = new MapPath(points);
+    var pathGraphic:PathGraphic = new PathGraphic(points);
     
-    this._path_map_[v1][v2] = new PathMapEntry(vertices, points, pathGraphic);
+    this._entries_[v1][v2] = new PathMapEntry(vertices, points, pathGraphic);
   }
 }
 
@@ -328,12 +300,12 @@ private class PathMap {
 private class PathMapEntry {
   public var vertices:Array<Int>;
   public var points:Array<FlxPoint>;
-  public var graphic:MapPath;
+  public var graphic:PathGraphic;
   
   public function new(
     vertices:Array<Int>,
     points:Array<FlxPoint>,
-    graphic:MapPath
+    graphic:PathGraphic
   ) {
     this.vertices = vertices;
     this.points = points;

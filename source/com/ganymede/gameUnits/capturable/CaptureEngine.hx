@@ -16,9 +16,10 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ganymede.faction;
+package com.ganymede.gameUnits.capturable;
 
-import com.ganymede.faction.Faction.FactionType;
+import com.ganymede.faction.Faction;
+//import com.ganymede.faction.Faction.FactionType;
 import flixel.math.FlxMath.bound;
 
 /**
@@ -72,7 +73,7 @@ private class ControlAccumulator {
     //this._currentControlPoints = this._currentControlPoints < 0.0 ? 0.0 : this._currentControlPoints;
     // make sure currentControlPoints is not greater than totalControlPoints
     //this._currentControlPoints = this._currentControlPoints > this._totalControlPoints ? this._totalControlPoints : this._currentControlPoints;
-    this._currentControlPoints = bound(_currentControlPoints, 0.0, _totalControlPoints);
+    this._currentControlPoints = Math.round(bound(_currentControlPoints, 0.0, _totalControlPoints) * 100) / 100;
     
     return this._currentControlFaction != oldController;
   }
@@ -97,7 +98,7 @@ private class ControlAccumulator {
    * @return
    */
   private function checkLost(faction:FactionType):Bool {
-    if (this._currentControlPoints < 0) {
+    if (this._currentControlPoints < 0.0000001) {
       this._currentControlFaction = NOP;
       this._capturingFaction = faction;
       this._currentControlPoints = Math.abs(this._currentControlPoints);

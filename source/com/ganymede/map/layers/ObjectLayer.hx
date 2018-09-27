@@ -23,6 +23,8 @@ import flixel.FlxBasic;
 import flixel.FlxG;
 import flixel.group.FlxGroup;
 
+using Lambda;
+
 private typedef NodeArray = Array<DB_LevelNode>;
 private typedef PlanetArray = Array<DB_LevelPlanet>;
 private typedef BeaconArray = Array<DB_LevelBeacon>;
@@ -36,11 +38,11 @@ private typedef PowerupArray = Array<DB_LevelPowerup>;
  * 
  * - Layer 2 (Game Object Group)
  *   - planets
- *     - upgrade UI
- *     - capture bars
+ *     - upgrade UI (move to UI layer)
+ *     - capture bars (move to UI layer)
  *   - beacons
- *     - capture bars
- *   - ships???
+ *     - capture bars (move to UI layer)
+ *   - ships
  *   - hazards
  */
 class ObjectLayer extends FlxGroup {
@@ -58,30 +60,38 @@ class ObjectLayer extends FlxGroup {
     
     super.add(this.planets);
     super.add(this.beacons);
-    super.add(this.hazzards);
     super.add(this.ships);
+    super.add(this.hazzards);
   }
   
   /**
-   * Overridden to prevent adding objects to object layer group.
+   * Overridden to prevent adding objects to object layer group container.
    */
   override public function add(Object:FlxBasic):FlxBasic {
-    //Browser.console.error("Tried adding object to base objects group, this is a non-op. Don't do it again!");
     FlxG.log.error("Tried adding object to base objects group, this is a non-op. Don't do it again!");
     return null;
   }
   
   public function set_object_data(levelData:LevelData) {
+    trace('Set Object Level Data', levelData);
     var nodes:NodeArray = levelData.nodes;
     
-    this.addPlanets(nodes, levelData.planets);
+    function addPlanet(planetData) {
+      trace('Planet in FN', planetData);
+    }
+    function addBeacon(beaconData) {
+      trace('Beacon in FN', beaconData);
+    }
+    function addHazzard(hazzardData) {
+      trace('Hazzard in FN', hazzardData);
+    }
+    
+    this.addObjects(levelData.planets, addPlanet);
+    this.addObjects(levelData.beacons, addBeacon);
+    this.addObjects(levelData.hazzards, addHazzard);
   }
   
-  private function addPlanets(nodes:NodeArray, planets:PlanetArray):Void {
-    //trace('Planets', planets);
-    
-    for (planet in planets) {
-      trace('Planet', planet, nodes[planet.nodeId]);
-    }
+  private function addObjects<T>(objects:Iterable<T>, cb:T -> Void):Void {
+    Lambda.iter(objects, cb);
   }
 }

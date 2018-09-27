@@ -19,6 +19,8 @@
 package com.ganymede.db;
 
 import com.ganymede.db.DB_Data;
+import com.ganymede.blueprint.PlanetBlueprint;
+import com.ganymede.blueprint.ShipBlueprint;
 
 /**
  * Parses Ganymede.DB dynamic objects into typed game objects.
@@ -61,8 +63,8 @@ class Parser {
    * F A C T I O N   D A T A
    */
   
-  public function factions(data:Dynamic):Array<DB_Faction> {
-    return DB_Faction.createArray(data);
+  public function factions(data:Dynamic):FactionData {
+    return DB_Faction.createMap(data);
   }
   
   /**
@@ -71,5 +73,25 @@ class Parser {
   
   public function shipClasses(data:Dynamic):Array<DB_ShipClass> {
     return DB_ShipClass.createArray(data);
+  }
+  
+  /**
+   * P L A N E T   B L U E P R I N T S
+   */
+  
+  public function planetBlueprintsArray(data:Dynamic):PlanetBlueprintsArray {
+    return DB_PlanetBlueprint.createArray(data);
+  }
+  
+  public function planetBlueprintsMap(data:Dynamic):PlanetBlueprintsMap {
+    return DB_PlanetBlueprint.createMap(data);
+  }
+  
+  /**
+   * S H I P   B L U E P R I N T S
+   */
+  
+  public function shipBlueprintsMap(data:Dynamic):ShipBlueprintsMap {
+    return DB_ShipBlueprint.createMap(data);
   }
 }

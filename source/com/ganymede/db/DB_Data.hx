@@ -18,14 +18,18 @@
 
 package com.ganymede.db;
 
+import com.ganymede.blueprint.PlanetBlueprint;
+import com.ganymede.blueprint.ShipBlueprint;
 import com.ganymede.db.DB_Data.DB_Faction;
 import com.ganymede.db.DB_Data.DB_LevelBeacon;
 import com.ganymede.db.DB_Data.DB_LevelHazzard;
 import com.ganymede.db.DB_Data.DB_LevelNode;
 import com.ganymede.db.DB_Data.DB_LevelPlanet;
 import com.ganymede.db.DB_Data.DB_LevelPowerup;
+import com.ganymede.db.DB_Data.DB_PlanetBlueprint;
 import com.ganymede.db.DB_Data.DB_ShipClass;
 import com.ganymede.faction.Faction;
+//import com.ganymede.faction.Factions;
 import flixel.math.FlxPoint;
 import flixel.util.FlxColor;
 
@@ -51,8 +55,16 @@ class DB_Data {
    * Maps the values of array @{arr} to new array using map function callback @{mapFn}.
    * Map function callback signature is (object: Dynamic, index: Int).
    */
-  public static function map<T>(arr:Array<Dynamic>, mapFn:Dynamic->Int->T):Array<T> {
+  public static function createArray<T>(arr:Array<Dynamic>, mapFn:Dynamic->Int->T):Array<T> {
     return [for (i in 0...arr.length) mapFn(arr[i], i)];
+  }
+  
+  /**
+   * Maps the values of array @{arr} to new map using map function callback @{mapFn}.
+   * Map function callback signature is (object: Dynamic, index: Int).
+   */
+  public static function createMap<T>(arr:Array<Dynamic>, mapFn:Dynamic->Int->T):Map<String, T> {
+    return [for (i in 0...arr.length) arr[i].id => mapFn(arr[i], i)];
   }
 }
 
@@ -82,8 +94,7 @@ class DB_LevelNode {
   }
   
   public static function createArray(nodes:Dynamic):Array<DB_LevelNode> {
-    //return [for (i in 0...nodes.length) new DB_LevelNode(i, nodes[i])];
-    return DB_Data.map(nodes, function(node, i){ return new DB_LevelNode(i, node); });
+    return DB_Data.createArray(nodes, function(node, i){ return new DB_LevelNode(i, node); });
   }
 }
 
@@ -103,8 +114,7 @@ class DB_LevelPlanet {
   }
   
   public static function createArray(planets:Dynamic):Array<DB_LevelPlanet> {
-    //return [for (i in 0...planets.length) new DB_LevelPlanet(planets[i])];
-    return DB_Data.map(planets, function(planet, i) { return new DB_LevelPlanet(planets); });
+    return DB_Data.createArray(planets, function(planet, i) { return new DB_LevelPlanet(planet); });
   }
 }
 
@@ -122,11 +132,10 @@ class DB_LevelBeacon {
   }
   
   public static function createArray(beacons:Dynamic):Array<DB_LevelBeacon> {
-    //return [for (i in 0...beacons.length) new DB_LevelBeacon(beacons[i])];
     function mapFn(beacon, index) {
       return new DB_LevelBeacon(beacon);
     }
-    return DB_Data.map(beacons, mapFn);
+    return DB_Data.createArray(beacons, mapFn);
   }
 }
 
@@ -140,11 +149,10 @@ class DB_LevelHazzard {
   }
   
   public static function createArray(hazzards:Dynamic):Array<DB_LevelHazzard> {
-    //return [for (i in 0...hazzards.length) new DB_LevelHazzard(hazzards[i])];
     function mapFn(hazzard, index) {
       return new DB_LevelHazzard(hazzard);
     }
-    return DB_Data.map(hazzards, mapFn);
+    return DB_Data.createArray(hazzards, mapFn);
   }
 }
 
@@ -156,11 +164,10 @@ class DB_LevelPowerup {
   }
   
   public static function createArray(powerups:Dynamic):Array<DB_LevelPowerup> {
-    //return [for (i in 0...powerups.length) new DB_LevelPowerup(powerups[i])];
     function mapFn(powerup, index) {
       return new DB_LevelPowerup(powerup);
     }
-    return DB_Data.map(powerups, mapFn);
+    return DB_Data.createArray(powerups, mapFn);
   }
 }
 
@@ -176,27 +183,35 @@ typedef LevelData = {
 // F A C T I O N   D A T A
 
 class DB_Faction {
-  public var faction(default, null):FactionType;
-  public var color(default, null):FlxColor;
+  //public var faction(default, null):FactionType;
+  //public var color(default, null):FlxColor;
+  //public var faction(default, null):Factions;
 
-  public function new(faction:Dynamic) {
-    this.faction = faction.faction;
-    this.color = faction.color;
-  }
+  //public function new(faction:Dynamic) {
+    ////this.faction = faction.faction;
+    ////this.color = faction.color;
+    //this.faction = Factions.Faction(faction.faction, faction.color);
+  //}
   
-  public static function createArray(factions:Dynamic):Array<DB_Faction> {
-    //return [for (i in 0...factions.length) new DB_Faction(factions[i])];
-    function mapFn(faction, index) {
-      return new DB_Faction(faction);
-    }
-    return DB_Data.map(factions, mapFn);
+  //public static function createArray(factions:Dynamic):Array<Factions> {
+    //function mapFn(faction, index) {
+      ////return new DB_Faction(faction);
+      //return Factions.Faction(faction.faction, faction.color);
+    //}
+    //return DB_Data.createArray(factions, mapFn);
+  //}
+  
+  public static function createMap(factions:Dynamic):FactionData {
+    //function mapFn(faction, index) {
+      //return Factions.Faction(faction.faction, faction.color);
+    //}
+    //return DB_Data.createMap(factions, mapFn);
+    return [for (i in 0...factions.length) factions[i].faction => factions[i].color];
   }
   
 }
 
-typedef FactionData = {
-  factions: Array<DB_Faction>,
-}
+typedef FactionData = Map<FactionType, FlxColor>;
 
 // S H I P   C L A S S   D A T A
 
@@ -208,11 +223,72 @@ class DB_ShipClass {
   }
   
   public static function createArray(shipClasses:Dynamic):Array<DB_ShipClass> {
-    //return [for (i in 0...shipClasses.length) new DB_ShipClass(shipClasses[i])];
-    return DB_Data.map(shipClasses, function(shipClass, i) {return new DB_ShipClass(shipClass);});
+    return DB_Data.createArray(shipClasses, function(shipClass, i) {return new DB_ShipClass(shipClass);});
   }
+  
 }
 
 typedef ShipClassData = {
   classes: Array<DB_ShipClass>,
 }
+
+// P L A N E T   B L U E P R I N T S
+
+class DB_ShipBlueprint {
+  private static function createBlueprint(bp, index) {
+    return new ShipBlueprint(
+      bp.id,
+      bp.description,
+      bp.hull_class,
+      bp.orbit_velocity,
+      bp.warp_velocity,
+      bp.angular_velocity,
+      bp.hit_points,
+      bp.shield_strength,
+      bp.hp_regen,
+      bp.capture_points_per_second,
+      bp.sensor_range,
+      bp.turret_hardpoints,
+      bp.launcher_hardpoints,
+      bp.turrets,
+      bp.launchers
+    );
+  }
+  
+  public static function createMap(blueprints:Dynamic):Map<String, ShipBlueprint> {
+    return DB_Data.createMap(blueprints, createBlueprint);
+  }
+}
+
+typedef ShipBlueprintsMap = Map<String, ShipBlueprint>;
+
+// P L A N E T   B L U E P R I N T S
+
+class DB_PlanetBlueprint {
+  private static function createBlueprint(bp, index) {
+    return new PlanetBlueprint(
+      bp.id,
+      bp.description,
+      bp.level,
+      bp.max_capacity_level,
+      bp.max_tech_level,
+      bp.ship_capacity,
+      bp.production_rate_seconds,
+      bp.production_threshold,
+      bp.base_upgrade_cost,
+      bp.capacity_per_level,
+      bp.tech_per_level
+    );
+  }
+  
+  public static function createArray(blueprints:Dynamic):Array<PlanetBlueprint> {
+    return DB_Data.createArray(blueprints, createBlueprint);
+  }
+  
+  public static function createMap(blueprints:Dynamic):Map<String, PlanetBlueprint> {
+    return DB_Data.createMap(blueprints, createBlueprint);
+  }
+}
+
+typedef PlanetBlueprintsArray = Array<PlanetBlueprint>;
+typedef PlanetBlueprintsMap = Map<String, PlanetBlueprint>;

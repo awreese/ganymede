@@ -20,12 +20,9 @@ package com.ganymede.map;
 
 import com.ganymede.gameUnits.capturable.Capturable;
 import com.ganymede.util.Colors;
-import com.ganymede.util.MouseHandler;
 import flixel.FlxG;
-import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup;
-import flixel.group.FlxSpriteGroup;
 import flixel.input.mouse.FlxMouse;
 import flixel.math.FlxMath;
 import flixel.math.FlxPoint;
@@ -80,14 +77,12 @@ class MapNode extends FlxGroup {
     this.add(this.node_selected);
     this.add(this.node_highlight);
     this.add(this.node_disk);
-
   }
 
   override public function update(elapsed:Float):Void {
     super.update(elapsed);
 
     this.handleMouseEvents();
-
   }
 
   public function equals(other:Dynamic):Bool {
@@ -111,8 +106,12 @@ class MapNode extends FlxGroup {
   }
 
   private function handleMouseEvents():Void {
-    this.isMouseover = node_highlight.isHovered;
-    this.isSelected = node_highlight.isLeftClicked;
+    var mouse:FlxMouse = FlxG.mouse;
+    
+    this.isMouseover = mouse.overlaps(node_highlight);
+    if (mouse.justPressed) {
+      this.isSelected = isMouseover;      
+    }
 
 
     node_highlight.visible = this.isMouseover && !this.isSelected;
@@ -146,15 +145,9 @@ class MapNode extends FlxGroup {
   public function getCaptureable(): Capturable {
     return capturable;
   }
-
 }
 
 class MapNodeRing extends FlxSprite {
-
-  public var isHovered(default, null):Bool;
-  public var isLeftClicked(default, null):Bool;
-
-  private var mouseHandler:MouseHandler;
 
   public function new (
     x:Float, y:Float,
@@ -177,21 +170,5 @@ class MapNodeRing extends FlxSprite {
     FlxSpriteUtil.drawCircle(this, -1, -1, radius, fill, lineStyle, drawStyle);
     this.setPosition(x - radius, y - radius);
     this.visible = visible;
-
-    this.mouseHandler = new MouseHandler();
-    this.mouseHandler.addListener(MouseButton.LEFT, MouseEvent.UP, mouseDown);
-  }
-
-  override public function update(elapsed:Float):Void {
-    super.update(elapsed);
-
-    var mouse:FlxMouse = FlxG.mouse;
-    this.isHovered = mouse.overlaps(this);
-
-    this.mouseHandler.handleEvents();
-  }
-
-  private function mouseDown():Void {
-    this.isLeftClicked = this.isHovered;
   }
 }
