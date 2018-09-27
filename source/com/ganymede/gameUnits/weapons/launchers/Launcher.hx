@@ -18,8 +18,8 @@
 
 package com.ganymede.gameUnits.weapons.launchers;
 
-import com.ganymede.gameUnits.combat.ICombatant;
-import com.ganymede.gameUnits.weapons.IWeapon;
+import com.ganymede.gameUnits.combat.I_Combatant;
+import com.ganymede.gameUnits.weapons.I_Weapon;
 import com.ganymede.gameUnits.weapons.WeaponSize;
 import com.ganymede.gameUnits.weapons.ammunition.Missile;
 import flixel.FlxG;
@@ -34,9 +34,9 @@ import flixel.util.helpers.FlxBounds;
  * This class represents the in-game missile launchers.
  * @author Drew Reese
  */
-class Launcher extends FlxTypedWeapon<Missile> implements IWeapon {
+class Launcher extends FlxTypedWeapon<Missile> implements I_Weapon {
 
-  private var source:ICombatant;
+  private var source:I_Combatant;
   public var size(default, null):WeaponSize;
 
   public function new(source:FlxSprite, name:String, bulletFactory:FlxTypedWeapon<Missile> -> Missile, fireFrom:FlxWeaponFireFrom, speedMode:FlxWeaponSpeedMode) {
@@ -59,7 +59,7 @@ class Launcher extends FlxTypedWeapon<Missile> implements IWeapon {
 
     // finish settings
     this.rotateBulletTowardsTarget = false;
-    this.source = cast(source, ICombatant);
+    this.source = cast(source, I_Combatant);
     FlxG.state.add(this.group);
   }
 

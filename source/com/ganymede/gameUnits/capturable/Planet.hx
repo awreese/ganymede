@@ -18,13 +18,15 @@
 
 package com.ganymede.gameUnits.capturable;
 
+import com.ganymede.blueprint.PlanetBlueprint;
 import com.ganymede.faction.Faction;
-import com.ganymede.gameUnits.Ship;
-import com.ganymede.gameUnits.Ship.BluePrint;
-import com.ganymede.gameUnits.Ship.ShipFactory;
+import com.ganymede.gameUnits.ships.Ship;
+import com.ganymede.gameUnits.ships.Ship.BluePrint;
+import com.ganymede.gameUnits.ships.Ship.ShipFactory;
 import com.ganymede.gameUnits.capturable.Capturable;
 import com.ganymede.gameUnits.capturable.Planet.PlanetStat;
 import com.ganymede.map.Node;
+import flixel.FlxSprite;
 import flixel.math.FlxVector;
 
 /**
@@ -132,7 +134,7 @@ class PlanetStat {
  * Contains the property of the Planets
  * Stores the faction, capacity, production rate, etc
  */
-class Planet extends Capturable {
+class Planet extends Capturable implements I_Planet {
   /*
    * From Capturable Class
    *
@@ -141,28 +143,58 @@ class Planet extends Capturable {
    *
    */
 
-  //public var playState:PlayState;
-
   // internal fields
   private var pStats:PlanetStat;
+  
+  public var id(default, null):String;
+  public var description(default, null):String;
+  public var level(default, null):Int;
+  public var max_capacity_level(default, null):Int;
+  public var max_technology_level(default, null):Int;
+  public var ship_capacity(default, null):Int;
+  public var production_rate_seconds(default, null):Float;
+  public var production_threshold(default, null):Float;
+  public var base_upgrade_cost(default, null):Int;
+  public var capacity_upgrade_per_level(default, null):Int;
+  public var technology_upgrade_per_level(default, null):Int;
 
   private var numShips:Map<FactionType, Int>;
-  private var shipTimer:Float;
 
   // Ship Factory
   private var shipFactory:ShipFactory;
+  
+  private var planetSprite:FlxSprite;
 
   //public function new(playState:PlayState, location:Node, faction:Faction, pstats:PlanetStat) {
-  public function new(location:Node, faction:Faction, pstats:PlanetStat) {
+  public function new(location:Node, faction:Faction, factionType:FactionType, pstats:PlanetStat) {
     // set position of the planet
-    super(location, faction);
+    super(location, 100.0, faction.getFactionType());
 
     //this.playState = playState;
 
     // set sprite
+    this.planetSprite = new FlxSprite(0,0);
     setSprite();
+    this.planetSprite.setGraphicSize(32, 32); // This scales down the planets from their default size of 48x48
 
+    this.planetSprite.x -= this.planetSprite.origin.x;
+    this.planetSprite.y -= this.planetSprite.origin.y;
+    
+    this.add(planetSprite);
+    
     this.pStats = pstats;
+    
+    //this.id = data.id;
+    //this.description = data.description;
+    //this.level = data.level;
+    //this.max_capacity_level = data.max_capacity_level;
+    //this.max_technology_level = data.max_technology_level;
+    //this.ship_capacity = data.ship_capacity;
+    //this.production_rate_seconds = data.production_rate_seconds;
+    //this.production_threshold = data.production_threshold;
+    //this.base_upgrade_cost = data.base_upgrade_cost;
+    //this.capacity_upgrade_per_level = data.capacity_upgrade_per_level;
+    //this.technology_upgrade_per_level = data.technology_upgrade_per_level;
 
     this.shipFactory = new ShipFactory(this);
     this.shipFactory.setProduction(this.pStats.ship);
@@ -172,15 +204,11 @@ class Planet extends Capturable {
     for (f in Faction.getEnums()) {
       numShips.set(f, 0);
     }
-    shipTimer = 0;
     shipsAtPlanet = new Array<Ship>();
-
+    trace("new Planet", this);
   }
 
   override public function update(elapsed:Float):Void {
-    // increment timer
-    shipTimer += elapsed;
-
     this.shipFactory.produceShip(elapsed);
 
     super.update(elapsed);
@@ -273,28 +301,24 @@ class Planet extends Capturable {
 
   // return the position of the planet
   public function getPos():FlxVector {
-    return new FlxVector(this.x, this.y);
+    return new FlxVector(this.planetSprite.x, this.planetSprite.y);
   }
 
   private function setSprite():Void {
-    switch (this.faction.getFactionType()) {
+    //switch (this.faction.getFactionType()) {
+    switch (this.controllingFaction) {
       case PLAYER:
-        loadGraphic(AssetPaths.planet_1_player__png, false);
+        this.planetSprite.loadGraphic(AssetPaths.planet_1_player__png, false);
       case ENEMY_1:
-        loadGraphic(AssetPaths.planet_1_enemy1__png, false);
+        this.planetSprite.loadGraphic(AssetPaths.planet_1_enemy1__png, false);
       case ENEMY_2:
-        loadGraphic(AssetPaths.planet_1_enemy2__png, false);
+        this.planetSprite.loadGraphic(AssetPaths.planet_1_enemy2__png, false);
       case NEUTRAL:
-        loadGraphic(AssetPaths.planet_1_neutral__png, false);
+        this.planetSprite.loadGraphic(AssetPaths.planet_1_neutral__png, false);
       case NOP:
-        loadGraphic(AssetPaths.planet_1_none__png, false);
+        this.planetSprite.loadGraphic(AssetPaths.planet_1_none__png, false);
       default:
-        loadGraphic(AssetPaths.planet_1_enemy1__png, false);
+        this.planetSprite.loadGraphic(AssetPaths.planet_1_enemy1__png, false);
     }
-
-    this.setGraphicSize(32, 32); // This scales down the planets from their default size of 48x48
-
-    x = node.x - origin.x + 1;
-    y = node.y - origin.y + 1;
   }
 }

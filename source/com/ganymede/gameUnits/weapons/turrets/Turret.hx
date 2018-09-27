@@ -18,7 +18,7 @@
 
 package com.ganymede.gameUnits.weapons.turrets;
 
-import com.ganymede.gameUnits.Ship;
+import com.ganymede.gameUnits.ships.Ship;
 import com.ganymede.gameUnits.weapons.ammunition.Ammunition;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -28,8 +28,8 @@ import flixel.addons.weapon.FlxWeapon.FlxWeaponSpeedMode;
 import flixel.math.FlxPoint;
 import flixel.system.FlxSound;
 import flixel.util.helpers.FlxBounds;
-import com.ganymede.gameUnits.combat.ICombatant;
-import com.ganymede.gameUnits.weapons.IWeapon;
+import com.ganymede.gameUnits.combat.I_Combatant;
+import com.ganymede.gameUnits.weapons.I_Weapon;
 import com.ganymede.gameUnits.weapons.WeaponSize;
 import com.ganymede.gameUnits.weapons.ammunition.Ammunition.Charge;
 import com.ganymede.gameUnits.weapons.ammunition.Laser;
@@ -46,9 +46,9 @@ import com.ganymede.gameUnits.weapons.ammunition.Projectile.Projectile_Small;
  *
  * @author Drew Reese
  */
-class Turret extends FlxTypedWeapon<Charge> implements IWeapon {
+class Turret extends FlxTypedWeapon<Charge> implements I_Weapon {
 
-  private var source:ICombatant;
+  private var source:I_Combatant;
   public var size(default, null):WeaponSize;
 
   /**
@@ -63,7 +63,7 @@ class Turret extends FlxTypedWeapon<Charge> implements IWeapon {
     super(name, chargeFactory, fireFrom, speedMode);
 
     this.rotateBulletTowardsTarget = true;
-    this.source = cast(source, ICombatant);
+    this.source = cast(source, I_Combatant);
 
     FlxG.state.add(this.group);
   }

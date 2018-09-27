@@ -30,7 +30,7 @@ typedef AdjancencyList<V,E> = Map<V, EdgeMap<V,E>>;
  */
 @:generic
 @:remove
-class Graph<V,E> implements IGraph<V,E> {
+class Graph<V,E> implements I_Graph<V,E> {
 
   private var _graph:AdjancencyList<V,E>;
 

@@ -1,6 +1,7 @@
 /**
- *  Copyright (C) 2017  Andrew Reese
- * 
+ *  Astrorush: TBD (The Best Defense)
+ *  Copyright (C) 2018 Andrew Reese
+ *
  * This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
@@ -15,21 +16,16 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ganymede.util.graph;
+package com.ganymede.gameUnits.capturable;
 
-import com.ganymede.util.graph.Graph.Edge;
+import com.ganymede.faction.Faction;
 
 /**
  * @author Drew Reese
  */
-interface IGraph<V,E> {
-	public function add(vertex:V):Bool;
-	public function remove(vertex:V):Bool;
-	public function connect(v1:V, v2:V, ?weight:Float = 1, ?data:E = null):Bool;
-	public function unconnect(v1:V, v2:V):Edge<E>;
-	public function contains(vertex:V):Bool;
-	public function isConnected(v1:V, v2:V):Bool;
-	public function getVertices(?vertex:V = null):Iterator<V>;
-	public function getEdges(vertex:V):Iterator<Edge<E>>;
-	public function getEdge(v1:V, v2:V):Edge<E>;
+interface I_Capturer {
+  private var faction:Faction;
+  private var capturePerSecond:Float;
+  
+  private function capture(capturable:I_Capturable):Void;
 }

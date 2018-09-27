@@ -1,4 +1,4 @@
-package com.ganymede.gameUnits;
+package com.ganymede.gameUnits.ships;
 
 /**
  *  Astrorush: TBD (The Best Defense)
@@ -19,21 +19,19 @@ package com.ganymede.gameUnits;
  */
 
 import com.ganymede.faction.Faction;
+import com.ganymede.gameUnits.capturable.I_Capturable;
+import com.ganymede.gameUnits.capturable.Planet;
+import com.ganymede.gameUnits.combat.Radar;
+import com.ganymede.gameUnits.weapons.I_Weapon;
+import com.ganymede.gameUnits.weapons.launchers.Launcher;
+import com.ganymede.gameUnits.weapons.turrets.Turret;
+import com.ganymede.map.Edge;
+import com.ganymede.map.Node;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxVector;
-import flixel.util.helpers.FlxBounds;
-import com.ganymede.gameUnits.Ship.BluePrint;
-import com.ganymede.gameUnits.capturable.Planet;
-import com.ganymede.gameUnits.combat.ICombatant;
-import com.ganymede.gameUnits.combat.Radar;
-import com.ganymede.gameUnits.weapons.IWeapon;
-import com.ganymede.gameUnits.weapons.launchers.Launcher;
-import com.ganymede.gameUnits.weapons.turrets.Turret;
-import com.ganymede.map.Edge;
-import com.ganymede.map.Node;
 
 /**
  * Various ship hull types that exist in-game.
@@ -159,7 +157,7 @@ class BluePrint {
  * @author Rory Soiffer
  * @author Drew Reese
  */
-class Ship extends FlxSprite implements ICombatant {
+class Ship extends FlxSprite implements I_Ship {
 
   // Parent/Faction Info
   //private var homePlanet:Planet; // probably not needed
@@ -199,7 +197,7 @@ class Ship extends FlxSprite implements ICombatant {
   //private var hpBar :FlxText;
 
   //private var weapon:Turret;
-  private var weapon:IWeapon;
+  private var weapon:I_Weapon;
   //private var weapon1:Launcher;
 
   public function new(destination:Node, faction:Faction, blueprint:BluePrint) {
@@ -248,9 +246,9 @@ class Ship extends FlxSprite implements ICombatant {
     // TODO: Move weapon definition into a Weapons Class, just instantiate here
     // Creates the weapon that creates bullets
 
-    //this.weapon = new GatlingPulseLaser(this);
+    this.weapon = new GatlingPulseLaser(this);
     //this.weapon = new SmallFocusedBeamLaser(this);
-    this.weapon = new Launcher_Rocket(this);
+    //this.weapon = new Launcher_Rocket(this);
     //this.weapon = new SmallAutoCannon(this);
 
     //hpBar = new FlxText(this.x, this.y - this.height, 0, "" + stats.hitPoints, 16);
@@ -433,6 +431,14 @@ class Ship extends FlxSprite implements ICombatant {
   public function getFactionType(): FactionType {
     return faction.getFactionType();
   }
+  
+  private function capture(capturable:I_Capturable):Void {
+    capturable.capture(this.faction.getFactionType(), this.capturePerSecond * FlxG.elapsed);
+  }
+  
+  public function attemptCapture(capturable:I_Capturable):Void {
+    this.capture(capturable);
+  }
 }
 
 /**
@@ -502,7 +508,7 @@ class ShipFactory {
    */
   private function canProduce(): Bool {
     //return this._timeSinceLast >= productionTime();
-    return underCapacity() && this._timeSinceLast >= productionTime();
+    return this._planet.isControlled && underCapacity() && this._timeSinceLast >= productionTime();
   }
 
   /**

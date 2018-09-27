@@ -16,30 +16,19 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ganymede.util;
+ package com.ganymede.gameUnits.ships;
 
-class FloatTools {
-
-  /**
-   * Rounds a float value @number to N digits of @precision.
-   * @param number
-   * @param precision
-   * @return float rounded to N digits
-   */
-  static public function roundN(number:Float, precision:Int):Float {
-    var p = Math.pow(10, precision);
-    return Math.round(number * p) / p;
-  }
-  
-  /**
-   * Bouonds @number to inclusive range @min and @max.
-   * @param number
-   * @param min
-   * @param max
-   * @return bounded float
-   */
-  static public function bound(number:Float, min:Float, max:Float):Float {
-    return Math.max(min, Math.min(number, max));
-  }
-  
+/**
+ * @author Drew Reese
+ */
+enum HullType {
+  FRIGATE;
+  DESTROYER;
+  CRUISER;
+  BATTLECUISER;
+  BATTLESHIP;
+  FIGHTER;
+  CORVETTE;
+  CAPITAL;
+  PATROL_CRAFT;
 }

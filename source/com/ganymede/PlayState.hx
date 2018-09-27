@@ -20,8 +20,8 @@ package com.ganymede;
 
 import com.ganymede.Main;
 import com.ganymede.faction.Faction;
-import com.ganymede.gameUnits.Ship;
-import com.ganymede.gameUnits.Ship.ShipGroup;
+import com.ganymede.gameUnits.ships.Ship;
+import com.ganymede.gameUnits.ships.Ship.ShipGroup;
 import com.ganymede.gameUnits.capturable.Planet;
 import com.ganymede.map.GameMap;
 import com.ganymede.map.Node;
@@ -67,7 +67,7 @@ class PlayState extends FlxState {
     add(gameMap);
     
     trace('gameMap', gameMap);
-    trace('grpMap', grpMap);
+    //trace('grpMap', grpMap);
 
     // Create the ships
     shipGroup = new ShipGroup();

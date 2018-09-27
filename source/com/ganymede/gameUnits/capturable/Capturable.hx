@@ -1,6 +1,7 @@
 /**
  *  Astrorush: TBD (The Best Defense)
  *  Copyright (C) 2017  Andrew Reese, Daisy Xu, Rory Soiffer
+ *  Copyright (C) 2018  Andrew Reese
  *
  * This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,34 +19,35 @@
 
 package com.ganymede.gameUnits.capturable;
 
-import com.ganymede.faction.CaptureEngine;
+import com.ganymede.db.Ganymede;
 import com.ganymede.faction.Faction;
-import com.ganymede.gameUnits.Ship;
+import com.ganymede.gameUnits.capturable.CaptureBar;
+import com.ganymede.gameUnits.ships.Ship;
 import com.ganymede.map.Node;
-import flixel.FlxG;
-import flixel.FlxSprite;
-import flixel.ui.FlxBar;
+import flixel.group.FlxSpriteGroup;
+import flixel.util.FlxColor;
+
+using com.ganymede.util.Utility.FloatTools;
+using haxe.EnumTools.EnumValueTools;
 
 /**
  * Capturable
  *
  * Capturable objects, like planets and beacons, exist on nodes.
  *
- * This class acts as interface between objects that can be captured and
- * the underlying graph structure that makes up the game map.  It stores
- * the controlling faction and capture engine.
- *
  * @author Drew Reese
  */
-class Capturable extends FlxSprite {
+class Capturable extends FlxSpriteGroup implements I_Capturable {
 
-  // parent node and faction control fields
-  private var node: Node;
-  private var faction:Faction;
+  public var node(default, null): Node;
+  public var totalControlPoints(default, null):Float;
+  public var controllingFaction(default, null):FactionType;
+  public var capturingFaction(default, null):FactionType;
+  public var isControlled(default, null):Bool;
+  
+  private var currentControlPoints:Float;
+  private var captureBar:CaptureBar;
 
-  private var captureBar:FlxBar;
-
-  private var captureEngine:CaptureEngine;
   private var shipsAtPlanet: Array<Ship>; // TODO: Query this from node
 
   /**
@@ -53,94 +55,52 @@ class Capturable extends FlxSprite {
    * @param node  node capturable resides on
    * @param faction   faction of capturable node
    */
-  private function new(node: Node, faction: Faction) {
+  private function new(
+    node: Node,
+    ?control_points = 100.0,
+    ?control_faction:FactionType
+  ) {
     super(node.x, node.y);
-    this.node = node;
-    this.faction = faction;
-    this.captureEngine = new CaptureEngine(this.faction.getFactionType(), 100.0); // TODO: Move CP to constructor
-
+    
+    this.node = node; // TODO: Check if this is needed for position any longer
+    this.totalControlPoints = control_points;
+    
+    var isNOP:Bool = control_faction.equals(null) || control_faction.equals(NOP);
+    this.controllingFaction = isNOP ? NOP : control_faction;
+    this.capturingFaction = NOP;
+    this.currentControlPoints = isNOP ? 0 : this.totalControlPoints;
+    this.isControlled = !isNOP;
+    
     // create capturebar and add it to the graphics
-    // TODO: Refactor this into a CaptureBar class
-    captureBar = new FlxBar(0, 0, LEFT_TO_RIGHT, 50, 10, null, "", 0, captureEngine.getMaxControllingPoint(), true);
-    captureBar.x = node.x - 25;
-    captureBar.y = node.y + 20;
-    captureBar.createColoredFilledBar(faction.getColor(), true);
-    captureBar.killOnEmpty = false;
-    captureBar.visible = false;
-    FlxG.state.add(captureBar);
+    captureBar = new CaptureBar(this, barEmpty, barFull);
+    this.add(captureBar);
   }
 
   override public function update(elapsed:Float):Void {
-    // TODO: Monitor capture status, display "contended" bar when active skirmish happening
-    // get accumulative points
-    var totalCP:Map<FactionType, Float> = new Map<FactionType, Float>();
-    for (f in Faction.getEnums()) {
-      totalCP[f] = 0.0;
-      /*for (s in node.getShipGroup(f)) {
-      	totalCP[f] += s.stats.cps;
-      }*/
-    }
 
     for (shipGroup in this.node.getShipGroups()) {
       for (ship in shipGroup) {
-        totalCP[ship.getFactionType()] += ship.getCPS();
+        ship.attemptCapture(this);
       }
     }
-
-    //for (s in shipsAtPlanet) {
-    //var cp = totalCP[s.getFactionType()];
-    //totalCP.set(s.getFactionType(), cp + (s.stats.cps));
-    //}
-
-    for (f in Faction.getEnums()) {
-      captureEngine.addPoints(f, totalCP[f] * elapsed);
-    }
-
-    // change bar color to invading faction if being invaded for NOP
-    if (this.faction.getFactionType() == FactionType.NOP && captureEngine.isContended()) {
-      captureBar.createColoredFilledBar(captureEngine.getCapturingFaction().getColor(),true);
-    }
-
-    // change faction if captured
-    if (captureEngine.checkCaptured()) {
-      // change controlling faction if captured
-      var currStatus = captureEngine.status();
-      var currFaction;
-      for (f in currStatus.keys()) {
-        currFaction = f;
-      }
-      // if captured, change faction and set bar color
-      var oldFaction = faction;
-      faction = new Faction(currFaction);
-      captureBar.color = faction.getColor();
-
-      // Log capturing planets
-      Main.LOGGER.logLevelAction(4, {
-        x: x,
-        y: y,
-        oldFaction: oldFaction.getFactionType(),
-        newFaction: faction.getFactionType()
-      });
-    }
-
-    // get current cp
-    var currStatus = captureEngine.status();
-    var currFaction;
-    for (f in currStatus.keys()) {
-      currFaction = f;
-    }
-    // keep track of current cp
-    var currCP = currStatus[currFaction];
-
-    // set value for bar
-    captureBar.value = currCP;
-    captureBar.updateBar();
-
-    captureBar.visible = captureEngine.isContended();
 
     super.update(elapsed);
+    
+    // TODO: Create & Apply capture entropy
+    //if (!this.isControlled) {
+      //this.currentControlPoints -= 5 * elapsed;
+    //}
+    //this.currentControlPoints = this.currentControlPoints.bound(0, this.totalControlPoints);
   }
-
+  
+  private function barEmpty() {
+    //trace('Bar is empty');
+  }
+  
+  private function barFull() {
+    //trace('Bar is full');
+  }
+  
   // TODO: Remove this and query from node
   // sets array of ships at planet
   public function setShips(ships: Array<Ship>): Void {
@@ -150,13 +110,14 @@ class Capturable extends FlxSprite {
   // TODO: I don't think this is required now, so check if removeable
   // get current cp of this
   public function getCP(): Float {
-    return captureBar.value;
+    //return captureBar.value;
+    return this.currentControlPoints;
   }
 
   // TODO: same as above
   // get max cp this can have
   public function getTotalCP():Float {
-    return captureEngine.getMaxControllingPoint();
+    return this.totalControlPoints;
   }
 
   /**
@@ -164,6 +125,43 @@ class Capturable extends FlxSprite {
    * @return  Faction of this capturable object
    */
   public function getFaction():Faction {
-    return this.faction;
+    return new Faction(this.controllingFaction);
+  }
+  
+  public function capture(capturingFaction:FactionType, capturePoints:Float):Void {
+    var normalizedCapturePoints:Float = capturePoints.roundN(3);
+    var defending:Float = this.isDefendingCapture(capturingFaction) ? 1 : -1;
+    
+    this.currentControlPoints += defending * normalizedCapturePoints;
+    
+    if (this.currentControlPoints < 0.0) {
+      this.lost(capturingFaction);
+    }
+    
+    if (this.currentControlPoints > this.totalControlPoints) {
+      if (!this.isControlled) {
+        this.captured();
+      }
+      this.currentControlPoints = this.totalControlPoints;
+    }
+  }
+  
+  private function isDefendingCapture(capturingFaction:FactionType):Bool {
+    var defendingControl:Bool = capturingFaction.equals(this.controllingFaction);
+    var gainAfterCapture:Bool = capturingFaction.equals(this.capturingFaction);
+    return defendingControl || gainAfterCapture;
+  }
+
+  private function captured():Void {
+    this.controllingFaction = this.capturingFaction;
+    this.capturingFaction = NOP;
+    this.isControlled = true;
+  }
+  
+  private function lost(capturingFaction:FactionType):Void {
+    this.currentControlPoints *= -1;
+    this.controllingFaction = NOP;
+    this.capturingFaction = capturingFaction;
+    this.isControlled = false;
   }
 }

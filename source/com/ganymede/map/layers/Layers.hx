@@ -53,9 +53,24 @@ import flixel.group.FlxGroup;
  * @author Drew Reese
  */
 class Layers extends FlxGroup {
+  /**
+   * Background Layer contains a single background image.
+   */
   public var background(default, null):BackgroundLayer;
+  
+  /**
+   * Graph Layer contains the map graph, nodes, edges, and paths.
+   */
   public var graph(default, null):GraphLayer;
+  
+  /**
+   * Objects Layer contains all the game objects (planets, ships, etc..).
+   */
   public var objects(default, null):ObjectLayer;
+  
+  /**
+   * Interfaces Layer contains all the UI components
+   */
   public var interfaces(default, null):FlxGroup; // TODO: Eventually specialize this group as well
 
   public function new() {

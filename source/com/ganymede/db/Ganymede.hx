@@ -20,7 +20,11 @@ package com.ganymede.db;
 
 import com.ganymede.db.Data;
 import com.ganymede.db.Parser;
-import com.ganymede.db.LevelData;
+import com.ganymede.db.DB_Data;
+import com.ganymede.faction.Faction.FactionType;
+import flixel.util.FlxColor;
+
+using haxe.EnumTools.EnumValueTools;
 
 /**
  * Ganymede.DB in-memory database.
@@ -68,5 +72,56 @@ class Ganymede {
       hazzards: Parser.parse.hazzards(data.hazzards),
       powerups: Parser.parse.powerups(data.powerups),
     };
+  }
+  
+  public static inline function getFactionData():FactionData {
+    checkDBLoaded();
+    
+    var data = Data.factions.all;
+    
+    //return {
+      //factions: Parser.parse.factions(data),
+    //}
+    return Parser.parse.factions(data);
+  }
+  
+  public static inline function getFactionColor(faction:FactionType):FlxColor {
+    checkDBLoaded();
+    
+    // Colors are only stored in RGB format, but FlxColors are ARGB, 
+    // need to add the alpha value to the stored faction color.
+    return 0xff000000 | Data.factions.all[faction.getIndex()].color;
+  }
+  
+  public static inline function getShipClassData():ShipClassData {
+    checkDBLoaded();
+    
+    var data = Data.shipClasses.all;
+    
+    return {
+      classes: Parser.parse.shipClasses(data),
+    }
+  }
+  
+  public static inline function getPlanetBluePrintsArray(): PlanetBlueprintsArray {
+    checkDBLoaded();
+    
+    var data = Data.planets.all;
+    
+    //return {
+      //blueprints: Parser.parse.planetBlueprintsArray(data),
+    //}
+    return Parser.parse.planetBlueprintsArray(data);
+  }
+  
+  public static inline function getPlanetBluePrintsMap(): PlanetBlueprintsMap {
+    checkDBLoaded();
+    
+    var data = Data.planets.all;
+    
+    //return {
+      //blueprints: Parser.parse.planetBlueprintsMap(data),
+    //}
+    return Parser.parse.planetBlueprintsMap(data);
   }
 }

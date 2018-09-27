@@ -17,12 +17,13 @@
  */
 
 package com.ganymede.map;
+import com.ganymede.gameUnits.ships.Ship;
 
 import com.ganymede.db.Ganymede;
-import com.ganymede.db.LevelData;
+import com.ganymede.db.DB_Data;
 import com.ganymede.faction.Faction;
 import com.ganymede.faction.Faction.FactionType;
-import com.ganymede.gameUnits.Ship.BluePrint;
+import com.ganymede.gameUnits.ships.Ship.BluePrint;
 import com.ganymede.gameUnits.capturable.Capturable;
 import com.ganymede.gameUnits.capturable.Planet;
 import com.ganymede.map.layers.GraphLayer;
@@ -96,11 +97,26 @@ class GameMap extends FlxGroup {
     var bg = new FlxSprite(AssetPaths.mapbg__png);
     this.mapLayers.background.add(bg);
 
-    // Set & build map graph
     var levelData:LevelData = Ganymede.getLevelData(0); // Use current level here
-    this.mapLayers.graph.set(levelData);
     
+    // Set & build map graph
+    this.mapLayers.graph.set_level_data(levelData);
+    //this.mapLayers.graph
     
+    // Populate level with Planets, Beacons, & Hazzards
+    this.mapLayers.objects.set_object_data(levelData);
+    
+    var xxxfactionData:FactionData = Ganymede.getFactionData();
+    trace('FactionData', xxxfactionData);
+    
+    var xxxShipClassData:ShipClassData = Ganymede.getShipClassData();
+    trace('ShipClassData', xxxShipClassData);
+    
+    //var xxxPlanetBPs:PlanetBlueprintsArray = Ganymede.getPlanetBluePrintsArray();
+    //trace('xxxPlanetBPs', xxxPlanetBPs);
+    
+    var xxxPlanetBPs:PlanetBlueprintsMap = Ganymede.getPlanetBluePrintsMap();
+    trace('xxxPlanetBPs', xxxPlanetBPs);
     
     /**
      * The following is the old existing map/graph stuff which will be
@@ -110,7 +126,9 @@ class GameMap extends FlxGroup {
     //this.nodes = new NodeGroup();
     //
     //this.id_to_node = new Id_to_Node();
+    
     this.node_to_neighbors = new Node_to_Neighbors();
+    
     //
     //this.numPlanets = 0;
     //
@@ -291,13 +309,13 @@ class GameMap extends FlxGroup {
   * Returns the total count of ships on the map.
   * @return total count of ships on the map
   */
-  public function getGlobalShipCount():Int {
-    var totalCount = 0;
-    for (shipCount in this.factionShipCount) {
-      totalCount += shipCount;
-    }
-    return totalCount;
-  }
+  //public function getGlobalShipCount():Int {
+    //var totalCount = 0;
+    //for (shipCount in this.factionShipCount) {
+      //totalCount += shipCount;
+    //}
+    //return totalCount;
+  //}
 
   /**
    * Returns the total count of ships on the map for the specified faction.
@@ -419,11 +437,12 @@ class GameMap extends FlxGroup {
 
         // Create the planet and add it the to game
         //var planet = new Planet(playState, this.id_to_node.get(node.id), new Faction(faction), planetstat);
-        var planet = new Planet(this.id_to_node.get(node.id), new Faction(faction), planetstat);
+        var planet = new Planet(this.id_to_node.get(node.id), new Faction(faction), faction, planetstat);
         this.addCapturableByID(node.id, planet);
         //FlxG.state.add(planet);
         //this.objectGroup.add(planet);
         //this.mapLayers.objects.add(planet);
+        trace('ADDING PLANET 1', planet);
         this.mapLayers.objects.planets.add(planet);
       }
 
@@ -441,11 +460,12 @@ class GameMap extends FlxGroup {
               // make planet stat
               var ps = new PlanetStat(blueprint, cap.cap, cap.prod, cap.prod_thresh, cap.cap_lvl, cap.tech_lvl, cap.base_cost, cap.cap_per_level, cap.tech_per_lvl);
               //var planet = new Planet(playState, this.id_to_node.get(node.id), new Faction(faction), ps); // create planet
-              var planet = new Planet(this.id_to_node.get(node.id), new Faction(faction), ps); // create planet
+              var planet = new Planet(this.id_to_node.get(node.id), new Faction(faction), faction, ps); // create planet
               this.addCapturableByID(node.id, planet); // add planet
               //FlxG.state.add(planet);
               //this.objectGroup.add(planet);
               //this.mapLayers.objects.add(planet);
+              trace('ADDING PLANET 2', planet);
               this.mapLayers.objects.planets.add(planet);
           }
         }

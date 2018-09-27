@@ -1,6 +1,6 @@
 /**
  *  Astrorush: TBD (The Best Defense)
- *  Copyright (C) 2017  Andrew Reese, Daisy Xu, Rory Soiffer
+ *  Copyright (C) 2018  Andrew Reese
  *
  * This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,17 +16,16 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ganymede.gameUnits.weapons;
+package com.ganymede.factory;
 
-import com.ganymede.gameUnits.combat.ICombatant;
+import com.ganymede.gameUnits.ships.HullType;
+import com.ganymede.gameUnits.ships.I_Ship;
 
 /**
- * Interface for in-game weapons.
  * @author Drew Reese
  */
-interface IWeapon {
-  private var source:ICombatant;
-  public var size(default, null):WeaponSize;
-
-  public function fire():Void;
+interface I_ShipFactory extends I_Factory {
+  public var productionCheck:Void->Bool;
+  
+  public function produceShip(hullType:HullType):I_Ship;
 }

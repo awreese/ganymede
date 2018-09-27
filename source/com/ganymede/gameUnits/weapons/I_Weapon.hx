@@ -1,6 +1,6 @@
 /**
  *  Astrorush: TBD (The Best Defense)
- *  Copyright (C) 2018  Andrew Reese
+ *  Copyright (C) 2017  Andrew Reese, Daisy Xu, Rory Soiffer
  *
  * This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,30 +16,17 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ganymede.util;
+package com.ganymede.gameUnits.weapons;
 
-class FloatTools {
+import com.ganymede.gameUnits.combat.I_Combatant;
 
-  /**
-   * Rounds a float value @number to N digits of @precision.
-   * @param number
-   * @param precision
-   * @return float rounded to N digits
-   */
-  static public function roundN(number:Float, precision:Int):Float {
-    var p = Math.pow(10, precision);
-    return Math.round(number * p) / p;
-  }
-  
-  /**
-   * Bouonds @number to inclusive range @min and @max.
-   * @param number
-   * @param min
-   * @param max
-   * @return bounded float
-   */
-  static public function bound(number:Float, min:Float, max:Float):Float {
-    return Math.max(min, Math.min(number, max));
-  }
-  
+/**
+ * Interface for in-game weapons.
+ * @author Drew Reese
+ */
+interface I_Weapon {
+  private var source:I_Combatant;
+  public var size(default, null):WeaponSize;
+
+  public function fire():Void;
 }

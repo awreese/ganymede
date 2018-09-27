@@ -278,7 +278,15 @@
 					"beacons": [],
 					"hazzards": [],
 					"powerups": [],
-					"planets": [],
+					"planets": [
+						{
+							"node": 0,
+							"planet": "tutorial",
+							"shipFactory": "rookie_player",
+							"faction": "NOP",
+							"capturable": false
+						}
+					],
 					"size": "SMALL"
 				}
 			],
@@ -463,7 +471,7 @@
 				},
 				{
 					"typeStr": "4",
-					"name": "production_rate"
+					"name": "production_rate_seconds"
 				},
 				{
 					"typeStr": "4",
@@ -490,11 +498,11 @@
 					"max_capacity_level": 0,
 					"max_tech_level": 0,
 					"ship_capacity": 1,
-					"production_rate": 1,
 					"production_threshold": 0.5,
 					"base_upgrade_cost": -1,
 					"capacity_per_level": 0,
-					"tech_per_level": 0
+					"tech_per_level": 0,
+					"production_rate_seconds": 1
 				},
 				{
 					"id": "planet_0",
@@ -503,11 +511,11 @@
 					"max_capacity_level": 0,
 					"max_tech_level": 0,
 					"ship_capacity": 10,
-					"production_rate": 10,
 					"production_threshold": 0.5,
 					"base_upgrade_cost": -1,
 					"capacity_per_level": 0,
-					"tech_per_level": 0
+					"tech_per_level": 0,
+					"production_rate_seconds": 10
 				}
 			],
 			"separators": [],
@@ -573,42 +581,42 @@
 			"columns": [
 				{
 					"typeStr": "0",
-					"name": "class"
+					"name": "className"
 				}
 			],
 			"lines": [
 				{
-					"class": "FRIGATE"
+					"className": "FRIGATE"
 				},
 				{
-					"class": "DESTROYER"
+					"className": "DESTROYER"
 				},
 				{
-					"class": "CRUISER"
+					"className": "CRUISER"
 				},
 				{
-					"class": "BATTLECRUISER"
+					"className": "BATTLECRUISER"
 				},
 				{
-					"class": "BATTLESHIP"
+					"className": "BATTLESHIP"
 				},
 				{
-					"class": "CARRIER"
+					"className": "CARRIER"
 				},
 				{
-					"class": "DREADNOUGHT"
+					"className": "DREADNOUGHT"
 				},
 				{
-					"class": "SUPERCARRIER"
+					"className": "SUPERCARRIER"
 				},
 				{
-					"class": "TITAN"
+					"className": "TITAN"
 				},
 				{
-					"class": "DRONE"
+					"className": "DRONE"
 				},
 				{
-					"class": "FIGHTER"
+					"className": "FIGHTER"
 				}
 			],
 			"separators": [],

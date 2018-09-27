@@ -2,12 +2,12 @@ package com.ganymede.npc;
 
 import com.ganymede.faction.Faction;
 
-import com.ganymede.faction.CaptureEngine;
+import com.ganymede.gameUnits.capturable.CaptureEngine;
 import com.ganymede.faction.Faction.FactionType;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxRandom;
 import flixel.util.FlxTimer;
-import com.ganymede.gameUnits.Ship;
+import com.ganymede.gameUnits.ships.Ship;
 import com.ganymede.gameUnits.capturable.Capturable;
 import com.ganymede.map.Node;
 
