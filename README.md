@@ -24,18 +24,21 @@ Gather your forces and test your fortitude against a rising threat.  Command you
             - [x] Possibly allow 'one-way' edges
             - [ ] Possibly allow for different types of edges
         - [ ] Game Levels
-            - ~~[ ] Option 1: Stored as JSON files (current way)~~
-            - [x] Option 2: Stored in Database table (preferred way)
-            - [ ] Game map level parser **In Progress**
+            - [x] ~~Option 1: Stored as JSON files (current way)~~
+            - [x] Option 2: Stored in Database table (preferred way)(Using CastleDB)
+            - [ ] Game map level parser
     - [ ] Ships
         - [x] Use database to store ship 'blueprints'
+        - [ ] Create Ship factory **In Progress**
         - [ ] Change ship movements
             - [ ] 'Slowish' at object nodes
             - [ ] Align for 'warping' along edges
         - [ ] Better ship graphics
     - [ ] Node Objects
         - [x] Use database to store object 'blueprints'
-        - [ ] Capturables
+        - [ ] Capturables **In Progress**
+            - [x] Simplify Capturing
+            - [x] Create CaptureBar class
             - [ ] Planets
                 - [ ] Better planet graphics
                 - [ ] Planet HUD
