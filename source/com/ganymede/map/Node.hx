@@ -31,7 +31,7 @@ import flixel.math.FlxVector;
 import flixel.util.FlxColor;
 import flixel.util.FlxSpriteUtil;
 import flixel.group.FlxSpriteGroup;
-import com.ganymede.gameUnits.Ship;
+import com.ganymede.gameUnits.ships.Ship;
 import com.ganymede.gameUnits.capturable.Capturable;
 import com.ganymede.gameUnits.capturable.Planet;
 //import com.ganymede.map.Node.NodeRing;

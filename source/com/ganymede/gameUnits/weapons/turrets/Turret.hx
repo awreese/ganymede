@@ -18,7 +18,7 @@
 
 package com.ganymede.gameUnits.weapons.turrets;
 
-import com.ganymede.gameUnits.Ship;
+import com.ganymede.gameUnits.ships.Ship;
 import com.ganymede.gameUnits.weapons.ammunition.Ammunition;
 import flixel.FlxG;
 import flixel.FlxSprite;

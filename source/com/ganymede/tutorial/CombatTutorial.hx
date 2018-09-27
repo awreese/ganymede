@@ -11,7 +11,7 @@ import flixel.text.FlxText;
 import flixel.ui.FlxBar;
 import flixel.ui.FlxButton;
 import flixel.util.FlxColor;
-import com.ganymede.gameUnits.Ship;
+import com.ganymede.gameUnits.ships.Ship;
 
 /**
  * ...

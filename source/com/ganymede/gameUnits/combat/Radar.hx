@@ -19,7 +19,7 @@
 package com.ganymede.gameUnits.combat;
 
 import com.ganymede.faction.Faction.FactionType;
-import com.ganymede.gameUnits.Ship;
+import com.ganymede.gameUnits.ships.Ship;
 import flixel.math.FlxRandom;
 
 /**
